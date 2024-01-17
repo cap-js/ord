@@ -1,0 +1,48 @@
+{
+    "export": {
+        "asyncapi": {
+            "application_namespace": "sap",
+            "event_spec_version": "2.1.0",
+            "event_source": "/{region}/sap.sample/{instanceId}ord",
+            "merged": {
+                "title": "Merged Title",
+                "version": "1.2.3"
+            }
+        }
+    },
+    "ord": {
+        "application_namespace": "sap.capordpocA",
+        "description": "cdsrc",
+        "policyLevel": "sap:core:v1",
+        "products": [
+            {
+                "ordId": "sap:product:CapOrdPoC:okok",
+                "title": "ORD Reference App Incident Management",
+                "shortDescription": " shortDescription for products Array",
+                "vendor": "sap:vendor:SAP:"
+            }
+        ],
+        "packages": [
+            {
+                "ordId": "sap.capordpoc:package:incidents-mgmt:v1",
+                "title": "sample Incident Management Application Open Resource Discovery Reference Application",
+                "shortDescription": " here is the shortDescription for packages Array",
+                "description": " here is the description for packages Array",
+                "version": "1.0.0",
+                "partOfProducts": [
+                    "sap:product:CapOrdPoC:"
+                ],
+                "vendor": "sap:vendor:SAP:"
+            }
+        ],
+        "consumptionBundles": [
+            {
+                "ordId": "sap.capordpoc:consumptionBundle:noAuth:v1",
+                "version": "1.0.0",
+                "title": "Unprotected resources",
+                "shortDescription": "If we have another protected API then it will be another object",
+                "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication"
+            }
+        ]
+    }
+}

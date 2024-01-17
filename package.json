@@ -1,0 +1,12 @@
+{
+  "name": "ord",
+  "version": "1.0.0",
+  "description": "Default templates for cap-js open source repositories, including LICENSE, .reuse/dep5, Code of Conduct, etc... All repositories on github.com/cap-js will be created based on this template.",
+  "main": "cds-plugin.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

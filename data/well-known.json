@@ -1,0 +1,14 @@
+{
+    "openResourceDiscoveryV1": {
+        "documents": [
+            {
+                "url": "/open-resource-discovery/v1/documents/1",
+                "accessStrategies": [
+                    {
+                        "type": "open"
+                    }
+                ]
+            }
+        ]
+    }
+}
