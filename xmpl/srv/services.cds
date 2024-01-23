@@ -12,10 +12,18 @@ annotate ProcessorService with @ORD.Extensions : {
     }
 };
 
-annotate ProcessorService.test with @ORD.Extensions.test : {
-    title : 'test this is a sample',
-    shortDescription : 'event sample shortDescription'
-};
+@AsyncAPI.Title         : 'SAP Incident Management'
+@AsyncAPI.SchemaVersion : '1.0'
+extend service ProcessorService {
+  @ORD.Extensions: {
+    title           : 'test this is a sample',
+    shortDescription: 'event sample shortDescription'
+  }
+  event test : {
+    ID    : Integer;
+    title : String @title: 'Title';
+  }
+}
 
 annotate AdminService with @ORD.Extensions : {
   title : 'test this is a sample 2',

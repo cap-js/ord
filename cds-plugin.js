@@ -22,27 +22,37 @@ const _ = {
             vendor: "sap:vendor:SAP:",
         },
     ] , 
-    packages : [
+    packages: (name) => [
         {
-            ordId: "sap.capordpoc:package:incidents-mgmt:v1",
-            title:
-                "sample Incident Management Application Open Resource Discovery Reference Application",
-            shortDescription: " here is the shortDescription for packages Array",
-            description: " here is the description for packages Array",
-            version: "1.0.0",
-            partOfProducts: ["sap:product:CapOrdPoC:"],
-            vendor: "sap:vendor:SAP:",
+            "ordId": `sap.capordpoc:package:${name}-api:v1`,
+            "title": `sample title for ${name} management`,
+            "shortDescription": " here is the shortDescription for packages Array",
+            "description": " here is the description for packages Array",
+            "version": "1.0.0",
+            "partOfProducts": [
+                "sap:product:CapOrdPoC:"
+            ],
+            "vendor": "sap:vendor:SAP:"
         },
+        {
+            "ordId": `sap.capordpoc:package:i${name}-event:v1`,
+            "title": `sample title for ${name} management`,
+            "shortDescription": " here is the shortDescription for packages Array",
+            "description": " here is the description for packages Array",
+            "version": "1.0.0",
+            "partOfProducts": [
+                "sap:product:CapOrdPoC:"
+            ],
+            "vendor": "sap:vendor:SAP:"
+        }
     ] , 
     consumptionBundles : [
         {
             ordId: "sap.capordpoc:consumptionBundle:noAuth:v1",
             version: "1.0.0",
             title: "Unprotected resources",
-            shortDescription:
-                "If we have another protected API then it will be another object",
-            description:
-                "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
+            shortDescription: "If we have another protected API then it will be another object",
+            description: "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
         },
     ] , 
     baseTemplate : {
@@ -117,11 +127,11 @@ const fGetORDVersion = () => {
     return "1.6";
 }
 
-const fGetDescription = () => {
+const fGetPackageJson = (key) => {
     const fGetPackageJsonPath = path.resolve(process.cwd(), "package.json");
     return (
-        (fs.existsSync(fGetPackageJsonPath) && JSON.parse(fs.readFileSync(fGetPackageJsonPath, "utf8")).description) 
-        || "This is an example ORD document for Incident Management Application."
+        (fs.existsSync(fGetPackageJsonPath) && JSON.parse(fs.readFileSync(fGetPackageJsonPath, "utf8"))[key]) 
+        || `This is an example ORD document.`
     );
 }
 
@@ -142,6 +152,13 @@ const fGetAPIResources = () => {
         .map((srv) => fCreateAPIResourceTemplate(srv.definition.name, packageNameReg, oEntityTypeTargets, namespace));
 
     return fGetPresets("apiResources", undefined) ?? oApiResources;
+}
+
+const fGetPackages = () => {
+    if (Object.keys(cds.model.definitions).filter((key) => cds.model.definitions[key].kind === "event").length){
+        return fGetPresets("packages", _.packages(fGetPackageJson("name").replace(/\s/g, "-")))
+    }
+    return fGetPresets("packages", _.packages(fGetPackageJson("name").replace(/\s/g, "-")).slice(0,1))
 }
 
 const fGetEventResources = () => {
@@ -167,7 +184,7 @@ const fCreateAPIResourceTemplate = (srv, packageNameReg, entityTypeTargets, name
         description: ordExtent.description ?? `Here we have the description for ${srv}`,
         version: ordExtent.version ?? "1.0.0",
         visibility: ordExtent.visibility ?? "public",
-        partOfPackage: `${packageNameReg}:package:${"incidents-mgmt"}:v1`,
+        partOfPackage: `${packageNameReg}:package:${fGetPackageJson("name").replace(/\s/g, "-")}:v1`,
         releaseStatus: ordExtent.active ?? "active",
         partOfConsumptionBundles: [
             {
@@ -179,13 +196,13 @@ const fCreateAPIResourceTemplate = (srv, packageNameReg, entityTypeTargets, name
             {
                 type: "openapi-v3",
                 mediaType: "application/json",
-                url: `/.well-known/open-resource-discovery/${"incidentManagement"}/v1/api-metadata/${srv}.oas3.json`,
+                url: `/.well-known/open-resource-discovery/${fGetPackageJson("name").replace(/\s/g, "-")}/v1/api-metadata/${srv}.oas3.json`,
                 accessStrategies: [{ type: "open" }],
             },
             {
                 type: "edmx",
                 mediaType: "application/xml",
-                url: `/.well-known/open-resource-discovery/${"incidentManagement"}/v1/api-metadata/${srv}.edmx`,
+                url: `/.well-known/open-resource-discovery/${fGetPackageJson("name").replace(/\s/g, "-")}/v1/api-metadata/${srv}.edmx`,
                 accessStrategies: [{ type: "open" }],
             },
         ],
@@ -199,18 +216,21 @@ const fCreateEventResourceTemplate = (srv,packageNameReg,namespace) => {
     const ordExtent = fReadORDExtensions(cds.model.definitions[srv]);
     return {
         ordId: `${packageNameReg}:eventResource:${namespace}.${srv}:v1`,
-        title: ordExtent.title ?? `"ODM Incident Management Events"`,
-        shortDescription: ordExtent.shortDescription ?? "Example ODM Incident Management Event",
-        description: ordExtent.description ??  "This is an example event catalog that contains only a partial ODM Incident Management V1 event",
+        title: ordExtent.title ?? `ODM ${fGetPackageJson("name").replace(/\s/g, "-")} Events`,
+        shortDescription: ordExtent.shortDescription ?? "Example ODM Event",
+        description: ordExtent.description ??  `This is an example event catalog that contains only a partial ODM ${fGetPackageJson("name").replace(/\s/g, "-")} V1 event`,
         version: ordExtent.version ?? "1.0.0",
         releaseStatus: ordExtent.releaseStatus ?? "beta",
-        partOfPackage: `${packageNameReg}:package:${"incidents-mgmt"}:v1`,
+        // TODO : From where to get the package name - incidents-mgmt
+        partOfPackage: `${packageNameReg}:package:${fGetPackageJson("name").replace(/\s/g, "-")}:v1`,
         visibility: ordExtent.visibility ?? "public",
         resourceDefinitions: [
             {
                 type: "asyncapi-v2",
                 mediaType: "application/json",
-                url: `/.well-known/open-resource-discovery/${"incidentManagement"}/v1/api-metadata/${cds.model.definitions[srv]._service.name}.asyncapi2.json`,
+                // TODO : From where to get the package name - incidentManagement
+                // TODO : How are we generating this URL ?
+                url: `/.well-known/open-resource-discovery/${fGetPackageJson("name").replace(/\s/g, "-")}/v1/api-metadata/${cds.model.definitions[srv]._service.name}.asyncapi2.json`,
                 accessStrategies: [
                     {
                         type: "open",
@@ -223,6 +243,7 @@ const fCreateEventResourceTemplate = (srv,packageNameReg,namespace) => {
 }
 
 const ORD = () => {
+    // TODO : Error handling in plugin
     try {
         const data = cds.env["ord"].application_namespace;
         if (data === undefined) {
@@ -231,9 +252,9 @@ const ORD = () => {
         const oReturn = {
             openResourceDiscovery: fGetORDVersion(),
             policyLevel: fGetPresets("policyLevel", _.policyLevel),
-            description: fGetDescription(),
+            description: fGetPackageJson("description"),
             products: fGetPresets("products", _.products),
-            packages: fGetPresets("packages", _.packages),
+            packages: fGetPackages(),
             consumptionBundles: fGetPresets("consumptionBundles", _.consumptionBundles),
             apiResources: fGetAPIResources(),
             eventResources: fGetEventResources()
