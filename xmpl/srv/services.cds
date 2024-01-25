@@ -4,11 +4,11 @@ using from '@capire/incidents/db/schema';
 namespace sap.capire.incidents;
 
 annotate ProcessorService with @ORD.Extensions : {
-    title           : 'test this is a sample  ok 5',
-    shortDescription: 'event sample shortDescription',
-    visibility : 'pvt',
+    title           : 'This is Processor Service title',
+    shortDescription: 'short description for Processor Service',
+    visibility : 'public',
     extensible : {
-      supported : 'kldjbisbkvbfky'
+      supported : 'no'
     }
 };
 
@@ -16,17 +16,16 @@ annotate ProcessorService with @ORD.Extensions : {
 @AsyncAPI.SchemaVersion : '1.0'
 extend service ProcessorService {
   @ORD.Extensions: {
-    title           : 'test this is a sample',
-    shortDescription: 'event sample shortDescription'
+    title           : 'This is title for TitleChange event',
+    shortDescription: 'Event TitleChange short description'
   }
-  event test : {
+  event TitleChange : {
     ID    : Integer;
     title : String @title: 'Title';
   }
 }
 
 annotate AdminService with @ORD.Extensions : {
-  title : 'test this is a sample 2',
-  shortDescription : 'event sample shortDescription 2',
-  description: 'ok'
+  title : 'This is Admin Service title',
+  shortDescription : 'short description for Admin Service'
 };

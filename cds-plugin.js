@@ -1,5 +1,5 @@
 console.log("\n\n ORD working !!! \n\n");
-
+// TODO : Comments on every function
 const fs = require("fs");
 const path = require("path");
 const cds_dk = require("@sap/cds-dk");
@@ -192,6 +192,8 @@ const fCreateAPIResourceTemplate = (srv, packageNameReg, entityTypeTargets, name
             },
         ],
         apiProtocol: ordExtent.apiProtocol ?? "odata-v4",
+        // TODO : From where to get the package name - incidentManagement 
+        // TODO : How are we generating this URL ? 
         resourceDefinitions: [
             {
                 type: "openapi-v3",
@@ -221,15 +223,15 @@ const fCreateEventResourceTemplate = (srv,packageNameReg,namespace) => {
         description: ordExtent.description ??  `This is an example event catalog that contains only a partial ODM ${fGetPackageJson("name").replace(/\s/g, "-")} V1 event`,
         version: ordExtent.version ?? "1.0.0",
         releaseStatus: ordExtent.releaseStatus ?? "beta",
-        // TODO : From where to get the package name - incidents-mgmt
+        // TODO : From where to get the package name - incidents-mgmt 
         partOfPackage: `${packageNameReg}:package:${fGetPackageJson("name").replace(/\s/g, "-")}:v1`,
         visibility: ordExtent.visibility ?? "public",
         resourceDefinitions: [
             {
                 type: "asyncapi-v2",
                 mediaType: "application/json",
-                // TODO : From where to get the package name - incidentManagement
-                // TODO : How are we generating this URL ?
+                // TODO : From where to get the package name - incidentManagement 
+                // TODO : How are we generating this URL ? 
                 url: `/.well-known/open-resource-discovery/${fGetPackageJson("name").replace(/\s/g, "-")}/v1/api-metadata/${cds.model.definitions[srv]._service.name}.asyncapi2.json`,
                 accessStrategies: [
                     {
@@ -243,12 +245,13 @@ const fCreateEventResourceTemplate = (srv,packageNameReg,namespace) => {
 }
 
 const ORD = () => {
-    // TODO : Error handling in plugin
+    // TODO : Error handling in plugin 
     try {
         const data = cds.env["ord"].application_namespace;
         if (data === undefined) {
             return { status:"Error" }
         }
+        // TODO : Check for values if there are correct or not
         const oReturn = {
             openResourceDiscovery: fGetORDVersion(),
             policyLevel: fGetPresets("policyLevel", _.policyLevel),
