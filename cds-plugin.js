@@ -57,7 +57,7 @@ const _ = {
     ] , 
     baseTemplate : {
         openResourceDiscoveryV1: {
-            bra: [
+            documents: [
                 {
                     url: "/open-resource-discovery/v1/documents/1",
                     accessStrategies: [
