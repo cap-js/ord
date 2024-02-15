@@ -1,6 +1,6 @@
 using {ProcessorService,AdminService}  from '@capire/incidents/srv/services';
 using from '@capire/incidents/db/schema';
-// !@#$%^&*()
+
 namespace sap.capire.incidents;
 
 annotate ProcessorService with @ORD.Extensions : {
@@ -29,3 +29,8 @@ annotate AdminService with @ORD.Extensions : {
   title : 'This is Admin Service title',
   shortDescription : 'short description for Admin Service'
 };
+
+
+annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';
+annotate sap.capire.incidents.Addresses with @ODM.entityName: 'Addresses';
+annotate sap.capire.incidents.Incidents with @ODM.entityName: 'Incidents';

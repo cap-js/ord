@@ -12,7 +12,7 @@
     },
     "ord": {
         "application_namespace": "sap.capordpocA",
-        "description": "this is a xmpl application description",
+        "description": "this is my custom description",
         "policyLevel": "sap:core:v1"
     }
 }
