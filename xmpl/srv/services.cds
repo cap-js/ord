@@ -15,11 +15,16 @@ annotate ProcessorService with @ORD.Extensions : {
 @AsyncAPI.Title         : 'SAP Incident Management'
 @AsyncAPI.SchemaVersion : '1.0'
 extend service ProcessorService {
-  @ORD.Extensions: {
-    title           : 'This is title for TitleChange event',
-    shortDescription: 'Event TitleChange short description'
-  }
   event TitleChange : {
+    ID    : Integer;
+    title : String @title: 'Title';
+  }
+}
+
+@AsyncAPI.Title         : 'SAP Incident Management'
+@AsyncAPI.SchemaVersion : '1.0'
+service LocalService {
+  event TitleChange2 : {
     ID    : Integer;
     title : String @title: 'Title';
   }
@@ -29,7 +34,6 @@ annotate AdminService with @ORD.Extensions : {
   title : 'This is Admin Service title',
   shortDescription : 'short description for Admin Service'
 };
-
 
 annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';
 annotate sap.capire.incidents.Addresses with @ODM.entityName: 'Addresses';

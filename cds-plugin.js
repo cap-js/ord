@@ -1,8 +1,20 @@
 console.log("\n\n ORD working !!! \n\n");
 const cds_dk = require("@sap/cds-dk");
-const { ORD, getMetaData, defaults } = require('./lib');
+const cds = require('@sap/cds/lib');
+const { ord, getMetaData, defaults } = require('./lib');
 
 cds_dk.app = require("express")();
+
+// class ORD {
+//     get compile() {
+//       let compile = require('@sap/cds/lib/compile/cds-compile')
+//       cds.extend (compile.to.constructor) .with (class {
+//         get ord() { return super.ord = ord() }
+//       })
+//       return super.compile = compile
+//     }
+// }
+// cds.extend (cds.constructor).with(ORD);
 
 cds_dk.on("bootstrap", (app) => {
     app.use("/.well-known/open-resource-discovery", async (req, res) => {
@@ -16,7 +28,7 @@ cds_dk.on("bootstrap", (app) => {
 
     app.get("/open-resource-discovery/v1/documents/1", async (req, res) => {
         try {
-            const data = ORD();
+            const data = ord();
             return res.status(200).send(data);
         } catch (error) {
             console.log(error);
