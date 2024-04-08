@@ -5,17 +5,6 @@ const { ord, getMetaData, defaults } = require('./lib');
 
 cds_dk.app = require("express")();
 
-// class ORD {
-//     get compile() {
-//       let compile = require('@sap/cds/lib/compile/cds-compile')
-//       cds.extend (compile.to.constructor) .with (class {
-//         get ord() { return super.ord = ord() }
-//       })
-//       return super.compile = compile
-//     }
-// }
-// cds.extend (cds.constructor).with(ORD);
-
 cds_dk.on("bootstrap", (app) => {
     app.use("/.well-known/open-resource-discovery", async (req, res) => {
         if (req.url === "/") {
