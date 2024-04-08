@@ -1,0 +1,14 @@
+{
+    "name": "@capire/ord-sample",
+    "description": "this is a xmpl application description",
+    "version": "1.0.0",
+    "dependencies": {
+      "ord": "*",
+      "@capire/incidents": "*",
+      "@sap/cds": "*"
+    },
+    "devDependencies": {
+      "@cap-js/sqlite": "*"
+    },
+    "private": true
+}
