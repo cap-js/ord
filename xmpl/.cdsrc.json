@@ -1,7 +1,7 @@
 {
     "export": {
         "asyncapi": {
-            "application_namespace": "sap",
+            "system_namespace": "sap",
             "event_spec_version": "2.1.0",
             "event_source": "/{region}/sap.sample/{instanceId}ord",
             "merged": {
@@ -11,7 +11,7 @@
         }
     },
     "ord": {
-        "application_namespace": "sap.capordpocA",
+        "system_namespace": "sap.capordpocA",
         "description": "this is my custom description",
         "policyLevel": "sap:core:v1"
     }
