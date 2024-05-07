@@ -11,7 +11,7 @@
         }
     },
     "ord": {
-        "system_namespace": "sap.capordpocA",
+        "namespace": "sap.sample",
         "description": "this is my custom description",
         "policyLevel": "sap:core:v1"
     }
