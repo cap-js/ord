@@ -1,11 +1,10 @@
 console.log("\n\n ORD working !!! \n\n");
-const cds_dk = require("@sap/cds-dk");
 const cds = require('@sap/cds/lib');
 const { ord, getMetaData, defaults } = require('./lib');
 
-cds_dk.app = require("express")();
+cds.app = require("express")();
 
-cds_dk.on("bootstrap", (app) => {
+cds.on("bootstrap", (app) => {
     app.use("/.well-known/open-resource-discovery", async (req, res) => {
         if (req.url === "/") {
             res.status(200).send(defaults.baseTemplate);
@@ -26,4 +25,4 @@ cds_dk.on("bootstrap", (app) => {
     });
 });
 
-module.exports = cds_dk.server;
+module.exports = cds.server;
