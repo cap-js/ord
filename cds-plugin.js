@@ -30,7 +30,8 @@ cds_dk.on("bootstrap", (app) => {
 
     app.get("/open-resource-discovery/v1/documents/1", async (req, res) => {
         try {
-            const data = ord();
+            const csn = await cds.load(cds.env.folders.srv)
+            const data = ord(csn); 
             return res.status(200).send(data);
         } catch (error) {
             console.log(error);
