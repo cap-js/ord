@@ -1,0 +1,18 @@
+{
+    "export": {
+        "asyncapi": {
+            "application_namespace": "sap",
+            "event_spec_version": "2.1.0",
+            "event_source": "/{region}/sap.sample/{instanceId}ord",
+            "merged": {
+                "title": "Merged Title",
+                "version": "1.2.3"
+            }
+        }
+    },
+    "ord": {
+        "namespace": "sap.sample",
+        "description": "this is my custom description",
+        "policyLevel": "sap:core:v1"
+    }
+}
