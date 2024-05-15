@@ -11,5 +11,8 @@
   "license": "ISC",
   "peerDependencies": {
     "@sap/cds-dk": "^7"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
