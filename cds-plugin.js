@@ -1,29 +1,34 @@
 console.log("\n\n ORD working !!! \n\n");
 const cds_dk = require("@sap/cds-dk");
 const cds = require('@sap/cds/lib');
-const { ord, getMetaData, defaults } = require('./lib');
+// const { ord, getMetaData, defaults } = require('./lib');
 
-cds_dk.app = require("express")();
+// cds_dk.app = require("express")();
 
-cds_dk.on("bootstrap", (app) => {
-    app.use("/.well-known/open-resource-discovery", async (req, res) => {
-        if (req.url === "/") {
-            res.status(200).send(defaults.baseTemplate);
-        } else {
-            const { contentType, response } = await getMetaData(req.url);
-            res.status(200).contentType(contentType).send(response);
-        }
-    });
+cds_dk.on("bootstrap", async () => {
 
-    app.get("/open-resource-discovery/v1/documents/1", async (req, res) => {
-        try {
-            const data = ord();
-            return res.status(200).send(data);
-        } catch (error) {
-            console.log(error);
-            return res.status(200).send(error);
-        }
-    });
+    // const csn = await cds_dk.load('../ORDService.cds');
+    // cds_dk.serve('all').from(csn);
+
+
+    // app.use("/.well-known/open-resource-discovery", async (req, res) => {
+    //     if (req.url === "/") {
+    //         res.status(200).send(defaults.baseTemplate);
+    //     } else {
+    //         const { contentType, response } = await getMetaData(req.url);
+    //         res.status(200).contentType(contentType).send(response);
+    //     }
+    // });
+
+    // app.get("/open-resource-discovery/v1/documents/1", async (req, res) => {
+    //     try {
+    //         const data = ord();
+    //         return res.status(200).send(data);
+    //     } catch (error) {
+    //         console.log(error);
+    //         return res.status(200).send(error);
+    //     }
+    // });
 });
 
 module.exports = cds_dk.server;
