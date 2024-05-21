@@ -13,7 +13,7 @@ cds.on("bootstrap", (app) => {
                 const { contentType, response } = await getMetaData(req.url);
                 res.status(200).contentType(contentType).send(response);
             } catch (error) {
-                console.log(error);
+                console.log('Error while generating metadata');
                 res.status(500).send(error.message);
             }
         }
@@ -24,7 +24,7 @@ cds.on("bootstrap", (app) => {
             const data = ord();
             return res.status(200).send(data);
         } catch (error) {
-            console.log(error);
+            console.log('Error while creating ORD document');
             return res.status(500).send(error.message);
         }
     });
