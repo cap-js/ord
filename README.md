@@ -22,7 +22,6 @@ There are multiple ways to view the ORD Document by using this plugin.
 
 ```js
 const cds = require('@sap/cds')
-const { compile } = require('@cap-js/ord')
 ```
 
 ```js
@@ -33,15 +32,13 @@ const ord = cds.compile.to.ord(csn)
 #### Command Line
 
 ```sh
-$ cds compile <filePath to srv folder of CAP Application> -2 ord [-o] [destinationFilePath]
+$ cds compile <filePath to srv folder of CAP App> -2 ord [-o] [destinationFilePath]
 ```
 
 #### ORD Endpoints 
 
-1) After installing the plugin do an `npm i`.
-2) If not already globally installed, install cds-dk npm install -g @sap/cds-dk.
-3) Run a `cds watch` in the CAP Application's root path.
-4) Check the following relative paths for ORD information - `/.well-known/open-resource-discovery` , `/open-resource-discovery/v1/documents/1`.
+1) Run a `cds watch` in the application's root path.
+2) Check the following relative paths for ORD information - `/.well-known/open-resource-discovery` , `/open-resource-discovery/v1/documents/1`.
 
 
 ## Support, Feedback, Contributing
@@ -49,7 +46,7 @@ $ cds compile <filePath to srv folder of CAP Application> -2 ord [-o] [destinati
 This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/cap-js/ord/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
 
 ## Security / Disclosure
-If you find any bug that may be a security problem, please follow our instructions at [in our security policy](https://github.com/cap-js/ord/security/policy) on how to report it. Please do not create GitHub issues for security-related doubts or problems.
+If you find any bug that may be a security problem, please follow our instructions at [in our security policy](https://github.com/cap-js/ord/issues/security/policy) on how to report it. Please do not create GitHub issues for security-related doubts or problems.
 
 ## Code of Conduct
 
