@@ -4,7 +4,7 @@
 
 ## About this project
 
-Enables generation of ORD document for CAP based applications.
+Open Resource Discovery (ORD) is a protocol that allows applications and services to self-describe their exposed resources and capabilities. This plugin enables generation of ORD document for CAP based applications.
 
 ## Requirements and Setup
 
