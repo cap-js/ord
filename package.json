@@ -10,7 +10,7 @@
   "files": [
     "lib",
     "data",
-    "LICENSES",
+    "LICENSES"
   ],
   "scripts": {
     "lint": "npx eslint ."
