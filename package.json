@@ -1,16 +1,22 @@
 {
-  "name": "ord",
+  "name": "@cap-js/ord",
   "version": "1.0.0",
-  "description": "Default templates for cap-js open source repositories, including LICENSE, .reuse/dep5, Code of Conduct, etc... All repositories on github.com/cap-js will be created based on this template.",
+  "description": "CAP Tool for generating ORD information",
+  "repository": "cap-js/ord",
+  "author": "SAP SE (https://www.sap.com)",
+  "homepage": "https://cap.cloud.sap/",
+  "license": "SEE LICENSE IN LICENSE",
   "main": "./cds-plugin.js",
+  "files": [
+    "lib",
+    "data",
+    "LICENSES",
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "npx eslint ."
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "peerDependencies": {
-    "@sap/cds":  ">=7.9 || ^8.0.0-beta",
+    "@sap/cds": ">=7.9 || ^8.0.0-beta",
     "@cap-js/asyncapi": "^1.0.0",
     "@cap-js/openapi": "^1.0.2"
   }
