@@ -9,11 +9,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
+  "peerDependencies": {
+    "@sap/cds":  ">=7.9 || ^8.0.0-beta",
     "@cap-js/asyncapi": "^1.0.0",
     "@cap-js/openapi": "^1.0.2"
-  },
-  "peerDependencies": {
-    "@sap/cds": "^7.9.0"
   }
 }
