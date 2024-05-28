@@ -1,5 +1,5 @@
 {
-    "openResourceDiscovery": "1.6",
+    "openResourceDiscovery": "1.9",
     "policyLevel": "sap:base:v1",
     "description": "This is an example ORD document for Incident Management Application.",
     "products": [
