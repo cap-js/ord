@@ -32,7 +32,7 @@ const ord = cds.compile.to.ord(csn)
 #### Command Line
 
 ```sh
-$ cds compile <filePath to srv folder of CAP App> -2 ord [-o] [destinationFilePath]
+$ cds compile <path to srv folder> -2 ord [-o] [destinationFilePath]
 ```
 
 #### ORD Endpoints 
