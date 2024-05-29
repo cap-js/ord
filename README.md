@@ -11,12 +11,10 @@ Open Resource Discovery (ORD) is a protocol that allows applications and servic
 ### Installation
 
 ```sh
-$ npm install @cap-js/ord
+npm install @cap-js/ord
 ```
 
 ### Usage
-
-There are multiple ways to view the ORD Document by using this plugin.
 
 #### Programmatic API
 
@@ -32,12 +30,12 @@ const ord = cds.compile.to.ord(csn)
 #### Command Line
 
 ```sh
-$ cds compile <path to srv folder> -2 ord [-o] [destinationFilePath]
+cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 ```
 
-#### ORD Endpoints 
+#### ORD Endpoints
 
-1) Run a `cds watch` in the application's root path.
+1) Run `cds watch` in the application's root.
 2) Check the following relative paths for ORD information - `/.well-known/open-resource-discovery` , `/open-resource-discovery/v1/documents/1`.
 
 
