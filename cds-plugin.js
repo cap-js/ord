@@ -44,3 +44,5 @@ cds.on("bootstrap", (app) => {
     }
   });
 });
+
+cds.build?.register?.('ord', require('./lib/build'));  

@@ -10,7 +10,8 @@
   "files": [
     "lib",
     "data",
-    "LICENSES"
+    "LICENSES",
+    "cds-plugin.js"
   ],
   "scripts": {
     "lint": "npx eslint ."
@@ -19,5 +20,10 @@
     "@sap/cds": ">=7.6",
     "@cap-js/asyncapi": "^1.0.0",
     "@cap-js/openapi": "^1.0.2"
+  },
+  "cds": {
+    "[production]": {
+      "ord": { "dynamicMetadata": false }
+    }
   }
 }
