@@ -6,7 +6,7 @@
   "author": "SAP SE (https://www.sap.com)",
   "homepage": "https://cap.cloud.sap/",
   "license": "SEE LICENSE IN LICENSE",
-  "main": "./cds-plugin.js",
+  "main": "cds-plugin.js",
   "files": [
     "lib",
     "data",
