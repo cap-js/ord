@@ -10,7 +10,8 @@
   "files": [
     "lib",
     "data",
-    "LICENSES"
+    "LICENSES",
+    "cds-plugin.js"
   ],
   "scripts": {
     "lint": "npx eslint ."
