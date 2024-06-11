@@ -3,7 +3,7 @@
   "description": "this is a xmpl application description",
   "version": "1.0.0",
   "dependencies": {
-    "ord": "*",
+    "@cap-js/ord": "*",
     "@capire/incidents": "*",
     "@sap/cds": "*"
   },
