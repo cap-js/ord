@@ -2,9 +2,9 @@ require("./lib/plugin");
 const cds = require("@sap/cds");
 
 function _lazyRegisterCompileTarget() {
-  const value = require("./lib/index").ord;
-  Object.defineProperty(this, "ord", { value });
-  return value;
+  const ord = require("./lib/index").ord;
+  Object.defineProperty(this, "ord", { ord });
+  return ord;
 }
 
 const registerORDCompileTarget = () => {
