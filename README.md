@@ -39,7 +39,7 @@ cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 2) Check the following relative paths for ORD information - `/.well-known/open-resource-discovery` , `/open-resource-discovery/v1/documents/1`.
 
 
-<img width="1300" alt="Sample Application Demo" style="border-radius:0.5rem;" src="ord.gif">
+<img width="1300" alt="Sample Application Demo" style="border-radius:0.5rem;" src="./asset/etc/ord.gif">
 
 
 ## Support, Feedback, Contributing
