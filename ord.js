@@ -32,7 +32,7 @@ const fInitializeGlobal = (csn) => {
     const aEvents = [];
     const aServices = [];
     const aODMEntity = [];
-
+    
     const capNamespace = csn.namespace;
     // namespace variable value if present in cdsrc.json take it there or else from package.json
     const namespace = cds.env["ord"]?.namespace || `customer.${appName}`;
