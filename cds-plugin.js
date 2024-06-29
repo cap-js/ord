@@ -15,3 +15,5 @@ const registerORDCompileTarget = () => {
 };
 
 registerORDCompileTarget();
+
+cds.build?.register?.('ord', require('./lib/build'));  
