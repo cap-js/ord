@@ -18,6 +18,14 @@
   "peerDependencies": {
     "@sap/cds": ">=7.6",
     "@cap-js/asyncapi": "^1.0.0",
-    "@cap-js/openapi": "^1.0.2"
+    "@cap-js/openapi": "^1.0.2",
+    "@sap/cds-dk": "^7"
+  },
+  "devDependencies": {
+    "axios": "^1.4.0",
+    "chai": "^4.4.1",
+    "chai-as-promised": "^7.1.1",
+    "chai-subset": "^1.6.0",
+    "jest": "^29.7.0"
   }
 }
