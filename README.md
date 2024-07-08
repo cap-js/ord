@@ -4,7 +4,7 @@
 
 ## About this project
 
-Open Resource Discovery (ORD) is a protocol that allows applications and services to self-describe their exposed resources and capabilities. This plugin enables generation of ORD document for CAP based applications.
+Open Resource Discovery [(ORD)](https://sap.github.io/open-resource-discovery/) is a protocol that allows applications and services to self-describe their exposed resources and capabilities. This plugin enables generation of ORD document for CAP based applications.
 
 ## Requirements and Setup
 
@@ -33,10 +33,15 @@ const ord = cds.compile.to.ord(csn)
 cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 ```
 
+<img width="1300" alt="Sample Application Demo" style="border-radius:0.5rem;" src="./asset/etc/ordCLI.png">
+
 #### ORD Endpoints
 
 1) Run `cds watch` in the application's root.
 2) Check the following relative paths for ORD information - `/.well-known/open-resource-discovery` , `/open-resource-discovery/v1/documents/1`.
+
+
+<img width="1300" alt="Sample Application Demo" style="border-radius:0.5rem;" src="./asset/etc/ordEndpoint.gif">
 
 
 ## Support, Feedback, Contributing
