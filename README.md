@@ -4,7 +4,9 @@
 
 ## About this project
 
-Open Resource Discovery [(ORD)](https://sap.github.io/open-resource-discovery/) is a protocol that allows applications and services to self-describe their exposed resources and capabilities. This plugin enables generation of ORD document for CAP based applications.
+This plugin enables generation of ORD document for CAP based applications. When you adopt ORD, your application gains a single entry point, known as the Service Provider Interface. This interface allows you to discover and gather relevant information or metadata. You can use this information to construct a static metadata catalog or to perform a detailed runtime inspection of your actual system landscapes.
+
+Open Resource Discovery [(ORD)](https://sap.github.io/open-resource-discovery/) is a protocol that enables applications and services to self-describe their available resources and capabilities. It's not only useful for describing static documentation, but it also accurately reflects tenant-specific configurations and extensions at runtime. Typically, ORD is used to describe APIs and Events, but it also supports higher-level concepts like Entity Types (Business Objects) and Data Products (beta).
 
 ## Requirements and Setup
 
