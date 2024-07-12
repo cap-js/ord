@@ -1,4 +1,4 @@
-[![REUSE status](https://api.reuse.software/badge/github.com/cap-js/cds-plugin-for-ord)](https://api.reuse.software/info/github.com/cap-js/cds-plugin-for-ord)
+[![REUSE status](https://api.reuse.software/badge/github.com/cap-js/ord)](https://api.reuse.software/info/github.com/cap-js/cds-plugin-for-ord)
 
 # CDS Plugin for ORD
 
@@ -44,6 +44,10 @@ cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 
 
 <img width="1300" alt="Sample Application Demo" style="border-radius:0.5rem;" src="./asset/etc/ordEndpoint.gif">
+
+### Customizing ORD Document
+
+You can find more information, such as how to customize the ORD Document, in this [document](ord.md).
 
 
 ## Support, Feedback, Contributing

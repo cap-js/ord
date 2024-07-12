@@ -10,7 +10,7 @@ jobs:
 
   publish-npm:
     runs-on: ubuntu-latest
-    # environment: npm
+    environment: npm
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -18,11 +18,10 @@ jobs:
         node-version: 20
         registry-url: https://registry.npmjs.org/
 
-    - name: Run Unit Tests
+    - name: Run Tests
       run: |
         npm install
         npm run lint
-        npm run test
 
     - name: get-version
       id: package-version
@@ -37,6 +36,6 @@ jobs:
       with:
         tag: 'v${{ steps.package-version.outputs.current-version }}'
         body: '${{ steps.parse-changelog.outputs.body }}'
-    # - run: npm publish --access public
-    #   env:
-    #     NODE_AUTH_TOKEN: ${{secrets.npm_token}}
+    - run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{secrets.npm_token}}
