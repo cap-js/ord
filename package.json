@@ -1,7 +1,7 @@
 {
   "name": "@cap-js/ord",
-  "version": "1.0.0",
-  "description": "CAP Tool for generating ORD information",
+  "version": "1.0.1",
+  "description": "CAP Plugin for generating ORD document.",
   "repository": "cap-js/ord",
   "author": "SAP SE (https://www.sap.com)",
   "homepage": "https://cap.cloud.sap/",
