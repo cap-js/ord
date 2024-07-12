@@ -15,6 +15,9 @@
   "scripts": {
     "lint": "npx eslint ."
   },
+  "devDependencies": {
+    "eslint": "^8"
+  },
   "peerDependencies": {
     "@sap/cds": ">=7.6",
     "@cap-js/asyncapi": "^1.0.0",
