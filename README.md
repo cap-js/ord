@@ -22,6 +22,7 @@ npm install @cap-js/ord
 
 ```js
 const cds = require('@sap/cds')
+require('@cap-js/ord');
 ```
 
 ```js
