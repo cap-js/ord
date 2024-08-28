@@ -19,7 +19,7 @@
     "eslint": "^8"
   },
   "peerDependencies": {
-    "@sap/cds": "7.9.4",
+    "@sap/cds": "^8",
     "@sap/cds-compiler" : "5.0.6",
     "@cap-js/asyncapi": "^1.0.0",
     "@cap-js/openapi": "^1.0.2"
