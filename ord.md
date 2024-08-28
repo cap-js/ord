@@ -15,7 +15,6 @@ Example:
     "description": "this is my custom description",
     "policyLevel": "sap:core:v1"
   }
-
 ```
 
 For all the service level information they can be added / overwritten using annotations (in the `.cds` files as `@ORD.Extensions`).
