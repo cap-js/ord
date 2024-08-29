@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "lint": "npx eslint .",
-    "test": "npx jest"
+    "test": "jest --ci --collectCoverage"
   },
   "devDependencies": {
     "eslint": "^8",
