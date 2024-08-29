@@ -17,7 +17,7 @@ Example:
   }
 ```
 
-For all the service level information they can be added / overwritten using annotations (in the `.cds` files as `@ORD.Extensions`).
+For all the service level information, they can be added / overwritten using annotations (in the `.cds` files as `@ORD.Extensions`).
 
 Example:
 
