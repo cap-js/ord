@@ -4,7 +4,7 @@ The cap-js ORD plugin has a default behavior where all the values of the ORD doc
 
 If this default behavior is to be overwritten, then there are two ways in which it could be done.
 
-For all the application global information it can be done using `present configuration` ( in `./cdsrc.json` under `ord` section).
+For all the application global information, it can be done using `present configuration` ( in `./cdsrc.json` under `ord` section).
 
 Example:
 
