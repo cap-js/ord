@@ -1,5 +1,5 @@
 const config = {
-    testTimeout: 42222,
+    testTimeout: 4000,
     testMatch: ['**/*.test.js']
   }
   
