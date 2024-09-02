@@ -22,7 +22,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "partOfGroups": [
         "sap.cds:service:capjs.ord:undefined.AdminService",
       ],
-      "partOfPackage": undefined,
+      "partOfPackage": "capjsord:package:undefined:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -69,7 +69,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "partOfGroups": [
         "sap.cds:service:capjs.ord:undefined.CatalogService",
       ],
-      "partOfPackage": undefined,
+      "partOfPackage": "capjsord:package:undefined:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -100,6 +100,64 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
     },
   ],
   "description": "this is an application description",
+  "eventResources": [
+    {
+      "description": "This is an example event catalog that contains only a partial ODM cap-js-ord V1 event",
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "capjs.ord:eventResource:undefined.AdminService:v1",
+      "partOfGroups": [
+        "sap.cds:service:capjs.ord:undefined.AdminService",
+      ],
+      "partOfPackage": "capjsord:package:undefined:v1",
+      "releaseStatus": "beta",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "Example ODM Event",
+      "title": "ODM capjsord Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "This is an example event catalog that contains only a partial ODM cap-js-ord V1 event",
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "capjs.ord:eventResource:undefined.CatalogService:v1",
+      "partOfGroups": [
+        "sap.cds:service:capjs.ord:undefined.CatalogService",
+      ],
+      "partOfPackage": "capjsord:package:undefined:v1",
+      "releaseStatus": "beta",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/CatalogService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "Example ODM Event",
+      "title": "ODM capjsord Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "groups": [
     {
       "groupId": "sap.cds:service:capjs.ord:undefined.AdminService",
@@ -113,6 +171,19 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
     },
   ],
   "openResourceDiscovery": "1.9",
+  "packages": [
+    {
+      "description": "Description for capjs ord",
+      "ordId": "capjsord:package:undefined:v1",
+      "partOfProducts": [
+        "customer:product:capjs.ord:",
+      ],
+      "shortDescription": "Short description for capjs ord",
+      "title": "capjs ord",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+  ],
   "policyLevel": "none",
   "products": [
     {
