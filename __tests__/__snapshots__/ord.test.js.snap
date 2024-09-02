@@ -1,0 +1,126 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Tests for default ORD document Successfully create ORD Documents with defaults 1`] = `
+{
+  "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
+  "apiResources": [
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Here we have the description for AdminService",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [],
+        },
+      ],
+      "entryPoints": [
+        "/odata/v4/admin",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "capjs.ord:apiResource:undefined.AdminService:v1",
+      "partOfGroups": [
+        "sap.cds:service:capjs.ord:undefined.AdminService",
+      ],
+      "partOfPackage": undefined,
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
+        },
+      ],
+      "shortDescription": "Here we have the shortDescription for AdminService",
+      "title": "The service is for AdminService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Here we have the description for CatalogService",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [],
+        },
+      ],
+      "entryPoints": [
+        "/browse",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "capjs.ord:apiResource:undefined.CatalogService:v1",
+      "partOfGroups": [
+        "sap.cds:service:capjs.ord:undefined.CatalogService",
+      ],
+      "partOfPackage": undefined,
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/CatalogService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/CatalogService.edmx",
+        },
+      ],
+      "shortDescription": "Here we have the shortDescription for CatalogService",
+      "title": "The service is for CatalogService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "description": "this is an application description",
+  "groups": [
+    {
+      "groupId": "sap.cds:service:capjs.ord:undefined.AdminService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Admin Service Title",
+    },
+    {
+      "groupId": "sap.cds:service:capjs.ord:undefined.CatalogService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Catalog Service Title",
+    },
+  ],
+  "openResourceDiscovery": "1.9",
+  "policyLevel": "none",
+  "products": [
+    {
+      "ordId": "customer:product:cap.js.ord:",
+      "shortDescription": "Description for cap js ord",
+      "title": "cap js ord",
+      "vendor": "customer:vendor:customer:",
+    },
+  ],
+}
+`;
