@@ -13,18 +13,20 @@
     "LICENSES"
   ],
   "scripts": {
-    "lint": "npx eslint ."
+    "lint": "npx eslint .",
+    "test": "jest --ci --collectCoverage",
+    "cds:version": "cds v -i"
   },
   "devDependencies": {
-    "eslint": "^8"
+    "eslint": "^8",
+    "jest": "^29.7.0"
   },
   "peerDependencies": {
+    "@sap/cds": "^8",
+    "@sap/cds-compiler" : "5.0.6",
     "@cap-js/asyncapi": "^1.0.0",
     "@cap-js/openapi": "^1.0.2",
-    "@sap/cds": "7.9.4",
+    "@sap/cds": "^8.1.1",
     "@sap/cds-compiler": "5.0.6"
-  },
-  "dependencies": {
-    "jest": "^29.7.0"
   }
 }
