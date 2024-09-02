@@ -2,22 +2,22 @@
 
 The cap-js ORD plugin has a default behavior where all the values of the ORD document are generated automatically by the plugin without the user giving them explicitly.
 
-If this default behavior is to be overwritten , then there are two ways in which it could be done.
+If this default behavior is to be overwritten, then there are two ways in which it could be done.
 
-For all the application level felids it is done using `present configuration` ( in `./cdsrc.json` under `ord` section).
+For all the application global information, it can be done using `present configuration` ( in `./cdsrc.json` under `ord` section).
 
 Example:
 
 ```js
- "ord": {
-        "namespace": "sap.sample",
-        "description": "this is my custom description",
-        "policyLevel": "sap:core:v1"
-    }
-
+// cdsrc.json or package.json cds context
+  "ord": {
+    "namespace": "sap.sample",
+    "description": "this is my custom description",
+    "policyLevel": "sap:core:v1"
+  }
 ```
 
-For all the service level felids it is done using annotations ( in the `.cds` files as `@ORD.Extensions`).
+For all the service level information, they can be added / overwritten using annotations (in the `.cds` files as `@ORD.Extensions`).
 
 Example:
 
@@ -34,11 +34,12 @@ annotate ProcessorService with @ORD.Extensions : {
 ```
 
 Also note that annotations like `@Core.Description` and `@description` are also read.
-The overwriting happens in the following priority : ord.extensions annotations > cap annotations > defaults.
+
+The overwriting happens in the following priority: ord.extensions annotations > cap annotations > defaults.
 
 The below is the table for all the supported ORD Fields containing defaults and how to overwrite the same.
 
-Note: `namespace` is usually taken from `.cdsrc.json` if not we take the `package.json` name. 
+Note: `namespace` is usually taken from `.cdsrc.json`, with a fallback to the `package.json` name. 
 
 | ORD Field  | Type | Defaults | Preset/Annotation | Usage Example | Description |
 |----------|----------|----------|----------|----------|----------|
