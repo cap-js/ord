@@ -16,7 +16,7 @@ describe("Tests for default ORD document", () => {
 
 
   describe("eventResources", () => {
-    const eventResourceId = /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/
+    const GROUP_ID_REGEX = /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/
 
     let document;
 
@@ -33,9 +33,9 @@ describe("Tests for default ORD document", () => {
     test("The CDS Service Group ID includes the CDS Service identifier", () => {
       for (const eventResource of document.eventResources) {
         const [groupId] = eventResource.partOfGroups
-        expect(groupId).toMatch(eventResourceId)
+        expect(groupId).toMatch(GROUP_ID_REGEX)
 
-        const match = eventResourceId.exec(groupId)
+        const match = GROUP_ID_REGEX.exec(groupId)
         if (match && match.groups?.service) {
           let service = match.groups?.service
           if (service.startsWith("undefined")) service = service.replace("undefined.", "")
