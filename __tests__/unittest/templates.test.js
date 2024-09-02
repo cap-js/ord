@@ -17,8 +17,8 @@ describe('templates', () => {
     describe('fCreateEntityTypeTemplate', () => {
         it('should return default value', () => {
             expect(templates.fCreateEntityTypeTemplate(linkedModel)).toEqual({
-                // TODO: fix undefined. Root cause: get the value from ${entity["@ODM.entityName"]} without setting default value
-                ordId: "sap.odm:entityType:undefined:v1"
+                // TODO: fix undefined. Root cause: get the value from ${entity['@ODM.entityName']} without setting default value
+                ordId: 'sap.odm:entityType:undefined:v1'
             });
         });
     });
@@ -127,11 +127,6 @@ describe('templates', () => {
                   partOfPackage: undefined,
                   partOfGroups: ['sap.cds:service:customer:undefined.MyService'],
                   releaseStatus: 'active',
-                  partOfConsumptionBundles: [
-                    {
-                      ordId: 'customer:consumptionBundle:noAuth:v1',
-                    },
-                  ],
                   apiProtocol: 'odata-v4',
                   resourceDefinitions: [
                     {
