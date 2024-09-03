@@ -181,7 +181,7 @@ describe('templates', () => {
                     {
                     type: 'asyncapi-v2',
                     mediaType: 'application/json',
-                    url: '/.well-known/open-resource-discovery/v1/api-metadata/MyService.asyncapi2.json',
+                    url: '/.well-known/open-resource-discovery/v1/api-metadata/undefined.asyncapi2.json',
                     accessStrategies: [
                         {
                         type: 'open',
