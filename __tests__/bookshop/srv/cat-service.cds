@@ -7,4 +7,18 @@ service CatalogService @(path:'/browse') {
 
   @requires: 'authenticated-user'
   action submitOrder (book: Books:ID, quantity: Integer);
+  
+  event BookCreated : {
+      ID    : Integer;
+    title : String @title: 'Title';
+  };
+
+  event BookDeleted : {
+    ID    : Integer;
+  };
+
+  event BookUpdated : {
+    ID    : Integer;
+    title : String @title: 'Title';
+  }
 }
