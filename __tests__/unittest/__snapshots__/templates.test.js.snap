@@ -108,7 +108,3 @@ exports[`templates fCreateEventResourceTemplate should create API resource templ
   "visibility": "public",
 }
 `;
-
-exports[`templates fReplaceSpecialCharacters should return dash when there is no customer 1`] = `"testNamespace-123"`;
-
-exports[`templates fReplaceSpecialCharacters should return replaced dash 1`] = `"customer.testNamespace123"`;
