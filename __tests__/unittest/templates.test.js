@@ -17,7 +17,6 @@ describe('templates', () => {
   describe('fCreateEntityTypeTemplate', () => {
     it('should return default value', () => {
       expect(templates.fCreateEntityTypeTemplate(linkedModel)).toEqual({
-        // TODO: fix undefined. Root cause: get the value from ${entity['@ODM.entityName']} without setting default value
         ordId: 'sap.odm:entityType:undefined:v1'
       });
     });
@@ -44,7 +43,6 @@ describe('templates', () => {
       expect(templates.fReplaceSpecialCharacters(testString)).toEqual('customer.testNamespace123');
     });
 
-    // TODO: is that correct?
     it('should return dash when there is no customer', () => {
       const testString = 'testNamespace-123';
       expect(templates.fReplaceSpecialCharacters(testString)).toEqual('testNamespace-123');
