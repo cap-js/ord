@@ -108,7 +108,6 @@ describe('templates', () => {
         it('should create API resource template correctly', () => {
             const srv = 'MyService';
             const srvDefinition = linkedModel
-            console.log('srvDefinition:', srvDefinition._service);
             global.namespace = 'customer';
             global.appName = 'testAppName';
             const packageIds = ['package1'];

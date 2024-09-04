@@ -35,7 +35,7 @@ exports[`defaults description should return default value 1`] = `"this is an app
 
 exports[`defaults groupTypeId should return default value 1`] = `"sap.cds:service"`;
 
-exports[`defaults openResourceDiscovery should return default value 1`] = `"2.0"`;
+exports[`defaults openResourceDiscovery should return default value 1`] = `"1.9"`;
 
 exports[`defaults packages should return default value if policyLevel contains sap 1`] = `
 [
