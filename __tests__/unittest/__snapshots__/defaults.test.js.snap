@@ -1,0 +1,94 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`defaults $schema should return default value 1`] = `"https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json"`;
+
+exports[`defaults baseTemplate should return default value 1`] = `
+{
+  "openResourceDiscoveryV1": {
+    "documents": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "url": "/open-resource-discovery/v1/documents/1",
+      },
+    ],
+  },
+}
+`;
+
+exports[`defaults consumptionBundles should return default value 1`] = `
+[
+  {
+    "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
+    "ordId": "MyConsumptionBundle:consumptionBundle:unknown:v1",
+    "shortDescription": "If we have another protected API then it will be another object",
+    "title": "Unprotected resources",
+    "version": "1.0.0",
+  },
+]
+`;
+
+exports[`defaults description should return default value 1`] = `"this is an application description"`;
+
+exports[`defaults groupTypeId should return default value 1`] = `"sap.cds:service"`;
+
+exports[`defaults openResourceDiscovery should return default value 1`] = `"2.0"`;
+
+exports[`defaults packages should return default value if policyLevel contains sap 1`] = `
+[
+  {
+    "description": "Description for My Package",
+    "ordId": "MyPackage:package:sample-api:v1",
+    "partOfProducts": [
+      "customer:product:My.Package:",
+    ],
+    "shortDescription": "Short description for My Package",
+    "title": "My Package",
+    "vendor": "customer:vendor:Customer:",
+    "version": "1.0.0",
+  },
+  {
+    "description": "Description for My Package",
+    "ordId": "MyPackage:package:sample-event:v1",
+    "partOfProducts": [
+      "customer:product:My.Package:",
+    ],
+    "shortDescription": "Short description for My Package",
+    "title": "My Package",
+    "vendor": "customer:vendor:Customer:",
+    "version": "1.0.0",
+  },
+]
+`;
+
+exports[`defaults packages should return default value if policyLevel does not contain sap 1`] = `
+[
+  {
+    "description": "Description for My Package",
+    "ordId": "MyPackage:package:sample:v1",
+    "partOfProducts": [
+      "customer:product:My.Package:",
+    ],
+    "shortDescription": "Short description for My Package",
+    "title": "My Package",
+    "vendor": "customer:vendor:Customer:",
+    "version": "1.0.0",
+  },
+]
+`;
+
+exports[`defaults policyLevel should return default value 1`] = `"none"`;
+
+exports[`defaults products should return default value 1`] = `
+[
+  {
+    "ordId": "customer:product:My.Product:",
+    "shortDescription": "Description for My Product",
+    "title": "My Product",
+    "vendor": "customer:vendor:customer:",
+  },
+]
+`;
