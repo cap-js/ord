@@ -80,7 +80,7 @@ exports[`templates fCreateAPIResourceTemplate should create API resource templat
 
 exports[`templates fCreateEventResourceTemplate should create API resource template correctly 1`] = `
 {
-  "description": "This is an example event catalog that contains only a partial ODM testAppName V1 event",
+  "description": "CAP Event resource describing events / messages.",
   "extensible": {
     "supported": "no",
   },
