@@ -57,7 +57,7 @@ describe('templates', () => {
             const testResult = {
                 groupId: 'sap.cds:service:customer:undefined.testServiceName',
                 groupTypeId: 'sap.cds:service',
-                title: 'test Service Title'
+                title: 'test Service'
             };
             expect(templates.fCreateGroupsTemplateForService(testSrv, linkedModel, testGroupIds)).toEqual(testResult);
         });
@@ -72,7 +72,7 @@ describe('templates', () => {
                 groupId: 'sap.cds:service:customer:undefined.testEventName',
                 groupTypeId: 'sap.cds:service',
                 // TODO: space because of service name missing
-                title: ' Service Title'
+                title: ' Service'
             };
             expect(templates.fCreateGroupsTemplateForEvent(tesEvent, linkedModel, testGroupIds)).toEqual(testResult);
         });
