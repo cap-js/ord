@@ -102,7 +102,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
   "description": "this is an application description",
   "eventResources": [
     {
-      "description": "This is an example event catalog that contains only a partial ODM cap-js-ord V1 event",
+      "description": "CAP Event resource describing events / messages.",
       "extensible": {
         "supported": "no",
       },
@@ -130,7 +130,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "visibility": "public",
     },
     {
-      "description": "This is an example event catalog that contains only a partial ODM cap-js-ord V1 event",
+      "description": "CAP Event resource describing events / messages.",
       "extensible": {
         "supported": "no",
       },
