@@ -6,7 +6,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
   "apiResources": [
     {
       "apiProtocol": "odata-v4",
-      "description": "Here we have the description for AdminService",
+      "description": "AdminService",
       "entityTypeMappings": [
         {
           "entityTypeTargets": [],
@@ -46,14 +46,14 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
           "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
         },
       ],
-      "shortDescription": "Here we have the shortDescription for AdminService",
-      "title": "The service is for AdminService",
+      "shortDescription": "AdminService",
+      "title": "AdminService",
       "version": "1.0.0",
       "visibility": "public",
     },
     {
       "apiProtocol": "odata-v4",
-      "description": "Here we have the description for CatalogService",
+      "description": "CatalogService",
       "entityTypeMappings": [
         {
           "entityTypeTargets": [],
@@ -93,8 +93,8 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
           "url": "/.well-known/open-resource-discovery/v1/api-metadata/CatalogService.edmx",
         },
       ],
-      "shortDescription": "Here we have the shortDescription for CatalogService",
-      "title": "The service is for CatalogService",
+      "shortDescription": "CatalogService",
+      "title": "CatalogService",
       "version": "1.0.0",
       "visibility": "public",
     },
@@ -104,12 +104,12 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
     {
       "groupId": "sap.cds:service:capjs.ord:undefined.AdminService",
       "groupTypeId": "sap.cds:service",
-      "title": "Admin Service Title",
+      "title": "Admin Service",
     },
     {
       "groupId": "sap.cds:service:capjs.ord:undefined.CatalogService",
       "groupTypeId": "sap.cds:service",
-      "title": "Catalog Service Title",
+      "title": "Catalog Service",
     },
   ],
   "openResourceDiscovery": "1.9",
