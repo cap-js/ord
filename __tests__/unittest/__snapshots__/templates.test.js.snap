@@ -30,7 +30,7 @@ exports[`templates fCreateAPIResourceTemplate should create API resource templat
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "Here we have the description for MyService",
+    "description": "MyService",
     "entityTypeMappings": [
       {
         "entityTypeTargets": undefined,
@@ -70,8 +70,8 @@ exports[`templates fCreateAPIResourceTemplate should create API resource templat
         "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.edmx",
       },
     ],
-    "shortDescription": "Here we have the shortDescription for MyService",
-    "title": "The service is for MyService",
+    "shortDescription": "MyService",
+    "title": "MyService",
     "version": "1.0.0",
     "visibility": "public",
   },
