@@ -4,9 +4,11 @@
 
 ## About this project
 
-This plugin enables generation of ORD document for CAP based applications. When you adopt ORD, your application gains a single entry point, known as the Service Provider Interface. This interface allows you to discover and gather relevant information or metadata. You can use this information to construct a static metadata catalog or to perform a detailed runtime inspection of your actual system landscapes.
+This plugin adds support for the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) (ORD) protocol for CAP based applications. 
+When you add the ORD plugin, your application gains a single entry point, which allows to discover and gather machine-readable information or metadata about the application. 
+You can use this information to construct a static metadata catalog or to perform a detailed runtime inspection of your actual system instances / system landscapes.
 
-Open Resource Discovery [(ORD)](https://sap.github.io/open-resource-discovery/) is a protocol that enables applications and services to self-describe their available resources and capabilities. It's not only useful for describing static documentation, but it also accurately reflects tenant-specific configurations and extensions at runtime. Typically, ORD is used to describe APIs and Events, but it also supports higher-level concepts like Entity Types (Business Objects) and Data Products (beta).
+For more information, have a look at the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) page. 
 
 ## Requirements and Setup
 
@@ -49,7 +51,6 @@ cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 ### Customizing ORD Document
 
 You can find more information, such as how to customize the ORD Document, in this [document](ord.md).
-
 
 ## Support, Feedback, Contributing
 
