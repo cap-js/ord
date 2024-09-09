@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`templates checkEntityFunctionAction should fail when entity is empty 1`] = `
+[
+  {
+    "entitySet": "customer.testNamespace123.Books",
+    "entitySetMapping": "undefined:entitySet:customer.testNamespace123.Books:v1",
+    "entityType": "customer.testNamespace123.Books",
+    "entityTypeMapping": "undefined:entityType:customer.testNamespace123.Books:v1",
+    "name": "customer.testNamespace123.Books",
+    "type": "entity",
+  },
+]
+`;
+
+exports[`templates checkEntityFunctionAction should return entity 1`] = `
+[
+  {
+    "entitySet": "customer.testNamespace123.Books",
+    "entitySetMapping": "undefined:entitySet:customer.testNamespace123.Books:v1",
+    "entityType": "customer.testNamespace123.Books",
+    "entityTypeMapping": "undefined:entityType:customer.testNamespace123.Books:v1",
+    "name": "customer.testNamespace123.Books",
+    "type": "entity",
+  },
+]
+`;
+
+exports[`templates fCreateAPIResourceTemplate should create API resource template correctly 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Here we have the description for MyService",
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": undefined,
+      },
+    ],
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "ordId": "customer:apiResource:undefined.MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer:undefined.MyService",
+    ],
+    "partOfPackage": undefined,
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.edmx",
+      },
+    ],
+    "shortDescription": "Here we have the shortDescription for MyService",
+    "title": "The service is for MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`templates fCreateEventResourceTemplate should create API resource template correctly 1`] = `
+{
+  "description": "This is an example event catalog that contains only a partial ODM testAppName V1 event",
+  "extensible": {
+    "supported": "no",
+  },
+  "ordId": "customer:eventResource:undefined.MyService:v1",
+  "partOfGroups": [
+    "sap.cds:service:customer:undefined.MyService",
+  ],
+  "partOfPackage": undefined,
+  "releaseStatus": "beta",
+  "resourceDefinitions": [
+    {
+      "accessStrategies": [
+        {
+          "type": "open",
+        },
+      ],
+      "mediaType": "application/json",
+      "type": "asyncapi-v2",
+      "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.asyncapi2.json",
+    },
+  ],
+  "shortDescription": "Example ODM Event",
+  "title": "ODM testAppName Events",
+  "version": "1.0.0",
+  "visibility": "public",
+}
+`;
