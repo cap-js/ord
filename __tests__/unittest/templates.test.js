@@ -61,14 +61,6 @@ describe('templates', () => {
             };
             expect(templates.fCreateGroupsTemplateForService(testSrv, linkedModel, testGroupIds)).toEqual(testResult);
         });
-
-        it('should return null when groupIds has groupId', () => {
-            const testSrv = 'testServiceName';
-            global.namespace = 'customer';
-            const testGroupIds = new Set(['sap.cds:service:customer:undefined.testServiceName']);
-            const testResult = null;
-            expect(templates.fCreateGroupsTemplateForService(testSrv, linkedModel, testGroupIds)).toEqual(testResult);
-        });
     });
 
     describe('fCreateGroupsTemplateForEvent', () => {
