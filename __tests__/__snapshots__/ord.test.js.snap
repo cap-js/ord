@@ -173,13 +173,13 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
   "openResourceDiscovery": "1.9",
   "packages": [
     {
-      "description": "Description for capjs ord",
+      "description": "Description for cap js ord",
       "ordId": "capjsord:package:undefined:v1",
       "partOfProducts": [
-        "customer:product:capjs.ord:",
+        "customer:product:cap.js.ord:",
       ],
-      "shortDescription": "Short description for capjs ord",
-      "title": "capjs ord",
+      "shortDescription": "Short description for cap js ord",
+      "title": "cap js ord",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
