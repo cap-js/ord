@@ -43,9 +43,9 @@ describe("Tests for default ORD document", () => {
             for (const apiResource of document.apiResources) {
                 expect(
                     document.packages.find(
-                        (pck) => pck.ordId == apiResource.partOfPackage
+                        (pck) => pck.ordId === apiResource.partOfPackage
                     )
-                ).toBeDefined;
+                ).toBeDefined();
             }
         });
     });
