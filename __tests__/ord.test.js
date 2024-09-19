@@ -24,7 +24,9 @@ describe("Tests for default ORD document", () => {
     });
 
     describe("apiResources", () => {
-        const PACKAGE_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._-]+):(v0|v[1-9][0-9]*)$/;
+        // eslint-disable-next-line no-useless-escape
+        const PACKAGE_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._\-]+):(v0|v[1-9][0-9]*)$/;
+
         let document;
 
         beforeAll(() => {
@@ -49,8 +51,8 @@ describe("Tests for default ORD document", () => {
     });
 
     describe("eventResources", () => {
-        const GROUP_ID_REGEX =
-            /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/;
+        // eslint-disable-next-line no-useless-escape
+        const GROUP_ID_REGEX = /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/;
 
         let document;
 
