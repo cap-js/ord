@@ -14,6 +14,27 @@ describe("Tests for default ORD document", () => {
     expect(document).toMatchSnapshot();
   });
 
+  describe("apiResources", () => {
+    const PACKAGE_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._\-]+):(v0|v[1-9][0-9]*)$/
+
+    let document;
+
+    beforeAll(()=> {
+      document = ord(csn);
+    })
+
+    test("partOfPackage values are valid ORD IDs ", () => {
+      for (const apiResource of document.apiResources) {
+        expect(apiResource.partOfPackage).toMatch(PACKAGE_ID_REGEX)
+      }
+    })
+
+    test("The partOfPackage references an existing package", () => {
+        for (const apiResource of document.apiResources) {
+          expect(document.packages.find((pck) => pck.ordId == apiResource.partOfPackage)).toBeDefined
+        }
+      })
+  })
 
   describe("eventResources", () => {
     const GROUP_ID_REGEX = /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/
@@ -24,12 +45,12 @@ describe("Tests for default ORD document", () => {
       document = ord(csn);
     })
 
-    test("Assigned to excactly one CDS Service group", () => {
+    test("Assigned to exactly one CDS Service group", () => {
       for (const eventResource of document.eventResources) {
         expect(eventResource.partOfGroups.length).toEqual(1)
       }
     });
-  
+
     test("The CDS Service Group ID includes the CDS Service identifier", () => {
       for (const eventResource of document.eventResources) {
         const [groupId] = eventResource.partOfGroups
