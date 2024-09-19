@@ -5,8 +5,8 @@ const { join } = require("path");
 jest.mock("@sap/cds", () => {
     const { join } = require("path");
     let originalCds = jest.requireActual("@sap/cds");
-    originalCds.root = join(__dirname, "bookshop")
-    return originalCds
+    originalCds.root = join(__dirname, "bookshop");
+    return originalCds;
 });
 
 const cds = require("@sap/cds");
@@ -24,9 +24,7 @@ describe("Tests for default ORD document", () => {
     });
 
     describe("apiResources", () => {
-        const PACKAGE_ID_REGEX =
-            /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._\-]+):(v0|v[1-9][0-9]*)$/;
-
+        const PACKAGE_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._-]+):(v0|v[1-9][0-9]*)$/;
         let document;
 
         beforeAll(() => {
