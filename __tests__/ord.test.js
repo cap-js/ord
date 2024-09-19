@@ -31,7 +31,7 @@ describe("Tests for default ORD document", () => {
 
     test("The partOfPackage references an existing package", () => {
         for (const apiResource of document.apiResources) {
-          expect(document.packages.find((pck) => pck.ordId == apiResource.partOfPackage)).toBeDefined
+          expect(document.packages.find((pck) => pck.ordId === apiResource.partOfPackage)).toBeDefined()
         }
       })
   })
