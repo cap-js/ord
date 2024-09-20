@@ -18,11 +18,11 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "extensible": {
         "supported": "no",
       },
-      "ordId": "capjs.ord:apiResource:undefined.AdminService:v1",
+      "ordId": "capire.bookshopordsample:apiResource:undefined.AdminService:v1",
       "partOfGroups": [
-        "sap.cds:service:capjs.ord:undefined.AdminService",
+        "sap.cds:service:capire.bookshopordsample:undefined.AdminService",
       ],
-      "partOfPackage": "capjsord:package:undefined:v1",
+      "partOfPackage": "capirebookshopordsample:package:undefined:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -65,11 +65,11 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "extensible": {
         "supported": "no",
       },
-      "ordId": "capjs.ord:apiResource:undefined.CatalogService:v1",
+      "ordId": "capire.bookshopordsample:apiResource:undefined.CatalogService:v1",
       "partOfGroups": [
-        "sap.cds:service:capjs.ord:undefined.CatalogService",
+        "sap.cds:service:capire.bookshopordsample:undefined.CatalogService",
       ],
-      "partOfPackage": "capjsord:package:undefined:v1",
+      "partOfPackage": "capirebookshopordsample:package:undefined:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -106,11 +106,11 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "extensible": {
         "supported": "no",
       },
-      "ordId": "capjs.ord:eventResource:undefined.AdminService:v1",
+      "ordId": "capire.bookshopordsample:eventResource:undefined.AdminService:v1",
       "partOfGroups": [
-        "sap.cds:service:capjs.ord:undefined.AdminService",
+        "sap.cds:service:capire.bookshopordsample:undefined.AdminService",
       ],
-      "partOfPackage": "capjsord:package:undefined:v1",
+      "partOfPackage": "capirebookshopordsample:package:undefined:v1",
       "releaseStatus": "beta",
       "resourceDefinitions": [
         {
@@ -125,7 +125,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
         },
       ],
       "shortDescription": "Example ODM Event",
-      "title": "ODM capjsord Events",
+      "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "public",
     },
@@ -134,11 +134,11 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "extensible": {
         "supported": "no",
       },
-      "ordId": "capjs.ord:eventResource:undefined.CatalogService:v1",
+      "ordId": "capire.bookshopordsample:eventResource:undefined.CatalogService:v1",
       "partOfGroups": [
-        "sap.cds:service:capjs.ord:undefined.CatalogService",
+        "sap.cds:service:capire.bookshopordsample:undefined.CatalogService",
       ],
-      "partOfPackage": "capjsord:package:undefined:v1",
+      "partOfPackage": "capirebookshopordsample:package:undefined:v1",
       "releaseStatus": "beta",
       "resourceDefinitions": [
         {
@@ -153,19 +153,19 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
         },
       ],
       "shortDescription": "Example ODM Event",
-      "title": "ODM capjsord Events",
+      "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "public",
     },
   ],
   "groups": [
     {
-      "groupId": "sap.cds:service:capjs.ord:undefined.AdminService",
+      "groupId": "sap.cds:service:capire.bookshopordsample:undefined.AdminService",
       "groupTypeId": "sap.cds:service",
       "title": "Admin Service",
     },
     {
-      "groupId": "sap.cds:service:capjs.ord:undefined.CatalogService",
+      "groupId": "sap.cds:service:capire.bookshopordsample:undefined.CatalogService",
       "groupTypeId": "sap.cds:service",
       "title": "Catalog Service",
     },
@@ -173,13 +173,13 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
   "openResourceDiscovery": "1.9",
   "packages": [
     {
-      "description": "Description for capjs ord",
-      "ordId": "capjsord:package:undefined:v1",
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "capirebookshopordsample:package:undefined:v1",
       "partOfProducts": [
-        "customer:product:capjs.ord:",
+        "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description for capjs ord",
-      "title": "capjs ord",
+      "shortDescription": "Short description for capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
@@ -187,9 +187,9 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
   "policyLevel": "none",
   "products": [
     {
-      "ordId": "customer:product:cap.js.ord:",
-      "shortDescription": "Description for cap js ord",
-      "title": "cap js ord",
+      "ordId": "customer:product:capire.bookshop.ord.sample:",
+      "shortDescription": "Description for capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:customer:",
     },
   ],
