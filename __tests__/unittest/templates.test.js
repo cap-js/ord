@@ -55,7 +55,7 @@ describe('templates', () => {
             global.namespace = 'customer';
             const testGroupIds = new Set();
             const testResult = {
-                groupId: 'sap.cds:service:customer:undefined.testServiceName',
+                groupId: 'sap.cds:service:customer:testServiceName',
                 groupTypeId: 'sap.cds:service',
                 title: 'test Service'
             };
@@ -69,7 +69,7 @@ describe('templates', () => {
             global.namespace = 'customer';
             const testGroupIds = new Set();
             const testResult = {
-                groupId: 'sap.cds:service:customer:undefined.testEventName',
+                groupId: 'sap.cds:service:customer:testEventName',
                 groupTypeId: 'sap.cds:service',
                 // TODO: space because of service name missing
                 title: ' Service'
@@ -80,7 +80,7 @@ describe('templates', () => {
         it('should return null when groupIds has groupId', () => {
             const tesEvent = 'testEventName';
             global.namespace = 'customer';
-            const testGroupIds = new Set(['sap.cds:service:customer:undefined.testEventName']);
+            const testGroupIds = new Set(['sap.cds:service:customer:testEventName']);
             const testResult = null;
             expect(templates.fCreateGroupsTemplateForEvent(tesEvent, linkedModel, testGroupIds)).toEqual(testResult);
         });
