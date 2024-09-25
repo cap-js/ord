@@ -13,6 +13,7 @@
     "ord": {
         "namespace": "sap.sample",
         "description": "this is my custom description",
-        "policyLevel": "sap:core:v1"
+        "policyLevel": "sap:core:v1",
+        "customOrdContentFile": "./ord/custom.ord.json"
     }
 }
