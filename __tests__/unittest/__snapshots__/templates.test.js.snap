@@ -42,9 +42,9 @@ exports[`templates fCreateAPIResourceTemplate should create API resource templat
     "extensible": {
       "supported": "no",
     },
-    "ordId": "customer:apiResource:MyService:v1",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
     "partOfGroups": [
-      "sap.cds:service:customer:MyService",
+      "sap.cds:service:customer.testNamespace:MyService",
     ],
     "partOfPackage": undefined,
     "releaseStatus": "active",
@@ -84,9 +84,9 @@ exports[`templates fCreateEventResourceTemplate should create API resource templ
   "extensible": {
     "supported": "no",
   },
-  "ordId": "customer:eventResource:MyService:v1",
+  "ordId": "customer.testNamespace:eventResource:MyService:v1",
   "partOfGroups": [
-    "sap.cds:service:customer:MyService",
+    "sap.cds:service:customer.testNamespace:MyService",
   ],
   "partOfPackage": undefined,
   "releaseStatus": "beta",
