@@ -41,7 +41,7 @@ exports[`defaults packages should return default value if policyLevel contains s
 [
   {
     "description": "Description for My Package",
-    "ordId": "MyPackage:package:sample-api:v1",
+    "ordId": "sample:package:customer.MyPackage-api:v1",
     "partOfProducts": [
       "customer:product:My.Package:",
     ],
@@ -52,7 +52,7 @@ exports[`defaults packages should return default value if policyLevel contains s
   },
   {
     "description": "Description for My Package",
-    "ordId": "MyPackage:package:sample-event:v1",
+    "ordId": "sample:package:customer.MyPackage-event:v1",
     "partOfProducts": [
       "customer:product:My.Package:",
     ],
@@ -68,7 +68,7 @@ exports[`defaults packages should return default value if policyLevel does not c
 [
   {
     "description": "Description for My Package",
-    "ordId": "MyPackage:package:sample:v1",
+    "ordId": "sample:package:customer.MyPackage:v1",
     "partOfProducts": [
       "customer:product:My.Package:",
     ],

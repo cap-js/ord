@@ -22,7 +22,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "partOfGroups": [
         "sap.cds:service:capire.bookshopordsample:AdminService",
       ],
-      "partOfPackage": "capirebookshopordsample:package:capire.bookshopordsample:v1",
+      "partOfPackage": "capire.bookshopordsample:package:customer.capirebookshopordsample:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -69,7 +69,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "partOfGroups": [
         "sap.cds:service:capire.bookshopordsample:CatalogService",
       ],
-      "partOfPackage": "capirebookshopordsample:package:capire.bookshopordsample:v1",
+      "partOfPackage": "capire.bookshopordsample:package:customer.capirebookshopordsample:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -110,7 +110,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "partOfGroups": [
         "sap.cds:service:capire.bookshopordsample:AdminService",
       ],
-      "partOfPackage": "capirebookshopordsample:package:capire.bookshopordsample:v1",
+      "partOfPackage": "capire.bookshopordsample:package:customer.capirebookshopordsample:v1",
       "releaseStatus": "beta",
       "resourceDefinitions": [
         {
@@ -138,7 +138,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "partOfGroups": [
         "sap.cds:service:capire.bookshopordsample:CatalogService",
       ],
-      "partOfPackage": "capirebookshopordsample:package:capire.bookshopordsample:v1",
+      "partOfPackage": "capire.bookshopordsample:package:customer.capirebookshopordsample:v1",
       "releaseStatus": "beta",
       "resourceDefinitions": [
         {
@@ -174,7 +174,7 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
   "packages": [
     {
       "description": "Description for capire bookshop ord sample",
-      "ordId": "capirebookshopordsample:package:capire.bookshopordsample:v1",
+      "ordId": "capire.bookshopordsample:package:customer.capirebookshopordsample:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],

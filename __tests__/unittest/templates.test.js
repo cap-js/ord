@@ -52,7 +52,7 @@ describe('templates', () => {
     describe('fCreateGroupsTemplateForService', () => {
         it('should return default value when groupIds do not have groupId', () => {
             const testSrv = 'testServiceName';
-            global.namespace = 'customer';
+            global.ordNamespace = 'customer';
             const testGroupIds = new Set();
             const testResult = {
                 groupId: 'sap.cds:service:customer:testServiceName',
@@ -66,7 +66,7 @@ describe('templates', () => {
     describe('fCreateGroupsTemplateForEvent', () => {
         it('should return default value when groupIds do not have groupId', () => {
             const tesEvent = 'testEventName';
-            global.namespace = 'customer';
+            global.ordNamespace = 'customer';
             const testGroupIds = new Set();
             const testResult = {
                 groupId: 'sap.cds:service:customer:testEventName',
@@ -79,7 +79,7 @@ describe('templates', () => {
 
         it('should return null when groupIds has groupId', () => {
             const tesEvent = 'testEventName';
-            global.namespace = 'customer';
+            global.ordNamespace = 'customer';
             const testGroupIds = new Set(['sap.cds:service:customer:testEventName']);
             const testResult = null;
             expect(templates.fCreateGroupsTemplateForEvent(tesEvent, linkedModel, testGroupIds)).toEqual(testResult);
@@ -90,7 +90,7 @@ describe('templates', () => {
         it('should create API resource template correctly', () => {
             const srv = 'MyService';
             const srvDefinition = linkedModel
-            global.namespace = 'customer';
+            global.ordNamespace = 'customer';
             const packageIds = ['package1'];
             expect(templates.fCreateAPIResourceTemplate(srv, srvDefinition, global, packageIds)).toMatchSnapshot();
         });
@@ -100,7 +100,7 @@ describe('templates', () => {
         it('should create API resource template correctly', () => {
             const srv = 'MyService';
             const srvDefinition = linkedModel
-            global.namespace = 'customer';
+            global.ordNamespace = 'customer';
             global.appName = 'testAppName';
             const packageIds = ['package1'];
 
