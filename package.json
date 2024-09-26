@@ -15,6 +15,7 @@
   "scripts": {
     "lint": "npx eslint .",
     "test": "jest --ci --collectCoverage",
+    "update-snapshot": "jest --ci --updateSnapshot",
     "cds:version": "cds v -i"
   },
   "devDependencies": {
