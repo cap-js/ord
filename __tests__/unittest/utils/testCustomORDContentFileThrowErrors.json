@@ -1,0 +1,9 @@
+{
+    "namespace": "sap.sample",
+    "packages": [
+        {
+            "ordId": "sap.sm:package:smDataProducts:v1",
+            "localId": "smDataProducts"
+        }
+    ]
+}
