@@ -40,7 +40,7 @@ describe('defaults', () => {
 
     describe('packages', () => {
         const testGetPackageDataName = 'My Package';
-        const testGetPackageOrdNamespace = 'sample';
+        const testGetPackageOrdNamespace = 'customer.sample';
         it('should return default value if policyLevel contains sap', () => {
             const testPolicyLevel = 'sap:policy';
 

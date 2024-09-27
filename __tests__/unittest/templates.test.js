@@ -32,23 +32,6 @@ describe('templates', () => {
         });
     })
 
-    describe('fReplaceSpecialCharacters', () => {
-        it('should return replaced dot', () => {
-            const testString = 'customer.testNamespace.123';
-            expect(templates.fReplaceSpecialCharacters(testString)).toEqual('customer.testNamespace123');
-        });
-
-        it('should return replaced dash', () => {
-            const testString = 'customer.testNamespace-123';
-            expect(templates.fReplaceSpecialCharacters(testString)).toEqual('customer.testNamespace123');
-        });
-
-        it('should return dash when there is no customer', () => {
-            const testString = 'testNamespace-123';
-            expect(templates.fReplaceSpecialCharacters(testString)).toEqual('testNamespace-123');
-        });
-    })
-
     describe('fCreateGroupsTemplateForService', () => {
         it('should return default value when groupIds do not have groupId', () => {
             const testSrv = 'testServiceName';

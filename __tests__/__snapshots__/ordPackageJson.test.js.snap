@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Tests for default ORD document Successfully create ORD Documents with defaults 1`] = `
+exports[`Tests for default ORD document when .cdsrc.json is not present Successfully create ORD Documents with defaults 1`] = `
 {
   "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
@@ -18,9 +18,9 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "extensible": {
         "supported": "no",
       },
-      "ordId": "capire.bookshopordsample:apiResource:AdminService:v1",
+      "ordId": "customer.capirebookshopordsample:apiResource:AdminService:v1",
       "partOfGroups": [
-        "sap.cds:service:capire.bookshopordsample:AdminService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -65,9 +65,9 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "extensible": {
         "supported": "no",
       },
-      "ordId": "capire.bookshopordsample:apiResource:CatalogService:v1",
+      "ordId": "customer.capirebookshopordsample:apiResource:CatalogService:v1",
       "partOfGroups": [
-        "sap.cds:service:capire.bookshopordsample:CatalogService",
+        "sap.cds:service:customer.capirebookshopordsample:CatalogService",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -106,9 +106,9 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "extensible": {
         "supported": "no",
       },
-      "ordId": "capire.bookshopordsample:eventResource:AdminService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService:v1",
       "partOfGroups": [
-        "sap.cds:service:capire.bookshopordsample:AdminService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "beta",
@@ -134,9 +134,9 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
       "extensible": {
         "supported": "no",
       },
-      "ordId": "capire.bookshopordsample:eventResource:CatalogService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:CatalogService:v1",
       "partOfGroups": [
-        "sap.cds:service:capire.bookshopordsample:CatalogService",
+        "sap.cds:service:customer.capirebookshopordsample:CatalogService",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "beta",
@@ -160,12 +160,12 @@ exports[`Tests for default ORD document Successfully create ORD Documents with d
   ],
   "groups": [
     {
-      "groupId": "sap.cds:service:capire.bookshopordsample:AdminService",
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:AdminService",
       "groupTypeId": "sap.cds:service",
       "title": "Admin Service",
     },
     {
-      "groupId": "sap.cds:service:capire.bookshopordsample:CatalogService",
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:CatalogService",
       "groupTypeId": "sap.cds:service",
       "title": "Catalog Service",
     },
