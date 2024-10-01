@@ -11,7 +11,7 @@ jest.mock("@sap/cds", () => {
 
 const cds = require("@sap/cds");
 
-describe("Tests for default ORD document", () => {
+describe("Tests for default ORD document when .cdsrc.json is present", () => {
     let csn;
 
     beforeAll(async () => {
