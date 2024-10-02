@@ -1,7 +1,9 @@
 {
+    "namespace": "should not update since conflict with cdsrc.json",
+    "openResourceDiscovery": "should not update since no define in cdsrc.json",
     "packages": [
         {
-            "ordId": "sap.sm:package:smDataProducts:v1",
+            "ordId": "sap.sm:package:smDataProducts:v2",
             "localId": "smDataProducts",
             "title": "smDataProducts",
             "shortDescription": "smDataProducts package",
