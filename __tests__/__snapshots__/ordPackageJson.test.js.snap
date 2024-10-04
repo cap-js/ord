@@ -99,32 +99,6 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
       "visibility": "public",
     },
   ],
-  "dataProducts": [
-    {
-      "category": "business-object",
-      "description": "The Supplier data product offers access to all customers.",
-      "entityTypes": [
-        "sap.odm:entityType:BusinessPartner:v1",
-        "sap.sm:entityType:BusinessPartner:v1",
-      ],
-      "lastUpdate": "2024-06-20T14:04:01+01:00",
-      "localId": "Supplier",
-      "ordId": "sap.sm:dataProduct:Supplier:v1",
-      "outputPorts": [
-        {
-          "ordId": "sap.sm:apiResource:SupplierService:v1",
-        },
-      ],
-      "partOfPackage": "sap.sm:package:smDataProducts:v1",
-      "releaseStatus": "active",
-      "responsible": "sap:ach:CIC-DP-CO",
-      "shortDescription": "Ariba Supplier data product",
-      "title": "Supplier",
-      "type": "primary",
-      "version": "1.1.11",
-      "visibility": "public",
-    },
-  ],
   "description": "this is an application description",
   "eventResources": [
     {
