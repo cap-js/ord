@@ -1,5 +1,8 @@
 {
     "ord": {
+        "namespace": "sap.test.cdsrc.sample",
+        "description": "this is my custom description",
+        "policyLevel": "sap:core:v1",
         "customOrdContentFile": "./ord/custom.ord.json"
     }
 }

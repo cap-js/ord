@@ -32,30 +32,13 @@ describe('templates', () => {
         });
     })
 
-    describe('fReplaceSpecialCharacters', () => {
-        it('should return replaced dot', () => {
-            const testString = 'customer.testNamespace.123';
-            expect(templates.fReplaceSpecialCharacters(testString)).toEqual('customer.testNamespace123');
-        });
-
-        it('should return replaced dash', () => {
-            const testString = 'customer.testNamespace-123';
-            expect(templates.fReplaceSpecialCharacters(testString)).toEqual('customer.testNamespace123');
-        });
-
-        it('should return dash when there is no customer', () => {
-            const testString = 'testNamespace-123';
-            expect(templates.fReplaceSpecialCharacters(testString)).toEqual('testNamespace-123');
-        });
-    })
-
     describe('fCreateGroupsTemplateForService', () => {
         it('should return default value when groupIds do not have groupId', () => {
             const testSrv = 'testServiceName';
-            global.namespace = 'customer';
+            global.ordNamespace = 'customer.testNamespace';
             const testGroupIds = new Set();
             const testResult = {
-                groupId: 'sap.cds:service:customer:undefined.testServiceName',
+                groupId: 'sap.cds:service:customer.testNamespace:testServiceName',
                 groupTypeId: 'sap.cds:service',
                 title: 'test Service'
             };
@@ -66,10 +49,10 @@ describe('templates', () => {
     describe('fCreateGroupsTemplateForEvent', () => {
         it('should return default value when groupIds do not have groupId', () => {
             const tesEvent = 'testEventName';
-            global.namespace = 'customer';
+            global.ordNamespace = 'customer.testNamespace';
             const testGroupIds = new Set();
             const testResult = {
-                groupId: 'sap.cds:service:customer:undefined.testEventName',
+                groupId: 'sap.cds:service:customer.testNamespace:testEventName',
                 groupTypeId: 'sap.cds:service',
                 // TODO: space because of service name missing
                 title: ' Service'
@@ -79,8 +62,8 @@ describe('templates', () => {
 
         it('should return null when groupIds has groupId', () => {
             const tesEvent = 'testEventName';
-            global.namespace = 'customer';
-            const testGroupIds = new Set(['sap.cds:service:customer:undefined.testEventName']);
+            global.ordNamespace = 'customer.testNamespace';
+            const testGroupIds = new Set(['sap.cds:service:customer.testNamespace:testEventName']);
             const testResult = null;
             expect(templates.fCreateGroupsTemplateForEvent(tesEvent, linkedModel, testGroupIds)).toEqual(testResult);
         });
@@ -90,7 +73,7 @@ describe('templates', () => {
         it('should create API resource template correctly', () => {
             const srv = 'MyService';
             const srvDefinition = linkedModel
-            global.namespace = 'customer';
+            global.ordNamespace = 'customer.testNamespace';
             const packageIds = ['package1'];
             expect(templates.fCreateAPIResourceTemplate(srv, srvDefinition, global, packageIds)).toMatchSnapshot();
         });
@@ -100,7 +83,7 @@ describe('templates', () => {
         it('should create API resource template correctly', () => {
             const srv = 'MyService';
             const srvDefinition = linkedModel
-            global.namespace = 'customer';
+            global.ordNamespace = 'customer.testNamespace';
             global.appName = 'testAppName';
             const packageIds = ['package1'];
 

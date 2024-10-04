@@ -40,17 +40,17 @@ describe('defaults', () => {
 
     describe('packages', () => {
         const testGetPackageDataName = 'My Package';
-        const testGetPackageCapNamespace = 'sample';
+        const testGetPackageOrdNamespace = 'customer.sample';
         it('should return default value if policyLevel contains sap', () => {
             const testPolicyLevel = 'sap:policy';
 
-            expect(defaults.packages(testGetPackageDataName, testPolicyLevel, testGetPackageCapNamespace)).toMatchSnapshot();
+            expect(defaults.packages(testGetPackageDataName, testPolicyLevel, testGetPackageOrdNamespace)).toMatchSnapshot();
         });
 
         it('should return default value if policyLevel does not contain sap', () => {
             const testPolicyLevel = 'policy';
 
-            expect(defaults.packages(testGetPackageDataName, testPolicyLevel, testGetPackageCapNamespace)).toMatchSnapshot();
+            expect(defaults.packages(testGetPackageDataName, testPolicyLevel, testGetPackageOrdNamespace)).toMatchSnapshot();
         });
     });
 
