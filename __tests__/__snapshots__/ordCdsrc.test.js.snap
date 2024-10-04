@@ -5,11 +5,13 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
   "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
-      "apiProtocol": "odata-v4",
-      "description": "AdminService",
+      "apiProtocol": "odata-v5",
+      "description": "new AdminService",
       "entityTypeMappings": [
         {
-          "entityTypeTargets": [],
+          "entityTypeTargets": [
+            "new.entityType.target",
+          ],
         },
       ],
       "entryPoints": [
@@ -56,7 +58,9 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "description": "CatalogService",
       "entityTypeMappings": [
         {
-          "entityTypeTargets": [],
+          "entityTypeTargets": [
+            "new.entityType.target",
+          ],
         },
       ],
       "entryPoints": [
@@ -188,12 +192,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
     {
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:AdminService",
       "groupTypeId": "sap.cds:service",
-      "title": "Admin Service",
-    },
-    {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
-      "groupTypeId": "sap.cds:service",
-      "title": "Catalog Service",
+      "title": "new Admin Service",
     },
   ],
   "openResourceDiscovery": "1.9",

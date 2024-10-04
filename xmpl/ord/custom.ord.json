@@ -1,6 +1,27 @@
 {
     "namespace": "should not update since has conflict with cdsrc.json",
     "openResourceDiscovery": "should not update since not defined in cdsrc.json",
+    "groups": [
+        {
+            "groupId": "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+            "groupTypeId": "sap.cds:service",
+            "title": "new Admin Service"
+        }
+    ],
+    "apiResources": [
+        {
+            "apiProtocol": "odata-v5",
+            "description": "new AdminService",
+            "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
+            "entityTypeMappings": [
+                {
+                    "entityTypeTargets": [
+                        "new.entityType.target"
+                    ]
+                }
+            ]
+        }
+    ],
     "dataProducts": [
         {
             "ordId": "sap.sm:dataProduct:Supplier:v1",
@@ -17,7 +38,7 @@
             "category": "business-object",
             "outputPorts": [
                 {
-                "ordId": "sap.sm:apiResource:SupplierService:v1"
+                    "ordId": "sap.sm:apiResource:SupplierService:v1"
                 }
             ],
             "responsible": "sap:ach:CIC-DP-CO",
