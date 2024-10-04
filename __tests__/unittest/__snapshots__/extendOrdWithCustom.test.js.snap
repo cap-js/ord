@@ -1,7 +1,59 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should extend if custom ORD obj OrdId has no conflict with existing content 1`] = `
+{
+  "packages": [
+    {
+      "ordId": "sap.sm:package:smDataProducts:different",
+    },
+    {
+      "localId": "smDataProducts",
+      "ordId": "sap.sm:package:smDataProducts:v1",
+    },
+  ],
+}
+`;
+
 exports[`extendOrdWithCustom extendCustomORDContentIfExists should return custom ORD content if path it exists 1`] = `
 {
+  "packages": [
+    {
+      "localId": "smDataProducts",
+      "ordId": "sap.sm:package:smDataProducts:v1",
+    },
+  ],
+}
+`;
+
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should update if custom ORD obj OrdId has conflict with existing content 1`] = `
+{
+  "packages": [
+    {
+      "localId": "smDataProducts",
+      "ordId": "sap.sm:package:smDataProducts:v1",
+    },
+  ],
+}
+`;
+
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should update nested content  1`] = `
+{
+  "apiResources": [
+    {
+      "ordId": "sap.sm:apiResource:SupplierService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+      ],
+      "partOfPackage": "sap.sm:package:smDataProducts:v1",
+    },
+    {
+      "ordId": "sap.sm:apiResource:orginalService:dontUpdate",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:originalService",
+      ],
+      "partOfPackage": "sap.sm:package:smDataProducts:v2",
+    },
+  ],
   "packages": [
     {
       "localId": "smDataProducts",

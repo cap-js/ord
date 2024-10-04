@@ -33,10 +33,7 @@ describe('extendOrdWithCustom', () => {
     describe('extendCustomORDContentIfExists', () => {
         it('should return custom ORD content if path it exists', () => {
             const ordContent = {};
-            cds.env["ord"] = {};
-            const testCustomORDContentFile = '/utils/testCustomORDContentFile.json';
-            path.join.mockReturnValue(__dirname + testCustomORDContentFile);
-
+            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFile.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });
@@ -44,71 +41,38 @@ describe('extendOrdWithCustom', () => {
         it('should not extend existing object if custom ORD content does not exist', () => {
             const ordContent = {};
             appConfig.env.customOrdContentFile = undefined;
-
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toEqual(ordContent);
         });
 
         it('should throw error if custom ORD content has conflict with cdsrc.json', () => {
             const ordContent = { namespace: "sap.sample" };
-            cds.env["ord"] = { namespace: "sap.sample" };
-            appConfig.env.customOrdContentFile = 'testCustomORDContentFileThrowErrors.json';
-
-            const testCustomORDContentFile = '/utils/testCustomORDContentFileThrowErrors.json';
-            path.join.mockReturnValue(__dirname + testCustomORDContentFile);
-
+            prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
             console.error = jest.fn();
-
             extendCustomORDContentIfExists(appConfig, ordContent);
             expect(console.error).toHaveBeenCalledWith(expect.stringContaining('.cdsrc.json: namespace'));
         });
 
         it('should throw error if custom ORD content has conflict with default value', () => {
             const ordContent = { openResourceDiscovery: "1.9" };
-            cds.env["ord"] = {};
-            appConfig.env.customOrdContentFile = 'testCustomORDContentFileConflictWithDefault.json';
-
-            const testCustomORDContentFile = '/utils/testCustomORDContentFileConflictWithDefault.json';
-            path.join.mockReturnValue(__dirname + testCustomORDContentFile);
-
+            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileConflictWithDefault.json');
             console.error = jest.fn();
-
             extendCustomORDContentIfExists(appConfig, ordContent);
             expect(console.error).toHaveBeenCalledWith(expect.stringContaining('default value: openResourceDiscovery'));
         });
 
         it('should extend if custom ORD obj OrdId has no conflict with existing content', () => {
             const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:different" }] };
-            cds.env["ord"] = {};
-            const expectedResult = {
-                packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "smDataProducts" },
-                { ordId: "sap.sm:package:smDataProducts:different" }]
-            };
-            appConfig.env.customOrdContentFile = 'testCustomORDContentFile.json';
-
-            const testCustomORDContentFile = '/utils/testCustomORDContentFile.json';
-            path.join.mockReturnValue(__dirname + testCustomORDContentFile);
-
+            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFile.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
-
-            expect(result.namespace).toEqual(expectedResult.namespace);
-            expect(result.packages.map(a => a.ordId).sort()).toEqual(expectedResult.packages.map(a => a.ordId).sort());
+            expect(result).toMatchSnapshot();
         });
 
         it('should update if custom ORD obj OrdId has conflict with existing content', () => {
             const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "differentLocalId" }] };
-            cds.env["ord"] = {};
-            const expectedResult = {
-                packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "smDataProducts" }]
-            };
-            appConfig.env.customOrdContentFile = 'testCustomORDContentFile.json';
-
-            const testCustomORDContentFile = '/utils/testCustomORDContentFile.json';
-            path.join.mockReturnValue(__dirname + testCustomORDContentFile);
-
+            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFile.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
-
-            expect(result).toEqual(expectedResult);
+            expect(result).toMatchSnapshot();
         });
 
         it('should update nested content ', () => {
@@ -132,35 +96,15 @@ describe('extendOrdWithCustom', () => {
                     partOfPackage: "sap.sm:package:smDataProducts:v2"
                 }]
             };
-            cds.env["ord"] = {};
-            const expectedResult = {
-                packages: [{
-                    ordId: "sap.sm:package:smDataProducts:v1",
-                    localId: "smDataProducts"
-                },],
-                apiResources: [{
-                    ordId: "sap.sm:apiResource:SupplierService:v1",
-                    partOfGroups: [
-                        "sap.cds:service:sap.test.cdsrc.sample:AdminService"
-                    ],
-                    partOfPackage: "sap.sm:package:smDataProducts:v1"
-                },
-                {
-                    ordId: "sap.sm:apiResource:orginalService:dontUpdate",
-                    partOfGroups: [
-                        "sap.cds:service:sap.test.cdsrc.sample:originalService"
-                    ],
-                    partOfPackage: "sap.sm:package:smDataProducts:v2"
-                }]
-            };
-            appConfig.env.customOrdContentFile = 'testCustomORDContentFileWithNestedConflicts.json';
-
-            const testCustomORDContentFile = '/utils/testCustomORDContentFileWithNestedConflicts.json';
-            path.join.mockReturnValue(__dirname + testCustomORDContentFile);
-
+            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileWithNestedConflicts.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
-
-            expect(result).toEqual(expectedResult);
+            expect(result).toMatchSnapshot();
         });
     });
 });
+
+function prepareTestEnvironment(ordEnvVariables, appConfig, testFileName) {
+    cds.env["ord"] = ordEnvVariables;
+    appConfig.env.customOrdContentFile = testFileName;
+    path.join.mockReturnValue(`${__dirname}/utils/${testFileName}`);
+}
