@@ -1,22 +1,6 @@
 {
     "namespace": "should not update since conflict with cdsrc.json",
     "openResourceDiscovery": "should not update since no define in cdsrc.json",
-    "packages": [
-        {
-            "ordId": "sap.sm:package:smDataProducts:v2",
-            "localId": "smDataProducts",
-            "title": "smDataProducts",
-            "shortDescription": "smDataProducts package",
-            "description": "smDataProducts package",
-            "visibility": "public",
-            "releaseStatus": "active",
-            "version": "1.1.11",
-            "lastUpdate": "2024-06-20T14:04:01+01:00",
-            "type": "primary",
-            "category": "business-object",
-            "responsible": "sap:ach:CIC-DP-CO"
-        }
-    ],
     "dataProducts": [
         {
             "ordId": "sap.sm:dataProduct:Supplier:v1",

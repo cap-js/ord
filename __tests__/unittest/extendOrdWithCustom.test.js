@@ -35,11 +35,10 @@ describe('extendOrdWithCustom', () => {
             const ordContent = {};
             cds.env["ord"] = {};
             const testCustomORDContentFile = '/utils/testCustomORDContentFile.json';
-            const customORDContent = { content: 'content' };
             path.join.mockReturnValue(__dirname + testCustomORDContentFile);
 
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
-            expect(result).toEqual(customORDContent);
+            expect(result).toMatchSnapshot();
         });
 
         it('should not extend existing object if custom ORD content does not exist', () => {
@@ -82,13 +81,12 @@ describe('extendOrdWithCustom', () => {
             const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:different" }] };
             cds.env["ord"] = {};
             const expectedResult = {
-                namespace: "sap.sample",
                 packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "smDataProducts" },
                            { ordId: "sap.sm:package:smDataProducts:different" }]
             };
-            appConfig.env.customOrdContentFile = 'testCustomORDContentFileThrowErrors.json';
+            appConfig.env.customOrdContentFile = 'testCustomORDContentFile.json';
 
-            const testCustomORDContentFile = '/utils/testCustomORDContentFileThrowErrors.json';
+            const testCustomORDContentFile = '/utils/testCustomORDContentFile.json';
             path.join.mockReturnValue(__dirname + testCustomORDContentFile);
 
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
@@ -101,18 +99,16 @@ describe('extendOrdWithCustom', () => {
             const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "differentLocalId" }] };
             cds.env["ord"] = {};
             const expectedResult = {
-                namespace: "sap.sample",
-                packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "differentLocalId" }]
+                packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "smDataProducts" }]
             };
-            appConfig.env.customOrdContentFile = 'testCustomORDContentFileThrowErrors.json';
+            appConfig.env.customOrdContentFile = 'testCustomORDContentFile.json';
 
-            const testCustomORDContentFile = '/utils/testCustomORDContentFileThrowErrors.json';
+            const testCustomORDContentFile = '/utils/testCustomORDContentFile.json';
             path.join.mockReturnValue(__dirname + testCustomORDContentFile);
 
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
 
-            expect(result.namespace).toEqual(expectedResult.namespace);
-            expect(result.packages.map(a => a.ordId).sort()).toEqual(expectedResult.packages.map(a => a.ordId).sort());
+            expect(result).toEqual(expectedResult);
         });
     });
 });

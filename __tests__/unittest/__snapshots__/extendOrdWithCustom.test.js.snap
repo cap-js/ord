@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should return custom ORD content if path it exists 1`] = `
+{
+  "packages": [
+    {
+      "localId": "smDataProducts",
+      "ordId": "sap.sm:package:smDataProducts:v1",
+    },
+  ],
+}
+`;
