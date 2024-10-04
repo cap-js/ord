@@ -1,6 +1,6 @@
 {
-    "namespace": "should not update since conflict with cdsrc.json",
-    "openResourceDiscovery": "should not update since no define in cdsrc.json",
+    "namespace": "should not update since has conflict with cdsrc.json",
+    "openResourceDiscovery": "should not update since not defined in cdsrc.json",
     "dataProducts": [
         {
             "ordId": "sap.sm:dataProduct:Supplier:v1",

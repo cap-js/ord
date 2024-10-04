@@ -82,7 +82,7 @@ describe('extendOrdWithCustom', () => {
             cds.env["ord"] = {};
             const expectedResult = {
                 packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "smDataProducts" },
-                           { ordId: "sap.sm:package:smDataProducts:different" }]
+                { ordId: "sap.sm:package:smDataProducts:different" }]
             };
             appConfig.env.customOrdContentFile = 'testCustomORDContentFile.json';
 
@@ -104,6 +104,58 @@ describe('extendOrdWithCustom', () => {
             appConfig.env.customOrdContentFile = 'testCustomORDContentFile.json';
 
             const testCustomORDContentFile = '/utils/testCustomORDContentFile.json';
+            path.join.mockReturnValue(__dirname + testCustomORDContentFile);
+
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
+
+            expect(result).toEqual(expectedResult);
+        });
+
+        it('should update nested content ', () => {
+            const ordContent = {
+                packages: [{
+                    ordId: "sap.sm:package:smDataProducts:v1",
+                    localId: "differentLocalId"
+                }],
+                apiResources: [{
+                    ordId: "sap.sm:apiResource:SupplierService:v1",
+                    partOfGroups: [
+                        "sap.cds:service:sap.test.cdsrc.sample:originalService"
+                    ],
+                    partOfPackage: "sap.sm:package:smDataProducts:v2"
+                },
+                {
+                    ordId: "sap.sm:apiResource:orginalService:dontUpdate",
+                    partOfGroups: [
+                        "sap.cds:service:sap.test.cdsrc.sample:originalService"
+                    ],
+                    partOfPackage: "sap.sm:package:smDataProducts:v2"
+                }]
+            };
+            cds.env["ord"] = {};
+            const expectedResult = {
+                packages: [{
+                    ordId: "sap.sm:package:smDataProducts:v1",
+                    localId: "smDataProducts"
+                },],
+                apiResources: [{
+                    ordId: "sap.sm:apiResource:SupplierService:v1",
+                    partOfGroups: [
+                        "sap.cds:service:sap.test.cdsrc.sample:AdminService"
+                    ],
+                    partOfPackage: "sap.sm:package:smDataProducts:v1"
+                },
+                {
+                    ordId: "sap.sm:apiResource:orginalService:dontUpdate",
+                    partOfGroups: [
+                        "sap.cds:service:sap.test.cdsrc.sample:originalService"
+                    ],
+                    partOfPackage: "sap.sm:package:smDataProducts:v2"
+                }]
+            };
+            appConfig.env.customOrdContentFile = 'testCustomORDContentFileWithNestedConflicts.json';
+
+            const testCustomORDContentFile = '/utils/testCustomORDContentFileWithNestedConflicts.json';
             path.join.mockReturnValue(__dirname + testCustomORDContentFile);
 
             const result = extendCustomORDContentIfExists(appConfig, ordContent);

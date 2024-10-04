@@ -9,7 +9,7 @@ annotate ProcessorService with @ORD.Extensions : {
     visibility : 'public',
     extensible : {
       supported : 'no'
-    },
+    }
 };
 
 @AsyncAPI.Title         : 'SAP Incident Management'
