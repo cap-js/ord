@@ -9,7 +9,11 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "description": "AdminService",
       "entityTypeMappings": [
         {
-          "entityTypeTargets": [],
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:BusinessPartner:v1",
+            },
+          ],
         },
       ],
       "entryPoints": [
@@ -19,9 +23,6 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
         "supported": "yes",
       },
       "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
-      "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
-      ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
@@ -46,6 +47,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
           "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
         },
       ],
+      "shortDescription": "AdminService",
       "title": "AdminService",
       "version": "1.0.0",
       "visibility": "public",
@@ -55,7 +57,11 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "description": "CatalogService",
       "entityTypeMappings": [
         {
-          "entityTypeTargets": [],
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:BusinessPartner:v1",
+            },
+          ],
         },
       ],
       "entryPoints": [

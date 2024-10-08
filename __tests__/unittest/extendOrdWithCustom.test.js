@@ -55,7 +55,7 @@ describe('extendOrdWithCustom', () => {
         });
 
         it('should add new ord resources that are not supported by cap framework', () => {
-            const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:v1" }] };
+            const ordContent = {};
             prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileWithNewResources.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
@@ -63,7 +63,7 @@ describe('extendOrdWithCustom', () => {
 
         it('should enhance the list of generated ord resources', () => {
             const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "smDataProductsV1" }] };
-            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileWithNewResources.json');
+            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileWithEnhanced.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });
@@ -86,16 +86,25 @@ describe('extendOrdWithCustom', () => {
                     },
                     entityTypeMappings: [
                         {
-                            entityTypeTargets: {}
+                            entityTypeTargets: [
+                                {
+                                    ordId: "sap.odm:entityType:BusinessPartner:v2"
+                                }
+                            ]
                         }
                     ]
                 },
                 {
-                    ordId: "sap.sm:apiResource:orginalService:dontUpdate",
+                    ordId: "sap.sm:apiResource:orginalService:v2",
                     partOfGroups: [
                         "sap.cds:service:sap.test.cdsrc.sample:originalService"
                     ],
-                    partOfPackage: "sap.sm:package:smDataProducts:v2"
+                    partOfPackage: "sap.sm:package:smDataProducts:v2",
+                    entityTypeMappings: [
+                        {
+                            entityTypeTargets: []
+                        }
+                    ]
                 }]
             };
             prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileWithPatch.json');

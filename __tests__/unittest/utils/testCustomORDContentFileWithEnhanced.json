@@ -1,0 +1,8 @@
+{
+    "packages": [
+        {
+            "ordId": "sap.sm:package:smDataProducts:v2",
+            "localId": "smDataProductsV2"
+        }
+    ]
+}

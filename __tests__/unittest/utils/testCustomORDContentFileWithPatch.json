@@ -24,9 +24,11 @@
             "extensible": null,
             "entityTypeMappings": [
                 {
-                    "entityTypeTargets": {
-                        "ordId": "sap.odm:entityType:BusinessPartner:v1"
-                    }
+                    "entityTypeTargets": [
+                        {
+                            "ordId": "sap.odm:entityType:BusinessPartner:v1"
+                        }
+                    ]
                 }
             ]
         }
