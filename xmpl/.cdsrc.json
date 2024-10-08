@@ -14,22 +14,6 @@
         "namespace": "sap.sample",
         "description": "this is my custom description",
         "policyLevel": "sap:core:v1",
-        "packages": [
-            {
-                "ordId": "sap.sm:package:smDataProducts:v2",
-                "localId": "smDataProducts",
-                "title": "smDataProducts",
-                "shortDescription": "smDataProducts package",
-                "description": "smDataProducts package",
-                "visibility": "public",
-                "releaseStatus": "active",
-                "version": "1.1.11",
-                "lastUpdate": "2024-06-20T14:04:01+01:00",
-                "type": "primary",
-                "category": "business-object",
-                "responsible": "sap:ach:CIC-DP-CO"
-            }
-        ],
         "customOrdContentFile": "./ord/custom.ord.json"
     }
 }
