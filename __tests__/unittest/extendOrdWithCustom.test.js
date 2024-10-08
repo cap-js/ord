@@ -89,6 +89,9 @@ describe('extendOrdWithCustom', () => {
                             entityTypeTargets: [
                                 {
                                     ordId: "sap.odm:entityType:BusinessPartner:v2"
+                                },
+                                {
+                                    ordId: "sap.odm:entityType:BusinessPartner:v3"
                                 }
                             ]
                         }
