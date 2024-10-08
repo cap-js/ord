@@ -5,20 +5,18 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
   "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
-      "apiProtocol": "odata-v5",
-      "description": "new AdminService",
+      "apiProtocol": "odata-v4",
+      "description": "AdminService",
       "entityTypeMappings": [
         {
-          "entityTypeTargets": [
-            "new.entityType.target",
-          ],
+          "entityTypeTargets": [],
         },
       ],
       "entryPoints": [
         "/odata/v4/admin",
       ],
       "extensible": {
-        "supported": "no",
+        "supported": "yes",
       },
       "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
       "partOfGroups": [
@@ -48,7 +46,6 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
           "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
         },
       ],
-      "shortDescription": "AdminService",
       "title": "AdminService",
       "version": "1.0.0",
       "visibility": "public",
@@ -58,9 +55,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "description": "CatalogService",
       "entityTypeMappings": [
         {
-          "entityTypeTargets": [
-            "new.entityType.target",
-          ],
+          "entityTypeTargets": [],
         },
       ],
       "entryPoints": [
@@ -192,7 +187,12 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
     {
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:AdminService",
       "groupTypeId": "sap.cds:service",
-      "title": "new Admin Service",
+      "title": "Admin Service",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Catalog Service",
     },
   ],
   "openResourceDiscovery": "1.9",
@@ -214,10 +214,20 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description for capire bookshop ord sample",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
-      "version": "1.0.0",
+      "version": "1.0.1",
+    },
+    {
+      "description": "Description for capire bookshop ord sample version 2",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description for capire bookshop ord sample version 2",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "2.0.0",
     },
   ],
   "policyLevel": "sap:core:v1",

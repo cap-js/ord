@@ -31,21 +31,14 @@ describe('extendOrdWithCustom', () => {
     });
 
     describe('extendCustomORDContentIfExists', () => {
-        it('should return custom ORD content if path it exists', () => {
-            const ordContent = {};
-            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFile.json');
-            const result = extendCustomORDContentIfExists(appConfig, ordContent);
-            expect(result).toMatchSnapshot();
-        });
-
-        it('should not extend existing object if custom ORD content does not exist', () => {
+        it('should skip if there is no custom ord file', () => {
             const ordContent = {};
             appConfig.env.customOrdContentFile = undefined;
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toEqual(ordContent);
         });
 
-        it('should throw error if custom ORD content has conflict with cdsrc.json', () => {
+        it('should print log error if custom obj has ord root level property which defined in cdsrc.json', () => {
             const ordContent = { namespace: "sap.sample" };
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
             console.error = jest.fn();
@@ -53,7 +46,7 @@ describe('extendOrdWithCustom', () => {
             expect(console.error).toHaveBeenCalledWith(expect.stringContaining('.cdsrc.json: namespace'));
         });
 
-        it('should throw error if custom ORD content has conflict with default value', () => {
+        it('should print log error if custom obj has ord root level property which exists in default', () => {
             const ordContent = { openResourceDiscovery: "1.9" };
             prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileConflictWithDefault.json');
             console.error = jest.fn();
@@ -61,32 +54,41 @@ describe('extendOrdWithCustom', () => {
             expect(console.error).toHaveBeenCalledWith(expect.stringContaining('default value: openResourceDiscovery'));
         });
 
-        it('should extend if custom ORD obj OrdId has no conflict with existing content', () => {
-            const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:different" }] };
-            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFile.json');
+        it('should add new ord resources that are not supported by cap framework', () => {
+            const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:v1" }] };
+            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileWithNewResources.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });
 
-        it('should update if custom ORD obj OrdId has conflict with existing content', () => {
-            const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "differentLocalId" }] };
-            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFile.json');
+        it('should enhance the list of generated ord resources', () => {
+            const ordContent = { packages: [{ ordId: "sap.sm:package:smDataProducts:v1", localId: "smDataProductsV1" }] };
+            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileWithNewResources.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });
 
-        it('should update nested content ', () => {
+        it('should should patch the existing generated ord resources', () => {
             const ordContent = {
                 packages: [{
                     ordId: "sap.sm:package:smDataProducts:v1",
-                    localId: "differentLocalId"
+                    localId: "smDataProductsV1"
                 }],
                 apiResources: [{
                     ordId: "sap.sm:apiResource:SupplierService:v1",
+                    title: "should be removed",
                     partOfGroups: [
                         "sap.cds:service:sap.test.cdsrc.sample:originalService"
                     ],
-                    partOfPackage: "sap.sm:package:smDataProducts:v2"
+                    partOfPackage: "sap.sm:package:smDataProducts:v2",
+                    extensible: {
+                        "supported": "no"
+                    },
+                    entityTypeMappings: [
+                        {
+                            entityTypeTargets: {}
+                        }
+                    ]
                 },
                 {
                     ordId: "sap.sm:apiResource:orginalService:dontUpdate",
@@ -96,7 +98,7 @@ describe('extendOrdWithCustom', () => {
                     partOfPackage: "sap.sm:package:smDataProducts:v2"
                 }]
             };
-            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileWithNestedConflicts.json');
+            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileWithPatch.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });

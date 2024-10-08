@@ -1,25 +1,38 @@
 {
     "namespace": "should not update since has conflict with cdsrc.json",
     "openResourceDiscovery": "should not update since not defined in cdsrc.json",
-    "groups": [
+    "packages": [
         {
-            "groupId": "sap.cds:service:sap.test.cdsrc.sample:AdminService",
-            "groupTypeId": "sap.cds:service",
-            "title": "new Admin Service"
+            "description": "Description for capire bookshop ord sample version 2",
+            "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
+            "partOfProducts": [
+                "customer:product:capire.bookshop.ord.sample:"
+            ],
+            "shortDescription": "Short description for capire bookshop ord sample version 2",
+            "title": "capire bookshop ord sample",
+            "vendor": "customer:vendor:Customer:",
+            "version": "2.0.0"
+        },
+        {
+            "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+            "shortDescription": null,
+            "version": "1.0.1"
         }
     ],
     "apiResources": [
         {
-            "apiProtocol": "odata-v5",
-            "description": "new AdminService",
+            "shortDescription": null,
             "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
             "entityTypeMappings": [
                 {
-                    "entityTypeTargets": [
-                        "new.entityType.target"
-                    ]
+                    "entityTypeTargets": {
+                        "ordId": "sap.odm:entityType:BusinessPartner:v1"
+                    }
                 }
-            ]
+            ],
+            "extensible": {
+                "supported": "yes"
+            }
         }
     ],
     "dataProducts": [
