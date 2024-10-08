@@ -57,11 +57,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "description": "CatalogService",
       "entityTypeMappings": [
         {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:BusinessPartner:v1",
-            },
-          ],
+          "entityTypeTargets": [],
         },
       ],
       "entryPoints": [
