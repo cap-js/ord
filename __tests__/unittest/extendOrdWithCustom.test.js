@@ -20,8 +20,10 @@ const cds = require("@sap/cds");
 
 describe('extendOrdWithCustom', () => {
     let appConfig = {};
+    let logger;
 
     beforeEach(() => {
+        logger = { warn: jest.fn() };
         appConfig = {
             env: {
                 customOrdContentFile: 'customOrdContentFile.json',
@@ -41,11 +43,12 @@ describe('extendOrdWithCustom', () => {
             expect(result).toEqual(ordContent);
         });
 
-        it('should log warn if found ord top-level string property in customOrdFile', () => {
-            const ordContent = { namespace: "sap.sample" };
+        it('should ignore and log warn if found ord top-level primitive property in customOrdFile', () => {
+            const ordContent = {};
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
-            extendCustomORDContentIfExists(appConfig, ordContent);
-            expect(cds.log).toHaveBeenCalledWith(expect.stringContaining('ord-plugin'));
+            const result = extendCustomORDContentIfExists(appConfig, ordContent, logger);
+            expect(logger.warn).toHaveBeenCalledTimes(3);
+            expect(result).toMatchSnapshot();
         });
 
         it('should add new ord resources that are not supported by cap framework', () => {

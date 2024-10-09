@@ -46,6 +46,17 @@ exports[`extendOrdWithCustom extendCustomORDContentIfExists should enhance the l
 }
 `;
 
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should ignore and log warn if found ord top-level primitive property in customOrdFile 1`] = `
+{
+  "packages": [
+    {
+      "localId": "smDataProducts",
+      "ordId": "sap.sm:package:smDataProducts:v1",
+    },
+  ],
+}
+`;
+
 exports[`extendOrdWithCustom extendCustomORDContentIfExists should should patch the existing generated ord resources 1`] = `
 {
   "apiResources": [
