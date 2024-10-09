@@ -45,7 +45,7 @@ describe('extendOrdWithCustom', () => {
             const ordContent = { namespace: "sap.sample" };
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
             extendCustomORDContentIfExists(appConfig, ordContent);
-            expect(cds.log).toHaveBeenCalledWith(expect.stringContaining('extend-custom-ord-content'));
+            expect(cds.log).toHaveBeenCalledWith(expect.stringContaining('ord-plugin'));
         });
 
         it('should add new ord resources that are not supported by cap framework', () => {
