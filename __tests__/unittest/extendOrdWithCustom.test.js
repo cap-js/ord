@@ -10,6 +10,9 @@ jest.mock("@sap/cds", () => {
     return {
         ...actualCds,
         env: {},
+        log: jest.fn(() => ({
+            warn: jest.fn(),
+        })),
     };
 });
 
@@ -38,20 +41,11 @@ describe('extendOrdWithCustom', () => {
             expect(result).toEqual(ordContent);
         });
 
-        it('should print log error if custom obj has ord root level property which defined in cdsrc.json', () => {
+        it('should log warn if found ord top-level string property in customOrdFile', () => {
             const ordContent = { namespace: "sap.sample" };
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
-            console.error = jest.fn();
             extendCustomORDContentIfExists(appConfig, ordContent);
-            expect(console.error).toHaveBeenCalledWith(expect.stringContaining('.cdsrc.json: namespace'));
-        });
-
-        it('should print log error if custom obj has ord root level property which exists in default', () => {
-            const ordContent = { openResourceDiscovery: "1.9" };
-            prepareTestEnvironment({}, appConfig, 'testCustomORDContentFileConflictWithDefault.json');
-            console.error = jest.fn();
-            extendCustomORDContentIfExists(appConfig, ordContent);
-            expect(console.error).toHaveBeenCalledWith(expect.stringContaining('default value: openResourceDiscovery'));
+            expect(cds.log).toHaveBeenCalledWith(expect.stringContaining('extend-custom-ord-content'));
         });
 
         it('should add new ord resources that are not supported by cap framework', () => {
