@@ -1,5 +1,5 @@
 const ord = require("../lib/ord");
-const { join } = require("path");
+const path = require("path");
 
 // Mock the @sap/cds module
 jest.mock("@sap/cds", () => {
@@ -15,7 +15,7 @@ describe("Tests for default ORD document when .cdsrc.json is present", () => {
     let csn;
 
     beforeAll(async () => {
-        csn = await cds.load(join(__dirname, "bookshop", "srv"));
+        csn = await cds.load(path.join(__dirname, "bookshop", "srv"));
     });
 
     test("Successfully create ORD Documents with defaults", () => {
@@ -33,7 +33,7 @@ describe("Tests for default ORD document when .cdsrc.json is present", () => {
             document = ord(csn);
         });
 
-        test("partOfPackage values are valid ORD IDs ", () => {
+        test("PartOfPackage values are valid ORD IDs ", () => {
             for (const apiResource of document.apiResources) {
                 expect(apiResource.partOfPackage).toMatch(PACKAGE_ID_REGEX);
             }

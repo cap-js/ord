@@ -1,0 +1,107 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should add new ord resources that are not supported by cap framework 1`] = `
+{
+  "dataProducts": [
+    {
+      "category": "business-object",
+      "description": "The Supplier data product offers access to all customers.",
+      "entityTypes": [
+        "sap.odm:entityType:BusinessPartner:v1",
+        "sap.sm:entityType:BusinessPartner:v1",
+      ],
+      "lastUpdate": "2024-06-20T14:04:01+01:00",
+      "localId": "Supplier",
+      "ordId": "sap.sm:dataProduct:Supplier:v1",
+      "outputPorts": [
+        {
+          "ordId": "sap.sm:apiResource:SupplierService:v1",
+        },
+      ],
+      "partOfPackage": "sap.sm:package:smDataProducts:v1",
+      "releaseStatus": "active",
+      "responsible": "sap:ach:CIC-DP-CO",
+      "shortDescription": "Ariba Supplier data product",
+      "title": "Supplier",
+      "type": "primary",
+      "version": "1.1.11",
+      "visibility": "public",
+    },
+  ],
+}
+`;
+
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should enhance the list of generated ord resources 1`] = `
+{
+  "packages": [
+    {
+      "localId": "smDataProductsV1",
+      "ordId": "sap.sm:package:smDataProducts:v1",
+    },
+    {
+      "localId": "smDataProductsV2",
+      "ordId": "sap.sm:package:smDataProducts:v2",
+    },
+  ],
+}
+`;
+
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should ignore and log warn if found ord top-level primitive property in customOrdFile 1`] = `
+{
+  "packages": [
+    {
+      "localId": "smDataProducts",
+      "ordId": "sap.sm:package:smDataProducts:v1",
+    },
+  ],
+}
+`;
+
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should should patch the existing generated ord resources 1`] = `
+{
+  "apiResources": [
+    {
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:BusinessPartner:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [
+        "/odata/v4/admin",
+      ],
+      "ordId": "sap.sm:apiResource:SupplierService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+      ],
+      "partOfPackage": "sap.sm:package:smDataProducts:v1",
+    },
+    {
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [],
+        },
+      ],
+      "ordId": "sap.sm:apiResource:orginalService:v2",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:originalService",
+      ],
+      "partOfPackage": "sap.sm:package:smDataProducts:v2",
+    },
+  ],
+  "packages": [
+    {
+      "localId": "overrideSmDataProductsV1",
+      "ordId": "sap.sm:package:smDataProducts:v1",
+      "version": "1.1.1",
+    },
+    {
+      "localId": "smDataProductsV2",
+      "ordId": "sap.sm:package:smDataProducts:v2",
+    },
+  ],
+}
+`;

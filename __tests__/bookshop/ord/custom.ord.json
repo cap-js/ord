@@ -1,0 +1,66 @@
+{
+    "namespace": "should not update since has conflict with cdsrc.json",
+    "openResourceDiscovery": "should not update since not defined in cdsrc.json",
+    "packages": [
+        {
+            "description": "Description for capire bookshop ord sample version 2",
+            "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
+            "partOfProducts": [
+                "customer:product:capire.bookshop.ord.sample:"
+            ],
+            "shortDescription": "Short description for capire bookshop ord sample version 2",
+            "title": "capire bookshop ord sample",
+            "vendor": "customer:vendor:Customer:",
+            "version": "2.0.0"
+        },
+        {
+            "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+            "shortDescription": null,
+            "version": "1.0.1"
+        }
+    ],
+    "apiResources": [
+        {
+            "partOfGroups": null,
+            "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
+            "entityTypeMappings": [
+                {
+                    "entityTypeTargets": [
+                        {
+                            "ordId": "sap.odm:entityType:BusinessPartner:v1"
+                        }
+                    ]
+                }
+            ],
+            "extensible": {
+                "supported": "yes"
+            }
+        }
+    ],
+    "dataProducts": [
+        {
+            "ordId": "sap.sm:dataProduct:Supplier:v1",
+            "localId": "Supplier",
+            "title": "Supplier",
+            "shortDescription": "Ariba Supplier data product",
+            "description": "The Supplier data product offers access to all customers.",
+            "partOfPackage": "sap.sm:package:smDataProducts:v1",
+            "visibility": "public",
+            "releaseStatus": "active",
+            "version": "1.1.11",
+            "lastUpdate": "2024-06-20T14:04:01+01:00",
+            "type": "primary",
+            "category": "business-object",
+            "outputPorts": [
+                {
+                    "ordId": "sap.sm:apiResource:SupplierService:v1"
+                }
+            ],
+            "responsible": "sap:ach:CIC-DP-CO",
+            "entityTypes": [
+                "sap.odm:entityType:BusinessPartner:v1",
+                "sap.sm:entityType:BusinessPartner:v1"
+            ]
+        }
+    ]
+}

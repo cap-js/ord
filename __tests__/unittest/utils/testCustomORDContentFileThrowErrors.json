@@ -1,0 +1,11 @@
+{
+    "namespace": "sap.sample",
+    "wrongBooleanProperty": false,
+    "wrongNumber": 1,
+    "packages": [
+        {
+            "ordId": "sap.sm:package:smDataProducts:v1",
+            "localId": "smDataProducts"
+        }
+    ]
+}
