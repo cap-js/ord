@@ -1,32 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`templates checkEntityFunctionAction should fail when entity is empty 1`] = `
-[
-  {
-    "entitySet": "customer.testNamespace123.Books",
-    "entitySetMapping": "undefined:entitySet:customer.testNamespace123.Books:v1",
-    "entityType": "customer.testNamespace123.Books",
-    "entityTypeMapping": "undefined:entityType:customer.testNamespace123.Books:v1",
-    "name": "customer.testNamespace123.Books",
-    "type": "entity",
-  },
-]
-`;
-
-exports[`templates checkEntityFunctionAction should return entity 1`] = `
-[
-  {
-    "entitySet": "customer.testNamespace123.Books",
-    "entitySetMapping": "undefined:entitySet:customer.testNamespace123.Books:v1",
-    "entityType": "customer.testNamespace123.Books",
-    "entityTypeMapping": "undefined:entityType:customer.testNamespace123.Books:v1",
-    "name": "customer.testNamespace123.Books",
-    "type": "entity",
-  },
-]
-`;
-
-exports[`templates fCreateAPIResourceTemplate should create API resource template correctly 1`] = `
+exports[`templates createAPIResourceTemplate should create API resource template correctly 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
@@ -78,7 +52,7 @@ exports[`templates fCreateAPIResourceTemplate should create API resource templat
 ]
 `;
 
-exports[`templates fCreateEventResourceTemplate should create API resource template correctly 1`] = `
+exports[`templates createEventResourceTemplate should create event resource template correctly 1`] = `
 {
   "description": "CAP Event resource describing events / messages.",
   "extensible": {
