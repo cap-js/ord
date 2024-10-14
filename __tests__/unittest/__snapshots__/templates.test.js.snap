@@ -20,7 +20,7 @@ exports[`templates createAPIResourceTemplate should create API resource template
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
     ],
-    "partOfPackage": undefined,
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
     "releaseStatus": "active",
     "resourceDefinitions": [
       {
