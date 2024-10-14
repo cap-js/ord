@@ -42,7 +42,7 @@ describe('templates', () => {
         it('should create API resource template correctly', () => {
             const srv = 'MyService';
             const srvDefinition = linkedModel
-            const packageIds = ['package1'];
+            const packageIds = new Set('package1');
             expect(templates.createAPIResourceTemplate(srv, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
@@ -51,8 +51,20 @@ describe('templates', () => {
         it('should create event resource template correctly', () => {
             const srv = 'MyService';
             const srvDefinition = linkedModel
-            const packageIds = ['package1'];
+            const packageIds = new Set()
+            packageIds.add('sap.test.cdsrc.sample:package:test-event:v1');
+            packageIds.add('sap.test.cdsrc.sample:package:test-api:v1');
+            expect(templates.createEventResourceTemplate(srv, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        });
+
+        it('should create event resource template correctly with packageIds including namespace', () => {
+            const srv = 'MyService';
+            const srvDefinition = linkedModel
+            const packageIds = new Set();
+            packageIds.add('customer.testNamespace:package:test:v1');
             expect(templates.createEventResourceTemplate(srv, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
+
+
 });
