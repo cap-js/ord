@@ -3,95 +3,70 @@ const templates = require('../../lib/templates');
 
 describe('templates', () => {
     let linkedModel;
+    const appConfig = {
+        ordNamespace: 'customer.testNamespace',
+        appName: 'testAppName'
+    };
 
     beforeEach(() => {
         linkedModel = cds.linked(`
-        namespace customer.testNamespace123;
-        entity Books {
-            key ID: UUID;
-            title: String;
-        }
-    `);
+            namespace customer.testNamespace123;
+            entity Books {
+                key ID: UUID;
+                title: String;
+            }
+        `);
     });
 
-    describe('fCreateEntityTypeTemplate', () => {
+    describe('createEntityTypeTemplate', () => {
         it('should return default value', () => {
-            expect(templates.fCreateEntityTypeTemplate(linkedModel)).toEqual({
+            expect(templates.createEntityTypeTemplate(linkedModel)).toEqual({
                 ordId: 'sap.odm:entityType:undefined:v1'
             });
         });
     });
 
-    describe('checkEntityFunctionAction', () => {
-        it('should return entity', () => {
-            expect(templates.checkEntityFunctionAction(linkedModel, global)).toMatchSnapshot();
-        });
-
-        it('should fail when entity is empty', () => {
-            expect(templates.checkEntityFunctionAction(linkedModel, global)).toMatchSnapshot();
-        });
-    })
-
-    describe('fCreateGroupsTemplateForService', () => {
+    describe('createGroupsTemplateForService', () => {
         it('should return default value when groupIds do not have groupId', () => {
-            const testSrv = 'testServiceName';
-            global.ordNamespace = 'customer.testNamespace';
-            const testGroupIds = new Set();
+            const testServiceName = 'testServiceName';
             const testResult = {
                 groupId: 'sap.cds:service:customer.testNamespace:testServiceName',
                 groupTypeId: 'sap.cds:service',
                 title: 'test Service'
             };
-            expect(templates.fCreateGroupsTemplateForService(testSrv, linkedModel, testGroupIds)).toEqual(testResult);
+            expect(templates.createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
         });
     });
 
-    describe('fCreateGroupsTemplateForEvent', () => {
-        it('should return default value when groupIds do not have groupId', () => {
-            const tesEvent = 'testEventName';
-            global.ordNamespace = 'customer.testNamespace';
-            const testGroupIds = new Set();
-            const testResult = {
-                groupId: 'sap.cds:service:customer.testNamespace:testEventName',
-                groupTypeId: 'sap.cds:service',
-                // TODO: space because of service name missing
-                title: ' Service'
-            };
-            expect(templates.fCreateGroupsTemplateForEvent(tesEvent, linkedModel, testGroupIds)).toEqual(testResult);
-        });
-
-        it('should return null when groupIds has groupId', () => {
-            const tesEvent = 'testEventName';
-            global.ordNamespace = 'customer.testNamespace';
-            const testGroupIds = new Set(['sap.cds:service:customer.testNamespace:testEventName']);
-            const testResult = null;
-            expect(templates.fCreateGroupsTemplateForEvent(tesEvent, linkedModel, testGroupIds)).toEqual(testResult);
-        });
-    });
-
-    describe('fCreateAPIResourceTemplate', () => {
+    describe('createAPIResourceTemplate', () => {
         it('should create API resource template correctly', () => {
             const srv = 'MyService';
             const srvDefinition = linkedModel
-            global.ordNamespace = 'customer.testNamespace';
-            const packageIds = ['package1'];
-            expect(templates.fCreateAPIResourceTemplate(srv, srvDefinition, global, packageIds)).toMatchSnapshot();
+            const packageIds = new Set()
+            packageIds.add('sap.test.cdsrc.sample:package:test-event:v1');
+            packageIds.add('sap.test.cdsrc.sample:package:test-api:v1');
+            expect(templates.createAPIResourceTemplate(srv, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
 
-    describe('fCreateEventResourceTemplate', () => {
-        it('should create API resource template correctly', () => {
+    describe('createEventResourceTemplate', () => {
+        it('should create event resource template correctly', () => {
             const srv = 'MyService';
             const srvDefinition = linkedModel
-            global.ordNamespace = 'customer.testNamespace';
-            global.appName = 'testAppName';
-            const packageIds = ['package1'];
+            const packageIds = new Set()
+            packageIds.add('sap.test.cdsrc.sample:package:test-event:v1');
+            packageIds.add('sap.test.cdsrc.sample:package:test-api:v1');
+            expect(templates.createEventResourceTemplate(srv, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        });
 
-            // TODO: temporary solution, fix it
-            srvDefinition._service = {
-                name: 'MyService',
-            };
-            expect(templates.fCreateEventResourceTemplate(srv, srvDefinition, global, packageIds)).toMatchSnapshot();
+        it('should create event resource template correctly with packageIds including namespace', () => {
+            const srv = 'MyService';
+            const srvDefinition = linkedModel
+            const packageIds = new Set();
+            packageIds.add('customer.testNamespace:package:test:v1');
+            expect(templates.createEventResourceTemplate(srv, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
+
+
 });
