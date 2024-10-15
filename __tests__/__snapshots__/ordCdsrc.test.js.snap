@@ -47,10 +47,10 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
           "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
         },
       ],
-      "shortDescription": "AdminService",
-      "title": "AdminService",
-      "version": "1.0.0",
-      "visibility": "public",
+      "shortDescription": "short description for test AdminService",
+      "title": "This is test AdminService title",
+      "version": "2.0.0",
+      "visibility": "private",
     },
     {
       "apiProtocol": "odata-v4",
@@ -131,7 +131,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
     {
       "description": "CAP Event resource describing events / messages.",
       "extensible": {
-        "supported": "no",
+        "supported": "yes",
       },
       "ordId": "sap.test.cdsrc.sample:eventResource:AdminService:v1",
       "partOfGroups": [
@@ -151,10 +151,10 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
           "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.asyncapi2.json",
         },
       ],
-      "shortDescription": "Example ODM Event",
-      "title": "ODM capirebookshopordsample Events",
-      "version": "1.0.0",
-      "visibility": "public",
+      "shortDescription": "short description for test AdminService",
+      "title": "This is test AdminService title",
+      "version": "2.0.0",
+      "visibility": "private",
     },
     {
       "description": "CAP Event resource describing events / messages.",
@@ -189,7 +189,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
     {
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:AdminService",
       "groupTypeId": "sap.cds:service",
-      "title": "Admin Service",
+      "title": "This is test AdminService title",
     },
     {
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:CatalogService",

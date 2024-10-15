@@ -113,3 +113,86 @@ exports[`templates createEventResourceTemplate should create event resource temp
   "visibility": "public",
 }
 `;
+
+exports[`templates ordExtension should add apiResources with ord extensions correctly 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "MyService",
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": undefined,
+      },
+    ],
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "yes",
+    },
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:test:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.edmx",
+      },
+    ],
+    "shortDescription": "short description for test MyService apiResource",
+    "title": "This is test MyService apiResource title",
+    "version": "2.0.0",
+    "visibility": "private",
+  },
+]
+`;
+
+exports[`templates ordExtension should add events with ord extensions correctly 1`] = `
+{
+  "description": "CAP Event resource describing events / messages.",
+  "extensible": {
+    "supported": "yes",
+  },
+  "ordId": "customer.testNamespace:eventResource:MyService:v1",
+  "partOfGroups": [
+    "sap.cds:service:customer.testNamespace:MyService",
+  ],
+  "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
+  "releaseStatus": "beta",
+  "resourceDefinitions": [
+    {
+      "accessStrategies": [
+        {
+          "type": "open",
+        },
+      ],
+      "mediaType": "application/json",
+      "type": "asyncapi-v2",
+      "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.asyncapi2.json",
+    },
+  ],
+  "shortDescription": "short description for test MyService event",
+  "title": "This is test MyService event title",
+  "version": "2.0.0",
+  "visibility": "private",
+}
+`;
