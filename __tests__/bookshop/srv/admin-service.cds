@@ -21,3 +21,11 @@ service AdminService @(requires: 'authenticated-user') {
     function sum(x : Integer, y : Integer)  returns Integer;
     action   add(x : Integer, to : Integer) returns Integer;
 }
+
+annotate AdminService with @ORD.Extensions: {
+    title           : 'This is test AdminService title',
+    shortDescription: 'short description for test AdminService',
+    visibility      : 'private',
+    version         : '2.0.0',
+    extensible      : {supported: 'yes'}
+};
