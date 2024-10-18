@@ -57,7 +57,11 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "description": "CatalogService",
       "entityTypeMappings": [
         {
-          "entityTypeTargets": [],
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
         },
       ],
       "entryPoints": [
@@ -130,6 +134,13 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test-from-extension:v1",
+          },
+        ],
+      },
       "extensible": {
         "supported": "yes",
       },
@@ -138,7 +149,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
         "sap.cds:service:sap.test.cdsrc.sample:AdminService",
       ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "releaseStatus": "beta",
+      "releaseStatus": "active",
       "resourceDefinitions": [
         {
           "accessStrategies": [
@@ -166,7 +177,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
         "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
       ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "releaseStatus": "beta",
+      "releaseStatus": "active",
       "resourceDefinitions": [
         {
           "accessStrategies": [
@@ -179,7 +190,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
           "url": "/.well-known/open-resource-discovery/v1/api-metadata/CatalogService.asyncapi2.json",
         },
       ],
-      "shortDescription": "Example ODM Event",
+      "shortDescription": "CatalogService event resource",
       "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "public",

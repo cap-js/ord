@@ -104,17 +104,24 @@ describe('templates', () => {
                         title: String;
                     }
                 }
+                @ODM.entityName: 'testOdmEntity'
+                entity Books {
+                    key ID: UUID;
+                    title: String;
+                }
                 annotate MyService with @ORD.Extensions : {
                     title           : 'This is test MyService apiResource title',
                     shortDescription: 'short description for test MyService apiResource',
                     visibility : 'private',
                     version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
                     extensible : {
                         supported : 'yes'
                     }
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
+            appConfig['odmEntity'] = 'sap.odm:entityType:test:v1'
             const packageIds = new Set();
             packageIds.add('customer.testNamespace:package:test:v1');
             expect(templates.createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
