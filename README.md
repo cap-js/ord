@@ -4,11 +4,11 @@
 
 ## About this project
 
-This plugin adds support for the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) (ORD) protocol for CAP based applications. 
-When you add the ORD plugin, your application gains a single entry point, which allows to discover and gather machine-readable information or metadata about the application. 
+This plugin adds support for the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) (ORD) protocol for CAP based applications.
+When you add the ORD plugin, your application gains a single entry point, which allows to discover and gather machine-readable information or metadata about the application.
 You can use this information to construct a static metadata catalog or to perform a detailed runtime inspection of your actual system instances / system landscapes.
 
-For more information, have a look at the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) page. 
+For more information, have a look at the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) page.
 
 ## Requirements and Setup
 
@@ -23,13 +23,13 @@ npm install @cap-js/ord
 #### Programmatic API
 
 ```js
-const cds = require('@sap/cds')
-require('@cap-js/ord');
+const cds = require("@sap/cds");
+require("@cap-js/ord");
 ```
 
 ```js
-const csn = await cds.load(cds.env.folders.srv)
-const ord = cds.compile.to.ord(csn)
+const csn = await cds.load(cds.env.folders.srv);
+const ord = cds.compile.to.ord(csn);
 ```
 
 #### Command Line
@@ -42,21 +42,21 @@ cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 
 #### ORD Endpoints
 
-1) Run `cds watch` in the application's root.
-2) Check the following relative paths for ORD information - `/.well-known/open-resource-discovery` , `/open-resource-discovery/v1/documents/1`.
-
+1. Run `cds watch` in the application's root.
+2. Check the following relative paths for ORD information - `/.well-known/open-resource-discovery` , `/open-resource-discovery/v1/documents/1`.
 
 <img width="1300" alt="Sample Application Demo" style="border-radius:0.5rem;" src="./asset/etc/ordEndpoint.gif">
 
 ### Customizing ORD Document
 
-You can find more information, such as how to customize the ORD Document, in this [document](ord.md).
+You can find more information, such as how to customize the ORD Document, in this [document](./docs/ord.md).
 
 ## Support, Feedback, Contributing
 
 This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/cap-js/ord/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
 
 ## Security / Disclosure
+
 If you find any bug that may be a security problem, please follow our instructions at [in our security policy](https://github.com/cap-js/ord/issues/security/policy) on how to report it. Please do not create GitHub issues for security-related doubts or problems.
 
 ## Code of Conduct

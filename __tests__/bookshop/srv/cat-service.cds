@@ -1,24 +1,32 @@
-using { sap.capire.bookshop as my } from '../db/schema';
-service CatalogService @(path:'/browse') { 
+using {sap.capire.bookshop as my} from '../db/schema';
 
-  @readonly entity Books as select from my.Books {*,
-    author.name as author
-  } excluding { createdBy, modifiedBy };
+service CatalogService @(path: '/browse') {
 
-  @requires: 'authenticated-user'
-  action submitOrder (book: Books:ID, quantity: Integer);
-  
-  event BookCreated : {
-      ID    : Integer;
-    title : String @title: 'Title';
-  };
+    @readonly
+    entity Books as
+        select from my.Books {
+            *,
+            author.name as author
+        }
+        excluding {
+            createdBy,
+            modifiedBy
+        };
 
-  event BookDeleted : {
-    ID    : Integer;
-  };
+    @requires: 'authenticated-user'
+    action submitOrder(book : Books:ID, quantity : Integer);
 
-  event BookUpdated : {
-    ID    : Integer;
-    title : String @title: 'Title';
-  }
+    event BookCreated : {
+        ID    : Integer;
+        title : String @title: 'Title';
+    };
+
+    event BookDeleted : {
+        ID : Integer;
+    };
+
+    event BookUpdated : {
+        ID    : Integer;
+        title : String @title: 'Title';
+    }
 }
