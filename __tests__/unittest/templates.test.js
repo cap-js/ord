@@ -40,31 +40,91 @@ describe('templates', () => {
 
     describe('createAPIResourceTemplate', () => {
         it('should create API resource template correctly', () => {
-            const srv = 'MyService';
+            const serviceName = 'MyService';
             const srvDefinition = linkedModel
             const packageIds = new Set()
             packageIds.add('sap.test.cdsrc.sample:package:test-event:v1');
             packageIds.add('sap.test.cdsrc.sample:package:test-api:v1');
-            expect(templates.createAPIResourceTemplate(srv, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+            expect(templates.createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
 
     describe('createEventResourceTemplate', () => {
         it('should create event resource template correctly', () => {
-            const srv = 'MyService';
+            const serviceName = 'MyService';
             const srvDefinition = linkedModel
             const packageIds = new Set()
             packageIds.add('sap.test.cdsrc.sample:package:test-event:v1');
             packageIds.add('sap.test.cdsrc.sample:package:test-api:v1');
-            expect(templates.createEventResourceTemplate(srv, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+            expect(templates.createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
 
         it('should create event resource template correctly with packageIds including namespace', () => {
-            const srv = 'MyService';
+            const serviceName = 'MyService';
             const srvDefinition = linkedModel
             const packageIds = new Set();
             packageIds.add('customer.testNamespace:package:test:v1');
-            expect(templates.createEventResourceTemplate(srv, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+            expect(templates.createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        });
+    });
+
+    describe('ordExtension', () => {
+        it('should add events with ord extensions correctly', () => {
+            const serviceName = 'MyService';
+            linkedModel = cds.linked(`
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService event title',
+                    shortDescription: 'short description for test MyService event',
+                    visibility : 'private',
+                    version : '2.0.0',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            const packageIds = new Set()
+            packageIds.add('sap.test.cdsrc.sample:package:test-event:v1');
+            packageIds.add('sap.test.cdsrc.sample:package:test-api:v1');
+            expect(templates.createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        });
+
+        it('should add apiResources with ord extensions correctly', () => {
+            const serviceName = 'MyService';
+            linkedModel = cds.linked(`
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                }
+                @ODM.entityName: 'testOdmEntity'
+                entity Books {
+                    key ID: UUID;
+                    title: String;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService apiResource title',
+                    shortDescription: 'short description for test MyService apiResource',
+                    visibility : 'private',
+                    version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            appConfig['odmEntity'] = 'sap.odm:entityType:test:v1'
+            const packageIds = new Set();
+            packageIds.add('customer.testNamespace:package:test:v1');
+            expect(templates.createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
 
