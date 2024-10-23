@@ -10,6 +10,10 @@ You can use this information to construct a static metadata catalog or to perfor
 
 For more information, have a look at the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) page.
 
+> ⚠ By installing this plugin, the metadata describing your CAP application will be made openly accessible. 
+> 
+> If you have a need to protect your metadata, please refrain from installing this plugin until we support metadata protection (planned).
+
 ## Requirements and Setup
 
 ### Installation
@@ -58,6 +62,11 @@ This project is open to feature requests/suggestions, bug reports etc. via [GitH
 ## Security / Disclosure
 
 If you find any bug that may be a security problem, please follow our instructions at [in our security policy](https://github.com/cap-js/ord/issues/security/policy) on how to report it. Please do not create GitHub issues for security-related doubts or problems.
+
+At the current state, the plugin will expose static metadata with open access.
+This means that the CAP resources are described and documented openly, but it does not imply that the resources themselves can be accessed.
+
+If you have a need to protect your metadata, please refrain from installing this plugin until we support metadata protection.
 
 ## Code of Conduct
 
