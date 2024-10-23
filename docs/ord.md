@@ -23,14 +23,14 @@ Example:
 
 ```js
 annotate ProcessorService with @ORD.Extensions : {
-    title           : 'This is Processor Service title',
-    shortDescription: 'short description for Processor Service',
-    visibility : 'public',
-    extensible : {
-      supported : 'no'
-    }
+    title : 'This is Processor Service title',
+    industry      : [
+        'Retail',
+        'Consumer Products'
+    ],
+    lineOfBusiness: ['Sales'],
+    extensible    : {supported: 'no'}
 };
-
 ```
 
 Also note that annotations like `@Core.Description` and `@description` are also read.
