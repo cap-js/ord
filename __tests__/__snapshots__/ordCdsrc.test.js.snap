@@ -208,7 +208,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "title": "Catalog Service",
     },
   ],
-  "openResourceDiscovery": "1.9",
+  "openResourceDiscovery": "1.10",
   "packages": [
     {
       "description": "Description for capire bookshop ord sample",
