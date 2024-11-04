@@ -55,9 +55,12 @@ describe('defaults', () => {
     });
 
     describe('consumptionBundles', () => {
-        const testConsumptionBundlesName = 'My Consumption Bundle';
+        const testAppConfig = {
+            appName: 'sap.xref',
+            lastUpdate: '2024-06-20T14:04:01+01:00',
+        }
         it('should return default value', () => {
-            expect(defaults.consumptionBundles(testConsumptionBundlesName)).toMatchSnapshot();
+            expect(defaults.consumptionBundles(testAppConfig)).toMatchSnapshot();
         });
     });
     describe('baseTemplate', () => {

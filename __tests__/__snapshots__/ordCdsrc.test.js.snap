@@ -22,6 +22,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "extensible": {
         "supported": "yes",
       },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "releaseStatus": "active",
@@ -70,6 +71,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "extensible": {
         "supported": "no",
       },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:CatalogService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
@@ -102,6 +104,16 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "title": "CatalogService",
       "version": "1.0.0",
       "visibility": "public",
+    },
+  ],
+  "consumptionBundles": [
+    {
+      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "shortDescription": "If we have another protected API then it will be another object",
+      "title": "Unprotected resources",
+      "version": "1.0.0",
     },
   ],
   "dataProducts": [
@@ -144,6 +156,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "extensible": {
         "supported": "yes",
       },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:eventResource:AdminService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:AdminService",
@@ -172,6 +185,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "extensible": {
         "supported": "no",
       },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:eventResource:CatalogService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
