@@ -4,7 +4,7 @@ exports[`templates createAPIResourceTemplate should create API resource template
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "MyService",
+    "description": "Description for MyService",
     "entityTypeMappings": [
       {
         "entityTypeTargets": undefined,
@@ -16,6 +16,7 @@ exports[`templates createAPIResourceTemplate should create API resource template
     "extensible": {
       "supported": "no",
     },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:apiResource:MyService:v1",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
@@ -44,7 +45,7 @@ exports[`templates createAPIResourceTemplate should create API resource template
         "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.edmx",
       },
     ],
-    "shortDescription": "MyService",
+    "shortDescription": "Short description for MyService",
     "title": "MyService",
     "version": "1.0.0",
     "visibility": "public",
@@ -58,6 +59,7 @@ exports[`templates createEventResourceTemplate should create event resource temp
   "extensible": {
     "supported": "no",
   },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
   "ordId": "customer.testNamespace:eventResource:MyService:v1",
   "partOfGroups": [
     "sap.cds:service:customer.testNamespace:MyService",
@@ -89,6 +91,7 @@ exports[`templates createEventResourceTemplate should create event resource temp
   "extensible": {
     "supported": "no",
   },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
   "ordId": "customer.testNamespace:eventResource:MyService:v1",
   "partOfGroups": [
     "sap.cds:service:customer.testNamespace:MyService",
@@ -118,7 +121,7 @@ exports[`templates ordExtension should add apiResources with ord extensions corr
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "MyService",
+    "description": "Description for MyService",
     "entityTypeMappings": [
       {
         "entityTypeTargets": "sap.odm:entityType:test:v1",
@@ -130,6 +133,7 @@ exports[`templates ordExtension should add apiResources with ord extensions corr
     "extensible": {
       "supported": "yes",
     },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:apiResource:MyService:v1",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
@@ -172,6 +176,7 @@ exports[`templates ordExtension should add events with ord extensions correctly 
   "extensible": {
     "supported": "yes",
   },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
   "ordId": "customer.testNamespace:eventResource:MyService:v1",
   "partOfGroups": [
     "sap.cds:service:customer.testNamespace:MyService",

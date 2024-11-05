@@ -5,7 +5,8 @@ describe('templates', () => {
     let linkedModel;
     const appConfig = {
         ordNamespace: 'customer.testNamespace',
-        appName: 'testAppName'
+        appName: 'testAppName',
+        lastUpdate: '2022-12-19T15:47:04+00:00'
     };
 
     beforeEach(() => {
@@ -127,6 +128,4 @@ describe('templates', () => {
             expect(templates.createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
-
-
 });

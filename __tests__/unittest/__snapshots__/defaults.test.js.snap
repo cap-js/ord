@@ -23,7 +23,8 @@ exports[`defaults consumptionBundles should return default value 1`] = `
 [
   {
     "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-    "ordId": "MyConsumptionBundle:consumptionBundle:unknown:v1",
+    "lastUpdate": "2024-06-20T14:04:01+01:00",
+    "ordId": "sapxref:consumptionBundle:noAuth:v1",
     "shortDescription": "If we have another protected API then it will be another object",
     "title": "Unprotected resources",
     "version": "1.0.0",
