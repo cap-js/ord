@@ -1,6 +1,6 @@
 const { getRFC3339Date } = require('../../lib/date');
 
-const RFC3339_REGEX = /^((?:(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2}(?:\.\d+)?))(Z|[+-]\d{2}:\d{2})?)$/;
+const RFC3339_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 
 describe('date', () => {
     it('test getRFC3339Date', () => {
