@@ -4,7 +4,7 @@ exports[`templates createAPIResourceTemplate should create API resource template
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "MyService",
+    "description": "Description for MyService",
     "entityTypeMappings": [
       {
         "entityTypeTargets": undefined,
@@ -45,7 +45,7 @@ exports[`templates createAPIResourceTemplate should create API resource template
         "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.edmx",
       },
     ],
-    "shortDescription": "MyService",
+    "shortDescription": "Short description for MyService",
     "title": "MyService",
     "version": "1.0.0",
     "visibility": "public",
@@ -121,7 +121,7 @@ exports[`templates ordExtension should add apiResources with ord extensions corr
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "MyService",
+    "description": "Description for MyService",
     "entityTypeMappings": [
       {
         "entityTypeTargets": "sap.odm:entityType:test:v1",

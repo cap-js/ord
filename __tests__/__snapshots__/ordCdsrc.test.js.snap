@@ -6,7 +6,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
   "apiResources": [
     {
       "apiProtocol": "odata-v4",
-      "description": "AdminService",
+      "description": "Description for AdminService",
       "entityTypeMappings": [
         {
           "entityTypeTargets": [
@@ -55,7 +55,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
     },
     {
       "apiProtocol": "odata-v4",
-      "description": "CatalogService",
+      "description": "Description for CatalogService",
       "entityTypeMappings": [
         {
           "entityTypeTargets": [
@@ -100,7 +100,7 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
           "url": "/.well-known/open-resource-discovery/v1/api-metadata/CatalogService.edmx",
         },
       ],
-      "shortDescription": "CatalogService",
+      "shortDescription": "Short description for CatalogService",
       "title": "CatalogService",
       "version": "1.0.0",
       "visibility": "public",
