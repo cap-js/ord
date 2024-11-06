@@ -6,56 +6,6 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
   "apiResources": [
     {
       "apiProtocol": "odata-v4",
-      "description": "Description for AdminService",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
-      "entryPoints": [
-        "/odata/v4/admin",
-      ],
-      "extensible": {
-        "supported": "yes",
-      },
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:apiResource:AdminService:v1",
-      "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:AdminService",
-      ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
-      "releaseStatus": "active",
-      "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "openapi-v3",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.oas3.json",
-        },
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/xml",
-          "type": "edmx",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
-        },
-      ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
-      "visibility": "private",
-    },
-    {
-      "apiProtocol": "odata-v4",
       "description": "Description for CatalogService",
       "entityTypeMappings": [
         {
@@ -119,42 +69,6 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
   ],
   "description": "this is an application description",
   "eventResources": [
-    {
-      "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
-      "extensible": {
-        "supported": "yes",
-      },
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:AdminService:v1",
-      "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:AdminService",
-      ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
-      "releaseStatus": "active",
-      "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "asyncapi-v2",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.asyncapi2.json",
-        },
-      ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
-      "visibility": "private",
-    },
     {
       "description": "CAP Event resource describing events / messages.",
       "extensible": {

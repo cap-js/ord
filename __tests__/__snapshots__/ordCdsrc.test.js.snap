@@ -6,55 +6,6 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
   "apiResources": [
     {
       "apiProtocol": "odata-v4",
-      "description": "Description for AdminService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:BusinessPartner:v1",
-            },
-          ],
-        },
-      ],
-      "entryPoints": [
-        "/odata/v4/admin",
-      ],
-      "extensible": {
-        "supported": "yes",
-      },
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
-      "releaseStatus": "active",
-      "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "openapi-v3",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.oas3.json",
-        },
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/xml",
-          "type": "edmx",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
-        },
-      ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
-      "visibility": "private",
-    },
-    {
-      "apiProtocol": "odata-v4",
       "description": "Description for CatalogService",
       "entityTypeMappings": [
         {
@@ -105,6 +56,21 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
       "version": "1.0.0",
       "visibility": "public",
     },
+    {
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:BusinessPartner:v1",
+            },
+          ],
+        },
+      ],
+      "extensible": {
+        "supported": "yes",
+      },
+      "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
+    },
   ],
   "consumptionBundles": [
     {
@@ -144,42 +110,6 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
   ],
   "description": "this is my custom description",
   "eventResources": [
-    {
-      "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
-      "extensible": {
-        "supported": "yes",
-      },
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService:v1",
-      "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
-      ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "releaseStatus": "active",
-      "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "asyncapi-v2",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.asyncapi2.json",
-        },
-      ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
-      "visibility": "private",
-    },
     {
       "description": "CAP Event resource describing events / messages.",
       "extensible": {

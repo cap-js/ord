@@ -43,9 +43,7 @@ describe('templates', () => {
         it('should create API resource template correctly', () => {
             const serviceName = 'MyService';
             const srvDefinition = linkedModel
-            const packageIds = new Set()
-            packageIds.add('sap.test.cdsrc.sample:package:test-event:v1');
-            packageIds.add('sap.test.cdsrc.sample:package:test-api:v1');
+            const packageIds = ['sap.test.cdsrc.sample:package:test-event:v1', 'sap.test.cdsrc.sample:package:test-api:v1'];
             expect(templates.createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
@@ -54,17 +52,14 @@ describe('templates', () => {
         it('should create event resource template correctly', () => {
             const serviceName = 'MyService';
             const srvDefinition = linkedModel
-            const packageIds = new Set()
-            packageIds.add('sap.test.cdsrc.sample:package:test-event:v1');
-            packageIds.add('sap.test.cdsrc.sample:package:test-api:v1');
+            const packageIds = ['sap.test.cdsrc.sample:package:test-event:v1', 'sap.test.cdsrc.sample:package:test-api:v1'];
             expect(templates.createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
 
         it('should create event resource template correctly with packageIds including namespace', () => {
             const serviceName = 'MyService';
             const srvDefinition = linkedModel
-            const packageIds = new Set();
-            packageIds.add('customer.testNamespace:package:test:v1');
+            const packageIds = ['customer.testNamespace:package:test:v1'];
             expect(templates.createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
@@ -90,9 +85,7 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            const packageIds = new Set()
-            packageIds.add('sap.test.cdsrc.sample:package:test-event:v1');
-            packageIds.add('sap.test.cdsrc.sample:package:test-api:v1');
+            const packageIds = ['sap.test.cdsrc.sample:package:test-event:v1', 'sap.test.cdsrc.sample:package:test-api:v1'];
             expect(templates.createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
 
@@ -123,8 +116,7 @@ describe('templates', () => {
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
             appConfig['odmEntity'] = 'sap.odm:entityType:test:v1'
-            const packageIds = new Set();
-            packageIds.add('customer.testNamespace:package:test:v1');
+            const packageIds = ['customer.testNamespace:package:test:v1'];
             expect(templates.createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
