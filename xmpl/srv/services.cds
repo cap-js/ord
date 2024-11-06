@@ -9,7 +9,7 @@ namespace sap.capire.incidents;
 annotate ProcessorService with @ORD.Extensions: {
     title           : 'This is Processor Service title',
     shortDescription: 'short description for Processor Service',
-    visibility      : 'public',
+    visibility      : 'private',
     extensible      : {supported: 'no'}
 };
 
@@ -37,7 +37,8 @@ annotate AdminService with @ORD.Extensions: {
         'Retail',
         'Consumer Products'
     ],
-    lineOfBusiness: ['Sales']
+    lineOfBusiness: ['Sales'],
+    visibility      : 'internal',
 };
 
 annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';
