@@ -10,7 +10,7 @@ jest.mock("@sap/cds", () => {
 });
 
 jest.mock("../lib/date", () => ({
-    getRFC3339Date: jest.fn(() => "2024-11-04T14:33:25+01:00"),
+    getRFC3339Date: jest.fn(() => "2024-11-04T14:33:25+01:00")
 }));
 
 const cds = require("@sap/cds");
@@ -60,8 +60,7 @@ describe("Tests for default ORD document when .cdsrc.json is present", () => {
 
     describe("eventResources", () => {
         // eslint-disable-next-line no-useless-escape
-        const GROUP_ID_REGEX =
-            /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/;
+        const GROUP_ID_REGEX = /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/;
 
         let document;
 
