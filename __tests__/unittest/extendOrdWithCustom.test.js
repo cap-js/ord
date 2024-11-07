@@ -1,3 +1,4 @@
+const cds = require("@sap/cds");
 const path = require('path');
 const { extendCustomORDContentIfExists } = require('../../lib/extendOrdWithCustom');
 
@@ -11,19 +12,16 @@ jest.mock("@sap/cds", () => {
         ...actualCds,
         env: {},
         log: jest.fn(() => ({
-            warn: jest.fn(),
+            warn: jest.fn(() => console.warn('Mocked warning')),
         })),
     };
 });
 
-const cds = require("@sap/cds");
-
 describe('extendOrdWithCustom', () => {
+
     let appConfig = {};
-    let logger;
 
     beforeEach(() => {
-        logger = { warn: jest.fn() };
         appConfig = {
             env: {
                 customOrdContentFile: 'customOrdContentFile.json',
@@ -33,6 +31,7 @@ describe('extendOrdWithCustom', () => {
 
     afterEach(() => {
         jest.resetModules();
+        jest.clearAllMocks();
     });
 
     describe('extendCustomORDContentIfExists', () => {
@@ -45,9 +44,13 @@ describe('extendOrdWithCustom', () => {
 
         it('should ignore and log warn if found ord top-level primitive property in customOrdFile', () => {
             const ordContent = {};
+            const warningSpy = jest.spyOn(console, 'warn');
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
-            const result = extendCustomORDContentIfExists(appConfig, ordContent, logger);
-            expect(logger.warn).toHaveBeenCalledTimes(3);
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
+
+            expect(warningSpy).toHaveBeenCalledTimes(3);
+            expect(warningSpy).toHaveBeenCalledWith('Mocked warning');
+
             expect(result).toMatchSnapshot();
         });
 
