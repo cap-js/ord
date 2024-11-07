@@ -29,8 +29,7 @@ describe("Tests for default ORD document when .cdsrc.json is present", () => {
 
     describe("apiResources", () => {
         // eslint-disable-next-line no-useless-escape
-        const PACKAGE_ID_REGEX =
-            /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._\-]+):(v0|v[1-9][0-9]*)$/;
+        const PACKAGE_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._\-]+):(v0|v[1-9][0-9]*)$/;
 
         let document;
 
