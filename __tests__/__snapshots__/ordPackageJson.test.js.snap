@@ -6,26 +6,24 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
   "apiResources": [
     {
       "apiProtocol": "odata-v4",
-      "description": "Description for CatalogService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
+      "description": "Description for AdminService",
+      "entityTypeMappings": {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test-from-extension:v1",
+          },
+        ],
+      },
       "entryPoints": [
-        "/browse",
+        "/odata/v4/admin",
       ],
       "extensible": {
-        "supported": "no",
+        "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:apiResource:CatalogService:v1",
+      "ordId": "customer.capirebookshopordsample:apiResource:AdminService:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:CatalogService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -38,7 +36,7 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/CatalogService.oas3.json",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -48,12 +46,12 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/CatalogService.edmx",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
         },
       ],
-      "shortDescription": "Short description for CatalogService",
-      "title": "CatalogService",
-      "version": "1.0.0",
+      "shortDescription": "short description for test AdminService",
+      "title": "This is test AdminService title",
+      "version": "2.0.0",
       "visibility": "public",
     },
   ],
@@ -71,13 +69,20 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test-from-extension:v1",
+          },
+        ],
+      },
       "extensible": {
-        "supported": "no",
+        "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:CatalogService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:CatalogService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -90,12 +95,12 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/CatalogService.asyncapi2.json",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.asyncapi2.json",
         },
       ],
-      "shortDescription": "CatalogService event resource",
-      "title": "ODM capirebookshopordsample Events",
-      "version": "1.0.0",
+      "shortDescription": "short description for test AdminService",
+      "title": "This is test AdminService title",
+      "version": "2.0.0",
       "visibility": "public",
     },
   ],
@@ -108,7 +113,7 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
     {
       "groupId": "sap.cds:service:customer.capirebookshopordsample:CatalogService",
       "groupTypeId": "sap.cds:service",
-      "title": "Catalog Service",
+      "title": "This is test Catalog Service title",
     },
   ],
   "openResourceDiscovery": "1.9",

@@ -30,3 +30,11 @@ service CatalogService @(path: '/browse') {
         title : String @title: 'Title';
     }
 }
+
+annotate CatalogService with @ORD.Extensions: {
+    title             : 'This is test Catalog Service title',
+    shortDescription  : 'short description for test CatalogService',
+    visibility        : 'internal',
+    version           : '2.0.0',
+    extensible        : {supported: 'yes'}
+};
