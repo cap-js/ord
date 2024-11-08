@@ -39,16 +39,12 @@ describe("Tests for default ORD document when .cdsrc.json is present", () => {
 
         test("PartOfPackage values are valid ORD IDs ", () => {
             for (const apiResource of document.apiResources) {
-                if (!apiResource.partOfPackage) continue;
-
                 expect(apiResource.partOfPackage).toMatch(PACKAGE_ID_REGEX);
             }
         });
 
         test("The partOfPackage references an existing package", () => {
             for (const apiResource of document.apiResources) {
-                if (!apiResource.partOfPackage) continue;
-
                 expect(
                     document.packages.find(
                         (pck) => pck.ordId === apiResource.partOfPackage
