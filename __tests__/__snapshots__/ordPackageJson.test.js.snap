@@ -115,6 +115,11 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
       "groupTypeId": "sap.cds:service",
       "title": "This is test Catalog Service title",
     },
+    {
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:CinemaService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is test Cinema Service title",
+    },
   ],
   "openResourceDiscovery": "1.9",
   "packages": [
