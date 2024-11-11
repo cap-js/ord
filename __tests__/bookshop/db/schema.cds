@@ -32,3 +32,11 @@ entity Genres : sap.common.CodeList {
         children : Composition of many Genres
                        on children.parent = $self;
 }
+
+entity Movies : managed {
+    key ID       : Integer;
+        title    : localized String(111);
+        descr    : localized String(1111);
+        author   : Association to Authors;
+        genre    : Association to Genres;
+}

@@ -1,11 +1,12 @@
+const cds = require("@sap/cds");
 const ord = require("../lib/ord");
 const path = require("path");
 
 // Mock the @sap/cds module
 jest.mock("@sap/cds", () => {
-    const { join } = require("path");
+    const path = require("path");
     let originalCds = jest.requireActual("@sap/cds");
-    originalCds.root = join(__dirname, "bookshop");
+    originalCds.root = path.join(__dirname, "bookshop");
     return originalCds;
 });
 
@@ -13,7 +14,6 @@ jest.mock("../lib/date", () => ({
     getRFC3339Date: jest.fn(() => "2024-11-04T14:33:25+01:00")
 }));
 
-const cds = require("@sap/cds");
 
 describe("Tests for default ORD document when .cdsrc.json is present", () => {
     let csn;
