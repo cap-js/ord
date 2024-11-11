@@ -46,7 +46,7 @@ describe('extendOrdWithCustom', () => {
             const ordContent = {};
             const warningSpy = jest.spyOn(console, 'warn');
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
-            const result = extendCustomORDContentIfExists(appConfig, ordContent);
+            const result = extendCustomORDContentIfExists(appConfig, ordContent, cds.log());
 
             expect(warningSpy).toHaveBeenCalledTimes(3);
             expect(warningSpy).toHaveBeenCalledWith('Mocked warning');
