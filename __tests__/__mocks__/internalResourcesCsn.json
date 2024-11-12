@@ -5,7 +5,7 @@
             "@requires": "authenticated-user",
             "@ORD.Extensions.title": "This is test AdminService title",
             "@ORD.Extensions.shortDescription": "short description for test AdminService",
-            "@ORD.Extensions.visibility": "private",
+            "@ORD.Extensions.visibility": "internal",
             "@ORD.Extensions.version": "2.0.0",
             "@ORD.Extensions.extensible.supported": "yes",
             "@ORD.Extensions.entityTypeMappings.entityTypeTargets": [
@@ -316,7 +316,7 @@
             "@path": "/browse",
             "@ORD.Extensions.title": "This is test Catalog Service title",
             "@ORD.Extensions.shortDescription": "short description for test CatalogService",
-            "@ORD.Extensions.visibility": "private",
+            "@ORD.Extensions.visibility": "internal",
             "@ORD.Extensions.version": "2.0.0",
             "@ORD.Extensions.extensible.supported": "yes"
         },

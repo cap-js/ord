@@ -499,7 +499,7 @@
             "@path": "/browse",
             "@ORD.Extensions.title": "This is test Cinema Service title",
             "@ORD.Extensions.shortDescription": "short description for test CinemaService",
-            "@ORD.Extensions.visibility": "internal",
+            "@ORD.Extensions.visibility": "private",
             "@ORD.Extensions.version": "1.0.0",
             "@ORD.Extensions.extensible.supported": "yes"
         },
