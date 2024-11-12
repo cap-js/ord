@@ -12,10 +12,6 @@ jest.mock("@sap/cds", () => {
     return cds;
 });
 
-jest.mock("../lib/date", () => ({
-    getRFC3339Date: jest.fn(() => "2024-11-04T14:33:25+01:00"),
-}));
-
 jest.mock("../lib/extendOrdWithCustom", () => ({
     extendCustomORDContentIfExists: jest.fn(
         (_appConfig, ordContent, _lazyLogger) => {
@@ -28,7 +24,7 @@ jest.mock("../lib/extendOrdWithCustom", () => ({
 }));
 
 describe("Tests for ORD document when there is no public service", () => {
-    test("Private services: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
+    test("All services are private: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
         const document = ord(private_csn);
 
         expect(document.packages).not.toBeDefined();
@@ -36,7 +32,7 @@ describe("Tests for ORD document when there is no public service", () => {
         expect(document.eventResources).toHaveLength(0);
     });
 
-    test("Internal services: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
+    test("All services are internal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
         const document = ord(internal_csn);
 
         expect(document.packages).not.toBeDefined();
