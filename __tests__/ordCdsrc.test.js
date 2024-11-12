@@ -5,9 +5,10 @@ const path = require("path");
 // Mock the @sap/cds module
 jest.mock("@sap/cds", () => {
     const path = require("path");
-    let originalCds = jest.requireActual("@sap/cds");
-    originalCds.root = path.join(__dirname, "bookshop");
-    return originalCds;
+    let cds = jest.requireActual("@sap/cds");
+    cds.root = path.join(__dirname, "bookshop");
+
+    return cds;
 });
 
 jest.mock("../lib/date", () => ({
@@ -19,7 +20,7 @@ describe("Tests for default ORD document when .cdsrc.json is present", () => {
     let csn;
 
     beforeAll(async () => {
-        csn = await cds.load(path.join(__dirname, "bookshop", "srv"));
+        csn = await cds.load(path.join(cds.root, "srv"));
     });
 
     test("Successfully create ORD Documents with defaults", () => {

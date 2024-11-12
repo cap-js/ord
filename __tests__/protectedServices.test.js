@@ -1,29 +1,15 @@
-const ord = require("../lib/ord");
-const private_csn = require("./__mocks__/privateResourcesCsn.json");
+const cds = require("@sap/cds");
 const internal_csn = require("./__mocks__/internalResourcesCsn.json");
-
-
-// Mock the @sap/cds module
-jest.mock("@sap/cds", () => {
-    const path = require("path");
-    let cds = jest.requireActual("@sap/cds");
-    cds.root = path.join(__dirname, "bookshop");
-
-    return cds;
-});
-
-jest.mock("../lib/extendOrdWithCustom", () => ({
-    extendCustomORDContentIfExists: jest.fn(
-        (_appConfig, ordContent, _lazyLogger) => {
-            console.log(
-                "The custom.ord.json file is not considered for the purpose of this test."
-            );
-            return ordContent;
-        }
-    ),
-}));
+const ord = require("../lib/ord");
+const path = require("path");
+const private_csn = require("./__mocks__/privateResourcesCsn.json");
 
 describe("Tests for ORD document when there is no public service", () => {
+    beforeAll(() => {
+        cds.root = path.join(__dirname, "bookshop");
+        cds.env = {};
+    });
+
     afterAll(() => {
         jest.clearAllMocks();
     })
