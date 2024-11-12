@@ -24,6 +24,10 @@ jest.mock("../lib/extendOrdWithCustom", () => ({
 }));
 
 describe("Tests for ORD document when there is no public service", () => {
+    afterAll(() => {
+        jest.clearAllMocks();
+    })
+
     test("All services are private: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
         const document = ord(private_csn);
 
