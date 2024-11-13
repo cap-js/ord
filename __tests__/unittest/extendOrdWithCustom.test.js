@@ -12,13 +12,13 @@ jest.mock("@sap/cds", () => {
         ...actualCds,
         env: {},
         log: jest.fn(() => ({
+            levels: { DEBUG: 0, WARN: 1 },
             warn: jest.fn(() => console.warn('Mocked warning')),
         })),
     };
 });
 
 describe('extendOrdWithCustom', () => {
-
     let appConfig = {};
 
     beforeEach(() => {
