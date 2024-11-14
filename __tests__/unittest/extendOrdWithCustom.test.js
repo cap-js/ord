@@ -46,7 +46,7 @@ describe('extendOrdWithCustom', () => {
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
 
-            expect(warningSpy).toHaveBeenCalledTimes(3);
+            expect(warningSpy).toHaveBeenCalledTimes(4);
             expect(warningSpy).toHaveBeenCalledWith('Mocked warning');
 
             expect(result).toMatchSnapshot();
