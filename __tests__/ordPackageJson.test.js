@@ -2,15 +2,6 @@ const cds = require("@sap/cds");
 const ord = require("../lib/ord");
 const path = require("path");
 
-
-// Mock the @sap/cds module
-jest.mock("@sap/cds", () => {
-    const path = require("path");
-    let originalCds = jest.requireActual("@sap/cds");
-    originalCds.root = path.join(__dirname, "bookshop");
-    return originalCds;
-});
-
 jest.mock("../lib/date", () => ({
     getRFC3339Date: jest.fn(() => "2024-11-04T14:33:25+01:00")
 }));
@@ -19,9 +10,11 @@ describe("Tests for default ORD document when .cdsrc.json is not present", () =>
     let csn;
 
     beforeAll(async () => {
-        cds.env["ord"] = "";
         csn = await cds.load(path.join(__dirname, "bookshop", "srv"));
+    });
 
+    beforeEach(() => {
+        cds.root = path.join(__dirname, "bookshop");
     });
 
     test("Successfully create ORD Documents with defaults", () => {
