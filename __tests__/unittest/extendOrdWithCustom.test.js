@@ -10,6 +10,7 @@ jest.mock("@sap/cds", () => {
         log: jest.fn(() => ({
             levels: { DEBUG: 0, WARN: 1 },
             warn: jest.fn(() => console.warn('Mocked warning')),
+            error: jest.fn(() => console.error('Mocked error')),
         })),
     };
 });
@@ -46,7 +47,7 @@ describe('extendOrdWithCustom', () => {
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
 
-            expect(warningSpy).toHaveBeenCalledTimes(4);
+            expect(warningSpy).toHaveBeenCalledTimes(3);
             expect(warningSpy).toHaveBeenCalledWith('Mocked warning');
 
             expect(result).toMatchSnapshot();
