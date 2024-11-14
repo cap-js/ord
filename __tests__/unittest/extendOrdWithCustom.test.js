@@ -2,10 +2,6 @@ const cds = require("@sap/cds");
 const path = require('path');
 const { extendCustomORDContentIfExists } = require('../../lib/extendOrdWithCustom');
 
-jest.mock('path', () => ({
-    join: jest.fn(),
-}));
-
 jest.mock("@sap/cds", () => {
     const actualCds = jest.requireActual('@sap/cds');
     return {
@@ -29,15 +25,17 @@ describe('extendOrdWithCustom', () => {
         };
     });
 
-    afterEach(() => {
-        jest.resetModules();
-        jest.clearAllMocks();
-    });
-
     describe('extendCustomORDContentIfExists', () => {
-        it('should skip if there is no custom ord file', () => {
+        it('should skip if there is no customOrdContentFile property in the .cdsrc.json', () => {
             const ordContent = {};
             appConfig.env.customOrdContentFile = undefined;
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
+            expect(result).toEqual(ordContent);
+        });
+
+        it('should skip if customOrdContentFile property in the .cdsrc.json points to NON-EXISTING custom ord file', () => {
+            const ordContent = {};
+            appConfig.env.customOrdContentFile = "./ord/NotExistingCustom.ord.json";
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toEqual(ordContent);
         });
@@ -46,7 +44,7 @@ describe('extendOrdWithCustom', () => {
             const ordContent = {};
             const warningSpy = jest.spyOn(console, 'warn');
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, 'testCustomORDContentFileThrowErrors.json');
-            const result = extendCustomORDContentIfExists(appConfig, ordContent, cds.log());
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
 
             expect(warningSpy).toHaveBeenCalledTimes(3);
             expect(warningSpy).toHaveBeenCalledWith('Mocked warning');
@@ -120,5 +118,5 @@ describe('extendOrdWithCustom', () => {
 function prepareTestEnvironment(ordEnvVariables, appConfig, testFileName) {
     cds.env["ord"] = ordEnvVariables;
     appConfig.env.customOrdContentFile = testFileName;
-    path.join.mockReturnValue(`${__dirname}/utils/${testFileName}`);
+    jest.spyOn(path, 'join').mockReturnValue(`${__dirname}/utils/${testFileName}`);
 }
