@@ -119,5 +119,5 @@ describe('extendOrdWithCustom', () => {
 function prepareTestEnvironment(ordEnvVariables, appConfig, testFileName) {
     cds.env["ord"] = ordEnvVariables;
     appConfig.env.customOrdContentFile = testFileName;
-    jest.spyOn(path, 'join').mockReturnValue(`${__dirname}/utils/${testFileName}`);
+    jest.spyOn(path, 'join').mockReturnValueOnce(`${__dirname}/utils/${testFileName}`);
 }

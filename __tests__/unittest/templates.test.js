@@ -43,6 +43,11 @@ describe('templates', () => {
             };
             expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
         });
+
+        it('should return undefined when no service definition', () => {
+            const testServiceName = 'testServiceName';
+            expect(createGroupsTemplateForService(testServiceName, null, appConfig)).not.toBeDefined();
+        });
     });
 
     describe('createAPIResourceTemplate', () => {
