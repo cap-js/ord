@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.2.0 (2024-11-18)
+
+### What's Changed
+
+* Version of ORD document generation
+* API short description
+* Default lastUpdate and consumptionBundles properties
+* Filtering of resources based on visibility
+* Added Unit tests
+* Added logger
+
 ## 1.1.0 (2024-10-24)
 
 ### What's Changed
