@@ -82,4 +82,22 @@ describe("Tests for default ORD document when .cdsrc.json is not present", () =>
             }
         });
     });
+
+    describe("integrationDependency", () => {
+        // eslint-disable-next-line no-useless-escape
+        const PACKAGE_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._\-]+):(v0|v[1-9][0-9]*)$/;
+
+        let document;
+
+        beforeAll(() => {
+            document = ord(csn);
+        });
+
+        test("PartOfPackage values are valid ORD IDs ", () => {
+            for (const apiResource of document.apiResources) {
+                expect(apiResource.partOfPackage).toMatch(PACKAGE_ID_REGEX);
+            }
+        });
+    });
+    
 });

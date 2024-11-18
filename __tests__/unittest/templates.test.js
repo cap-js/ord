@@ -3,7 +3,8 @@ const {
     createEntityTypeTemplate,
     createGroupsTemplateForService,
     createAPIResourceTemplate,
-    createEventResourceTemplate
+    createEventResourceTemplate,
+    createIntegrationDependencyTemplate
 } = require('../../lib/templates');
 
 describe('templates', () => {
@@ -82,6 +83,23 @@ describe('templates', () => {
             const srvDefinition = linkedModel
             const packageIds = ['customer.testNamespace:package:test:v1'];
             expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        });
+    });
+
+    describe('createIntegrationDependencyTemplate', () => {
+        it('should create integration dependency template correctly', () => {
+            const serviceName = "MyService";
+            linkedModel = cds.linked(`
+                service MyService{
+                    entity Books{
+                        key ID: UUID;
+                        title: String;
+                    }
+                }
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            const packageIds = ['customer.testNamespace:package:test:v1'];
+            expect(createIntegrationDependencyTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
 

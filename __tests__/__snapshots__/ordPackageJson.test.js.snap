@@ -121,6 +121,32 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
       "title": "This is test Cinema Service title",
     },
   ],
+  "integrationDependency": [
+    {
+      "aspects": [
+        {
+          "eventResources": [
+            {
+              "ordId": "customer.capirebookshopordsample:eventResource:sap.s4.beh.businesspartner.v1.BusinessPartner:v1",
+              "subset": [
+                {
+                  "eventType": "sap.s4.beh.businesspartner.v1.BusinessPartner.Created.v1",
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      "description": "Integration Dependency sample description",
+      "mandatory": true,
+      "ordId": "customer.capirebookshopordsample:integrationDependency:sap.s4.beh.businesspartner.v1.BusinessPartner:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "title": "Integration Dependency sample titile",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "openResourceDiscovery": "1.9",
   "packages": [
     {

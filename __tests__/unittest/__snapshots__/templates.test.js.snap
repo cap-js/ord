@@ -121,6 +121,29 @@ exports[`templates createEventResourceTemplate should create event resource temp
 ]
 `;
 
+exports[`templates createIntegrationDependencyTemplate should create integration dependency template correctly 1`] = `
+{
+  "aspects": [
+    {
+      "eventResources": [
+        {
+          "ordId": "customer.testNamespace:eventResource:MyService:v1",
+          "subset": [],
+        },
+      ],
+    },
+  ],
+  "description": "Integration Dependency sample description",
+  "mandatory": true,
+  "ordId": "customer.testNamespace:integrationDependency:MyService:v1",
+  "partOfPackage": "customer.testNamespace:package:test:v1",
+  "releaseStatus": "active",
+  "title": "Integration Dependency sample titile",
+  "version": "1.0.0",
+  "visibility": "public",
+}
+`;
+
 exports[`templates ordExtension should add apiResources with ORD Extension "visibility=public" 1`] = `
 [
   {

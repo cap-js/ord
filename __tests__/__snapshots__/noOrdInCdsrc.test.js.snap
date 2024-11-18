@@ -283,6 +283,7 @@ exports[`Tests for ORD document when .cdsrc.json has no \`ord\` property Success
       "title": "This is test Cinema Service title",
     },
   ],
+  "integrationDependency": [],
   "openResourceDiscovery": "1.9",
   "packages": [
     {
