@@ -90,18 +90,67 @@ describe("Tests for default ORD document when .cdsrc.json is present", () => {
     });
 
     describe("integrationDependency", () => {
-        // eslint-disable-next-line no-useless-escape
-        const PACKAGE_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._\-]+):(v0|v[1-9][0-9]*)$/;
-
         let document;
 
         beforeAll(() => {
             document = ord(csn);
         });
 
-        test("PartOfPackage values are valid ORD IDs ", () => {
-            for (const apiResource of document.apiResources) {
-                expect(apiResource.partOfPackage).toMatch(PACKAGE_ID_REGEX);
+        test("ordId values are valid ORD IDs", () => {
+            const ORD_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):integrationDependency:([a-zA-Z0-9.-]+):(v0|v[1-9][0-9]*)$/;
+            for (const dep of document.integrationDependency) {
+                expect(dep.ordId).toMatch(ORD_ID_REGEX);
+            }
+        });
+
+        test("partOfPackage values are valid package IDs", () => {
+            const PACKAGE_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._-]+):(v0|v[1-9][0-9]*)$/;
+            for (const dep of document.integrationDependency) {
+                expect(dep.partOfPackage).toBeDefined();
+                expect(dep.partOfPackage).toMatch(PACKAGE_ID_REGEX);
+            }
+        });
+        
+        test("aspects contain valid eventResources", () => {
+            for (const dep of document.integrationDependency) {
+                expect(dep.aspects).toBeDefined();
+                for (const aspect of dep.aspects) {
+                    expect(aspect.eventResources).toBeDefined();
+                    expect(Array.isArray(aspect.eventResources)).toBe(true);
+                }
+            }
+        });
+        
+        test("eventResources ordId values are valid", () => {
+            const EVENT_RESOURCE_ORD_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):eventResource:([a-zA-Z0-9._-]+):(v0|v[1-9][0-9]*)$/;
+            for (const dep of document.integrationDependency) {
+                for (const aspect of dep.aspects) {
+                    for (const eventResource of aspect.eventResources) {
+                        expect(eventResource.ordId).toMatch(EVENT_RESOURCE_ORD_ID_REGEX);
+                    }
+                }
+            }
+        });
+
+        test("eventResources subset contains valid eventType fields", () => {
+            for (const dep of document.integrationDependency) {
+                for (const aspect of dep.aspects) {
+                    for (const eventResource of aspect.eventResources) {
+                        expect(eventResource.subset).toBeDefined();
+                        expect(Array.isArray(eventResource.subset)).toBe(true);
+                        for (const subsetItem of eventResource.subset) {
+                            expect(subsetItem.eventType).toBeDefined();
+                            expect(typeof subsetItem.eventType).toBe("string");
+                        }
+                    }
+                }
+            }
+        });
+        
+        test("partOfPackage matches an existing package ordId", () => {
+            const packageOrdIds = document.packages.map(pkg => pkg.ordId);
+            for (const dep of document.integrationDependency) {
+                expect(packageOrdIds).toContain(dep.partOfPackage);
             }
         });
     });
