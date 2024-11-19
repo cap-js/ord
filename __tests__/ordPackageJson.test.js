@@ -1,20 +1,19 @@
 const cds = require("@sap/cds");
-const ord = require("../lib/ord");
 const path = require("path");
 
-jest.mock("../lib/date", () => ({
-    getRFC3339Date: jest.fn(() => "2024-11-04T14:33:25+01:00")
-}));
-
 describe("Tests for default ORD document when .cdsrc.json is not present", () => {
-    let csn;
+    let csn, ord;
 
     beforeAll(async () => {
-        csn = await cds.load(path.join(__dirname, "bookshop", "srv"));
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
+        cds.root = path.join(__dirname, "bookshop");
+        csn = await cds.load(path.join(cds.root, "srv"));
     });
 
-    beforeEach(() => {
-        cds.root = path.join(__dirname, "bookshop");
+    afterAll(() => {
+        jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     test("Successfully create ORD Documents with defaults", () => {

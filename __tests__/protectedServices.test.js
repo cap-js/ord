@@ -1,9 +1,9 @@
 const cds = require("@sap/cds");
-const internal_csn = require("./__mocks__/internalResourcesCsn.json");
-const ord = require("../lib/ord");
+const csnInternal = require("./__mocks__/internalResourcesCsn.json");
+const csnPrivate = require("./__mocks__/privateResourcesCsn.json");
 const path = require("path");
-const private_csn = require("./__mocks__/privateResourcesCsn.json");
 
+let ord;
 function checkOrdDocument(csn) {
     const document = ord(csn);
 
@@ -12,11 +12,6 @@ function checkOrdDocument(csn) {
     expect(document.apiResources).toHaveLength(0);
     expect(document.eventResources).toHaveLength(0);
 }
-
-
-jest.mock("../lib/date", () => ({
-    getRFC3339Date: jest.fn(() => "2024-11-04T14:33:25+01:00")
-}));
 
 describe("Tests for ORD document when there is no public service", () => {
     beforeAll(() => {
@@ -27,17 +22,20 @@ describe("Tests for ORD document when there is no public service", () => {
             description: "this is my custom description",
             policyLevel: "sap:core:v1"
         };
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
     });
 
     afterAll(() => {
         jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     test("All services are private: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
-        checkOrdDocument(private_csn);
+        checkOrdDocument(csnPrivate);
     });
 
     test("All services are internal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
-        checkOrdDocument(internal_csn);
+        checkOrdDocument(csnInternal);
     });
 });
