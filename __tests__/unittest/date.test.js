@@ -3,8 +3,13 @@ const { getRFC3339Date } = require('../../lib/date');
 const RFC3339_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 
 describe('date', () => {
-    it('test getRFC3339Date', () => {
+    it('tests getRFC3339Date with offset', () => {
         const lastUpdate = getRFC3339Date();
+        expect(lastUpdate).toMatch(RFC3339_REGEX);
+    });
+
+    it('tests getRFC3339Date without offset', () => {
+        const lastUpdate = getRFC3339Date(false);
         expect(lastUpdate).toMatch(RFC3339_REGEX);
     });
 
