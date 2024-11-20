@@ -43,6 +43,21 @@ describe('templates', () => {
             };
             expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
         });
+
+        it('should return default value with a proper Service title when "Service" keyword is missing', () => {
+            const testServiceName = 'testServName';
+            const testResult = {
+                groupId: 'sap.cds:service:customer.testNamespace:testServName',
+                groupTypeId: 'sap.cds:service',
+                title: 'testServName Service'
+            };
+            expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
+        });
+
+        it('should return undefined when no service definition', () => {
+            const testServiceName = 'testServiceName';
+            expect(createGroupsTemplateForService(testServiceName, null, appConfig)).not.toBeDefined();
+        });
     });
 
     describe('createAPIResourceTemplate', () => {
