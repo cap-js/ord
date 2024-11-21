@@ -1,6 +1,6 @@
 const cds = require('@sap/cds');
 const {
-    createEntityTypeTemplate,
+    createEntityTypeMappingsItemTemplate,
     createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate
@@ -25,9 +25,9 @@ describe('templates', () => {
         `);
     });
 
-    describe('createEntityTypeTemplate', () => {
+    describe('createEntityTypeMappingsItemTemplate', () => {
         it('should return default value', () => {
-            expect(createEntityTypeTemplate(linkedModel)).toEqual({
+            expect(createEntityTypeMappingsItemTemplate(linkedModel)).toEqual({
                 ordId: 'sap.odm:entityType:undefined:v1'
             });
         });
