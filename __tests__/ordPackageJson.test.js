@@ -83,7 +83,7 @@ describe("Tests for default ORD document when .cdsrc.json is not present", () =>
         });
     });
 
-    describe("integrationDependency", () => {
+    describe("integrationDependencies", () => {
         let document;
 
         beforeAll(() => {
@@ -92,21 +92,21 @@ describe("Tests for default ORD document when .cdsrc.json is not present", () =>
 
         test("ordId values are valid ORD IDs", () => {
             const ORD_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):integrationDependency:([a-zA-Z0-9.-]+):(v0|v[1-9][0-9]*)$/;
-            for (const dep of document.integrationDependency) {
+            for (const dep of document.integrationDependencies) {
                 expect(dep.ordId).toMatch(ORD_ID_REGEX);
             }
         });
 
         test("partOfPackage values are valid package IDs", () => {
             const PACKAGE_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):(package):([a-zA-Z0-9._-]+):(v0|v[1-9][0-9]*)$/;
-            for (const dep of document.integrationDependency) {
+            for (const dep of document.integrationDependencies) {
                 expect(dep.partOfPackage).toBeDefined();
                 expect(dep.partOfPackage).toMatch(PACKAGE_ID_REGEX);
             }
         });
         
         test("aspects contain valid eventResources", () => {
-            for (const dep of document.integrationDependency) {
+            for (const dep of document.integrationDependencies) {
                 expect(dep.aspects).toBeDefined();
                 for (const aspect of dep.aspects) {
                     expect(aspect.eventResources).toBeDefined();
@@ -117,7 +117,7 @@ describe("Tests for default ORD document when .cdsrc.json is not present", () =>
         
         test("eventResources ordId values are valid", () => {
             const EVENT_RESOURCE_ORD_ID_REGEX = /^([a-z0-9]+(?:[.][a-z0-9]+)*):eventResource:([a-zA-Z0-9._-]+):(v0|v[1-9][0-9]*)$/;
-            for (const dep of document.integrationDependency) {
+            for (const dep of document.integrationDependencies) {
                 for (const aspect of dep.aspects) {
                     for (const eventResource of aspect.eventResources) {
                         expect(eventResource.ordId).toMatch(EVENT_RESOURCE_ORD_ID_REGEX);
@@ -127,7 +127,7 @@ describe("Tests for default ORD document when .cdsrc.json is not present", () =>
         });
 
         test("eventResources subset contains valid eventType fields", () => {
-            for (const dep of document.integrationDependency) {
+            for (const dep of document.integrationDependencies) {
                 for (const aspect of dep.aspects) {
                     for (const eventResource of aspect.eventResources) {
                         expect(eventResource.subset).toBeDefined();
@@ -143,7 +143,7 @@ describe("Tests for default ORD document when .cdsrc.json is not present", () =>
         
         test("partOfPackage matches an existing package ordId", () => {
             const packageOrdIds = document.packages.map(pkg => pkg.ordId);
-            for (const dep of document.integrationDependency) {
+            for (const dep of document.integrationDependencies) {
                 expect(packageOrdIds).toContain(dep.partOfPackage);
             }
         });
