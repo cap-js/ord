@@ -1,6 +1,6 @@
 const cds = require('@sap/cds');
 const {
-    createEntityTypeTemplate,
+    createEntityTypeMappingsItemTemplate,
     createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate
@@ -25,9 +25,9 @@ describe('templates', () => {
         `);
     });
 
-    describe('createEntityTypeTemplate', () => {
+    describe('createEntityTypeMappingsItemTemplate', () => {
         it('should return default value', () => {
-            expect(createEntityTypeTemplate(linkedModel)).toEqual({
+            expect(createEntityTypeMappingsItemTemplate(linkedModel)).toEqual({
                 ordId: 'sap.odm:entityType:undefined:v1'
             });
         });
@@ -42,6 +42,21 @@ describe('templates', () => {
                 title: 'test Service'
             };
             expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
+        });
+
+        it('should return default value with a proper Service title when "Service" keyword is missing', () => {
+            const testServiceName = 'testServName';
+            const testResult = {
+                groupId: 'sap.cds:service:customer.testNamespace:testServName',
+                groupTypeId: 'sap.cds:service',
+                title: 'testServName Service'
+            };
+            expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
+        });
+
+        it('should return undefined when no service definition', () => {
+            const testServiceName = 'testServiceName';
+            expect(createGroupsTemplateForService(testServiceName, null, appConfig)).not.toBeDefined();
         });
     });
 
@@ -97,7 +112,7 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            appConfig['odmEntity'] = 'sap.odm:entityType:test:v1'
+            appConfig['odmEntities'] = 'sap.odm:entityType:test:v1'
             const packageIds = ['customer.testNamespace:package:test:v1'];
             const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
@@ -131,7 +146,7 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            appConfig['odmEntity'] = 'sap.odm:entityType:test:v1'
+            appConfig['odmEntities'] = 'sap.odm:entityType:test:v1'
             const packageIds = ['customer.testNamespace:package:test:v1'];
             const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
@@ -166,7 +181,7 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            appConfig['odmEntity'] = 'sap.odm:entityType:test:v1'
+            appConfig['odmEntities'] = 'sap.odm:entityType:test:v1'
             const packageIds = ['customer.testNamespace:package:test:v1'];
             const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
