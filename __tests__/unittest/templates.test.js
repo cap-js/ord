@@ -96,6 +96,15 @@ describe('templates', () => {
                         title: String;
                     }
                 }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService integrationDependency title',
+                    visibility : 'public',
+                    version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                }; 
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
             const packageIds = ['customer.testNamespace:package:test:v1'];

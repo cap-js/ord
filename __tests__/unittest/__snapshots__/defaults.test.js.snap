@@ -62,6 +62,17 @@ exports[`defaults packages should return default value if policyLevel contains s
     "vendor": "customer:vendor:Customer:",
     "version": "1.0.0",
   },
+  {
+    "description": "Description for My Package",
+    "ordId": "customer.sample:package:MyPackage-integration-dependency:v1",
+    "partOfProducts": [
+      "customer:product:My.Package:",
+    ],
+    "shortDescription": "Short description for My Package",
+    "title": "My Package",
+    "vendor": "customer:vendor:Customer:",
+    "version": "1.0.0",
+  },
 ]
 `;
 
