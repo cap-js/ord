@@ -5,11 +5,6 @@ exports[`templates createAPIResourceTemplate should create API resource template
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": undefined,
-      },
-    ],
     "entryPoints": [
       "/odata/v4/my",
     ],
