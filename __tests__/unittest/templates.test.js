@@ -1,6 +1,6 @@
 const cds = require('@sap/cds');
 const {
-    createEntityTypeTemplate,
+    createEntityTypeMappingsItemTemplate,
     createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate
@@ -25,9 +25,9 @@ describe('templates', () => {
         `);
     });
 
-    describe('createEntityTypeTemplate', () => {
+    describe('createEntityTypeMappingsItemTemplate', () => {
         it('should return default value', () => {
-            expect(createEntityTypeTemplate(linkedModel)).toEqual({
+            expect(createEntityTypeMappingsItemTemplate(linkedModel)).toEqual({
                 ordId: 'sap.odm:entityType:undefined:v1'
             });
         });
@@ -112,7 +112,7 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            appConfig['odmEntity'] = 'sap.odm:entityType:test:v1'
+            appConfig['odmEntities'] = 'sap.odm:entityType:test:v1'
             const packageIds = ['customer.testNamespace:package:test:v1'];
             const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
@@ -146,7 +146,7 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            appConfig['odmEntity'] = 'sap.odm:entityType:test:v1'
+            appConfig['odmEntities'] = 'sap.odm:entityType:test:v1'
             const packageIds = ['customer.testNamespace:package:test:v1'];
             const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
@@ -181,7 +181,7 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            appConfig['odmEntity'] = 'sap.odm:entityType:test:v1'
+            appConfig['odmEntities'] = 'sap.odm:entityType:test:v1'
             const packageIds = ['customer.testNamespace:package:test:v1'];
             const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
