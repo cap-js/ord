@@ -60,7 +60,9 @@ exports[`Tests for ORD document when .cdsrc.json has no \`ord\` property Success
       "entityTypeMappings": [
         {
           "entityTypeTargets": [
-            "sap.odm:entityType:odm.bookshop.Authors:v1",
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
           ],
         },
       ],
@@ -110,7 +112,9 @@ exports[`Tests for ORD document when .cdsrc.json has no \`ord\` property Success
       "entityTypeMappings": [
         {
           "entityTypeTargets": [
-            "sap.odm:entityType:odm.bookshop.Authors:v1",
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
           ],
         },
       ],

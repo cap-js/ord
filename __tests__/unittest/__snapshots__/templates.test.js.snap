@@ -124,7 +124,9 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
     "entityTypeMappings": [
       {
         "entityTypeTargets": [
-          "sap.odm:entityType:test:v1",
+          {
+            "ordId": "sap.odm:entityType:test:v1",
+          },
         ],
       },
     ],
