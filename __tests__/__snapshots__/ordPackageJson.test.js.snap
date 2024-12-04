@@ -66,6 +66,7 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
     },
   ],
   "description": "this is an application description",
+  "entityTypes": [],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -129,7 +130,7 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description for capire bookshop ord sample",
+      "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
@@ -139,7 +140,7 @@ exports[`Tests for default ORD document when .cdsrc.json is not present Successf
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
-      "shortDescription": "Description for capire bookshop ord sample",
+      "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:customer:",
     },
