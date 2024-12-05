@@ -26,13 +26,13 @@ extend service ProcessorService {
 @AsyncAPI.Title        : 'SAP Incident Management'
 @AsyncAPI.SchemaVersion: '1.0'
 service LocalService {
-    entity DummyEntityA as projection on my.EntityWithCorrespondingODMEntity;
+    entity Entertainment as projection on my.Cinema;
 
-    entity DummyEntityB as projection on my.SomeAribaEntity;
+    entity Film as projection on my.Movie;
 
-    event TitleChange2 : {
+    event TitleChange : {
         ID    : Integer;
-        title : String @title: 'Title';
+        title : String @title: 'Changed Title';
     }
 }
 
