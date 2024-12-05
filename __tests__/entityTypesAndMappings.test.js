@@ -26,8 +26,6 @@ describe("Tests for ORD document checking if entityTypes and entityTypeMappings 
     test("Successfully create ORD Document: entityTypes with local entities and entityTypeMappings containing referenced entities", () => {
         const document = ord(csn);
 
-        // ...(appConfig.entityTypeMappings?.length > 0 && { entityTypeMappings: [{ entityTypeTargets: appConfig.entityTypeTargets.map(m => m.ordId) }] }),
-
         expect(document).not.toBeUndefined();
         expect(document.entityTypes).toHaveLength(1);
         expect(document.entityTypes[0].partOfPackage).toEqual(expect.stringContaining("entityType"));

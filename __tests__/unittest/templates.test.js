@@ -1,5 +1,6 @@
 const cds = require('@sap/cds');
 const {
+    createEntityTypeTemplate,
     createEntityTypeMappingsItemTemplate,
     createGroupsTemplateForService,
     createAPIResourceTemplate,
@@ -8,6 +9,7 @@ const {
 
 describe('templates', () => {
     let linkedModel;
+    let warningSpy;
 
     const appConfig = {
         ordNamespace: 'customer.testNamespace',
@@ -23,11 +25,46 @@ describe('templates', () => {
                 title: String;
             }
         `);
+        warningSpy = jest.spyOn(console, "warn");
     });
 
     describe('createEntityTypeMappingsItemTemplate', () => {
         it('should return default value', () => {
             expect(createEntityTypeMappingsItemTemplate(linkedModel.definitions['customer.testNamespace123.Books'])).toBeUndefined();
+        });
+    });
+
+    describe('createEntityTypeTemplate', () => {
+        const packageIds = ['sap.test.cdsrc.sample:package:test-entityType:v1'];
+        it('should return entity type with incorrect version, title and level:root-entity', () => {
+            const entityWithVersion = {
+                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1.2b.3",
+                entityName: "SomeAribaDummyEntity",
+                "@title": "Title of SomeAribaDummyEntity",
+                "@ObjectModel.compositionRoot": true,
+            };
+
+            const entityType = createEntityTypeTemplate(appConfig, packageIds, entityWithVersion);
+            expect(entityType).toBeDefined();
+            expect(entityType).toMatchSnapshot();
+            expect(warningSpy).toHaveBeenCalledTimes(1);
+            expect(entityType.version).toEqual('v1.2b.3');
+            expect(entityType.level).toEqual('root-entity');
+            expect(entityType.partOfPackage).toEqual('sap.test.cdsrc.sample:package:test-entityType:v1');
+        });
+
+
+        it('should return entity type with default version, title and level:sub-entity', () => {
+            const entityWithoutVersion = {
+                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1",
+                entityName: "SomeAribaDummyEntity"
+            };
+
+            const entityType = createEntityTypeTemplate(appConfig, packageIds, entityWithoutVersion);
+            expect(entityType).toBeDefined();
+            expect(entityType).toMatchSnapshot();
+            expect(entityType.version).toEqual('1.0.0');
+            expect(entityType.level).toEqual('sub-entity');
         });
     });
 

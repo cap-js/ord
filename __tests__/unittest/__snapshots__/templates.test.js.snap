@@ -48,6 +48,44 @@ exports[`templates createAPIResourceTemplate should create API resource template
 ]
 `;
 
+exports[`templates createEntityTypeTemplate should return entity type with default version, title and level:sub-entity 1`] = `
+{
+  "description": "Description for SomeAribaDummyEntity",
+  "extensible": {
+    "supported": "no",
+  },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "level": "sub-entity",
+  "localId": "SomeAribaDummyEntity",
+  "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v1",
+  "partOfPackage": "sap.test.cdsrc.sample:package:test-entityType:v1",
+  "releaseStatus": "active",
+  "shortDescription": "Short description of SomeAribaDummyEntity",
+  "title": "SomeAribaDummyEntity",
+  "version": "1.0.0",
+  "visibility": "public",
+}
+`;
+
+exports[`templates createEntityTypeTemplate should return entity type with incorrect version, title and level:root-entity 1`] = `
+{
+  "description": "Description for SomeAribaDummyEntity",
+  "extensible": {
+    "supported": "no",
+  },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "level": "root-entity",
+  "localId": "SomeAribaDummyEntity",
+  "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v1.2b.3",
+  "partOfPackage": "sap.test.cdsrc.sample:package:test-entityType:v1",
+  "releaseStatus": "active",
+  "shortDescription": "Short description of SomeAribaDummyEntity",
+  "title": "Title of SomeAribaDummyEntity",
+  "version": "v1.2b.3",
+  "visibility": "public",
+}
+`;
+
 exports[`templates createEventResourceTemplate should create event resource template correctly 1`] = `
 [
   {

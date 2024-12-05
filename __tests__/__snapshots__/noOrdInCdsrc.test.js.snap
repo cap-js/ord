@@ -170,7 +170,6 @@ exports[`Tests for ORD document when .cdsrc.json has no \`ord\` property Success
     },
   ],
   "description": "this is an application description",
-  "entityTypes": [],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",

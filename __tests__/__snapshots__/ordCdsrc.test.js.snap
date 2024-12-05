@@ -91,7 +91,6 @@ exports[`Tests for default ORD document when .cdsrc.json is present Successfully
     },
   ],
   "description": "this is my custom description",
-  "entityTypes": [],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
