@@ -46,7 +46,7 @@ exports[`defaults packages should return default value if policyLevel contains s
     "partOfProducts": [
       "customer:product:My.Package:",
     ],
-    "shortDescription": "Short description for My Package",
+    "shortDescription": "Short description of My Package",
     "title": "My Package",
     "vendor": "customer:vendor:Customer:",
     "version": "1.0.0",
@@ -57,7 +57,29 @@ exports[`defaults packages should return default value if policyLevel contains s
     "partOfProducts": [
       "customer:product:My.Package:",
     ],
-    "shortDescription": "Short description for My Package",
+    "shortDescription": "Short description of My Package",
+    "title": "My Package",
+    "vendor": "customer:vendor:Customer:",
+    "version": "1.0.0",
+  },
+  {
+    "description": "Description for My Package",
+    "ordId": "customer.sample:package:MyPackage-integrationDependency:v1",
+    "partOfProducts": [
+      "customer:product:My.Package:",
+    ],
+    "shortDescription": "Short description of My Package",
+    "title": "My Package",
+    "vendor": "customer:vendor:Customer:",
+    "version": "1.0.0",
+  },
+  {
+    "description": "Description for My Package",
+    "ordId": "customer.sample:package:MyPackage-entityType:v1",
+    "partOfProducts": [
+      "customer:product:My.Package:",
+    ],
+    "shortDescription": "Short description of My Package",
     "title": "My Package",
     "vendor": "customer:vendor:Customer:",
     "version": "1.0.0",
@@ -73,7 +95,7 @@ exports[`defaults packages should return default value if policyLevel does not c
     "partOfProducts": [
       "customer:product:My.Package:",
     ],
-    "shortDescription": "Short description for My Package",
+    "shortDescription": "Short description of My Package",
     "title": "My Package",
     "vendor": "customer:vendor:Customer:",
     "version": "1.0.0",
@@ -87,7 +109,7 @@ exports[`defaults products should return default value 1`] = `
 [
   {
     "ordId": "customer:product:My.Product:",
-    "shortDescription": "Description for My Product",
+    "shortDescription": "Short description of My Product",
     "title": "My Product",
     "vendor": "customer:vendor:customer:",
   },
