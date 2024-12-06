@@ -41,7 +41,7 @@ The following rule governs code contributions:
 
 As this is a CAP plugin, it is best to develop in the following calesi environment:
 ```
-git clone --recursive https://github.com/cap-js/calesi.git for the calesi setup
+git clone --recursive https://github.com/cap-js/calesi.git
 cd calesi
 npm i
 ```
