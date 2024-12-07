@@ -36,5 +36,31 @@
                 "supported": "yes"
             }
         }
+    ],
+    "integrationDependencies": [
+        {
+            "ordId": "sap.test.cdsrc.sample:integrationDependency:sap.s4.beh.businesspartner.v1.BusinessPartner:v1",
+            "title": "Integration Dependency sample title",
+            "mandatory": true,
+            "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-integration-dependency:v1",
+            "lastUpdate": "2024-11-04T14:33:25+01:00",
+            "releaseStatus": "active",
+            "version": "1.0.0",
+            "visibility": "public",
+            "aspects": [
+                {
+                    "eventResources": [
+                        {
+                            "ordId": "sap.test.cdsrc.sample:eventResource:sap.s4.beh.businesspartner.v1.BusinessPartner:v1",
+                            "subset": [
+                                {
+                                    "eventType": "sap.s4.beh.businesspartner.v1.BusinessPartner.Created.v1"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
     ]
 }

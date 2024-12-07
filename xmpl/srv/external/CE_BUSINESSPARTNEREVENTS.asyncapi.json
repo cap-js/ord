@@ -1,0 +1,162 @@
+{
+    "asyncapi": "2.0.0",
+    "x-sap-catalog-spec-version": "1.0",
+    "info": {
+        "title": "Business Partner Events",
+        "version": "1.0.0",
+        "description": "A business partner is an organization (company, subsidiary), person or group of people or organizations in which your company has a business interest. The following events are available for business partner:\r\n\r\n* Business partner changed\r\n* Business partner created"
+    },
+    "x-sap-api-type": "EVENT",
+    "x-sap-shortText": "Informs a remote system about created and changed business partners in an SAP S/4HANA Cloud tenant.",
+    "x-sap-stateInfo": {
+        "state": "ACTIVE"
+    },
+    "channels": {
+        "ce/sap/s4/beh/businesspartner/v1/BusinessPartner/Changed/v1": {
+            "subscribe": {
+                "message": {
+                    "$ref": "#/components/messages/sap_s4_beh_businesspartner_v1_BusinessPartner_Changed_v1"
+                }
+            }
+        },
+        "ce/sap/s4/beh/businesspartner/v1/BusinessPartner/Created/v1": {
+            "subscribe": {
+                "message": {
+                    "$ref": "#/components/messages/sap_s4_beh_businesspartner_v1_BusinessPartner_Created_v1"
+                }
+            }
+        }
+    },
+    "components": {
+        "messages": {
+            "sap_s4_beh_businesspartner_v1_BusinessPartner_Changed_v1": {
+                "name": "sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1",
+                "summary": "BusinessPartner Changed",
+                "description": "This event is raised when Business Partner is changed.",
+                "headers": {
+                    "properties": {
+                        "type": {
+                            "const": "sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1"
+                        },
+                        "datacontenttype": {
+                            "const": "application/json"
+                        }
+                    }
+                },
+                "payload": {
+                    "$ref": "#/components/schemas/sap_s4_beh_businesspartner_v1_BusinessPartner_Changed_v1"
+                },
+                "traits": [
+                    {
+                        "$ref": "#/components/messageTraits/CloudEventContext"
+                    }
+                ]
+            },
+            "sap_s4_beh_businesspartner_v1_BusinessPartner_Created_v1": {
+                "name": "sap.s4.beh.businesspartner.v1.BusinessPartner.Created.v1",
+                "summary": "BusinessPartner Created",
+                "description": "This event is raised when Business Partner is created.",
+                "headers": {
+                    "properties": {
+                        "type": {
+                            "const": "sap.s4.beh.businesspartner.v1.BusinessPartner.Created.v1"
+                        },
+                        "datacontenttype": {
+                            "const": "application/json"
+                        }
+                    }
+                },
+                "payload": {
+                    "$ref": "#/components/schemas/sap_s4_beh_businesspartner_v1_BusinessPartner_Created_v1"
+                },
+                "traits": [
+                    {
+                        "$ref": "#/components/messageTraits/CloudEventContext"
+                    }
+                ]
+            }
+        },
+        "schemas": {
+            "sap_s4_beh_businesspartner_v1_BusinessPartner_Changed_v1": {
+                "type": "object",
+                "properties": {
+                    "BusinessPartner": {
+                        "description": "# Definition\r\n\r\nKey identifying a **business partner** in the SAP system. The key is unique within a client.",
+                        "type": "string",
+                        "maxLength": 10
+                    }
+                }
+            },
+            "sap_s4_beh_businesspartner_v1_BusinessPartner_Created_v1": {
+                "type": "object",
+                "properties": {
+                    "BusinessPartner": {
+                        "description": "# Definition\r\n\r\nKey identifying a **business partner** in the SAP system. The key is unique within a client.",
+                        "type": "string",
+                        "maxLength": 10
+                    }
+                }
+            }
+        },
+        "messageTraits": {
+            "CloudEventContext": {
+                "headers": {
+                    "type": "object",
+                    "properties": {
+                        "specversion": {
+                            "description": "The version of the CloudEvents specification which the event uses. This enables the interpretation of the context.",
+                            "type": "string",
+                            "const": "1.0"
+                        },
+                        "type": {
+                            "description": "Type of occurrence which has happened. Often this property is used for routing, observability, policy enforcement, etc.",
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "source": {
+                            "description": "This describes the event producer.",
+                            "type": "string",
+                            "format": "uri-reference"
+                        },
+                        "subject": {
+                            "description": "The subject of the event in the context of the event producer (identified by source).",
+                            "type": "string",
+                            "minLength": 1
+                        },
+                        "id": {
+                            "description": "ID of the event.",
+                            "type": "string",
+                            "minLength": 1,
+                            "examples": [
+                                "6925d08e-bc19-4ad7-902e-bd29721cc69b"
+                            ]
+                        },
+                        "time": {
+                            "description": "Timestamp of when the occurrence happened. Must adhere to RFC 3339.",
+                            "type": "string",
+                            "format": "date-time",
+                            "examples": [
+                                "2018-04-05T17:31:00Z"
+                            ]
+                        },
+                        "datacontenttype": {
+                            "description": "Describe the data encoding format",
+                            "type": "string",
+                            "const": "application/json"
+                        }
+                    },
+                    "required": [
+                        "id",
+                        "specversion",
+                        "source",
+                        "type"
+                    ]
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "Business Documentation",
+        "url": "https://help.sap.com/http.svc/ahp2/SAP_S4HANA_CLOUD/2408.latest/EN/a7/5345282ddd4054a1e5ce7687e4b088/frameset.htm"
+    }
+}
