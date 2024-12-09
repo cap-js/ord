@@ -12,14 +12,18 @@ describe("End-to-end test for ORD document", () => {
             ord = require("../lib/ord");
         });
 
-        afterAll(() => {
-            jest.clearAllMocks();
-            jest.resetAllMocks();
+        afterEach(() => {
+            cds.root = path.join(__dirname, "bookshop");
         });
 
         test("Successfully create ORD Documents with defaults", () => {
             const document = ord(csn);
             expect(document).toMatchSnapshot();
+        });
+
+        test("Exception thrown while package.json not found", () => {
+            cds.root = path.join(__dirname, "folderWithNoPackageJson");
+            expect(() => ord(csn)).toThrowError("package.json not found in the project root directory");
         });
 
         describe("apiResources", () => {
