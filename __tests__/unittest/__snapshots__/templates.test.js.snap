@@ -76,12 +76,12 @@ exports[`templates createEntityTypeTemplate should return entity type with incor
   "lastUpdate": "2022-12-19T15:47:04+00:00",
   "level": "root-entity",
   "localId": "SomeAribaDummyEntity",
-  "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v1.2b.3",
+  "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v3b",
   "partOfPackage": "sap.test.cdsrc.sample:package:test-entityType:v1",
   "releaseStatus": "active",
   "shortDescription": "Short description of SomeAribaDummyEntity",
   "title": "Title of SomeAribaDummyEntity",
-  "version": "v1.2b.3",
+  "version": "3b.0.0",
   "visibility": "public",
 }
 `;

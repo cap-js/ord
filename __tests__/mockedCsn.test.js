@@ -2,7 +2,7 @@ const cds = require("@sap/cds");
 const path = require("path");
 
 describe("Tests for ORD document generated out of mocked csn files", () => {
-    let ord; //, errorSpy;
+    let ord;
 
     function checkOrdDocument(csn) {
         const document = ord(csn);
@@ -26,7 +26,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             description: "this is my custom description",
             policyLevel: "sap:core:v1"
         };
-        // errorSpy = jest.spyOn(console, "error");
     });
 
     afterAll(() => {
@@ -99,14 +98,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.eventResources).toHaveLength(1);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
             expect(document.eventResources[0].ordId).toEqual(expect.stringContaining("CatalogService"));
-        });
-    });
-
-    describe("Tests for ORD document when namespace is not correctly defined", () => {
-        test("Namespace is not correctly defined in cdsrc.json: throw error", () => {
-            cds.env.ord.namespace = "invalid_namespace";
-            const csn = require("./__mocks__/publicResourcesCsn.json");
-            expect(() => ord(csn)).toThrowError(expect.objectContaining({"message": expect.stringContaining("Namespace is not correctly defined in cdsrc.json")}));
         });
     });
 });

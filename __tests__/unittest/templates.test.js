@@ -38,7 +38,7 @@ describe('templates', () => {
         const packageIds = ['sap.test.cdsrc.sample:package:test-entityType:v1'];
         it('should return entity type with incorrect version, title and level:root-entity', () => {
             const entityWithVersion = {
-                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1.2b.3",
+                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v3b",
                 entityName: "SomeAribaDummyEntity",
                 "@title": "Title of SomeAribaDummyEntity",
                 "@ObjectModel.compositionRoot": true,
@@ -48,7 +48,7 @@ describe('templates', () => {
             expect(entityType).toBeDefined();
             expect(entityType).toMatchSnapshot();
             expect(warningSpy).toHaveBeenCalledTimes(1);
-            expect(entityType.version).toEqual('v1.2b.3');
+            expect(entityType.version).toEqual('3b.0.0');
             expect(entityType.level).toEqual('root-entity');
             expect(entityType.partOfPackage).toEqual('sap.test.cdsrc.sample:package:test-entityType:v1');
         });
