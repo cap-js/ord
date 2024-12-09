@@ -10,5 +10,13 @@
   "devDependencies": {
     "@cap-js/sqlite": "*"
   },
-  "private": true
+  "private": true,
+  "cds": {
+    "requires": {
+      "sap.s4.beh.businesspartner.v1.BusinessPartner": {
+        "kind": "odata",
+        "model": "srv/external/CE_BUSINESSPARTNEREVENTS.asyncapi"
+      }
+    }
+  }
 }

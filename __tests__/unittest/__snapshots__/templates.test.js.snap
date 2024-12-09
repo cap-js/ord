@@ -116,6 +116,32 @@ exports[`templates createEventResourceTemplate should create event resource temp
 ]
 `;
 
+exports[`templates createIntegrationDependencyTemplate should create integration dependency template correctly 1`] = `
+{
+  "aspects": [
+    {
+      "eventResources": [
+        {
+          "ordId": "customer.testNamespace:eventResource:MyService:v1",
+          "subset": [],
+        },
+      ],
+    },
+  ],
+  "extensible": {
+    "supported": "yes",
+  },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "mandatory": true,
+  "ordId": "customer.testNamespace:integrationDependency:MyService:v1",
+  "partOfPackage": "sap.test.cdsrc.sample:package:test-other:v1",
+  "releaseStatus": "active",
+  "title": "This is test MyService integrationDependency title",
+  "version": "2.0.0",
+  "visibility": "public",
+}
+`;
+
 exports[`templates ordExtension should add apiResources with ORD Extension "visibility=public" 1`] = `
 [
   {

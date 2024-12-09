@@ -3,6 +3,7 @@ using {
     AdminService
 } from '@capire/incidents/srv/services';
 using from '@capire/incidents/db/schema';
+using {sap.s4.beh.businesspartner.v1.BusinessPartner.Created.v1 as Created} from './external/CE_BUSINESSPARTNEREVENTS.asyncapi';
 
 namespace sap.capire.incidents;
 
@@ -38,6 +39,17 @@ annotate AdminService with @ORD.Extensions: {
         'Consumer Products'
     ],
     lineOfBusiness: ['Sales']
+};
+
+service OwnService {
+    event BPCreated : projection on Created;
+}
+
+annotate OwnService with @ORD.Extensions: {
+    title           : 'This is Own Service title',
+    shortDescription: 'short description for OwnService',
+    visibility      : 'public',
+    extensible      : {supported: 'no'}
 };
 
 annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';
