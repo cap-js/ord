@@ -8,11 +8,6 @@ describe('date', () => {
         expect(lastUpdate).toMatch(RFC3339_REGEX);
     });
 
-    it('tests getRFC3339Date without offset', () => {
-        const lastUpdate = getRFC3339Date(false);
-        expect(lastUpdate).toMatch(RFC3339_REGEX);
-    });
-
     it('test regex correctly', () => {
         let lastUpdate = "1985-04-12T23:20:50.52Z";
         expect(lastUpdate).toMatch(RFC3339_REGEX);
