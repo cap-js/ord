@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Tests for ORD document when .cdsrc.json has no \`ord\` property Successfully create ORD Documents with no \`ord\` in .cdsrc.json 1`] = `
+exports[`Tests for ORD document generated out of mocked csn files Tests for ORD document when .cdsrc.json has no \`ord\` property Successfully create ORD Documents with no \`ord\` in .cdsrc.json 1`] = `
 {
   "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
@@ -291,7 +291,7 @@ exports[`Tests for ORD document when .cdsrc.json has no \`ord\` property Success
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description for capire bookshop ord sample",
+      "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
@@ -301,7 +301,7 @@ exports[`Tests for ORD document when .cdsrc.json has no \`ord\` property Success
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
-      "shortDescription": "Description for capire bookshop ord sample",
+      "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:customer:",
     },
