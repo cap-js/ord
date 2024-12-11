@@ -2,8 +2,8 @@
 const { Logger } = require('./lib/logger');
 const cds = require("@sap/cds");
 const path = require("path");
-const OrdService = path.resolve(__dirname, 'services/');
-const WellKnownService = path.resolve(__dirname, 'services/');
+const OrdService = path.resolve(__dirname, 'services/OrdService');
+const WellKnownService = path.resolve(__dirname, 'services/WellKnownService');
 
 cds.on("bootstrap", async (app) => {
 	try {

@@ -1,24 +1,21 @@
-const cds = require('@sap/cds');
-const { ord } = require('../lib'); // Adjust paths as necessary
-const { Logger } = require('../lib/logger');
+const cds = require('@sap/cds')
 
-
-module.exports = async (srv) => {
-        srv.on('READ', async (req) => {
-            if (req.path === '/open-resource-discovery/v1/documents/1') {
-                try {
-                    // Load the service definitions (CSN) and generate ORD data
-                    const csn = await cds.load(cds.env.folders.srv);
-                    const data = ord(csn);
-
-                    return data; // CAP will automatically format and send this response
-                } catch (error) {
-                    Logger.error(error, 'Error while creating ORD document');
-                    req.error(500, 'Failed to create ORD document');
-                }
-            }
-        });
+class OrdService extends cds.ApplicationService {
+  /** Registering custom event handlers */
+  init() {
+    this.before('READ', '*', console.log('hi'))
+    return super.init()
+  }
 
 
 
-};
+
+}
+
+module.exports = { OrdService }
+
+
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------
+// For demo purposess only...
+const _require = id => {try{ return require(id) } catch(e) { if (e.code !== 'MODULE_NOT_FOUND') throw e }}
+cds.once("served", ()=> _require('./alert-notifications')?.prototype.init.call(cds.services.OrdService))
