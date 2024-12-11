@@ -15,7 +15,7 @@ module.exports = cds.service.impl(async function () {
         //iterate over this.model.definitions and for all kind as service do this.on and listen
         for (const [key, value] of Object.entries(this.model.definitions)) {
             if (value.kind === "service") {
-                this.on("READ", '*', async (req) => {
+                value.on("READ", '*', async (req) => {
                     console.log("READ");
                     console.log(req);
                     return [
