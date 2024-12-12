@@ -1,0 +1,431 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`End-to-end test for ORD document Tests for default ORD document when .cdsrc.json is not present Successfully create ORD Documents with defaults 1`] = `
+{
+  "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
+  "apiResources": [
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for AdminService",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:BusinessPartner:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [
+        "/odata/v4/admin",
+      ],
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
+        },
+      ],
+      "shortDescription": "short description for test AdminService",
+      "title": "This is test AdminService title",
+      "version": "2.0.0",
+      "visibility": "public",
+    },
+  ],
+  "consumptionBundles": [
+    {
+      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "shortDescription": "If we have another protected API then it will be another object",
+      "title": "Unprotected resources",
+      "version": "1.0.0",
+    },
+  ],
+  "dataProducts": [
+    {
+      "category": "business-object",
+      "description": "The Supplier data product offers access to all customers.",
+      "entityTypes": [
+        "sap.odm:entityType:BusinessPartner:v1",
+        "sap.sm:entityType:BusinessPartner:v1",
+      ],
+      "lastUpdate": "2024-06-20T14:04:01+01:00",
+      "localId": "Supplier",
+      "ordId": "sap.sm:dataProduct:Supplier:v1",
+      "outputPorts": [
+        {
+          "ordId": "sap.sm:apiResource:SupplierService:v1",
+        },
+      ],
+      "partOfPackage": "sap.sm:package:smDataProducts:v1",
+      "releaseStatus": "active",
+      "responsible": "sap:ach:CIC-DP-CO",
+      "shortDescription": "Ariba Supplier data product",
+      "title": "Supplier",
+      "type": "primary",
+      "version": "1.1.11",
+      "visibility": "public",
+    },
+  ],
+  "description": "this is my custom description",
+  "eventResources": [
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test-from-extension:v1",
+          },
+        ],
+      },
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "short description for test AdminService",
+      "title": "This is test AdminService title",
+      "version": "2.0.0",
+      "visibility": "public",
+    },
+  ],
+  "groups": [
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is test AdminService title",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is test Catalog Service title",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is test Cinema Service title",
+    },
+  ],
+  "openResourceDiscovery": "1.10",
+  "packages": [
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.1",
+    },
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "Description for capire bookshop ord sample version 2",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description for capire bookshop ord sample version 2",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "2.0.0",
+    },
+  ],
+  "policyLevel": "sap:core:v1",
+  "products": [
+    {
+      "ordId": "customer:product:capire.bookshop.ord.sample:",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:customer:",
+    },
+  ],
+}
+`;
+
+exports[`End-to-end test for ORD document Tests for default ORD document when .cdsrc.json is present Successfully create ORD Documents with defaults 1`] = `
+{
+  "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
+  "apiResources": [
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for AdminService",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:BusinessPartner:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [
+        "/odata/v4/admin",
+      ],
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
+        },
+      ],
+      "shortDescription": "short description for test AdminService",
+      "title": "This is test AdminService title",
+      "version": "2.0.0",
+      "visibility": "public",
+    },
+  ],
+  "consumptionBundles": [
+    {
+      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "shortDescription": "If we have another protected API then it will be another object",
+      "title": "Unprotected resources",
+      "version": "1.0.0",
+    },
+  ],
+  "dataProducts": [
+    {
+      "category": "business-object",
+      "description": "The Supplier data product offers access to all customers.",
+      "entityTypes": [
+        "sap.odm:entityType:BusinessPartner:v1",
+        "sap.sm:entityType:BusinessPartner:v1",
+      ],
+      "lastUpdate": "2024-06-20T14:04:01+01:00",
+      "localId": "Supplier",
+      "ordId": "sap.sm:dataProduct:Supplier:v1",
+      "outputPorts": [
+        {
+          "ordId": "sap.sm:apiResource:SupplierService:v1",
+        },
+      ],
+      "partOfPackage": "sap.sm:package:smDataProducts:v1",
+      "releaseStatus": "active",
+      "responsible": "sap:ach:CIC-DP-CO",
+      "shortDescription": "Ariba Supplier data product",
+      "title": "Supplier",
+      "type": "primary",
+      "version": "1.1.11",
+      "visibility": "public",
+    },
+  ],
+  "description": "this is my custom description",
+  "eventResources": [
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test-from-extension:v1",
+          },
+        ],
+      },
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "short description for test AdminService",
+      "title": "This is test AdminService title",
+      "version": "2.0.0",
+      "visibility": "public",
+    },
+  ],
+  "groups": [
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is test AdminService title",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is test Catalog Service title",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is test Cinema Service title",
+    },
+  ],
+  "openResourceDiscovery": "1.10",
+  "packages": [
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.1",
+    },
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "Description for capire bookshop ord sample version 2",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description for capire bookshop ord sample version 2",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "2.0.0",
+    },
+  ],
+  "policyLevel": "sap:core:v1",
+  "products": [
+    {
+      "ordId": "customer:product:capire.bookshop.ord.sample:",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:customer:",
+    },
+  ],
+}
+`;
