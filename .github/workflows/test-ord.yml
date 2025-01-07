@@ -1,0 +1,41 @@
+name: Test ORD Compilation Workflow
+
+on:
+  push:
+    branches:
+      - fix/github-actions-ord
+
+jobs:
+  test-ord:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: "18"
+
+    - name: Install global dependencies
+      run: |
+        npm install -g @sap/cds-dk
+
+    - name: Install project dependencies
+      run: |
+        npm install
+
+    - name: Prepare ORD documents
+      run: |
+        mkdir -p tmp_documents
+        cds compile ./ariba/srv --to ord -o ./tmp_documents/ariba.json
+        cds compile ./cloud/srv --to ord -o ./tmp_documents/cloud.json
+        cds compile ./erp/srv --to ord -o ./tmp_documents/erp.json
+
+    - name: Validate generated ORD documents
+      run: |
+        ls -l tmp_documents
+        cat tmp_documents/ariba.json
+        cat tmp_documents/cloud.json
+        cat tmp_documents/erp.json
