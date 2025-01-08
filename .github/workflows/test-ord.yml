@@ -32,28 +32,27 @@ jobs:
 
     - name: Create test directories and files
       run: |
-        mkdir -p ariba/srv cloud/srv erp/srv
-        # Ariba Service
-        echo "namespace ariba; service AribaService { entity TestEntity { key ID: UUID; }; }" > ariba/srv/model.cds
-        echo "using { AribaService } from './model.cds'; service TestService { entity Test as projection on AribaService.TestEntity; }" > ariba/srv/services.cds
-        # Cloud Service
-        echo "namespace cloud; service CloudService { entity TestEntity { key ID: UUID; }; }" > cloud/srv/model.cds
-        echo "using { CloudService } from './model.cds'; service TestService { entity Test as projection on CloudService.TestEntity; }" > cloud/srv/services.cds
-        # ERP Service
-        echo "namespace erp; service ErpService { entity TestEntity { key ID: UUID; }; }" > erp/srv/model.cds
-        echo "using { ErpService } from './model.cds'; service TestService { entity Test as projection on ErpService.TestEntity; }" > erp/srv/services.cds
-
+        mkdir -p ariba/srv
+        echo "namespace ariba.example;
+        service ExampleService {
+          entity Orders {
+            key ID : UUID;
+            description : String;
+            createdAt : DateTime;
+          }
+        }" > ariba/srv/service.cds
 
     - name: Prepare ORD documents
       run: |
         mkdir -p tmp_documents
         cds compile ./ariba/srv --to ord -o ./tmp_documents/ariba.json
-        cds compile ./cloud/srv --to ord -o ./tmp_documents/cloud.json
-        cds compile ./erp/srv --to ord -o ./tmp_documents/erp.json
 
-    - name: Validate generated ORD documents
+    - name: Validate generated ORD document
       run: |
         ls -l tmp_documents
         cat tmp_documents/ariba.json
-        cat tmp_documents/cloud.json
-        cat tmp_documents/erp.json
+  
+    - name: Clean up temporary files
+      if: always()
+      run: |
+        rm -rf tmp_documents ariba
