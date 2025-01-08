@@ -33,12 +33,16 @@ jobs:
     - name: Create test directories and files
       run: |
         mkdir -p ariba/srv cloud/srv erp/srv
-        echo "using { service = 'AribaService' } from './model.cds';" > ariba/srv/services.cds
-        echo "using { service = 'CloudService' } from './model.cds';" > cloud/srv/services.cds
-        echo "using { service = 'ErpService' } from './model.cds';" > erp/srv/services.cds
+        # Ariba Service
         echo "namespace ariba; service AribaService { entity TestEntity { key ID: UUID; }; }" > ariba/srv/model.cds
+        echo "using { AribaService } from './model.cds'; service TestService { entity Test as projection on AribaService.TestEntity; }" > ariba/srv/services.cds
+        # Cloud Service
         echo "namespace cloud; service CloudService { entity TestEntity { key ID: UUID; }; }" > cloud/srv/model.cds
+        echo "using { CloudService } from './model.cds'; service TestService { entity Test as projection on CloudService.TestEntity; }" > cloud/srv/services.cds
+        # ERP Service
         echo "namespace erp; service ErpService { entity TestEntity { key ID: UUID; }; }" > erp/srv/model.cds
+        echo "using { ErpService } from './model.cds'; service TestService { entity Test as projection on ErpService.TestEntity; }" > erp/srv/services.cds
+
 
     - name: Prepare ORD documents
       run: |
