@@ -25,11 +25,10 @@
     "peerDependencies": {
         "@cap-js/asyncapi": "^1.0.0",
         "@cap-js/openapi": "^1.0.2",
-        "@sap/cds": "^8.6.0",
+        "@sap/cds": "^8.1.1",
         "@sap/cds-compiler": "5.0.6"
     },
     "dependencies": {
-        "lodash": "^4.17.21",
-        "@cap-js/ord": "file:../ord" 
+        "lodash": "^4.17.21"
     }
 }

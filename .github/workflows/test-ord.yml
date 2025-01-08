@@ -22,9 +22,23 @@ jobs:
       run: |
         npm install -g @sap/cds-dk
 
+    - name: Install @cap-js/ord locally
+      run: |
+        npm install file:../ord
+
     - name: Install project dependencies
       run: |
         npm install
+
+    - name: Create test directories and files
+      run: |
+        mkdir -p ariba/srv cloud/srv erp/srv
+        echo "using { service = 'AribaService' } from './model.cds';" > ariba/srv/services.cds
+        echo "using { service = 'CloudService' } from './model.cds';" > cloud/srv/services.cds
+        echo "using { service = 'ErpService' } from './model.cds';" > erp/srv/services.cds
+        echo "namespace ariba; service AribaService { entity TestEntity { key ID: UUID; }; }" > ariba/srv/model.cds
+        echo "namespace cloud; service CloudService { entity TestEntity { key ID: UUID; }; }" > cloud/srv/model.cds
+        echo "namespace erp; service ErpService { entity TestEntity { key ID: UUID; }; }" > erp/srv/model.cds
 
     - name: Prepare ORD documents
       run: |
