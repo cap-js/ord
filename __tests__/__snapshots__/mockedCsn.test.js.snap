@@ -21,11 +21,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:apiResource:AdminService:v1",
+      "ordId": "customer.capjsord:apiResource:AdminService:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:AdminService",
+        "sap.cds:service:customer.capjsord:AdminService",
       ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -73,11 +73,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:apiResource:CatalogService:v1",
+      "ordId": "customer.capjsord:apiResource:CatalogService:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:CatalogService",
+        "sap.cds:service:customer.capjsord:CatalogService",
       ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -125,11 +125,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:apiResource:CinemaService:v1",
+      "ordId": "customer.capjsord:apiResource:CinemaService:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:CinemaService",
+        "sap.cds:service:customer.capjsord:CinemaService",
       ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -163,7 +163,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "capjsord:consumptionBundle:noAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -184,11 +184,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:AdminService:v1",
+      "ordId": "customer.capjsord:eventResource:AdminService:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:AdminService",
+        "sap.cds:service:customer.capjsord:AdminService",
       ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -213,11 +213,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:CatalogService:v1",
+      "ordId": "customer.capjsord:eventResource:CatalogService:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:CatalogService",
+        "sap.cds:service:customer.capjsord:CatalogService",
       ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -242,11 +242,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService:v1",
+      "ordId": "customer.capjsord:eventResource:CinemaService:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:CinemaService",
+        "sap.cds:service:customer.capjsord:CinemaService",
       ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -268,17 +268,17 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
   ],
   "groups": [
     {
-      "groupId": "sap.cds:service:customer.capirebookshopordsample:AdminService",
+      "groupId": "sap.cds:service:customer.capjsord:AdminService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test AdminService title",
     },
     {
-      "groupId": "sap.cds:service:customer.capirebookshopordsample:CatalogService",
+      "groupId": "sap.cds:service:customer.capjsord:CatalogService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Catalog Service title",
     },
     {
-      "groupId": "sap.cds:service:customer.capirebookshopordsample:CinemaService",
+      "groupId": "sap.cds:service:customer.capjsord:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
     },
@@ -286,13 +286,13 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
   "openResourceDiscovery": "1.9",
   "packages": [
     {
-      "description": "Description for capire bookshop ord sample",
-      "ordId": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "description": "Description for cap js ord",
+      "ordId": "customer.capjsord:package:capjsord:v1",
       "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
+        "customer:product:cap.js.ord:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
-      "title": "capire bookshop ord sample",
+      "shortDescription": "Short description of cap js ord",
+      "title": "cap js ord",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
@@ -300,9 +300,9 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
   "policyLevel": "none",
   "products": [
     {
-      "ordId": "customer:product:capire.bookshop.ord.sample:",
-      "shortDescription": "Short description of capire bookshop ord sample",
-      "title": "capire bookshop ord sample",
+      "ordId": "customer:product:cap.js.ord:",
+      "shortDescription": "Short description of cap js ord",
+      "title": "cap js ord",
       "vendor": "customer:vendor:customer:",
     },
   ],
