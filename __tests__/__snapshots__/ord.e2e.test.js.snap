@@ -24,7 +24,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
-      "partOfPackage": "sap.test.cdsrc.sample:package:capjsord-api:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -58,7 +58,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capjsord:consumptionBundle:noAuth:v1",
+      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -109,7 +109,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:AdminService",
       ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capjsord-event:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -149,46 +149,45 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "openResourceDiscovery": "1.10",
   "packages": [
     {
-      "description": "Description for cap js ord",
-      "ordId": "sap.test.cdsrc.sample:package:capjsord-api:v1",
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "partOfProducts": [
-        "customer:product:cap.js.ord:",
+        "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for cap js ord",
-      "ordId": "sap.test.cdsrc.sample:package:capjsord-event:v1",
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "partOfProducts": [
-        "customer:product:cap.js.ord:",
+        "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.1",
+    },
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for cap js ord",
-      "ordId": "sap.test.cdsrc.sample:package:capjsord-integrationDependency:v1",
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
       "partOfProducts": [
-        "customer:product:cap.js.ord:",
+        "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
-      "vendor": "customer:vendor:Customer:",
-      "version": "1.0.0",
-    },
-    {
-      "description": "Description for cap js ord",
-      "ordId": "sap.test.cdsrc.sample:package:capjsord-entityType:v1",
-      "partOfProducts": [
-        "customer:product:cap.js.ord:",
-      ],
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
@@ -203,17 +202,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "vendor": "customer:vendor:Customer:",
       "version": "2.0.0",
     },
-    {
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "version": "1.0.1",
-    },
   ],
   "policyLevel": "sap:core:v1",
   "products": [
     {
-      "ordId": "customer:product:cap.js.ord:",
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
+      "ordId": "customer:product:capire.bookshop.ord.sample:",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:customer:",
     },
   ],
@@ -244,7 +239,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
-      "partOfPackage": "sap.test.cdsrc.sample:package:capjsord-api:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -278,7 +273,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capjsord:consumptionBundle:noAuth:v1",
+      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -329,7 +324,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:AdminService",
       ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capjsord-event:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -369,46 +364,45 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "openResourceDiscovery": "1.10",
   "packages": [
     {
-      "description": "Description for cap js ord",
-      "ordId": "sap.test.cdsrc.sample:package:capjsord-api:v1",
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "partOfProducts": [
-        "customer:product:cap.js.ord:",
+        "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for cap js ord",
-      "ordId": "sap.test.cdsrc.sample:package:capjsord-event:v1",
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "partOfProducts": [
-        "customer:product:cap.js.ord:",
+        "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.1",
+    },
+    {
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for cap js ord",
-      "ordId": "sap.test.cdsrc.sample:package:capjsord-integrationDependency:v1",
+      "description": "Description for capire bookshop ord sample",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
       "partOfProducts": [
-        "customer:product:cap.js.ord:",
+        "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
-      "vendor": "customer:vendor:Customer:",
-      "version": "1.0.0",
-    },
-    {
-      "description": "Description for cap js ord",
-      "ordId": "sap.test.cdsrc.sample:package:capjsord-entityType:v1",
-      "partOfProducts": [
-        "customer:product:cap.js.ord:",
-      ],
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
@@ -423,17 +417,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "vendor": "customer:vendor:Customer:",
       "version": "2.0.0",
     },
-    {
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "version": "1.0.1",
-    },
   ],
   "policyLevel": "sap:core:v1",
   "products": [
     {
-      "ordId": "customer:product:cap.js.ord:",
-      "shortDescription": "Short description of cap js ord",
-      "title": "cap js ord",
+      "ordId": "customer:product:capire.bookshop.ord.sample:",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:customer:",
     },
   ],

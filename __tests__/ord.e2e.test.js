@@ -22,17 +22,9 @@ describe("End-to-end test for ORD document", () => {
         });
 
         test("Exception thrown while package.json not found", () => {
-            jest.spyOn(cds.utils, "exists").mockImplementation((path) =>
-                path.endsWith("package.json") ? false : true
-            );
-        
-            const invalidModelPath = path.join(__dirname, "somePath");
-            expect(() => ord(csn, invalidModelPath)).toThrowError(
-                "package.json not found in the project root directory"
-            );
-        
-            cds.utils.exists.mockRestore();
-        });                      
+            cds.root = path.join(__dirname, "folderWithNoPackageJson");
+            expect(() => ord(csn)).toThrowError("package.json not found in the project root directory");
+        });
 
         describe("apiResources", () => {
             // eslint-disable-next-line no-useless-escape
