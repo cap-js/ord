@@ -1,0 +1,15 @@
+{
+  "SERVER_HOST": "0.0.0.0",
+  "SERVER_PORT": 8080,
+  "ORD_BASE_URL": "http://localhost:8080",
+  "ORD_SOURCE_TYPE": "local",
+  "ORD_DIRECTORY": "./example",
+  "ORD_AUTH": "basic",
+  "APP_USERS": {
+	"admin": "secret"
+  },
+  "UCL_MTLS_ENDPOINTS": [
+	"https://endpoint1.example.com/v1/info",
+	"https://endpoint2.example.com/v1/info"
+  ]
+}
