@@ -18,8 +18,9 @@
     },
     "authentication": {
         "type": "basic",
-        "username": "admin",
-        "password": "secret",
+        "credentials": {
+            "admin": "secret"
+        },
         "uclMtlsEndpoints": [
             "https://endpoint1.example.com/v1/info",
             "https://endpoint2.example.com/v1/info"

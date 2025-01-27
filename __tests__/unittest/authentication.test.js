@@ -1,169 +1,131 @@
-// const authenticate = require('../../lib/authentication');
+const cds = require('@sap/cds');
+const { AUTHENTICATION_TYPE } = require('../../lib/constants');
+const authenticate = require('../../lib/authentication');
 
 describe('Authentication Middleware', () => {
-    const mockValidUsers = { admin: "secret" };
+    const mockValidUser = { admin: "secret" };
     const mockTrustedSubject = "CN=test.example.com,OU=Test,O=Example";
     const protectedRoute = "/open-resource-discovery/v1/documents/1";
 
     beforeAll(() => {
-        // Mock environment variables
-        process.env.APP_USERS = JSON.stringify(mockValidUsers);
-        process.env.CMP_DEV_INFO_ENDPOINT = "https://test-endpoint.com";
-
-        // Mock fetch for trusted subjects
-        // eslint-disable-next-line no-unused-vars
-        const mockFetch = jest.fn().mockImplementation(() =>
-            Promise.resolve({
-                ok: true,
-                json: () => Promise.resolve({ certSubject: mockTrustedSubject }),
-            }),
-        );
+        cds.env.authentication = {
+            credentials: {}
+        };
     });
 
     afterAll(() => {
+        delete process.env.ORD_AUTH;
         delete process.env.APP_USERS;
         delete process.env.CMP_DEV_INFO_ENDPOINT;
+
         jest.restoreAllMocks();
     });
 
-    describe("Invalid authentication", () => {
-        beforeEach(async () => {
-            //   server = {};
-            //   server.setErrorHandler(errorHandler);
-            //   await setupAuthentication(server, {
-            //     authMethods: [OptAuthMethod.Open],
-            //   });
-            //   // Add a test route
-            //   server.get(protectedRoute, () => {
-            //     return { status: "ok" };
-            //   });
-            //   await server.ready();
+    function authCheck(req, status, message) {
+        const res = {
+            status: jest.fn().mockImplementation(value => { res.status = value; return res; }),
+            setHeader: jest.fn(),
+            end: jest.fn(),
+            send: jest.fn().mockImplementation(message => { res.message = message; return res; })
+        };
+        const next = jest.fn();
+
+        authenticate(req, res, next);
+
+        // expecting the status to be ${status} and the message to be ${message}
+        expect(res.status).toBe(status);
+        expect(res.message).toBe(message);
+    }
+
+    describe("Open (No) Authentication", () => {
+        beforeAll(() => {
+            cds.env.authentication = {
+                type: AUTHENTICATION_TYPE.Open
+            };
         });
 
-        afterEach(async () => {
-            //   await server.close();
+        beforeEach(() => {
+            delete process.env.ORD_AUTH;
         });
 
-        it("should reject with invalid authentication type", async () => {
-            // authenticate({}, {}, () => {});
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            // });
+        it("should have access without credentials - with authentication set/read from process.env", async () => {
+            process.env.ORD_AUTH = AUTHENTICATION_TYPE.Open;
 
-            expect(500).toBe(500);
-        });
-    });
-
-    describe("Open - without authentication", () => {
-        beforeEach(async () => {
-            //   server = {};
-            //   server.setErrorHandler(errorHandler);
-            //   await setupAuthentication(server, {
-            //     authMethods: [OptAuthMethod.Open],
-            //   });
-            //   // Add a test route
-            //   server.get(protectedRoute, () => {
-            //     return { status: "ok" };
-            //   });
-            //   await server.ready();
+            authCheck({ headers: {} }, 200);
         });
 
-        afterEach(async () => {
-            //   await server.close();
+        it("should have access without credentials - with authentication set/read from cds.env", async () => {
+            cds.env.authentication.type = AUTHENTICATION_TYPE.Open;
+
+            authCheck({ headers: {} }, 200);
         });
 
-        it("should have access without credentials", async () => {
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            // });
-
-            expect(200).toBe(200);
+        it("should have access without credentials - with default open authentication", async () => {
+            authCheck({ headers: {} }, 200);
         });
     });
 
     describe("Basic Authentication", () => {
-        beforeEach(async () => {
-            //   server = fastify() as FastifyInstanceType;
-            //   server.setErrorHandler(errorHandler);
-            //   await setupAuthentication(server, {
-            //     authMethods: [OptAuthMethod.Basic],
-            //     validUsers: mockValidUsers,
-            //   });
-            // Add a test route
-            //   server.get(protectedRoute, () => {
-            //     return { status: "ok" };
-            //   });
-            //   await server.ready();
+        beforeAll(() => {
+            process.env.ORD_AUTH = AUTHENTICATION_TYPE.Basic;
         });
 
-        afterEach(async () => {
-            //   await server.close();
+        beforeEach(() => {
+            process.env.APP_USERS = JSON.stringify(mockValidUser);
         });
 
-        it("should authenticate with valid credentials", async () => {
-            const credentials = Buffer.from("admin:secret").toString("base64");
-            //   const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //     headers: {
-            //       Authorization: `Basic ${credentials}`,
-            //     },
-            //   });
-
-            expect(credentials).toBe(credentials);
-            expect(200).toBe(200);
+        afterAll(() => {
+            delete process.env.ORD_AUTH;
+            delete process.env.APP_USERS;
+            cds.env.authentication.credentials = {};
         });
 
-        it("should reject with authorization header missing", async () => {
-            //   const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //   });
+        it("should authenticate with valid credentials; authentication set/read from process.env", async () => {
+            const req = {
+                headers: {
+                    authorization: "Basic " + Buffer.from(`admin:${mockValidUser["admin"]}`).toString("base64")
+                }
+            };
 
-            expect(401).toBe(401);
+            authCheck(req, 200);
         });
 
-        it("should reject with invalid authentication type", async () => {
-            //   const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //   });
+        it("should authenticate with valid credentials; authentication set/read from cds.env", async () => {
+            delete process.env.APP_USERS;
+            cds.env.authentication.credentials = JSON.stringify(mockValidUser);
 
-            expect(401).toBe(401);
+            const req = {
+                headers: {
+                    authorization: "Basic " + Buffer.from(`admin:${mockValidUser["admin"]}`).toString("base64")
+                }
+            };
+
+            authCheck(req, 200);
         });
 
-        it("should reject with invalid credentials", async () => {
-            const credentials = Buffer.from("admin:wrong").toString("base64");
-            //   const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //     headers: {
-            //       Authorization: `Basic ${credentials}`,
-            //     },
-            //   });
-
-            expect(credentials).toBe(credentials);
-            expect(401).toBe(401);
+        it("should not authenticate because of invalid credentials", async () => {
+            const req = {
+                headers: {
+                    authorization: "Basic " + Buffer.from("invalid:invalid").toString("base64")
+                }
+            };
+            authCheck(req, 401, "Invalid credentials");
         });
 
-        it("should reject without credentials", async () => {
-            //   const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //   });
-
-            expect(401).toBe(401);
+        it("should not authenticate because of invalid authentication type", async () => {
+            const req = {
+                headers: {
+                    authorization: "Invalid " + Buffer.from(`admin:${mockValidUser["admin"]}`).toString("base64")
+                }
+            };
+            authCheck(req, 401, "Invalid authentication type");
         });
 
-        it("should reject without credentials", async () => {
-            //   const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //   });
-
-            expect(401).toBe(401);
+        it("should not authenticate because of missing authorization header missing", async () => {
+            const req = {
+                headers: {}
+            };
+            authCheck(req, 401, "Authorization header missing");
         });
     });
 
@@ -311,58 +273,4 @@ describe('Authentication Middleware', () => {
             expect(401).toBe(401);
         });
     });
-
-    // beforeEach(() => {
-    //     app = express();
-    //     app.use((req, res, next) => {
-    //         process.env.ORD_AUTH = undefined;
-    //         cds.env = {
-    //             authentication: {
-    //                 type: undefined,
-    //                 username: 'testuser',
-    //                 password: 'testpassword'
-    //             }
-    //         };
-    //         next();
-    //     });
-    //     app.use(authenticationMiddleware);
-    //     app.get('/test', (req, res) => res.status(200).send('Success'));
-    // });
-
-    // it('should allow access with Open authentication', async () => {
-    //     cds.env.authentication.type = AUTHENTICATION_TYPE.Open;
-    //     await request(app).get('/test').expect(200);
-    // });
-
-    // it('should return 401 if authorization header is missing for Basic authentication', async () => {
-    //     cds.env.authentication.type = AUTHENTICATION_TYPE.Basic;
-    //     await request(app).get('/test').expect(401, 'Authorization header missing');
-    // });
-
-    // it('should return 401 if authorization type is not Basic for Basic authentication', async () => {
-    //     cds.env.authentication.type = AUTHENTICATION_TYPE.Basic;
-    //     await request(app).get('/test').set('Authorization', 'Bearer token').expect(401, 'Invalid authentication type');
-    // });
-
-    // it('should return 401 if credentials are invalid for Basic authentication', async () => {
-    //     cds.env.authentication.type = AUTHENTICATION_TYPE.Basic;
-    //     const invalidCredentials = Buffer.from('invaliduser:invalidpassword').toString('base64');
-    //     await request(app).get('/test').set('Authorization', `Basic ${invalidCredentials}`).expect(401, 'Invalid credentials');
-    // });
-
-    // it('should allow access with valid credentials for Basic authentication', async () => {
-    //     cds.env.authentication.type = AUTHENTICATION_TYPE.Basic;
-    //     const validCredentials = Buffer.from('testuser:testpassword').toString('base64');
-    //     await request(app).get('/test').set('Authorization', `Basic ${validCredentials}`).expect(200);
-    // });
-
-    // it('should allow access with UclMtls authentication', async () => {
-    //     cds.env.authentication.type = AUTHENTICATION_TYPE.UclMtls;
-    //     await request(app).get('/test').expect(200);
-    // });
-
-    // it('should return 500 for invalid authentication type', async () => {
-    //     cds.env.authentication.type = 'InvalidType';
-    //     await request(app).get('/test').expect(500, 'Invalid authentication type');
-    // });
 });
