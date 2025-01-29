@@ -5,6 +5,7 @@ const { authenticate } = require('../../lib/authentication');
 describe('Authentication Middleware', () => {
     const mockValidUser = { admin: "secret" };
     const mockTrustedSubject = "CN=test.example.com,OU=Test,O=Example";
+    const mockUntrustedSubject = "CN=invalid.example.com";
     const uclMtlsEndpoint = "https://test-endpoint.com";
 
     beforeAll(() => {
@@ -131,9 +132,9 @@ describe('Authentication Middleware', () => {
 
     describe("UCL mTLS Authentication", () => {
 
-        function uclMtlsAuthCheck(subjects) {
+        function uclMtlsAuthCheck(subjects, message, status = 200) {
             cds.context = {
-                trustedSubjects: [subjects]
+                trustedSubjects: [mockTrustedSubject]
             };
             const encodedSubject = Buffer.from(subjects, "ascii").toString("base64");
             const req = {
@@ -141,7 +142,7 @@ describe('Authentication Middleware', () => {
                     [CERT_SUBJECT_HEADER_KEY]: encodedSubject,
                 }
             };
-            authCheck(req, 200);
+            authCheck(req, status, message);
         }
 
         beforeEach(() => {
@@ -168,6 +169,10 @@ describe('Authentication Middleware', () => {
             delete process.env.UCL_MTLS_ENDPOINTS;
 
             uclMtlsAuthCheck(mockTrustedSubject);
+        });
+
+        it("should NOT authenticate because of invalid certificate subject", async () => {
+            uclMtlsAuthCheck(mockUntrustedSubject, "Certificate subject header is missing or invalid", 401);
         });
     });
 
