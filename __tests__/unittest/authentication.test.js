@@ -1,11 +1,11 @@
 const cds = require('@sap/cds');
-const { AUTHENTICATION_TYPE } = require('../../lib/constants');
-const { authenticate }= require('../../lib/authentication');
+const { AUTHENTICATION_TYPE, CERT_SUBJECT_HEADER_KEY } = require('../../lib/constants');
+const { authenticate } = require('../../lib/authentication');
 
 describe('Authentication Middleware', () => {
     const mockValidUser = { admin: "secret" };
     const mockTrustedSubject = "CN=test.example.com,OU=Test,O=Example";
-    const protectedRoute = "/open-resource-discovery/v1/documents/1";
+    const uclMtlsEndpoint = "https://test-endpoint.com";
 
     beforeAll(() => {
         cds.env.authentication = {
@@ -71,7 +71,8 @@ describe('Authentication Middleware', () => {
         });
 
         beforeEach(() => {
-            process.env.APP_USERS = JSON.stringify(mockValidUser);
+            process.env.APP_USERS =
+                cds.env.authentication.credentials = JSON.stringify(mockValidUser);
         });
 
         afterAll(() => {
@@ -92,7 +93,6 @@ describe('Authentication Middleware', () => {
 
         it("should authenticate with valid credentials; authentication set/read from cds.env", async () => {
             delete process.env.APP_USERS;
-            cds.env.authentication.credentials = JSON.stringify(mockValidUser);
 
             const req = {
                 headers: {
@@ -130,64 +130,44 @@ describe('Authentication Middleware', () => {
     });
 
     describe("UCL mTLS Authentication", () => {
-        beforeEach(async () => {
-            // mock cds.context
-            // cds.context = {
-            //     tru
-            // server = fastify();
-            // server.setErrorHandler(errorHandler);
-            // await setupAuthentication(server, {
-            //     authMethods: [OptAuthMethod.UclMtls],
-            //     trustedSubjects: [mockTrustedSubject],
-            // });
-            // // Add a test route
-            // server.get(protectedRoute, () => {
-            //     return { status: "ok" };
-            // });
-            // await server.ready();
+
+        function uclMtlsAuthCheck(subjects) {
+            cds.context = {
+                trustedSubjects: [subjects]
+            };
+            const encodedSubject = Buffer.from(subjects, "ascii").toString("base64");
+            const req = {
+                headers: {
+                    [CERT_SUBJECT_HEADER_KEY]: encodedSubject,
+                }
+            };
+            authCheck(req, 200);
+        }
+
+        beforeEach(() => {
+            process.env.ORD_AUTH =
+                cds.env.authentication.type = AUTHENTICATION_TYPE.UclMtls;
+            process.env.UCL_MTLS_ENDPOINTS =
+                cds.env.authentication.uclMtlsEndpoints = `["${uclMtlsEndpoint}"]`
         });
 
-        afterEach(async () => {
-            // await server.close();
+
+        afterAll(() => {
+            delete process.env.ORD_AUTH,
+                process.env.UCL_MTLS_ENDPOINTS,
+                cds.context,
+                cds.env.authentication.uclMtlsEndpoints;
         });
 
-        it("should authenticate with valid certificate subject", async () => {
-            const encodedSubject = Buffer.from(mockTrustedSubject, "ascii").toString("base64");
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //     headers: {
-            //         "x-ssl-client-subject-dn": encodedSubject,
-            //     },
-            // });
-
-            expect(protectedRoute).toBe(protectedRoute);
-            expect(encodedSubject).toBe(encodedSubject);
-            expect(200).toBe(200);
+        it("should authenticate with valid certificate subject; authentication set/read from process.env", async () => {
+            uclMtlsAuthCheck(mockTrustedSubject);
         });
 
-        it("should reject with invalid certificate subject", async () => {
-            const invalidSubject = Buffer.from("CN=invalid.example.com", "ascii").toString("base64");
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //     headers: {
-            //         "x-ssl-client-subject-dn": invalidSubject,
-            //     },
-            // });
+        it("should authenticate with valid certificate subject; authentication set/read from cds.env", async () => {
+            delete process.env.ORD_AUTH;
+            delete process.env.UCL_MTLS_ENDPOINTS;
 
-            expect(401).toBe(401);
-            expect(invalidSubject).toBe(invalidSubject);
-        });
-
-        it("should reject without certificate subject", async () => {
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            // });
-
-            expect(401).toBe(401);
-            expect(protectedRoute).toBe(protectedRoute);
+            uclMtlsAuthCheck(mockTrustedSubject);
         });
     });
 
