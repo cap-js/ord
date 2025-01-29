@@ -1,6 +1,6 @@
 const cds = require('@sap/cds');
 const { AUTHENTICATION_TYPE } = require('../../lib/constants');
-const authenticate = require('../../lib/authentication');
+const { authenticate }= require('../../lib/authentication');
 
 describe('Authentication Middleware', () => {
     const mockValidUser = { admin: "secret" };
@@ -131,6 +131,9 @@ describe('Authentication Middleware', () => {
 
     describe("UCL mTLS Authentication", () => {
         beforeEach(async () => {
+            // mock cds.context
+            // cds.context = {
+            //     tru
             // server = fastify();
             // server.setErrorHandler(errorHandler);
             // await setupAuthentication(server, {
