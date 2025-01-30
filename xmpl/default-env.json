@@ -4,7 +4,7 @@
   "ORD_BASE_URL": "http://localhost:8080",
   "ORD_SOURCE_TYPE": "local",
   "ORD_DIRECTORY": "./example",
-  "ORD_AUTH": "ucl-mtls",
+  "ORD_AUTH": "basic",
   "APP_USERS": {
 	"admin": "secret"
   },

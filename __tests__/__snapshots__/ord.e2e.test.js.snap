@@ -35,7 +35,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.oas3.json",
+          "url": "/ord/v1/documents/api-metadata/AdminService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -45,7 +45,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
+          "url": "/ord/v1/documents/api-metadata/AdminService.edmx",
         },
       ],
       "shortDescription": "short description for test AdminService",
@@ -120,7 +120,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.asyncapi2.json",
+          "url": "/ord/v1/documents/api-metadata/AdminService.asyncapi2.json",
         },
       ],
       "shortDescription": "short description for test AdminService",
@@ -250,7 +250,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.oas3.json",
+          "url": "/ord/v1/documents/api-metadata/AdminService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -260,7 +260,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
+          "url": "/ord/v1/documents/api-metadata/AdminService.edmx",
         },
       ],
       "shortDescription": "short description for test AdminService",
@@ -335,7 +335,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.asyncapi2.json",
+          "url": "/ord/v1/documents/api-metadata/AdminService.asyncapi2.json",
         },
       ],
       "shortDescription": "short description for test AdminService",
