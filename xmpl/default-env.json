@@ -4,13 +4,11 @@
   "ORD_BASE_URL": "http://localhost:8080",
   "ORD_SOURCE_TYPE": "local",
   "ORD_DIRECTORY": "./example",
-  "ORD_AUTH": "basic",
+  "ORD_AUTH": "ucl-mtls",
   "APP_USERS": {
 	"admin": "secret"
   },
   "UCL_MTLS_ENDPOINTS": [
-	"https://endpoint1.example.com/v1/info",
-	"https://endpoint2.example.com/v1/info",
     "https://compass-gateway.mps.kyma.cloud.sap/v1/info"
   ]
 }
