@@ -22,8 +22,7 @@
             "admin": "secret"
         },
         "uclMtlsEndpoints": [
-            "https://endpoint1.example.com/v1/info",
-            "https://endpoint2.example.com/v1/info"
+            "https://compass-gateway.mps.kyma.cloud.sap/v1/info"
         ]
     }
 }

@@ -1,6 +1,7 @@
 const cds = require('@sap/cds');
 const { AUTHENTICATION_TYPE, CERT_SUBJECT_HEADER_KEY } = require('../../lib/constants');
-const { authenticate } = require('../../lib/authentication');
+const { authenticate, getTrustedSubjects } = require('../../lib/authentication');
+const { Logger } = require('../../lib/logger');
 
 describe('Authentication Middleware', () => {
     const mockValidUser = { admin: "secret" };
@@ -12,12 +13,19 @@ describe('Authentication Middleware', () => {
         cds.env.authentication = {
             credentials: {}
         };
+        process.env.ORD_AUTH =
+            cds.env.authentication.type = AUTHENTICATION_TYPE.UclMtls;
+        process.env.APP_USERS =
+            cds.env.authentication.credentials = JSON.stringify(mockValidUser)
+        process.env.UCL_MTLS_ENDPOINTS =
+            cds.env.authentication.uclMtlsEndpoints = `["${uclMtlsEndpoint}"]`
+        Logger.log = Logger.error = jest.fn();
     });
 
     afterAll(() => {
         delete process.env.ORD_AUTH;
         delete process.env.APP_USERS;
-        delete process.env.CMP_DEV_INFO_ENDPOINT;
+        delete process.env.UCL_MTLS_ENDPOINTS;
 
         jest.restoreAllMocks();
     });
@@ -37,6 +45,22 @@ describe('Authentication Middleware', () => {
         expect(res.status).toBe(status);
         expect(res.message).toBe(message);
     }
+
+    it('should return certSubject from the endpoint', async () => {
+        // mock the fetch function implementation
+        global.fetch = jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ certSubject: mockTrustedSubject }) });
+        const result = await getTrustedSubjects(uclMtlsEndpoint);
+        expect(result).toEqual([mockTrustedSubject]);
+        expect(Logger.log).toHaveBeenCalledWith('TrustedSubjectService:', uclMtlsEndpoint);
+    });
+
+    it('should return null from invalid endpoint', async () => {
+        // mock the fetch function implementation
+        global.fetch = jest.fn().mockRejectedValue({ message: "Error" });
+        const result = await getTrustedSubjects(uclMtlsEndpoint);
+        expect(result).toEqual([]);
+        expect(Logger.error).toHaveBeenCalledWith('TrustedSubjectService:', 'Error');
+    });
 
     describe("Open (No) Authentication", () => {
         beforeAll(() => {
@@ -102,6 +126,21 @@ describe('Authentication Middleware', () => {
             };
 
             authCheck(req, 200);
+        });
+
+        it("should not apply basic authentication because of `process.env.APP_USERS` not being a valid JSON object", async () => {
+            process.env.APP_USERS = "non-valid-json";
+            Logger.error = jest.fn();
+            authCheck({}, 200);
+            expect(Logger.error).toHaveBeenCalledWith('getAuthConfiguration:', expect.stringContaining('Unexpected token'));
+        });
+
+        it("should not apply basic authentication because of `cds.env.authentication.credentials` not being a valid JSON object", async () => {
+            delete process.env.APP_USERS;
+            Logger.error = jest.fn();
+            cds.env.authentication.credentials = "non-valid-json";
+            authCheck({}, 200);
+            expect(Logger.error).toHaveBeenCalledWith('getAuthConfiguration:', expect.stringContaining('Unexpected token'));
         });
 
         it("should not authenticate because of invalid credentials", async () => {
@@ -171,94 +210,27 @@ describe('Authentication Middleware', () => {
             uclMtlsAuthCheck(mockTrustedSubject);
         });
 
-        it("should NOT authenticate because of invalid certificate subject", async () => {
-            uclMtlsAuthCheck(mockUntrustedSubject, "Certificate subject header is missing or invalid", 401);
-        });
-    });
-
-    describe("Combined Authentication", () => {
-        beforeEach(async () => {
-            // server = fastify();
-            // server.setErrorHandler(errorHandler);
-            // await setupAuthentication(server, {
-            //     authMethods: [OptAuthMethod.Basic, OptAuthMethod.UclMtls],
-            //     validUsers: mockValidUsers,
-            //     trustedSubjects: [mockTrustedSubject],
-            // });
-            // // Add a test route
-            // server.get(protectedRoute, () => {
-            //     return { status: "ok" };
-            // });
-            // await server.ready();
+        it("should not apply ucl-mtls authentication because of `process.env.UCL_MTLS_ENDPOINTS` not being a valid JSON object", async () => {
+            process.env.UCL_MTLS_ENDPOINTS = "non-valid-json";
+            Logger.error = jest.fn();
+            authCheck({}, 200);
+            expect(Logger.error).toHaveBeenCalledWith('getAuthConfiguration:', expect.stringContaining('Unexpected token'));
         });
 
-        afterEach(async () => {
-            // await server.close();
+        it("should not apply ucl-mtls authentication because of `cds.env.authentication.uclMtlsEndpoints` not being a valid JSON object", async () => {
+            delete process.env.UCL_MTLS_ENDPOINTS;
+            cds.env.authentication.uclMtlsEndpoints = "non-valid-json";
+            Logger.error = jest.fn();
+            authCheck({}, 200);
+            expect(Logger.error).toHaveBeenCalledWith('getAuthConfiguration:', expect.stringContaining('Unexpected token'));
         });
 
-        it("should authenticate with valid basic auth", async () => {
-            const credentials = Buffer.from("admin:secret").toString("base64");
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //     headers: {
-            //         Authorization: `Basic ${credentials}`,
-            //     },
-            // });
-
-            expect(200).toBe(200);
-            expect(credentials).toBe(credentials);
+        it("should NOT authenticate because of missing certificate subject header", async () => {
+            uclMtlsAuthCheck("", "Certificate subject header is missing", 401);
         });
 
-        it("should authenticate with valid certificate", async () => {
-            const encodedSubject = Buffer.from(mockTrustedSubject).toString("base64");
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //     headers: {
-            //         "x-ssl-client-subject-dn": encodedSubject,
-            //     },
-            // });
-
-            expect(200).toBe(200);
-            expect(encodedSubject).toBe(encodedSubject);
-        });
-
-        it("should reject with invalid certificate", async () => {
-            const encodedSubject = Buffer.from("CN=invalid.example.com", "ascii").toString("base64");
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //     headers: {
-            //         "x-ssl-client-subject-dn": encodedSubject,
-            //     },
-            // });
-
-            expect(401).toBe(401);
-            expect(encodedSubject).toBe(encodedSubject);
-        });
-
-        it("should reject with invalid basic auth", async () => {
-            const credentials = Buffer.from("admin:invalid").toString("base64");
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            //     headers: {
-            //         Authorization: `Basic ${credentials}`,
-            //     },
-            // });
-
-            expect(401).toBe(401);
-            expect(credentials).toBe(credentials);
-        });
-
-        it("should reject without any authentication", async () => {
-            // const response = await server.inject({
-            //     method: "GET",
-            //     url: protectedRoute,
-            // });
-
-            expect(401).toBe(401);
+        it("should NOT authenticate because of invalid certificate subject header", async () => {
+            uclMtlsAuthCheck(mockUntrustedSubject, "Certificate subject header is invalid", 401);
         });
     });
 });
