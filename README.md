@@ -10,9 +10,8 @@ You can use this information to construct a static metadata catalog or to perfor
 
 For more information, have a look at the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) page.
 
-> ⚠ By installing this plugin, the metadata describing your CAP application will be made openly accessible. 
-> 
-> If you have a need to protect your metadata, please refrain from installing this plugin until we support metadata protection (planned).
+> ⚠ To secure your CAP application's metadata, configure `basic` authentication by setting the environment variables or updating the `.cdsrc.json` file. The plugin prioritizes environment variables, then checks `.cdsrc.json`. If neither is configured, metadata remains publicly accessible.
+>
 
 ## Requirements and Setup
 
@@ -20,6 +19,28 @@ For more information, have a look at the [Open Resource Discovery](https://sap.g
 
 ```sh
 npm install @cap-js/ord
+```
+
+### Authentication
+
+For applying the `basic` authentication, the following environment variables must be set:
+
+* `ORD_AUTH`:  The type of authentication. For now, the only acceptable values are: `open` and `basic`(mTLS is planned as well).
+* `APP_USERS`: The credentials for basic authentication. Example:
+
+```json
+APP_USERS='{"user":"password"}'
+```
+
+Alternatively, set the authentication configuration in the `.cdsrc.json`:
+
+```json
+"authentication": {
+    "type": "basic",
+    "credentials": {
+        "user": "password"
+    }
+}
 ```
 
 ### Usage
