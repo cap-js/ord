@@ -1,31 +1,23 @@
 const cds = require('@sap/cds');
-const { AUTHENTICATION_TYPE, CERT_SUBJECT_HEADER_KEY } = require('../../lib/constants');
-const { authenticate, getTrustedSubjects } = require('../../lib/authentication');
+const { AUTHENTICATION_TYPE } = require('../../lib/constants');
+const { authenticate } = require('../../lib/authentication');
 const { Logger } = require('../../lib/logger');
 
 describe('Authentication Middleware', () => {
     const mockValidUser = { admin: "secret" };
-    const mockTrustedSubject = "CN=test.example.com,OU=Test,O=Example";
-    const mockUntrustedSubject = "CN=invalid.example.com";
-    const uclMtlsEndpoint = "https://test-endpoint.com";
 
     beforeAll(() => {
         cds.env.authentication = {
             credentials: {}
         };
-        process.env.ORD_AUTH =
-            cds.env.authentication.type = AUTHENTICATION_TYPE.UclMtls;
         process.env.APP_USERS =
             cds.env.authentication.credentials = JSON.stringify(mockValidUser)
-        process.env.UCL_MTLS_ENDPOINTS =
-            cds.env.authentication.uclMtlsEndpoints = `["${uclMtlsEndpoint}"]`
         Logger.log = Logger.error = jest.fn();
     });
 
     afterAll(() => {
         delete process.env.ORD_AUTH;
         delete process.env.APP_USERS;
-        delete process.env.UCL_MTLS_ENDPOINTS;
 
         jest.restoreAllMocks();
     });
@@ -45,22 +37,6 @@ describe('Authentication Middleware', () => {
         expect(res.status).toBe(status);
         expect(res.message).toBe(message);
     }
-
-    it('should return certSubject from the endpoint', async () => {
-        // mock the fetch function implementation
-        global.fetch = jest.fn().mockResolvedValue({ json: jest.fn().mockResolvedValue({ certSubject: mockTrustedSubject }) });
-        const result = await getTrustedSubjects(uclMtlsEndpoint);
-        expect(result).toEqual([mockTrustedSubject]);
-        expect(Logger.log).toHaveBeenCalledWith('TrustedSubjectService:', uclMtlsEndpoint);
-    });
-
-    it('should return null from invalid endpoint', async () => {
-        // mock the fetch function implementation
-        global.fetch = jest.fn().mockRejectedValue({ message: "Error" });
-        const result = await getTrustedSubjects(uclMtlsEndpoint);
-        expect(result).toEqual([]);
-        expect(Logger.error).toHaveBeenCalledWith('TrustedSubjectService:', 'Error');
-    });
 
     describe("Open (No) Authentication", () => {
         beforeAll(() => {
@@ -166,71 +142,6 @@ describe('Authentication Middleware', () => {
                 headers: {}
             };
             authCheck(req, 401, "Authorization header missing");
-        });
-    });
-
-    describe("UCL mTLS Authentication", () => {
-
-        function uclMtlsAuthCheck(subjects, message, status = 200) {
-            cds.context = {
-                trustedSubjects: [mockTrustedSubject]
-            };
-            const encodedSubject = Buffer.from(subjects, "ascii").toString("base64");
-            const req = {
-                headers: {
-                    [CERT_SUBJECT_HEADER_KEY]: encodedSubject,
-                }
-            };
-            authCheck(req, status, message);
-        }
-
-        beforeEach(() => {
-            process.env.ORD_AUTH =
-                cds.env.authentication.type = AUTHENTICATION_TYPE.UclMtls;
-            process.env.UCL_MTLS_ENDPOINTS =
-                cds.env.authentication.uclMtlsEndpoints = `["${uclMtlsEndpoint}"]`
-        });
-
-
-        afterAll(() => {
-            delete process.env.ORD_AUTH,
-                process.env.UCL_MTLS_ENDPOINTS,
-                cds.context,
-                cds.env.authentication.uclMtlsEndpoints;
-        });
-
-        it("should authenticate with valid certificate subject; authentication set/read from process.env", async () => {
-            uclMtlsAuthCheck(mockTrustedSubject);
-        });
-
-        it("should authenticate with valid certificate subject; authentication set/read from cds.env", async () => {
-            delete process.env.ORD_AUTH;
-            delete process.env.UCL_MTLS_ENDPOINTS;
-
-            uclMtlsAuthCheck(mockTrustedSubject);
-        });
-
-        it("should not apply ucl-mtls authentication because of `process.env.UCL_MTLS_ENDPOINTS` not being a valid JSON object", async () => {
-            process.env.UCL_MTLS_ENDPOINTS = "non-valid-json";
-            Logger.error = jest.fn();
-            authCheck({}, 200);
-            expect(Logger.error).toHaveBeenCalledWith('getAuthConfiguration:', expect.stringContaining('Unexpected token'));
-        });
-
-        it("should not apply ucl-mtls authentication because of `cds.env.authentication.uclMtlsEndpoints` not being a valid JSON object", async () => {
-            delete process.env.UCL_MTLS_ENDPOINTS;
-            cds.env.authentication.uclMtlsEndpoints = "non-valid-json";
-            Logger.error = jest.fn();
-            authCheck({}, 200);
-            expect(Logger.error).toHaveBeenCalledWith('getAuthConfiguration:', expect.stringContaining('Unexpected token'));
-        });
-
-        it("should NOT authenticate because of missing certificate subject header", async () => {
-            uclMtlsAuthCheck("", "Certificate subject header is missing", 401);
-        });
-
-        it("should NOT authenticate because of invalid certificate subject header", async () => {
-            uclMtlsAuthCheck(mockUntrustedSubject, "Certificate subject header is invalid", 401);
         });
     });
 });

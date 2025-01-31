@@ -20,9 +20,6 @@
         "type": "basic",
         "credentials": {
             "admin": "secret"
-        },
-        "uclMtlsEndpoints": [
-            "https://compass-gateway.mps.kyma.cloud.sap/v1/info"
-        ]
+        }
     }
 }

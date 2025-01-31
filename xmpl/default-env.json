@@ -7,8 +7,5 @@
   "ORD_AUTH": "basic",
   "APP_USERS": {
 	"admin": "secret"
-  },
-  "UCL_MTLS_ENDPOINTS": [
-    "https://compass-gateway.mps.kyma.cloud.sap/v1/info"
-  ]
+  }
 }
