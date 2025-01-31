@@ -1,0 +1,121 @@
+{
+    "$version": "2.0",
+    "definitions": {
+        "LocalService": {
+            "@ORD.Extensions.title": "This is Local Service title",
+            "kind": "service"
+        },
+        "LocalService.DummyEntityA": {
+            "@ODM.entityName": "SomeODMEntity",
+            "@ODM.oid": "id",
+            "@ODM.root": true,
+            "@title": "Dummy title of Entity with corresponding ODM entity title",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "propertyA": {
+                    "length": 10,
+                    "type": "cds.String"
+                },
+                "propertyB": {
+                    "length": 20,
+                    "type": "cds.String"
+                }
+            },
+            "kind": "entity",
+            "projection": {
+                "from": {
+                    "ref": [
+                        "sap.cds.demo.EntityWithCorrespondingODMEntity"
+                    ]
+                }
+            }
+        },
+        "LocalService.DummyEntityB": {
+            "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity",
+            "@ObjectModel.compositionRoot": true,
+            "@title": "Dummy title of Ariba entity",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "propertyC": {
+                    "length": 10,
+                    "type": "cds.String"
+                },
+                "propertyD": {
+                    "length": 20,
+                    "type": "cds.String"
+                }
+            },
+            "kind": "entity",
+            "projection": {
+                "from": {
+                    "ref": [
+                        "sap.cds.demo.SomeAribaEntity"
+                    ]
+                }
+            }
+        },
+        "LocalService.TitleChange2": {
+            "elements": {
+                "ID": {
+                    "type": "cds.Integer"
+                },
+                "title": {
+                    "@title": "Changed title",
+                    "type": "cds.String"
+                }
+            },
+            "kind": "event"
+        },
+        "sap.cds.demo.EntityWithCorrespondingODMEntity": {
+            "@ODM.entityName": "SomeODMEntity",
+            "@ODM.oid": "id",
+            "@ODM.root": true,
+            "@title": "Dummy title of Entity with corresponding ODM entity title",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "propertyA": {
+                    "length": 10,
+                    "type": "cds.String"
+                },
+                "propertyB": {
+                    "length": 20,
+                    "type": "cds.String"
+                }
+            },
+            "kind": "entity"
+        },
+        "sap.cds.demo.SomeAribaEntity": {
+            "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity",
+            "@ObjectModel.compositionRoot": true,
+            "@title": "Dummy title of Ariba entity",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "propertyC": {
+                    "length": 10,
+                    "type": "cds.String"
+                },
+                "propertyD": {
+                    "length": 20,
+                    "type": "cds.String"
+                }
+            },
+            "kind": "entity"
+        }
+    },
+    "meta": {
+        "creator": "CDS Compiler v5.4.4",
+        "flavor": "inferred"
+    }
+}
