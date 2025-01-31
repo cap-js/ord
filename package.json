@@ -27,8 +27,8 @@
         "@sap/cds": "^8.1.1"
     },
     "dependencies": {
-        "@cap-js/openapi": "github:zongqichen/openapi",
-        "@sap/cds-compiler": "git+https://github.tools.sap/D072944/cds-compiler",
+        "@cap-js/openapi": "github:cap-js/openapi#extend_er_annotation",
+        "@sap/cds-compiler": "^5.7.2",
         "lodash": "^4.17.21"
     }
 }
