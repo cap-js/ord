@@ -39,41 +39,44 @@ describe('Authentication Middleware', () => {
     }
 
     describe("Open (No) Authentication", () => {
-        beforeAll(() => {
-            cds.env.authentication = {
-                type: AUTHENTICATION_TYPE.Open
-            };
+        afterEach(() => {
+            delete process.env.ORD_AUTH;
+            cds.env.authentication = {}
         });
 
-        beforeEach(() => {
-            delete process.env.ORD_AUTH;
+        it("should have access without credentials - with default open authentication", async () => {
+            authCheck({ headers: {} }, 200);
+            expect(Logger.error).toHaveBeenCalledWith('getAuthenticationTypes:', expect.stringContaining('No authorization type is provided.'));
+        });
+
+        it("should set open authentication in case of invalid auth-configuration", async () => {
+            process.env.ORD_AUTH = `typo["${AUTHENTICATION_TYPE.Open}"typo]`;
+
+            authCheck({ headers: {} }, 200);
+            expect(Logger.error).toHaveBeenCalledWith('getAuthenticationTypes:', expect.stringContaining('not valid JSON'));
         });
 
         it("should have access without credentials - with authentication set/read from process.env", async () => {
-            process.env.ORD_AUTH = AUTHENTICATION_TYPE.Open;
+            process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Open}"]`;
 
             authCheck({ headers: {} }, 200);
         });
 
         it("should have access without credentials - with authentication set/read from cds.env", async () => {
-            cds.env.authentication.type = AUTHENTICATION_TYPE.Open;
+            cds.env.authentication.type = [AUTHENTICATION_TYPE.Open];
 
-            authCheck({ headers: {} }, 200);
-        });
-
-        it("should have access without credentials - with default open authentication", async () => {
             authCheck({ headers: {} }, 200);
         });
     });
 
     describe("Basic Authentication", () => {
         beforeAll(() => {
-            process.env.ORD_AUTH = AUTHENTICATION_TYPE.Basic;
+            process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Basic}"]`;
         });
 
         beforeEach(() => {
-            process.env.APP_USERS =
-                cds.env.authentication.credentials = JSON.stringify(mockValidUser);
+            process.env.APP_USERS = JSON.stringify(mockValidUser);
+            cds.env.authentication.credentials = mockValidUser;
         });
 
         afterAll(() => {
@@ -104,19 +107,29 @@ describe('Authentication Middleware', () => {
             authCheck(req, 200);
         });
 
-        it("should not apply basic authentication because of `process.env.APP_USERS` not being a valid JSON object", async () => {
+        it("should reject if `process.env.APP_USERS` not being a valid JSON object", async () => {
             process.env.APP_USERS = "non-valid-json";
-            Logger.error = jest.fn();
-            authCheck({}, 200);
-            expect(Logger.error).toHaveBeenCalledWith('getAuthConfiguration:', expect.stringContaining('Unexpected token'));
+            const req = {
+                headers: {
+                    authorization: "Basic " + Buffer.from(`admin:${mockValidUser["admin"]}`).toString("base64")
+                }
+            };
+
+            authCheck(req, 401, "Invalid credentials");
+            expect(Logger.error).toHaveBeenCalledWith('_getAuthConfiguration:', expect.stringContaining('not valid JSON'));
         });
 
-        it("should not apply basic authentication because of `cds.env.authentication.credentials` not being a valid JSON object", async () => {
+        it("should reject if `cds.env.authentication.credentials` not being a valid JSON object", async () => {
             delete process.env.APP_USERS;
-            Logger.error = jest.fn();
             cds.env.authentication.credentials = "non-valid-json";
-            authCheck({}, 200);
-            expect(Logger.error).toHaveBeenCalledWith('getAuthConfiguration:', expect.stringContaining('Unexpected token'));
+            const req = {
+                headers: {
+                    authorization: "Basic " + Buffer.from(`admin:${mockValidUser["admin"]}`).toString("base64")
+                }
+            };
+
+            authCheck(req, 401, "Invalid credentials");
+            expect(Logger.error).toHaveBeenCalledWith('_getAuthConfiguration:', expect.stringContaining('not valid JSON'));
         });
 
         it("should not authenticate because of invalid credentials", async () => {
@@ -137,11 +150,11 @@ describe('Authentication Middleware', () => {
             authCheck(req, 401, "Invalid authentication type");
         });
 
-        it("should not authenticate because of missing authorization header missing", async () => {
+        it("should not authenticate because of missing authorization header", async () => {
             const req = {
                 headers: {}
             };
-            authCheck(req, 401, "Authorization header missing");
+            authCheck(req, 401, "Required header is missing");
         });
     });
 });
