@@ -26,7 +26,7 @@ npm install @cap-js/ord
 To enforce authentication in the ORD Plugin, set the following environment variables:
 
 * `ORD_AUTH`: Specifies the authentication type.
-* `APP_USERS`: Contains credentials for `basic` authentication.
+* `APP_USER`: Contains credentials for `basic` authentication.
 
 If `ORD_AUTH` is not set, the application starts without authentication. This variable accepts `open` and `basic` (UCL-mTLS is also planned).
 > Note: `open` cannot be combined with `basic` or any other (future) authentication types.
@@ -37,10 +37,10 @@ The `open` authentication type bypasses authentication checks.
 
 #### Basic
 
-To use `basic` authentication, set `ORD_AUTH` to `["basic"]` and provide credentials in `APP_USERS`. Example:
+To use `basic` authentication, set `ORD_AUTH` to `["basic"]` and provide credentials in `APP_USER`. Example:
 
 ```json
-APP_USERS='{"user":"password"}'
+APP_USER='{"user":"password"}'
 ```
 
 Alternatively, configure authentication in `.cdsrc.json`:

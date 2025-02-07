@@ -29,21 +29,13 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "openapi-v3",
           "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v1/AdminService.oas3.json",
         },
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/xml",
           "type": "edmx",
           "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v1/AdminService.edmx",
@@ -81,21 +73,13 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "openapi-v3",
           "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CatalogService:v1/CatalogService.oas3.json",
         },
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/xml",
           "type": "edmx",
           "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CatalogService:v1/CatalogService.edmx",
@@ -133,21 +117,13 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "openapi-v3",
           "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CinemaService:v1/CinemaService.oas3.json",
         },
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/xml",
           "type": "edmx",
           "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CinemaService:v1/CinemaService.edmx",
@@ -192,11 +168,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
           "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
@@ -221,11 +193,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
           "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CatalogService:v1/CatalogService.asyncapi2.json",
@@ -250,11 +218,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
           "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",

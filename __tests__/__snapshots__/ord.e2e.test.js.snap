@@ -28,21 +28,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "openapi-v3",
           "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.oas3.json",
         },
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/xml",
           "type": "edmx",
           "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.edmx",
@@ -113,11 +105,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
           "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
@@ -243,21 +231,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "openapi-v3",
           "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.oas3.json",
         },
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/xml",
           "type": "edmx",
           "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.edmx",
@@ -328,11 +308,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
+          "accessStrategies": [],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
           "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
