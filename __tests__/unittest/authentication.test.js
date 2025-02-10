@@ -1,6 +1,6 @@
 const cds = require('@sap/cds');
 const { AUTHENTICATION_TYPE, CERT_SUBJECT_HEADER_KEY } = require('../../lib/constants');
-const { authenticate, createAuthConfig, getAuthenticationTypes } = require('../../lib/authentication');
+const { authenticate, createAuthConfig } = require('../../lib/authentication');
 const { Logger } = require('../../lib/logger');
 
 describe('authentication', () => {
@@ -54,12 +54,6 @@ describe('authentication', () => {
             delete process.env.ORD_AUTH;
             delete process.env.BASIC_AUTH;
             cds.env.authentication = {};
-        });
-
-        it('should return array of authentication types from environment variables: Basic auth', () => {
-            process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Basic}"]`;
-            const authTypes = getAuthenticationTypes();
-            expect(authTypes).toEqual([AUTHENTICATION_TYPE.Basic]);
         });
 
         it('should return default configuration when no authentication type is provided', () => {

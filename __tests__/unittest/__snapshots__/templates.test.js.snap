@@ -20,13 +20,21 @@ exports[`templates createAPIResourceTemplate should create API resource template
     "releaseStatus": "active",
     "resourceDefinitions": [
       {
-        "accessStrategies": [],
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
         "mediaType": "application/json",
         "type": "openapi-v3",
         "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
       },
       {
-        "accessStrategies": [],
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
         "mediaType": "application/xml",
         "type": "edmx",
         "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
@@ -94,7 +102,11 @@ exports[`templates createEventResourceTemplate should create event resource temp
     "releaseStatus": "active",
     "resourceDefinitions": [
       {
-        "accessStrategies": [],
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
         "mediaType": "application/json",
         "type": "asyncapi-v2",
         "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
@@ -124,7 +136,11 @@ exports[`templates createEventResourceTemplate should create event resource temp
     "releaseStatus": "active",
     "resourceDefinitions": [
       {
-        "accessStrategies": [],
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
         "mediaType": "application/json",
         "type": "asyncapi-v2",
         "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
@@ -167,13 +183,21 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
     "releaseStatus": "active",
     "resourceDefinitions": [
       {
-        "accessStrategies": [],
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
         "mediaType": "application/json",
         "type": "openapi-v3",
         "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
       },
       {
-        "accessStrategies": [],
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
         "mediaType": "application/xml",
         "type": "edmx",
         "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
@@ -203,7 +227,11 @@ exports[`templates ordExtension should add events with ORD Extension "visibility
     "releaseStatus": "active",
     "resourceDefinitions": [
       {
-        "accessStrategies": [],
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
         "mediaType": "application/json",
         "type": "asyncapi-v2",
         "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",

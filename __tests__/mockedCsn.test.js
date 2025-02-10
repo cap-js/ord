@@ -15,6 +15,11 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     beforeAll(() => {
         cds.root = path.join(__dirname, "bookshop");
+        jest.spyOn(cds, "context", "get").mockReturnValue({
+            authConfig: {
+                types: ["open"]
+            }
+        });
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
     });

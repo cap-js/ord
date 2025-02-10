@@ -7,7 +7,11 @@ exports[`defaults baseTemplate should return default value 1`] = `
   "openResourceDiscoveryV1": {
     "documents": [
       {
-        "accessStrategies": [],
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
         "url": "/ord/v1/documents/ord-document",
       },
     ],

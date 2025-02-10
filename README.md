@@ -39,7 +39,7 @@ The `open` authentication type bypasses authentication checks.
 
 To use `basic` authentication, set `ORD_AUTH` to `["basic"]` and provide credentials in `BASIC_AUTH`. Example:
 
-```json
+```bash
 BASIC_AUTH='{"user":"password"}'
 ```
 
