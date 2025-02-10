@@ -46,13 +46,13 @@ describe('authentication', () => {
     describe('Initialization of authentication config data', () => {
         beforeAll(() => {
             delete process.env.ORD_AUTH;
-            delete process.env.APP_USER;
+            delete process.env.BASIC_AUTH;
             cds.env.authentication = {};
         });
 
         afterEach(() => {
             delete process.env.ORD_AUTH;
-            delete process.env.APP_USER;
+            delete process.env.BASIC_AUTH;
             cds.env.authentication = {};
         });
 
@@ -98,15 +98,15 @@ describe('authentication', () => {
 
         it('should return default configuration when credentials are not valid JSON', () => {
             process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Basic}"]`;
-            process.env.APP_USER = 'non-valid-json';
+            process.env.BASIC_AUTH = 'non-valid-json';
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open] });
             expect(Logger.error).toHaveBeenCalledWith('createAuthConfig:', expect.stringContaining('not valid JSON'));
         });
 
-        it('should return auth configuration containing credentials by using data from process.env.APP_USER', () => {
+        it('should return auth configuration containing credentials by using data from process.env.BASIC_AUTH', () => {
             process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Basic}"]`;
-            process.env.APP_USER = JSON.stringify(mockValidUser);
+            process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
@@ -134,7 +134,7 @@ describe('authentication', () => {
     describe("Authentication middleware", () => {
         afterEach(() => {
             delete process.env.ORD_AUTH;
-            delete process.env.APP_USER;
+            delete process.env.BASIC_AUTH;
             cds.env.authentication = {}
             cds.context.authConfig = {};
         });

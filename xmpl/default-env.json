@@ -5,7 +5,7 @@
   "ORD_SOURCE_TYPE": "local",
   "ORD_DIRECTORY": "./example",
   "ORD_AUTH": ["basic"],
-  "APP_USER": {
+  "BASIC_AUTH": {
 	"admin": "secret"
   }
 }
