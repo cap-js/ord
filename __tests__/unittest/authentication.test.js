@@ -149,7 +149,7 @@ describe('authentication', () => {
                 headers: {}
             };
 
-            authCheck(req, 401, "Required header is missing");
+            authCheck(req, 401, "Authentication required.");
         });
 
         it("should not authenticate and set header 'WWW-Authenticate' because of missing authorization header", async () => {
@@ -158,7 +158,7 @@ describe('authentication', () => {
                 headers: {}
             };
 
-            authCheck(req, 401, "Required header is missing", "Secure Area");
+            authCheck(req, 401, "Authentication required.", "401");
         });
 
         it("should not authenticate and should not set header 'WWW-Authenticate' because of missing authorization header", async () => {
@@ -167,7 +167,7 @@ describe('authentication', () => {
                 headers: {}
             };
 
-            authCheck(req, 401, "Required header is missing");
+            authCheck(req, 401, "Authentication required.");
         });
 
         it("should not authenticate because of invalid authentication type in the request header", async () => {
