@@ -17,7 +17,7 @@
         "customOrdContentFile": "./ord/custom.ord.json"
     },
     "authentication": {
-        "type": ["basic"],
+        "types": ["basic"],
         "credentials": {
             "admin": "secret"
         }
