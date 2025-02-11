@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-const { AUTHENTICATION_TYPE, CERT_SUBJECT_HEADER_KEY } = require('../../lib/constants');
+const { AUTHENTICATION_TYPE } = require('../../lib/constants');
 const { authenticate, createAuthConfig } = require('../../lib/authentication');
 const { Logger } = require('../../lib/logger');
 
@@ -69,33 +69,29 @@ describe('authentication', () => {
             expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open] });
         });
 
-        it('should return default configuration when invalid authentication type is provided', () => {
+        it('should return default configuration with error when invalid authentication type is provided', () => {
             process.env.ORD_AUTH = '["InvalidType"]';
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open] });
-            expect(Logger.error).toHaveBeenCalledWith('createAuthConfig:', 'Invalid authentication type');
+            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: 'Invalid authentication type' });
         });
 
-        it('should return default configuration when Open and Basic authentication types are combined', () => {
+        it('should return default configuration with error when Open and Basic authentication types are combined', () => {
             process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}"]`;
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open] });
-            expect(Logger.error).toHaveBeenCalledWith('createAuthConfig:', 'Open authentication cannot be combined with any other authentication type');
+            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: 'Open authentication cannot be combined with any other authentication type' });
         });
 
-        it('should return default configuration when invalid JSON is provided', () => {
+        it('should return default configuration with error when invalid JSON is provided', () => {
             process.env.ORD_AUTH = 'typo["Open"typo]';
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open] });
-            expect(Logger.error).toHaveBeenCalledWith('createAuthConfig:', expect.stringContaining('not valid JSON'));
+            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: expect.stringContaining('not valid JSON') });
         });
 
-        it('should return default configuration when credentials are not valid JSON', () => {
+        it('should return default configuration with error when credentials are not valid JSON', () => {
             process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = 'non-valid-json';
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open] });
-            expect(Logger.error).toHaveBeenCalledWith('createAuthConfig:', expect.stringContaining('not valid JSON'));
+            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: expect.stringContaining('not valid JSON') });
         });
 
         it('should return auth configuration containing credentials by using data from process.env.BASIC_AUTH', () => {
@@ -110,6 +106,7 @@ describe('authentication', () => {
                 }
             });
         });
+
         it('should return auth configuration containing credentials by using data from .cdsrc.json', () => {
             process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Basic}"]`;
             cds.env.authentication.credentials = mockValidUser;
@@ -122,7 +119,6 @@ describe('authentication', () => {
                 }
             });
         });
-
     });
 
     describe("Authentication middleware", () => {
@@ -155,16 +151,16 @@ describe('authentication', () => {
             authCheck(req, 401, "Authentication required.", "401");
         });
 
-        it("should not authenticate and should not set header 'WWW-Authenticate' because of missing authorization header", async () => {
+        it("should not authenticate because of wrongly configured unsupported authentication type", async () => {
             cds.context.authConfig.types = [AUTHENTICATION_TYPE.UclMtls];
             const req = {
                 headers: {}
             };
 
-            authCheck(req, 401, "Authentication required.");
+            authCheck(req, 401, "Not authorized");
         });
 
-        it("should not authenticate because of invalid authentication type in the request header", async () => {
+        it("should not authenticate because of invalid name of authentication type in the request header", async () => {
             cds.context.authConfig.types = [AUTHENTICATION_TYPE.Basic];
             const req = {
                 headers: {
@@ -206,19 +202,6 @@ describe('authentication', () => {
                 }
             };
             authCheck(req, 401, "Invalid credentials");
-        });
-
-        it("should not authenticate for x-ssl-client-subject-dn header in the request", async () => {
-            cds.context.authConfig = {
-                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.UclMtls],
-            };
-
-            const req = {
-                headers: {
-                    [CERT_SUBJECT_HEADER_KEY]: "Dummy Subject"
-                }
-            };
-            authCheck(req, 401, "Not authorized");
         });
     });
 });

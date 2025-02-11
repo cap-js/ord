@@ -10,7 +10,6 @@ describe("End-to-end test for ORD document", () => {
                 types: ["open"]
             }
         });
-        // Logger.warn = jest.fn();
     });
 
     afterAll(() => {
