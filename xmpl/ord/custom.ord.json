@@ -37,20 +37,20 @@
                 {
                     "type": "openapi-v3",
                     "mediaType": "application/json",
-                    "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.oas3.json",
+                    "url": "/ord/v1/sap.sample:apiResource:manualImplementedService:v1/AdminService.oas3.json",
                     "accessStrategies": [
                         {
-                            "type": "open"
+                            "type": "sap.businesshub:basic-auth:v1"
                         }
                     ]
                 },
                 {
                     "type": "edmx",
                     "mediaType": "application/xml",
-                    "url": "/.well-known/open-resource-discovery/v1/api-metadata/AdminService.edmx",
+                    "url": "/ord/v1/sap.sample:apiResource:manualImplementedService:v1/AdminService.edmx",
                     "accessStrategies": [
                         {
-                            "type": "open"
+                            "type": "sap.businesshub:basic-auth:v1"
                         }
                     ]
                 }

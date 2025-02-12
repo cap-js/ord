@@ -10,9 +10,8 @@ You can use this information to construct a static metadata catalog or to perfor
 
 For more information, have a look at the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) page.
 
-> ⚠ By installing this plugin, the metadata describing your CAP application will be made openly accessible. 
-> 
-> If you have a need to protect your metadata, please refrain from installing this plugin until we support metadata protection (planned).
+> ⚠ To secure your CAP application's metadata, configure `basic` authentication by setting the environment variables or updating the `.cdsrc.json` file. The plugin prioritizes environment variables, then checks `.cdsrc.json`. If neither is configured, metadata remains publicly accessible.
+>
 
 ## Requirements and Setup
 
@@ -20,6 +19,39 @@ For more information, have a look at the [Open Resource Discovery](https://sap.g
 
 ```sh
 npm install @cap-js/ord
+```
+
+### Authentication
+
+To enforce authentication in the ORD Plugin, set the following environment variables:
+
+* `ORD_AUTH`: Specifies the authentication types.
+* `BASIC_AUTH`: Contains credentials for `basic` authentication.
+
+If `ORD_AUTH` is not set, the application starts without authentication. This variable accepts `open` and `basic` (UCL-mTLS is also planned).
+> Note: `open` cannot be combined with `basic` or any other (future) authentication types.
+
+#### Open
+
+The `open` authentication type bypasses authentication checks.
+
+#### Basic
+
+To use `basic` authentication, set `ORD_AUTH` to `["basic"]` and provide credentials in `BASIC_AUTH`. Example:
+
+```bash
+BASIC_AUTH='{"user":"password"}'
+```
+
+Alternatively, configure authentication in `.cdsrc.json`:
+
+```json
+"authentication": {
+    "types": ["basic"],
+    "credentials": {
+        "user": "password"
+    }
+}
 ```
 
 ### Usage

@@ -1,4 +1,9 @@
 const cds = require('@sap/cds');
+jest.spyOn(cds, "context", "get").mockReturnValue({
+    authConfig: {
+        types: ["open"]
+    }
+});
 const {
     createEntityTypeTemplate,
     createEntityTypeMappingsItemTemplate,
