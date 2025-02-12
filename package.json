@@ -24,11 +24,11 @@
     },
     "peerDependencies": {
         "@cap-js/asyncapi": "^1.0.0",
-        "@cap-js/openapi": "^1.0.2",
-        "@sap/cds": "^8.1.1",
-        "@sap/cds-compiler": "5.0.6"
+        "@sap/cds": "^8.1.1"
     },
     "dependencies": {
+        "@cap-js/openapi": "github:cap-js/openapi#extend_er_annotation",
+        "@sap/cds-compiler": "^5.7.0",
         "lodash": "^4.17.21"
     }
 }
