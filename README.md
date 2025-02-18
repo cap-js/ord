@@ -10,7 +10,7 @@ You can use this information to construct a static metadata catalog or to perfor
 
 For more information, have a look at the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) page.
 
-> ⚠ To secure your CAP application's metadata, configure `basic` authentication by setting the environment variables or updating the `.cdsrc.json` file. The plugin prioritizes environment variables, then checks `.cdsrc.json`. If neither is configured, metadata remains publicly accessible.
+> ⚠ By installing this plugin, the metadata describing your CAP application will be made openly accessible. If you want to secure your CAP application's metadata, configure `basic` authentication by setting the environment variables or updating the `.cdsrc.json` file. The plugin prioritizes environment variables, then checks `.cdsrc.json`. If neither is configured, metadata remains publicly accessible.
 >
 
 ## Requirements and Setup
