@@ -1,4 +1,4 @@
-[![REUSE status](https://api.reuse.software/badge/github.com/cap-js/ord)](https://api.reuse.software/info/github.com/cap-js/cds-plugin-for-ord)
+[![REUSE status](https://api.reuse.software/badge/github.com/cap-js/ord)](https://api.reuse.software/info/github.com/cap-js/ord)
 
 # CDS Plugin for ORD
 
