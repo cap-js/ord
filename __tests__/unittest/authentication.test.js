@@ -152,7 +152,7 @@ describe('authentication', () => {
         });
 
         it("should not authenticate because of wrongly configured unsupported authentication type", async () => {
-            cds.context.authConfig.types = [AUTHENTICATION_TYPE.UclMtls];
+            cds.context.authConfig.types = "UnsupportedAuthType";
             const req = {
                 headers: {}
             };
