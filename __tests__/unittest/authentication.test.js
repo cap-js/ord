@@ -45,13 +45,13 @@ describe('authentication', () => {
 
     describe('Initialization of authentication config data', () => {
         beforeAll(() => {
-            delete process.env.ORD_AUTH;
+            delete process.env.ORD_AUTH_TYPE;
             delete process.env.BASIC_AUTH;
             cds.env.authentication = {};
         });
 
         afterEach(() => {
-            delete process.env.ORD_AUTH;
+            delete process.env.ORD_AUTH_TYPE;
             delete process.env.BASIC_AUTH;
             cds.env.authentication = {};
         });
@@ -64,38 +64,38 @@ describe('authentication', () => {
 
 
         it('should return configuration when Open authentication type is provided', () => {
-            process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Open}"]`;
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}"]`;
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open] });
         });
 
         it('should return default configuration with error when invalid authentication type is provided', () => {
-            process.env.ORD_AUTH = '["InvalidType"]';
+            process.env.ORD_AUTH_TYPE = '["InvalidType"]';
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: 'Invalid authentication type' });
         });
 
         it('should return default configuration with error when Open and Basic authentication types are combined', () => {
-            process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}"]`;
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}"]`;
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: 'Open authentication cannot be combined with any other authentication type' });
         });
 
         it('should return default configuration with error when invalid JSON is provided', () => {
-            process.env.ORD_AUTH = 'typo["Open"typo]';
+            process.env.ORD_AUTH_TYPE = 'typo["Open"typo]';
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: expect.stringContaining('not valid JSON') });
         });
 
         it('should return default configuration with error when credentials are not valid JSON', () => {
-            process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Basic}"]`;
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = 'non-valid-json';
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: expect.stringContaining('not valid JSON') });
         });
 
         it('should return auth configuration containing credentials by using data from process.env.BASIC_AUTH', () => {
-            process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Basic}"]`;
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
@@ -108,7 +108,7 @@ describe('authentication', () => {
         });
 
         it('should return auth configuration containing credentials by using data from .cdsrc.json', () => {
-            process.env.ORD_AUTH = `["${AUTHENTICATION_TYPE.Basic}"]`;
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             cds.env.authentication.credentials = mockValidUser;
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
@@ -123,7 +123,7 @@ describe('authentication', () => {
 
     describe("Authentication middleware", () => {
         afterEach(() => {
-            delete process.env.ORD_AUTH;
+            delete process.env.ORD_AUTH_TYPE;
             delete process.env.BASIC_AUTH;
             cds.env.authentication = {}
             cds.context.authConfig = {};
