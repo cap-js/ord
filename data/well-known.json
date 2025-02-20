@@ -2,7 +2,7 @@
     "openResourceDiscoveryV1": {
         "documents": [
             {
-                "url": "/open-resource-discovery/v1/documents/1",
+                "url": "/ord/v1/documents/ord-document",
                 "accessStrategies": [
                     {
                         "type": "open"

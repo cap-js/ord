@@ -1,10 +1,15 @@
 const cds = require('@sap/cds');
-const { AUTHENTICATION_TYPE } = require('../../lib/constants');
-const { authenticate, createAuthConfig } = require('../../lib/authentication');
+const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require('../../lib/constants');
+const { authenticate, createAuthConfig, getAuthConfig } = require('../../lib/authentication');
 const { Logger } = require('../../lib/logger');
 
 describe('authentication', () => {
     const mockValidUser = { admin: "secret" };
+    const defaultAuthConfig = {
+        types: [AUTHENTICATION_TYPE.Open],
+        accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }]
+    };
+
     cds.context = {
         authConfig: {
             types: [AUTHENTICATION_TYPE.Open]
@@ -58,7 +63,7 @@ describe('authentication', () => {
 
         it('should return default configuration when no authentication type is provided', () => {
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open] });
+            expect(authConfig).toEqual(defaultAuthConfig);
             expect(Logger.error).toHaveBeenCalledWith('createAuthConfig:', 'No authorization type is provided. Defaulting to "Open" authentication');
         });
 
@@ -66,32 +71,32 @@ describe('authentication', () => {
         it('should return configuration when Open authentication type is provided', () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}"]`;
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open] });
+            expect(authConfig).toEqual(defaultAuthConfig);
         });
 
         it('should return default configuration with error when invalid authentication type is provided', () => {
             process.env.ORD_AUTH_TYPE = '["InvalidType"]';
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: 'Invalid authentication type' });
+            expect(authConfig.error).toEqual('Invalid authentication type');
         });
 
         it('should return default configuration with error when Open and Basic authentication types are combined', () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}"]`;
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: 'Open authentication cannot be combined with any other authentication type' });
+            expect(authConfig.error).toEqual('Open authentication cannot be combined with any other authentication type');
         });
 
         it('should return default configuration with error when invalid JSON is provided', () => {
             process.env.ORD_AUTH_TYPE = 'typo["Open"typo]';
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: expect.stringContaining('not valid JSON') });
+            expect(authConfig.error).toEqual(expect.stringContaining('not valid JSON'));
         });
 
         it('should return default configuration with error when credentials are not valid JSON', () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = 'non-valid-json';
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual({ types: [AUTHENTICATION_TYPE.Open], error: expect.stringContaining('not valid JSON') });
+            expect(authConfig.error).toEqual(expect.stringContaining('not valid JSON'));
         });
 
         it('should return auth configuration containing credentials by using data from process.env.BASIC_AUTH', () => {
@@ -100,6 +105,7 @@ describe('authentication', () => {
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                 credentials: {
                     username: "admin",
                     password: mockValidUser["admin"]
@@ -113,11 +119,54 @@ describe('authentication', () => {
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                 credentials: {
                     username: "admin",
                     password: mockValidUser["admin"]
                 }
             });
+        });
+    });
+
+    describe('Getting the authentication config data', () => {
+        afterAll(() => {
+            delete process.env.ORD_AUTH_TYPE;
+            cds.context = {};
+            jest.restoreAllMocks();
+        });
+
+        it('should return auth config from cds.context if provided', () => {
+            cds.context = {
+                authConfig: defaultAuthConfig
+            }
+            const authConfig = getAuthConfig();
+            expect(authConfig).toEqual(cds.context.authConfig);
+        });
+
+        it('should run createAuthConfig if cds.context undefined', () => {
+            cds.context = {};
+            const authConfig = getAuthConfig();
+
+            expect(authConfig).toEqual(defaultAuthConfig);
+            expect(authConfig).toEqual(cds.context.authConfig);
+        });
+
+        it('should run createAuthConfig if cds.context undefined', () => {
+            cds.context = {};
+
+            const authConfig = getAuthConfig();
+
+            expect(authConfig).toEqual(defaultAuthConfig);
+            expect(authConfig).toEqual(cds.context.authConfig);
+        });
+
+        it('should throw an error when auth configuration is not valid', () => {
+            cds.context = {};
+            process.env.ORD_AUTH_TYPE = '["InvalidType"]';
+            Logger.error = jest.fn();
+
+            expect(() => getAuthConfig()).toThrowError('Invalid authentication configuration');
+            expect(Logger.error).toHaveBeenCalledTimes(1);//With('Authentication configuration error: ', expect.anything);
         });
     });
 

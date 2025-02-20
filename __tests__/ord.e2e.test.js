@@ -1,5 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
+const { AUTHENTICATION_TYPE } = require('../lib/constants');
 
 describe("End-to-end test for ORD document", () => {
 
@@ -7,7 +8,7 @@ describe("End-to-end test for ORD document", () => {
         process.env.DEBUG = "true";
         jest.spyOn(cds, "context", "get").mockReturnValue({
             authConfig: {
-                types: ["open"]
+                types: [AUTHENTICATION_TYPE.Open]
             }
         });
     });

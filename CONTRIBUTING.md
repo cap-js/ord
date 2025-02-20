@@ -58,4 +58,4 @@ For testing an example app is available in the `xmpl` folder:
 npm install -g @sap/cds-dk
 cds w xmpl
 ```
-After the CAP app has started, open this link in your browser: http://localhost:4004/open-resource-discovery/v1/documents/1
+After the CAP app has started, open this link in your browser: http://localhost:4004/ord/v1/documents/ord-document
