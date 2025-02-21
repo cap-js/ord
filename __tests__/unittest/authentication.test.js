@@ -166,7 +166,7 @@ describe('authentication', () => {
             Logger.error = jest.fn();
 
             expect(() => getAuthConfig()).toThrowError('Invalid authentication configuration');
-            expect(Logger.error).toHaveBeenCalledTimes(1);//With('Authentication configuration error: ', expect.anything);
+            expect(Logger.error).toHaveBeenCalledTimes(1);
         });
     });
 
