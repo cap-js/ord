@@ -39,7 +39,7 @@ The `open` authentication type bypasses authentication checks.
 The server supports Basic Authentication through an environment variable that contains a JSON string mapping usernames to bcrypt-hashed passwords:
 
 ```bash
-BASIC_AUTH='{"admin":"$2y$05$TjeC./ljKi7VLTBbzjTVyOi6lQBYpzfXiZSfJiGECHVi0eEN6/QG."}'
+BASIC_AUTH='{"admin":"***"}'
 ```
 
 Alternatively, configure authentication in `.cdsrc.json`:
@@ -48,7 +48,7 @@ Alternatively, configure authentication in `.cdsrc.json`:
 "authentication": {
     "types": ["basic"],
     "credentials": {
-        "admin": "$2y$05$TjeC./ljKi7VLTBbzjTVyOi6lQBYpzfXiZSfJiGECHVi0eEN6/QG."
+        "admin": "***"
     }
 }
 ```
