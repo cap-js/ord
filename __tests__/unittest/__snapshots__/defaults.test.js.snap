@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`defaults $schema should return default value 1`] = `"https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json"`;
+exports[`defaults $schema should return default value 1`] = `"https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json"`;
 
 exports[`defaults baseTemplate should return default value 1`] = `
 {
