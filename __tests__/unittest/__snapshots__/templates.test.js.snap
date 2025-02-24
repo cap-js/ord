@@ -4,18 +4,14 @@ exports[`templates createAPIResourceTemplate should create API resource template
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "MyService",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": undefined,
-      },
-    ],
+    "description": "Description for MyService",
     "entryPoints": [
       "/odata/v4/my",
     ],
     "extensible": {
       "supported": "no",
     },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:apiResource:MyService:v1",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
@@ -31,7 +27,7 @@ exports[`templates createAPIResourceTemplate should create API resource template
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -41,10 +37,10 @@ exports[`templates createAPIResourceTemplate should create API resource template
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
       },
     ],
-    "shortDescription": "MyService",
+    "shortDescription": "Short description of MyService",
     "title": "MyService",
     "version": "1.0.0",
     "visibility": "public",
@@ -52,76 +48,124 @@ exports[`templates createAPIResourceTemplate should create API resource template
 ]
 `;
 
-exports[`templates createEventResourceTemplate should create event resource template correctly 1`] = `
+exports[`templates createEntityTypeTemplate should return entity type with default version, title and level:sub-entity 1`] = `
 {
-  "description": "CAP Event resource describing events / messages.",
+  "description": "Description for SomeAribaDummyEntity",
   "extensible": {
     "supported": "no",
   },
-  "ordId": "customer.testNamespace:eventResource:MyService:v1",
-  "partOfGroups": [
-    "sap.cds:service:customer.testNamespace:MyService",
-  ],
-  "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "level": "sub-entity",
+  "localId": "SomeAribaDummyEntity",
+  "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v1",
+  "partOfPackage": "sap.test.cdsrc.sample:package:test-entityType:v1",
   "releaseStatus": "active",
-  "resourceDefinitions": [
-    {
-      "accessStrategies": [
-        {
-          "type": "open",
-        },
-      ],
-      "mediaType": "application/json",
-      "type": "asyncapi-v2",
-      "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.asyncapi2.json",
-    },
-  ],
-  "shortDescription": "MyService event resource",
-  "title": "ODM testAppName Events",
+  "shortDescription": "Short description of SomeAribaDummyEntity",
+  "title": "SomeAribaDummyEntity",
   "version": "1.0.0",
   "visibility": "public",
 }
+`;
+
+exports[`templates createEntityTypeTemplate should return entity type with incorrect version, title and level:root-entity 1`] = `
+{
+  "description": "Description for SomeAribaDummyEntity",
+  "extensible": {
+    "supported": "no",
+  },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "level": "root-entity",
+  "localId": "SomeAribaDummyEntity",
+  "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v3b",
+  "partOfPackage": "sap.test.cdsrc.sample:package:test-entityType:v1",
+  "releaseStatus": "active",
+  "shortDescription": "Short description of SomeAribaDummyEntity",
+  "title": "Title of SomeAribaDummyEntity",
+  "version": "3b.0.0",
+  "visibility": "public",
+}
+`;
+
+exports[`templates createEventResourceTemplate should create event resource template correctly 1`] = `
+[
+  {
+    "description": "CAP Event resource describing events / messages.",
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:eventResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "asyncapi-v2",
+        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
+      },
+    ],
+    "shortDescription": "MyService event resource",
+    "title": "ODM testAppName Events",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
 `;
 
 exports[`templates createEventResourceTemplate should create event resource template correctly with packageIds including namespace 1`] = `
-{
-  "description": "CAP Event resource describing events / messages.",
-  "extensible": {
-    "supported": "no",
-  },
-  "ordId": "customer.testNamespace:eventResource:MyService:v1",
-  "partOfGroups": [
-    "sap.cds:service:customer.testNamespace:MyService",
-  ],
-  "partOfPackage": "customer.testNamespace:package:test:v1",
-  "releaseStatus": "active",
-  "resourceDefinitions": [
-    {
-      "accessStrategies": [
-        {
-          "type": "open",
-        },
-      ],
-      "mediaType": "application/json",
-      "type": "asyncapi-v2",
-      "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.asyncapi2.json",
+[
+  {
+    "description": "CAP Event resource describing events / messages.",
+    "extensible": {
+      "supported": "no",
     },
-  ],
-  "shortDescription": "MyService event resource",
-  "title": "ODM testAppName Events",
-  "version": "1.0.0",
-  "visibility": "public",
-}
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:eventResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:test:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "asyncapi-v2",
+        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
+      },
+    ],
+    "shortDescription": "MyService event resource",
+    "title": "ODM testAppName Events",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
 `;
 
-exports[`templates ordExtension should add apiResources with ord extensions correctly 1`] = `
+exports[`templates ordExtension should add apiResources with ORD Extension "visibility=public" 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "MyService",
+    "description": "Description for MyService",
     "entityTypeMappings": [
       {
-        "entityTypeTargets": "sap.odm:entityType:test:v1",
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test:v1",
+          },
+        ],
       },
     ],
     "entryPoints": [
@@ -130,6 +174,7 @@ exports[`templates ordExtension should add apiResources with ord extensions corr
     "extensible": {
       "supported": "yes",
     },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:apiResource:MyService:v1",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
@@ -145,7 +190,7 @@ exports[`templates ordExtension should add apiResources with ord extensions corr
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -155,44 +200,55 @@ exports[`templates ordExtension should add apiResources with ord extensions corr
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
       },
     ],
     "shortDescription": "short description for test MyService apiResource",
     "title": "This is test MyService apiResource title",
     "version": "2.0.0",
-    "visibility": "private",
+    "visibility": "public",
   },
 ]
 `;
 
-exports[`templates ordExtension should add events with ord extensions correctly 1`] = `
-{
-  "description": "CAP Event resource describing events / messages.",
-  "extensible": {
-    "supported": "yes",
-  },
-  "ordId": "customer.testNamespace:eventResource:MyService:v1",
-  "partOfGroups": [
-    "sap.cds:service:customer.testNamespace:MyService",
-  ],
-  "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
-  "releaseStatus": "active",
-  "resourceDefinitions": [
-    {
-      "accessStrategies": [
-        {
-          "type": "open",
-        },
-      ],
-      "mediaType": "application/json",
-      "type": "asyncapi-v2",
-      "url": "/.well-known/open-resource-discovery/v1/api-metadata/MyService.asyncapi2.json",
+exports[`templates ordExtension should add events with ORD Extension "visibility=public" 1`] = `
+[
+  {
+    "description": "CAP Event resource describing events / messages.",
+    "extensible": {
+      "supported": "yes",
     },
-  ],
-  "shortDescription": "short description for test MyService event",
-  "title": "This is test MyService event title",
-  "version": "2.0.0",
-  "visibility": "private",
-}
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:eventResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "asyncapi-v2",
+        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
+      },
+    ],
+    "shortDescription": "short description for test MyService event",
+    "title": "This is test MyService event title",
+    "version": "2.0.0",
+    "visibility": "public",
+  },
+]
 `;
+
+exports[`templates ordExtension should not add apiResources with ORD Extension "visibility=internal" 1`] = `[]`;
+
+exports[`templates ordExtension should not add apiResources with ORD Extension "visibility=private" 1`] = `[]`;
+
+exports[`templates ordExtension should not add events with ORD Extension "visibility=internal" 1`] = `[]`;
+
+exports[`templates ordExtension should not add events with ORD Extension "visibility=private" 1`] = `[]`;

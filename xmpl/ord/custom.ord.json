@@ -3,7 +3,7 @@
     "openResourceDiscovery": "should not update since not defined in cdsrc.json",
     "packages": [
         {
-            "description": "Description for capire bookshop ord sample version 2",
+            "description": "Description of capire bookshop ord sample version 2",
             "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
             "partOfProducts": [
                 "customer:product:capire.bookshop.ord.sample:"
@@ -14,14 +14,47 @@
             "version": "2.0.0"
         },
         {
+            "description": "Description of capire bookshop ord sample version 1.0.1",
             "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-            "shortDescription": null,
+            "shortDescription": "Short description for capire bookshop ord sample version 1.0.1",
+            "title": "capire bookshop ord sample",
+            "vendor": "customer:vendor:Customer:",
             "version": "1.0.1"
         }
     ],
     "apiResources": [
         {
+            "title": "This is the title of Manually Implemented Service",
             "partOfGroups": null,
+            "shortDescription": "Short description of Manually Implemented Service",
+            "description": "Description for Manually Implemented Service",
+            "visibility": "public",
+            "releaseStatus": "active",
+            "version": "1.0.0",
+            "partOfPackage": "sap.sample:package:capireordsample-api:v1",
+            "apiProtocol": "odata-v4",
+            "resourceDefinitions": [
+                {
+                    "type": "openapi-v3",
+                    "mediaType": "application/json",
+                    "url": "/ord/v1/sap.sample:apiResource:manualImplementedService:v1/AdminService.oas3.json",
+                    "accessStrategies": [
+                        {
+                            "type": "sap.businesshub:basic-auth:v1"
+                        }
+                    ]
+                },
+                {
+                    "type": "edmx",
+                    "mediaType": "application/xml",
+                    "url": "/ord/v1/sap.sample:apiResource:manualImplementedService:v1/AdminService.edmx",
+                    "accessStrategies": [
+                        {
+                            "type": "sap.businesshub:basic-auth:v1"
+                        }
+                    ]
+                }
+            ],
             "ordId": "sap.sample:apiResource:manualImplementedService:v1",
             "entityTypeMappings": [
                 {
@@ -33,7 +66,7 @@
                 }
             ],
             "extensible": {
-                "supported": "yes"
+                "supported": "no"
             }
         }
     ]

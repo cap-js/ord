@@ -36,3 +36,32 @@ The following rule governs code contributions:
 * We use GitHub issues to track bugs and enhancement requests.
 
 * Please provide as much context as possible when you open an issue. The information you provide must be comprehensive enough to reproduce that issue for the assignee.
+
+## Development Setup
+
+As this is a CAP plugin, it is best to develop in the following calesi environment:
+
+```bash
+git clone --recursive https://github.com/cap-js/calesi.git
+cd calesi
+npm i
+```
+
+Then clone this repository inside the calesi projects plugin folder:
+
+```bash
+cd plugins
+git clone https://github.com/cap-js/ORD
+cd ORD
+npm i
+```
+
+For testing an example app is available in the `xmpl` folder:
+
+```bash
+#If not already globally installed, install cds-dk
+npm install -g @sap/cds-dk
+cds w xmpl
+```
+
+After the CAP app has started, open this link in your browser: <http://localhost:4004/.well-known/open-resource-discovery>

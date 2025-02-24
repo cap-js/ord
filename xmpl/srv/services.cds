@@ -1,3 +1,4 @@
+using {sap.cds.demo as my} from '../db/schema';
 using {
     ProcessorService,
     AdminService
@@ -25,11 +26,19 @@ extend service ProcessorService {
 @AsyncAPI.Title        : 'SAP Incident Management'
 @AsyncAPI.SchemaVersion: '1.0'
 service LocalService {
-    event TitleChange2 : {
+    entity Entertainment as projection on my.Cinema;
+
+    entity Film as projection on my.Movie;
+
+    event TitleChange : {
         ID    : Integer;
-        title : String @title: 'Title';
+        title : String @title: 'Changed Title';
     }
 }
+
+annotate LocalService with @ORD.Extensions: {
+    title         : 'This is Local Service title'
+};
 
 annotate AdminService with @ORD.Extensions: {
     title         : 'This is Admin Service title',
