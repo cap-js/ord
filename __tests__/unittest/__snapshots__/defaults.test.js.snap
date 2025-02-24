@@ -12,7 +12,7 @@ exports[`defaults baseTemplate should return default value 1`] = `
             "type": "open",
           },
         ],
-        "url": "/open-resource-discovery/v1/documents/1",
+        "url": "/ord/v1/documents/ord-document",
       },
     ],
   },

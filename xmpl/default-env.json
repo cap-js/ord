@@ -1,0 +1,11 @@
+{
+    "SERVER_HOST": "0.0.0.0",
+    "SERVER_PORT": 8080,
+    "ORD_BASE_URL": "http://localhost:8080",
+    "ORD_SOURCE_TYPE": "local",
+    "ORD_DIRECTORY": "./example",
+    "ORD_AUTH_TYPE": ["basic"],
+    "BASIC_AUTH": {
+        "admin": "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"
+    }
+}
