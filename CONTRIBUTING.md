@@ -64,4 +64,4 @@ npm install -g @sap/cds-dk
 cds w xmpl
 ```
 
-After the CAP app has started, open this link in your browser: <http://localhost:4004/ord/v1/.well-known/open-resource-discovery>
+After the CAP app has started, open this link in your browser: <http://localhost:4004/.well-known/open-resource-discovery>
