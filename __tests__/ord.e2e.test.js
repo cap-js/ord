@@ -1,7 +1,23 @@
 const cds = require("@sap/cds");
 const path = require("path");
+const { AUTHENTICATION_TYPE } = require('../lib/constants');
 
 describe("End-to-end test for ORD document", () => {
+
+    beforeAll(() => {
+        process.env.DEBUG = "true";
+        jest.spyOn(cds, "context", "get").mockReturnValue({
+            authConfig: {
+                types: [AUTHENTICATION_TYPE.Open]
+            }
+        });
+    });
+
+    afterAll(() => {
+        jest.clearAllMocks();
+        jest.resetAllMocks();
+    });
+
     describe("Tests for default ORD document when .cdsrc.json is present", () => {
         let csn, ord;
 
@@ -14,9 +30,20 @@ describe("End-to-end test for ORD document", () => {
 
         afterEach(() => {
             cds.root = path.join(__dirname, "bookshop");
+            delete cds.env.export;
         });
 
         test("Successfully create ORD Documents with defaults", () => {
+            const document = ord(csn);
+            expect(document).toMatchSnapshot();
+        });
+
+        test("Successfully create ORD Documents with defaults and applicationNamespace configured incorrectly", () => {
+            cds.env.export = {
+                asyncapi: {
+                    applicationNamespace: "non-ord-namespace"
+                }
+            };
             const document = ord(csn);
             expect(document).toMatchSnapshot();
         });

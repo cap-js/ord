@@ -1,3 +1,11 @@
+const cds = require('@sap/cds');
+const { AUTHENTICATION_TYPE } = require('../../lib/constants');
+jest.spyOn(cds, "context", "get").mockReturnValue({
+    authConfig: {
+        types: [AUTHENTICATION_TYPE.Open],
+        accessStrategies: [{ type: AUTHENTICATION_TYPE.Open}]
+    }
+});
 const defaults = require('../../lib/defaults');
 
 describe('defaults', () => {

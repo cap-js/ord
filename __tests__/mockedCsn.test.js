@@ -1,5 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
+const { AUTHENTICATION_TYPE } = require('../lib/constants');
 
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;
@@ -15,6 +16,11 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     beforeAll(() => {
         cds.root = path.join(__dirname, "bookshop");
+        jest.spyOn(cds, "context", "get").mockReturnValue({
+            authConfig: {
+                types: [AUTHENTICATION_TYPE.Open]
+            }
+        });
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
     });
