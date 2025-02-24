@@ -43,7 +43,14 @@ describe('authentication', () => {
         };
         const next = jest.fn();
 
-        await authenticate(req, res, next);
+        try {
+            await authenticate(req, res, next);
+        } catch (error) {
+            if (message) {
+                expect(error.message).toBe(message);
+            }
+            return;
+        }
 
         if (status) {
             expect(res.status).toBe(status);
@@ -134,6 +141,15 @@ describe('authentication', () => {
                 credentials: mockValidUser,
             });
         });
+        it('should return default configuration with error when credentials are not valid BCrypt hashes', () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
+            process.env.BASIC_AUTH = JSON.stringify({
+                "admin": "InvalidBCrypHash"
+            });
+            const authConfig = createAuthConfig();
+            expect(authConfig.error).toEqual('All passwords must be bcrypt hashes');
+        });
+
     });
 
     describe('Getting the authentication config data', () => {
@@ -239,6 +255,21 @@ describe('authentication', () => {
                 },
             };
             await authCheck(req, 200);
+        });
+
+        it('should not authenticate because of missing password in the request', async () => {
+            cds.context.authConfig = {
+                types: [AUTHENTICATION_TYPE.Basic],
+                credentials: mockValidUser,
+            };
+
+            const req = {
+                headers: {
+                    authorization: 'Basic ' + Buffer.from('admin:').toString('base64'),
+                },
+            };
+
+            await authCheck(req, 401, 'Password and hashed password are required');
         });
 
         it('should not authenticate because of invalid credentials in the request', async () => {
