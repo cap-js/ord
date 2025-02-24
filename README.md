@@ -105,7 +105,7 @@ require("@cap-js/ord");
 ```
 
 ```js
-const csn = await cds.load(cds.env.folders.srv);
+const csn = cds.context?.model || cds.model;
 const ord = cds.compile.to.ord(csn);
 ```
 
