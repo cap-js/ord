@@ -11,7 +11,6 @@ You can use this information to construct a static metadata catalog or to perfor
 For more information, have a look at the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) page.
 
 > ⚠ By installing this plugin, the metadata describing your CAP application will be made openly accessible. If you want to secure your CAP application's metadata, configure `basic` authentication by setting the environment variables or updating the `.cdsrc.json` file. The plugin prioritizes environment variables, then checks `.cdsrc.json`. If neither is configured, metadata remains publicly accessible.
->
 
 ## Requirements and Setup
 
@@ -25,8 +24,8 @@ npm install @cap-js/ord
 
 To enforce authentication in the ORD Plugin, set the following environment variables:
 
-* `ORD_AUTH_TYPE`: Specifies the authentication types.
-* `BASIC_AUTH`: Contains credentials for `basic` authentication.
+- `ORD_AUTH_TYPE`: Specifies the authentication types.
+- `BASIC_AUTH`: Contains credentials for `basic` authentication.
 
 If `ORD_AUTH_TYPE` is not set, the application starts without authentication. This variable accepts `open` and `basic` (UCL-mTLS is also planned).
 > Note: `open` cannot be combined with `basic` or any other (future) authentication types.
@@ -35,12 +34,12 @@ If `ORD_AUTH_TYPE` is not set, the application starts without authentication. Th
 
 The `open` authentication type bypasses authentication checks.
 
-#### Basic
+#### Basic Authentication
 
-To use `basic` authentication, set `ORD_AUTH_TYPE` to `["basic"]` and provide credentials in `BASIC_AUTH`. Example:
+The server supports Basic Authentication through an environment variable that contains a JSON string mapping usernames to bcrypt-hashed passwords:
 
 ```bash
-BASIC_AUTH='{"user":"password"}'
+BASIC_AUTH='{"admin":"$2y$05$TjeC./ljKi7VLTBbzjTVyOi6lQBYpzfXiZSfJiGECHVi0eEN6/QG."}'
 ```
 
 Alternatively, configure authentication in `.cdsrc.json`:
@@ -49,10 +48,52 @@ Alternatively, configure authentication in `.cdsrc.json`:
 "authentication": {
     "types": ["basic"],
     "credentials": {
-        "user": "password"
+        "admin": "$2y$05$TjeC./ljKi7VLTBbzjTVyOi6lQBYpzfXiZSfJiGECHVi0eEN6/QG."
     }
 }
 ```
+
+To generate bcrypt hashes, use the [htpasswd](https://httpd.apache.org/docs/2.4/programs/htpasswd.html) utility:
+
+```bash
+htpasswd -Bnb <user> <password>
+```
+
+This will output something like `admin:$2y$05$...` - use only the hash part (starting with `$2y$`) in your `BASIC_AUTH` JSON.
+
+> [!IMPORTANT]
+> Make sure to use strong passwords and handle the BASIC_AUTH environment variable securely. Never commit real credentials or .env files to version control.
+
+<details>
+<summary>Using htpasswd in your environment</summary>
+
+- **Platform independent**:
+
+    > Prerequisite is to have [NodeJS](https://nodejs.org/en) installed on the machine.
+
+    ```bash
+    npm install -g htpasswd
+    ```
+
+    After installing package globally, command `htpasswd` should be available in the Terminal.
+
+- **macOS**:
+
+    Installation of any additional packages is not required. Utility `htpasswd` is available in Terminal by default.
+
+- **Linux**:
+
+    Install apache2-utils package:
+
+    ```bash
+    # Debian/Ubuntu
+    sudo apt-get install apache2-utils
+
+    # RHEL/CentOS
+    sudo yum install httpd-tools
+    ```
+
+</details>
 
 ### Usage
 

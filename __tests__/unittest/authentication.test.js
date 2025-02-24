@@ -4,16 +4,17 @@ const { authenticate, createAuthConfig, getAuthConfig } = require('../../lib/aut
 const { Logger } = require('../../lib/logger');
 
 describe('authentication', () => {
-    const mockValidUser = { admin: "secret" };
+    // The bcrypt hash decrypted is: secret
+    const mockValidUser = { admin: '$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW' };
     const defaultAuthConfig = {
         types: [AUTHENTICATION_TYPE.Open],
-        accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }]
+        accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
     };
 
     cds.context = {
         authConfig: {
-            types: [AUTHENTICATION_TYPE.Open]
-        }
+            types: [AUTHENTICATION_TYPE.Open],
+        },
     };
 
     beforeAll(() => {
@@ -24,16 +25,25 @@ describe('authentication', () => {
         jest.restoreAllMocks();
     });
 
-    function authCheck(req, status, message, header) {
+    async function authCheck(req, status, message, header) {
         const res = {
-            status: jest.fn().mockImplementation(value => { res.status = value; return res; }),
-            setHeader: jest.fn().mockImplementation((key, value) => { res.header = { [key]: value }; return res; }),
+            status: jest.fn().mockImplementation((value) => {
+                res.status = value;
+                return res;
+            }),
+            setHeader: jest.fn().mockImplementation((key, value) => {
+                res.header = { [key]: value };
+                return res;
+            }),
             end: jest.fn(),
-            send: jest.fn().mockImplementation(message => { res.message = message; return res; })
+            send: jest.fn().mockImplementation((message) => {
+                res.message = message;
+                return res;
+            }),
         };
         const next = jest.fn();
 
-        authenticate(req, res, next);
+        await authenticate(req, res, next);
 
         if (status) {
             expect(res.status).toBe(status);
@@ -64,9 +74,11 @@ describe('authentication', () => {
         it('should return default configuration when no authentication type is provided', () => {
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual(defaultAuthConfig);
-            expect(Logger.error).toHaveBeenCalledWith('createAuthConfig:', 'No authorization type is provided. Defaulting to "Open" authentication');
+            expect(Logger.error).toHaveBeenCalledWith(
+                'createAuthConfig:',
+                'No authorization type is provided. Defaulting to "Open" authentication'
+            );
         });
-
 
         it('should return configuration when Open authentication type is provided', () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}"]`;
@@ -83,7 +95,9 @@ describe('authentication', () => {
         it('should return default configuration with error when Open and Basic authentication types are combined', () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}"]`;
             const authConfig = createAuthConfig();
-            expect(authConfig.error).toEqual('Open authentication cannot be combined with any other authentication type');
+            expect(authConfig.error).toEqual(
+                'Open authentication cannot be combined with any other authentication type'
+            );
         });
 
         it('should return default configuration with error when invalid JSON is provided', () => {
@@ -106,10 +120,7 @@ describe('authentication', () => {
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
-                credentials: {
-                    username: "admin",
-                    password: mockValidUser["admin"]
-                }
+                credentials: mockValidUser,
             });
         });
 
@@ -120,10 +131,7 @@ describe('authentication', () => {
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
-                credentials: {
-                    username: "admin",
-                    password: mockValidUser["admin"]
-                }
+                credentials: mockValidUser,
             });
         });
     });
@@ -137,8 +145,8 @@ describe('authentication', () => {
 
         it('should return auth config from cds.context if provided', () => {
             cds.context = {
-                authConfig: defaultAuthConfig
-            }
+                authConfig: defaultAuthConfig,
+            };
             const authConfig = getAuthConfig();
             expect(authConfig).toEqual(cds.context.authConfig);
         });
@@ -170,87 +178,81 @@ describe('authentication', () => {
         });
     });
 
-    describe("Authentication middleware", () => {
+    describe('Authentication middleware', () => {
         afterEach(() => {
             delete process.env.ORD_AUTH_TYPE;
             delete process.env.BASIC_AUTH;
-            cds.env.authentication = {}
+            cds.env.authentication = {};
             cds.context.authConfig = {};
         });
 
-        it("should have access with default open authentication", async () => {
-            authCheck({ headers: {} }, 200);
+        it('should have access with default open authentication', async () => {
+            await authCheck({ headers: {} }, 200);
         });
 
-        it("should not authenticate because of missing authorization header in case of any non-open authentication", async () => {
+        it('should not authenticate because of missing authorization header in case of any non-open authentication', async () => {
             cds.context.authConfig.types = [AUTHENTICATION_TYPE.Basic];
             const req = {
-                headers: {}
+                headers: {},
             };
 
-            authCheck(req, 401, "Authentication required.");
+            await authCheck(req, 401, 'Authentication required.');
         });
 
         it("should not authenticate and set header 'WWW-Authenticate' because of missing authorization header", async () => {
             cds.context.authConfig.types = [AUTHENTICATION_TYPE.Basic];
             const req = {
-                headers: {}
+                headers: {},
             };
 
-            authCheck(req, 401, "Authentication required.", "401");
+            await authCheck(req, 401, 'Authentication required.', '401');
         });
 
-        it("should not authenticate because of wrongly configured unsupported authentication type", async () => {
-            cds.context.authConfig.types = "UnsupportedAuthType";
+        it('should not authenticate because of wrongly configured unsupported authentication type', async () => {
+            cds.context.authConfig.types = 'UnsupportedAuthType';
             const req = {
-                headers: {}
+                headers: {},
             };
 
-            authCheck(req, 401, "Not authorized");
+            await authCheck(req, 401, 'Not authorized');
         });
 
-        it("should not authenticate because of invalid name of authentication type in the request header", async () => {
+        it('should not authenticate because of invalid name of authentication type in the request header', async () => {
             cds.context.authConfig.types = [AUTHENTICATION_TYPE.Basic];
             const req = {
                 headers: {
-                    authorization: "Invalid " + Buffer.from(`invalid`).toString("base64")
-                }
+                    authorization: 'Invalid ' + Buffer.from(`invalid`).toString('base64'),
+                },
             };
-            authCheck(req, 401, "Invalid authentication type");
+            await authCheck(req, 401, 'Invalid authentication type');
         });
 
-        it("should authenticate with valid credentials in the request", async () => {
+        it('should authenticate with valid credentials in the request', async () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic],
-                credentials: {
-                    username: "admin",
-                    password: "secret"
-                }
+                credentials: mockValidUser,
             };
 
             const req = {
                 headers: {
-                    authorization: "Basic " + Buffer.from(`admin:${mockValidUser["admin"]}`).toString("base64")
-                }
+                    authorization: 'Basic ' + Buffer.from('admin:secret').toString('base64'),
+                },
             };
-            authCheck(req, 200);
+            await authCheck(req, 200);
         });
 
-        it("should not authenticate because of invalid credentials in the request", async () => {
+        it('should not authenticate because of invalid credentials in the request', async () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic],
-                credentials: {
-                    username: "admin",
-                    password: "secret"
-                }
+                credentials: mockValidUser,
             };
 
             const req = {
                 headers: {
-                    authorization: "Basic " + Buffer.from("invalid:invalid").toString("base64")
-                }
+                    authorization: 'Basic ' + Buffer.from('invalid:invalid').toString('base64'),
+                },
             };
-            authCheck(req, 401, "Invalid credentials");
+            await authCheck(req, 401, 'Invalid credentials');
         });
     });
 });
