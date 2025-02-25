@@ -62,6 +62,11 @@ export class OrdService extends cds.ApplicationService {
      *
      * NOTE: we add cds.middlewares.before to the route, which gives us all
      * the context and auth handling, which is also available to CAP services.
+     *
+     * TODO: Paths should be the following:
+     * - http://localhost:4004/ord/v1/documents/ord-document
+     * - http://localhost:4004/ord/v1/:ordId/:fileName
+     * - http://localhost:4004/.well-known/open-resource-discovery
      */
     cds.app.get (`${this.path}/:api?/:service?`, cds.middlewares.before, req => {
       const { api, service } = req.params
