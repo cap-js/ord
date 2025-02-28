@@ -20,6 +20,8 @@ For more information, have a look at the [Open Resource Discovery](https://sap.g
 npm install @cap-js/ord
 ```
 
+> Note: `@cap-js/openapi` and `@cap-js/asyncapi` packages have been migrated from peerDependencies to dependencies in `package.json`. As a result, using globally installed packages may lead to conflicts.  If conflicts arises do `npm uninstall -g @cap-js/openapi @cap-js/asyncapi` and then `npm install` in your project directory.
+
 ### Authentication
 
 To enforce authentication in the ORD Plugin, set the following environment variables:
