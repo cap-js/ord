@@ -1,14 +1,22 @@
 {
-  "name": "@capire/ord-sample",
-  "description": "this is a xmpl application description",
-  "version": "1.0.0",
-  "dependencies": {
-    "@cap-js/ord": "*",
-    "@capire/incidents": "*",
-    "@sap/cds": "*"
-  },
-  "devDependencies": {
-    "@cap-js/sqlite": "*"
-  },
-  "private": true
+    "name": "@capire/ord-sample",
+    "description": "this is a xmpl application description",
+    "version": "1.0.0",
+    "dependencies": {
+        "@cap-js/ord": "*",
+        "@capire/incidents": "*",
+        "@sap/cds": "*"
+    },
+    "devDependencies": {
+        "@cap-js/sqlite": "*"
+    },
+    "private": true,
+    "cds": {
+        "requires": {
+            "SAP ORD Service": {
+                "model": "@cap-js/ord/srv/ord-service",
+                "service": "OrdService"
+            }
+        }
+    }
 }
