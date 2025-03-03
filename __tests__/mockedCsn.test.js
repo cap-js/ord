@@ -113,7 +113,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.apiResources).toHaveLength(2)
+            expect(document.apiResources).toHaveLength(1)
             const dataProductApiResources = document.apiResources.filter(resource => resource.implementationStandard === "sap.dp:data-subscription-api:v1");
             expect(dataProductApiResources).toHaveLength(1);
             expect(dataProductApiResources[0].resourceDefinitions).toHaveLength(1);
