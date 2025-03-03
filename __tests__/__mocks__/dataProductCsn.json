@@ -1,0 +1,127 @@
+{
+    "namespace": "sap.capire.incidents",
+    "definitions": {
+        "sap.capire.incidents.LocalService": {
+            "kind": "service",
+            "@AsyncAPI.Title": "SAP Incident Management",
+            "@AsyncAPI.SchemaVersion": "1.0",
+            "@ORD.Extensions.title": "This is Local Service title",
+            "@DataIntegration.dataProduct.type": "primary"
+        },
+        "sap.capire.incidents.LocalService.Entertainment": {
+            "kind": "entity",
+            "@ODM.root": true,
+            "@ODM.entityName": "Cinema",
+            "@ODM.oid": "id",
+            "@title": "Cinema Title",
+            "projection": {
+                "from": {
+                    "ref": ["sap.cds.demo.Cinema"]
+                }
+            },
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "name": {
+                    "type": "cds.String",
+                    "length": 50
+                },
+                "location": {
+                    "type": "cds.String",
+                    "length": 100
+                }
+            }
+        },
+        "sap.capire.incidents.LocalService.Film": {
+            "kind": "entity",
+            "@ObjectModel.compositionRoot": true,
+            "@EntityRelationship.entityType": "sap.sample:Movie",
+            "@title": "Movie Title",
+            "projection": {
+                "from": {
+                    "ref": ["sap.cds.demo.Movie"]
+                }
+            },
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "title": {
+                    "type": "cds.String",
+                    "length": 100
+                },
+                "genre": {
+                    "type": "cds.String",
+                    "length": 50
+                },
+                "duration": {
+                    "type": "cds.Integer"
+                }
+            }
+        },
+        "sap.capire.incidents.LocalService.TitleChange": {
+            "kind": "event",
+            "elements": {
+                "ID": {
+                    "type": "cds.Integer"
+                },
+                "title": {
+                    "@title": "Changed Title",
+                    "type": "cds.String"
+                }
+            }
+        },
+        "sap.cds.demo.Cinema": {
+            "kind": "entity",
+            "@ODM.root": true,
+            "@ODM.entityName": "Cinema",
+            "@ODM.oid": "id",
+            "@title": "Cinema Title",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "name": {
+                    "type": "cds.String",
+                    "length": 50
+                },
+                "location": {
+                    "type": "cds.String",
+                    "length": 100
+                }
+            }
+        },
+        "sap.cds.demo.Movie": {
+            "kind": "entity",
+            "@ObjectModel.compositionRoot": true,
+            "@EntityRelationship.entityType": "sap.sample:Movie",
+            "@title": "Movie Title",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "title": {
+                    "type": "cds.String",
+                    "length": 100
+                },
+                "genre": {
+                    "type": "cds.String",
+                    "length": 50
+                },
+                "duration": {
+                    "type": "cds.Integer"
+                }
+            }
+        }
+    },
+    "meta": {
+        "creator": "CDS Compiler v5.4.4",
+        "flavor": "inferred"
+    },
+    "$version": "2.0"
+}
