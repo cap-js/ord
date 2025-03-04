@@ -11,7 +11,8 @@ const {
     createEntityTypeMappingsItemTemplate,
     createGroupsTemplateForService,
     createAPIResourceTemplate,
-    createEventResourceTemplate
+    createEventResourceTemplate,
+    createDataProductTemplate
 } = require('../../lib/templates');
 
 describe('templates', () => {
@@ -315,4 +316,180 @@ describe('templates', () => {
             expect(eventResourceTemplate).toEqual([]);
         });
     });
+    describe('createEntityTypeTemplate', () => {
+        const packageIds = ['sap.test.cdsrc.sample:package:test-entityType-public:v1', 'sap.test.cdsrc.sample:package:test-entityType-private:v1'];
+
+        it('should mark EntityType as private if referenced by a private API', () => {
+            const entity = {
+                ordId: "sap.sm:entityType:PrivateEntity:v1",
+                entityName: "PrivateEntity",
+            };
+
+            const updatedAppConfig = {
+                ...appConfig,
+                apiResources: [{
+                    ordId: "sap.sm:apiResource:SomeAPI:v1",
+                    visibility: "private",
+                    entityTypeMappings: [{ entityTypeTargets: [{ ordId: entity.ordId }] }]
+                }]
+            };
+
+            const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
+            expect(entityType.visibility).toEqual('private');
+        });
+
+        it('should mark EntityType as private if referenced by a private DataProduct', () => {
+            const entity = {
+                ordId: "sap.sm:entityType:PrivateEntity:v1",
+                entityName: "PrivateEntity",
+            };
+
+            const updatedAppConfig = {
+                ...appConfig,
+                dataProducts: [{
+                    ordId: "sap.sm:dataProduct:SomeDataProduct:v1",
+                    visibility: "private",
+                    entityTypes: [entity.ordId]
+                }]
+            };
+
+            const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
+            expect(entityType.visibility).toEqual('private');
+        });
+    });
+
+    describe('createAPIResourceTemplate', () => {
+        const packageIds = [
+            'sap.test.cdsrc.sample:package:test-api-public:v1',
+            'sap.test.cdsrc.sample:package:test-api-private:v1'
+        ];
+
+        it('should populate entityTypeMappings with referenced entity types', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = {}; // Falls nötig, Mock hier anpassen
+
+            const expectedOrdId = `${appConfig.ordNamespace}:apiResource:${serviceName}:v1`;
+
+            // EntityTypes mit passendem entityTypeMappings-Eintrag
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypes: [
+                    {
+                        ordId: "sap.sm:entityType:PrivateEntity:v1",
+                        visibility: "private",
+                        entityTypeMappings: [{ entityTypeTargets: [{ ordId: expectedOrdId }] }]
+                    },
+                    {
+                        ordId: "sap.sm:entityType:PublicEntity:v1",
+                        visibility: "public",
+                        entityTypeMappings: [{ entityTypeTargets: [{ ordId: expectedOrdId }] }]
+                    }
+                ]
+            };
+
+            const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+            // Sicherstellen, dass entityTypeMappings befüllt ist
+            expect(apiResource[0].entityTypeMappings).toBeDefined();
+            expect(apiResource[0].entityTypeMappings).toHaveLength(1);
+
+            // Sicherstellen, dass zwei EntityTypes korrekt in entityTypeTargets enthalten sind
+            expect(apiResource[0].entityTypeMappings[0].entityTypeTargets).toHaveLength(2);
+            expect(apiResource[0].entityTypeMappings[0].entityTypeTargets).toEqual([
+                { ordId: "sap.sm:entityType:PrivateEntity:v1" },
+                { ordId: "sap.sm:entityType:PublicEntity:v1" }
+            ]);
+        });
+    });
+
+
+
+
+    describe('createEventResourceTemplate', () => {
+        it('should correctly set referencedEntityTypes for Event Resource', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = linkedModel;
+            const packageIds = ['sap.test.cdsrc.sample:package:test-event-public:v1'];
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypes: [{
+                    ordId: "sap.sm:entityType:ReferencedEntity:v1",
+                    visibility: "public",
+                    entityTypeMappings: [{ entityTypeTargets: [{ ordId: "sap.sm:eventResource:MyService:v1" }] }]
+                }]
+            };
+
+            const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds);
+            expect(eventResource[0].entityTypeMappings).toBeDefined();
+            expect(eventResource[0].entityTypeMappings[0].entityTypeTargets).toEqual([{ ordId: "sap.sm:entityType:ReferencedEntity:v1" }]);
+        });
+    });
+    describe('createDataProductTemplate - Debugging', () => {
+        const packageIds = [
+            'sap.test.cdsrc.sample:package:test-dataProduct-public:v1',
+            'sap.test.cdsrc.sample:package:test-dataProduct-private:v1'
+        ];
+
+        const RESOURCE_VISIBILITY = Object.freeze({
+            public: "public",
+            internal: "internal",
+            private: "private",
+        });
+
+        const appConfig = {
+            ordNamespace: 'customer.testNamespace',
+            appName: 'testAppName',
+            lastUpdate: '2022-12-19T15:47:04+00:00',
+            entityTypes: [
+                {
+                    ordId: "customer.testNamespace:dataProduct:PrivateDataProduct:v1", // Correct ordId
+                    visibility: "private"
+                }
+            ]
+        };
+
+        it('should correctly determine private visibility when referencing a private entity type', () => {
+            const dataProductDefinition = {
+                "@title": "Private Data Product",
+                "@ORD.Extensions.entityTypes": [ // Ensure this key is recognized by readORDExtensions
+                    { ordId: "customer.testNamespace:dataProduct:PrivateDataProduct:v1" }
+                ]
+            };
+
+            console.log("\n[DEBUG] - Calling createDataProductTemplate...");
+            const dataProductTemplate = createDataProductTemplate("PrivateDataProduct", dataProductDefinition, appConfig, packageIds);
+
+            console.log("\n[DEBUG] - Returned Data Product Template:", JSON.stringify(dataProductTemplate, null, 2));
+
+            const referencedEntityTypes = dataProductTemplate[0].entityTypes;
+            console.log("\n[DEBUG] - Extracted Referenced Entity Types:", JSON.stringify(referencedEntityTypes, null, 2));
+
+            const extractedOrdId = referencedEntityTypes.length > 0 ? referencedEntityTypes[0].ordId : "NONE";
+            console.log("\n[DEBUG] - First referenced entityType ordId:", extractedOrdId);
+
+            const foundEntity = appConfig.entityTypes.find(et => et.ordId === extractedOrdId);
+            console.log("\n[DEBUG] - Found matching entity in appConfig:", JSON.stringify(foundEntity, null, 2));
+
+            const hasPrivateEntityType = Array.isArray(appConfig.entityTypes)
+                ? referencedEntityTypes.some(entityType => {
+                    const match = appConfig.entityTypes.find(et => et.ordId === entityType.ordId);
+                    console.log(`\n[DEBUG] - Checking entityType ordId: ${entityType.ordId}, Found match:`, match);
+                    return match?.visibility === RESOURCE_VISIBILITY.private;
+                })
+                : false;
+
+            console.log("\n[DEBUG] - hasPrivateEntityType:", hasPrivateEntityType);
+
+            // Expect visibility to be private
+            expect(dataProductTemplate[0].visibility).toEqual('private');
+            expect(hasPrivateEntityType).toBe(true);
+        });
+    });
+
+
+
+
+
+
 });
