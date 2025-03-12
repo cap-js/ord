@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-const { AUTHENTICATION_TYPE } = require('../../lib/constants');
+const { AUTHENTICATION_TYPE, RESOURCE_VISIBILITY } = require('../../lib/constants');
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
     authConfig: {
@@ -424,12 +424,6 @@ describe('templates', () => {
             'sap.test.cdsrc.sample:package:test-dataProduct-public:v1',
             'sap.test.cdsrc.sample:package:test-dataProduct-private:v1'
         ];
-
-        const RESOURCE_VISIBILITY = Object.freeze({
-            public: "public",
-            internal: "internal",
-            private: "private",
-        });
 
         const appConfig = {
             ordNamespace: 'customer.testNamespace',
