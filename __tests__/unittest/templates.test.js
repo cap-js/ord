@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-const { AUTHENTICATION_TYPE, RESOURCE_VISIBILITY } = require('../../lib/constants');
+const { AUTHENTICATION_TYPE } = require('../../lib/constants');
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
     authConfig: {
@@ -361,7 +361,6 @@ describe('templates', () => {
 
             const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
 
-            // Da private EntityTypes ausgeschlossen werden, muss das Ergebnis null sein
             expect(entityType).toBeNull();
         });
 
@@ -382,7 +381,6 @@ describe('templates', () => {
 
             const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
 
-            // Da private EntityTypes ausgeschlossen werden, muss das Ergebnis null sein
             expect(entityType).toBeNull();
         });
 
@@ -434,10 +432,8 @@ describe('templates', () => {
             const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
 
             if (apiResource.length === 0) {
-                // Falls private APIs entfernt werden sollen, sollte dies der erwartete Wert sein
                 expect(apiResource).toEqual([]);
             } else {
-                // Falls die API zurückgegeben wird, sollte sie als private markiert sein
                 expect(apiResource[0].ordId).toEqual(expectedOrdId);
                 expect(apiResource[0].visibility).toEqual('private');
             }
