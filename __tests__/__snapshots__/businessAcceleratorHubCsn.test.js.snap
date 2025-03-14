@@ -15,7 +15,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:SupplierService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:SupplierService",
@@ -60,7 +60,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:MaterialService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:MaterialService",
@@ -105,7 +105,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:PurchaseOrderService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:PurchaseOrderService",
@@ -150,7 +150,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:InternalDataProductService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:InternalDataProductService",
@@ -195,7 +195,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:CustomerService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:CustomerService",
@@ -240,7 +240,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:RestrictedDataProductService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:RestrictedDataProductService",
@@ -278,13 +278,14 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
   "consumptionBundles": [
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
     },
   ],
+  "dataProducts": [],
   "description": "Business Accelerator Hub ORD Test",
   "eventResources": [
     {
@@ -294,7 +295,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:eventResource:SupplierService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:SupplierService",
@@ -325,7 +326,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:eventResource:MaterialService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:MaterialService",
@@ -356,7 +357,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:eventResource:PurchaseOrderService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:PurchaseOrderService",
@@ -387,7 +388,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:eventResource:InternalDataProductService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:InternalDataProductService",
@@ -418,7 +419,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:eventResource:CustomerService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:CustomerService",
@@ -449,7 +450,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
         "supported": "no",
       },
       "integrationDependency": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
-      "lastUpdate": "2025-03-12T16:02:42+01:00",
+      "lastUpdate": "2025-03-14T17:03:46+01:00",
       "ordId": "sap.test.cdsrc.sample:eventResource:RestrictedDataProductService:v1",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:RestrictedDataProductService",

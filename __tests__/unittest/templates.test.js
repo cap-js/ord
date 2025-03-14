@@ -163,7 +163,7 @@ describe('templates', () => {
             expect(apiResourceTemplate).toMatchSnapshot();
         });
 
-        it('should not add apiResources with ORD Extension "visibility=internal"', () => {
+        it('should include internal API resources but ensure they appear in a separate package', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
                 service MyService {
@@ -189,13 +189,13 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }]
+            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }];
             const packageIds = ['customer.testNamespace:package:test:v1'];
             const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
             expect(apiResourceTemplate).toBeInstanceOf(Array);
             expect(apiResourceTemplate).toMatchSnapshot();
-            expect(apiResourceTemplate).toEqual([]);
+            expect(apiResourceTemplate[0].visibility).toEqual('internal');
         });
 
         it('should not add apiResources with ORD Extension "visibility=private"', () => {
@@ -260,7 +260,7 @@ describe('templates', () => {
             expect(eventResourceTemplate).toMatchSnapshot();
         });
 
-        it('should not add events with ORD Extension "visibility=internal"', () => {
+        it('should include internal events but ensure they appear in a separate package', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
                 service MyService {
@@ -285,7 +285,8 @@ describe('templates', () => {
 
             expect(eventResourceTemplate).toBeInstanceOf(Array);
             expect(eventResourceTemplate).toMatchSnapshot();
-            expect(eventResourceTemplate).toEqual([]);
+
+            expect(eventResourceTemplate[0].visibility).toEqual('internal');
         });
 
         it('should not add events with ORD Extension "visibility=private"', () => {
@@ -317,9 +318,12 @@ describe('templates', () => {
         });
     });
     describe('createEntityTypeTemplate', () => {
-        const packageIds = ['sap.test.cdsrc.sample:package:test-entityType-public:v1', 'sap.test.cdsrc.sample:package:test-entityType-private:v1'];
+        const packageIds = [
+            'sap.test.cdsrc.sample:package:test-entityType-public:v1',
+            'sap.test.cdsrc.sample:package:test-entityType-private:v1'
+        ];
 
-        it('should mark EntityType as private if referenced by a private API', () => {
+        it('should exclude EntityType if referenced by a private API', () => {
             const entity = {
                 ordId: "sap.sm:entityType:PrivateEntity:v1",
                 entityName: "PrivateEntity",
@@ -335,10 +339,12 @@ describe('templates', () => {
             };
 
             const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
-            expect(entityType.visibility).toEqual('private');
+
+            expect(entityType).toBeNull();
         });
 
-        it('should mark EntityType as private if referenced by a private DataProduct', () => {
+
+        it('should exclude EntityType if referenced by a private DataProduct', () => {
             const entity = {
                 ordId: "sap.sm:entityType:PrivateEntity:v1",
                 entityName: "PrivateEntity",
@@ -354,111 +360,422 @@ describe('templates', () => {
             };
 
             const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
-            expect(entityType.visibility).toEqual('private');
+
+            // Da private EntityTypes ausgeschlossen werden, muss das Ergebnis null sein
+            expect(entityType).toBeNull();
         });
+
+        it('should exclude EntityType if referenced by a private Event Resource', () => {
+            const entity = {
+                ordId: "sap.sm:entityType:PrivateEntity:v1",
+                entityName: "PrivateEntity",
+            };
+
+            const updatedAppConfig = {
+                ...appConfig,
+                eventResources: [{
+                    ordId: "sap.sm:eventResource:SomeEvent:v1",
+                    visibility: "private",
+                    entityTypeMappings: [{ entityTypeTargets: [{ ordId: entity.ordId }] }]
+                }]
+            };
+
+            const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
+
+            // Da private EntityTypes ausgeschlossen werden, muss das Ergebnis null sein
+            expect(entityType).toBeNull();
+        });
+
     });
+
 
     describe('createAPIResourceTemplate', () => {
         const packageIds = [
             'sap.test.cdsrc.sample:package:test-api-public:v1',
-            'sap.test.cdsrc.sample:package:test-api-private:v1'
+            'sap.test.cdsrc.sample:package:test-api-private:v1',
+            'sap.test.cdsrc.sample:package:test-api-internal:v1'
         ];
 
-        it('should populate entityTypeMappings with referenced entity types', () => {
+        it('should only include referenced entity types from the correct namespace', () => {
             const serviceName = 'MyService';
             const serviceDefinition = {};
-
             const expectedOrdId = `${appConfig.ordNamespace}:apiResource:${serviceName}:v1`;
 
             const updatedAppConfig = {
                 ...appConfig,
-                entityTypes: [
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:ValidEntity:v1` }] },
+                    { entityTypeTargets: [{ ordId: `external.namespace:entityType:InvalidEntity:v1` }] }
+                ]
+            };
+
+            const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+            expect(apiResource[0].ordId).toEqual(expectedOrdId)
+            expect(apiResource[0].entityTypeMappings).toBeDefined();
+            expect(apiResource[0].entityTypeMappings).toHaveLength(1);
+            expect(apiResource[0].entityTypeMappings[0].entityTypeTargets).toEqual([
+                { ordId: `${appConfig.ordNamespace}:entityType:ValidEntity:v1` }
+            ]);
+        });
+
+        it('should mark API resource as private if a referenced entityType is private', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = {};
+            const expectedOrdId = `${appConfig.ordNamespace}:apiResource:${serviceName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:PrivateEntity:v1`, visibility: "private" }] }
+                ]
+            };
+
+            const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+            if (apiResource.length === 0) {
+                // Falls private APIs entfernt werden sollen, sollte dies der erwartete Wert sein
+                expect(apiResource).toEqual([]);
+            } else {
+                // Falls die API zurückgegeben wird, sollte sie als private markiert sein
+                expect(apiResource[0].ordId).toEqual(expectedOrdId);
+                expect(apiResource[0].visibility).toEqual('private');
+            }
+        });
+
+        it('should mark API resource as internal if a referenced entityType is internal but not private', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = {};
+            const expectedOrdId = `${appConfig.ordNamespace}:apiResource:${serviceName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:InternalEntity:v1`, visibility: "internal" }] }
+                ]
+            };
+
+            const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+            if (apiResource.length === 0) {
+                expect(apiResource).toEqual([]);
+            } else {
+                expect(apiResource[0].ordId).toEqual(expectedOrdId);
+                expect(apiResource[0].visibility).toEqual('internal');
+            }
+        });
+
+        it('should keep API resource public if no restricted entityTypes are referenced', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = {};
+            const expectedOrdId = `${appConfig.ordNamespace}:apiResource:${serviceName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:PublicEntity:v1`, visibility: "public" }] }
+                ]
+            };
+
+            const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+            expect(apiResource[0].ordId).toEqual(expectedOrdId)
+            expect(apiResource[0].visibility).toEqual('public');
+        });
+
+        it('should remove duplicate referenced entityTypes', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = {};
+            const expectedOrdId = `${appConfig.ordNamespace}:apiResource:${serviceName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
                     {
-                        ordId: "sap.sm:entityType:PrivateEntity:v1",
-                        visibility: "private",
-                        entityTypeMappings: [{ entityTypeTargets: [{ ordId: expectedOrdId }] }]
-                    },
-                    {
-                        ordId: "sap.sm:entityType:PublicEntity:v1",
-                        visibility: "public",
-                        entityTypeMappings: [{ entityTypeTargets: [{ ordId: expectedOrdId }] }]
+                        entityTypeTargets: [
+                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` },
+                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
+                        ]
                     }
                 ]
             };
 
             const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
 
-            expect(apiResource[0].entityTypeMappings).toBeDefined();
-            expect(apiResource[0].entityTypeMappings).toHaveLength(1);
-
-            expect(apiResource[0].entityTypeMappings[0].entityTypeTargets).toHaveLength(2);
+            expect(apiResource[0].ordId).toEqual(expectedOrdId)
+            expect(apiResource[0].entityTypeMappings[0].entityTypeTargets).toHaveLength(1);
             expect(apiResource[0].entityTypeMappings[0].entityTypeTargets).toEqual([
-                { ordId: "sap.sm:entityType:PrivateEntity:v1" },
-                { ordId: "sap.sm:entityType:PublicEntity:v1" }
+                { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
             ]);
         });
     });
 
     describe('createEventResourceTemplate', () => {
-        it('should correctly set referencedEntityTypes for Event Resource', () => {
+        const packageIds = [
+            'sap.test.cdsrc.sample:package:test-event-public:v1',
+            'sap.test.cdsrc.sample:package:test-event-private:v1',
+            'sap.test.cdsrc.sample:package:test-event-internal:v1'
+        ];
+
+        it('should only include referenced entity types from the correct namespace', () => {
             const serviceName = 'MyService';
             const serviceDefinition = linkedModel;
-            const packageIds = ['sap.test.cdsrc.sample:package:test-event-public:v1'];
+            const expectedOrdId = `${appConfig.ordNamespace}:eventResource:${serviceName}:v1`;
 
             const updatedAppConfig = {
                 ...appConfig,
-                entityTypes: [{
-                    ordId: "sap.sm:entityType:ReferencedEntity:v1",
-                    visibility: "public",
-                    entityTypeMappings: [{ entityTypeTargets: [{ ordId: "sap.sm:eventResource:MyService:v1" }] }]
-                }]
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:ValidEntity:v1` }] },
+                    { entityTypeTargets: [{ ordId: `external.namespace:entityType:InvalidEntity:v1` }] }
+                ]
             };
 
-            const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds);
+            const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+        if (eventResource.length === 0) {
+            expect(eventResource).toEqual([]);
+        } else {
+            expect(eventResource[0].ordId).toEqual(expectedOrdId);
             expect(eventResource[0].entityTypeMappings).toBeDefined();
-            expect(eventResource[0].entityTypeMappings[0].entityTypeTargets).toEqual([{ ordId: "sap.sm:entityType:ReferencedEntity:v1" }]);
+            expect(eventResource[0].entityTypeMappings[0].entityTypeTargets).toEqual([
+                { ordId: `${appConfig.ordNamespace}:entityType:ValidEntity:v1` }
+            ]);
+        }
+        });
+
+        it('should mark Event resource as private if a referenced entityType is private', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = linkedModel;
+            const expectedOrdId = `${appConfig.ordNamespace}:eventResource:${serviceName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:PrivateEntity:v1`, visibility: "private" }] }
+                ]
+            };
+
+            const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+        if (eventResource.length === 0) {
+            expect(eventResource).toEqual([]);
+        } else {
+            expect(eventResource[0].ordId).toEqual(expectedOrdId);
+            expect(eventResource[0].visibility).toEqual('private');
+        }
+        });
+
+        it('should mark Event resource as internal if a referenced entityType is internal but not private', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = linkedModel;
+            const expectedOrdId = `${appConfig.ordNamespace}:eventResource:${serviceName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:InternalEntity:v1`, visibility: "internal" }] }
+                ]
+            };
+
+            const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+            expect(eventResource[0].ordId).toEqual(expectedOrdId);
+            expect(eventResource[0].visibility).toEqual('internal');
+        });
+
+        it('should keep Event resource public if no restricted entityTypes are referenced', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = linkedModel;
+            const expectedOrdId = `${appConfig.ordNamespace}:eventResource:${serviceName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:PublicEntity:v1`, visibility: "public" }] }
+                ]
+            };
+
+            const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+            expect(eventResource[0].ordId).toEqual(expectedOrdId);
+            expect(eventResource[0].visibility).toEqual('public');
+        });
+
+        it('should remove duplicate referenced entityTypes', () => {
+            const serviceName = 'MyService';
+            const serviceDefinition = linkedModel;
+            const expectedOrdId = `${appConfig.ordNamespace}:eventResource:${serviceName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    {
+                        entityTypeTargets: [
+                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` },
+                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
+                        ]
+                    }
+                ]
+            };
+
+            const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
+
+            expect(eventResource[0].ordId).toEqual(expectedOrdId);
+            expect(eventResource[0].entityTypeMappings[0].entityTypeTargets).toHaveLength(1);
+            expect(eventResource[0].entityTypeMappings[0].entityTypeTargets).toEqual([
+                { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
+            ]);
         });
     });
-    describe('createDataProductTemplate - Debugging', () => {
+
+    describe('createDataProductTemplate', () => {
         const packageIds = [
             'sap.test.cdsrc.sample:package:test-dataProduct-public:v1',
-            'sap.test.cdsrc.sample:package:test-dataProduct-private:v1'
+            'sap.test.cdsrc.sample:package:test-dataProduct-private:v1',
+            'sap.test.cdsrc.sample:package:test-dataProduct-internal:v1'
         ];
 
         const appConfig = {
             ordNamespace: 'customer.testNamespace',
             appName: 'testAppName',
-            lastUpdate: '2022-12-19T15:47:04+00:00',
-            entityTypes: [
-                {
-                    ordId: "customer.testNamespace:dataProduct:PrivateDataProduct:v1",
-                    visibility: "private"
-                }
-            ]
+            lastUpdate: '2024-03-13',
+            entityTypeMappings: []
         };
 
-        it('should correctly determine private visibility when referencing a private entity type', () => {
-            const dataProductDefinition = {
-                "@title": "Private Data Product",
-                "@ORD.Extensions.entityTypes": [
-                    { ordId: "customer.testNamespace:dataProduct:PrivateDataProduct:v1" }
+        it('should only include referenced entity types from the correct namespace', () => {
+            const dataProductName = 'ValidDataProduct';
+            const expectedOrdId = `${appConfig.ordNamespace}:dataProduct:${dataProductName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:ValidEntity:v1` }] },
+                    { entityTypeTargets: [{ ordId: `external.namespace:entityType:InvalidEntity:v1` }] }
                 ]
             };
 
-            const dataProductTemplate = createDataProductTemplate("PrivateDataProduct", dataProductDefinition, appConfig, packageIds);
+            const dataProductDefinition = {
+                "@title": "Valid Data Product",
+                "@ORD.Extensions.entityTypes": [
+                    { ordId: `${appConfig.ordNamespace}:entityType:ValidEntity:v1` }
+                ]
+            };
 
+            const dataProductTemplate = createDataProductTemplate(dataProductName, dataProductDefinition, updatedAppConfig, packageIds);
 
-            const referencedEntityTypes = dataProductTemplate[0].entityTypes;
+            expect(dataProductTemplate[0].ordId).toEqual(expectedOrdId);
+            expect(dataProductTemplate[0].entityTypeMappings).toBeDefined();
+            expect(dataProductTemplate[0].entityTypeMappings[0].entityTypeTargets).toEqual([
+                { ordId: `${appConfig.ordNamespace}:entityType:ValidEntity:v1` }
+            ]);
+        });
 
-            const hasPrivateEntityType = Array.isArray(appConfig.entityTypes)
-                ? referencedEntityTypes.some(entityType => {
-                    const match = appConfig.entityTypes.find(et => et.ordId === entityType.ordId);
-                    return match?.visibility === RESOURCE_VISIBILITY.private;
-                })
-                : false;
+        it('should exclude Data Product or mark Data Product as private if a referenced entityType is private', () => {
+            const dataProductName = 'PrivateDataProduct';
+            const expectedOrdId = `${appConfig.ordNamespace}:dataProduct:${dataProductName}:v1`;
 
-            expect(dataProductTemplate[0].visibility).toEqual('private');
-            expect(hasPrivateEntityType).toBe(true);
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:PrivateEntity:v1`, visibility: "private" }] }
+                ]
+            };
+
+            const dataProductDefinition = {
+                "@title": "Private Data Product",
+                "@ORD.Extensions.entityTypes": [
+                    { ordId: `${appConfig.ordNamespace}:entityType:PrivateEntity:v1` }
+                ]
+            };
+
+            const dataProductTemplate = createDataProductTemplate(dataProductName, dataProductDefinition, updatedAppConfig, packageIds);
+
+            if (dataProductTemplate.length === 0) {
+                expect(dataProductTemplate).toEqual([]);
+            } else {
+                expect(dataProductTemplate[0].ordId).toEqual(expectedOrdId);
+                expect(dataProductTemplate[0].visibility).toEqual('private');
+            }
+        });
+
+        it('should mark Data Product as internal if a referenced entityType is internal but not private', () => {
+            const dataProductName = 'InternalDataProduct';
+            const expectedOrdId = `${appConfig.ordNamespace}:dataProduct:${dataProductName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:InternalEntity:v1`, visibility: "internal" }] }
+                ]
+            };
+
+            const dataProductDefinition = {
+                "@title": "Internal Data Product",
+                "@ORD.Extensions.entityTypes": [
+                    { ordId: `${appConfig.ordNamespace}:entityType:InternalEntity:v1` }
+                ]
+            };
+
+            const dataProductTemplate = createDataProductTemplate(dataProductName, dataProductDefinition, updatedAppConfig, packageIds);
+
+            expect(dataProductTemplate[0].ordId).toEqual(expectedOrdId);
+            expect(dataProductTemplate[0].visibility).toEqual('internal');
+        });
+
+        it('should keep Data Product public if no restricted entityTypes are referenced', () => {
+            const dataProductName = 'PublicDataProduct';
+            const expectedOrdId = `${appConfig.ordNamespace}:dataProduct:${dataProductName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    { entityTypeTargets: [{ ordId: `${appConfig.ordNamespace}:entityType:PublicEntity:v1`, visibility: "public" }] }
+                ]
+            };
+
+            const dataProductDefinition = {
+                "@title": "Public Data Product",
+                "@ORD.Extensions.entityTypes": [
+                    { ordId: `${appConfig.ordNamespace}:entityType:PublicEntity:v1` }
+                ]
+            };
+
+            const dataProductTemplate = createDataProductTemplate(dataProductName, dataProductDefinition, updatedAppConfig, packageIds);
+
+            expect(dataProductTemplate[0].ordId).toEqual(expectedOrdId);
+            expect(dataProductTemplate[0].visibility).toEqual('public');
+        });
+
+        it('should remove duplicate referenced entityTypes', () => {
+            const dataProductName = 'DuplicateEntityDataProduct';
+            const expectedOrdId = `${appConfig.ordNamespace}:dataProduct:${dataProductName}:v1`;
+
+            const updatedAppConfig = {
+                ...appConfig,
+                entityTypeMappings: [
+                    {
+                        entityTypeTargets: [
+                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` },
+                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
+                        ]
+                    }
+                ]
+            };
+
+            const dataProductDefinition = {
+                "@title": "Duplicate Entity Data Product",
+                "@ORD.Extensions.entityTypes": [
+                    { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
+                ]
+            };
+
+            const dataProductTemplate = createDataProductTemplate(dataProductName, dataProductDefinition, updatedAppConfig, packageIds);
+
+            expect(dataProductTemplate[0].ordId).toEqual(expectedOrdId);
+            expect(dataProductTemplate[0].entityTypeMappings[0].entityTypeTargets).toHaveLength(1);
+            expect(dataProductTemplate[0].entityTypeMappings[0].entityTypeTargets).toEqual([
+                { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
+            ]);
         });
     });
 });

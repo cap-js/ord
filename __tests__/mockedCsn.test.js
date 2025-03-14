@@ -7,7 +7,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     function checkOrdDocument(csn) {
         const document = ord(csn);
-
+        console.log(document)
         expect(document).not.toBeUndefined();
         expect(document.packages).not.toBeDefined();
         expect(document.apiResources).toHaveLength(0);
@@ -100,10 +100,10 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.apiResources).toHaveLength(1);
-            expect(document.eventResources).toHaveLength(1);
+            expect(document.apiResources).toHaveLength(2);
+            expect(document.eventResources).toHaveLength(2);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
-            expect(document.eventResources[0].ordId).toEqual(expect.stringContaining("CatalogService"));
+            expect(document.eventResources[1].ordId).toEqual(expect.stringContaining("CatalogService"));
         });
     });
 });
