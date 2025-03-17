@@ -4,11 +4,11 @@
 
 ## About this project
 
-This plugin adds support for the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) (ORD) protocol for CAP based applications.
+This plugin adds support for the [Open Resource Discovery](https://open-resource-discovery.github.io/specification/) (ORD) protocol for CAP based applications.
 When you add the ORD plugin, your application gains a single entry point, which allows to discover and gather machine-readable information or metadata about the application.
 You can use this information to construct a static metadata catalog or to perform a detailed runtime inspection of your actual system instances / system landscapes.
 
-For more information, have a look at the [Open Resource Discovery](https://sap.github.io/open-resource-discovery/) page.
+For more information, have a look at the [Open Resource Discovery](https://open-resource-discovery.github.io/specification/) page.
 
 > ⚠ By installing this plugin, the metadata describing your CAP application will be made openly accessible. If you want to secure your CAP application's metadata, configure `basic` authentication by setting the environment variables or updating the `.cdsrc.json` file. The plugin prioritizes environment variables, then checks `.cdsrc.json`. If neither is configured, metadata remains publicly accessible.
 

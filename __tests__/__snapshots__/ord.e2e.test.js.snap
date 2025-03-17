@@ -2,7 +2,7 @@
 
 exports[`End-to-end test for ORD document Tests for default ORD document when .cdsrc.json is not present Successfully create ORD Documents with defaults 1`] = `
 {
-  "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
       "apiProtocol": "odata-v4",
@@ -217,7 +217,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
 
 exports[`End-to-end test for ORD document Tests for default ORD document when .cdsrc.json is present Successfully create ORD Documents with defaults 1`] = `
 {
-  "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
       "apiProtocol": "odata-v4",
@@ -432,7 +432,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
 
 exports[`End-to-end test for ORD document Tests for default ORD document when .cdsrc.json is present Successfully create ORD Documents with defaults and applicationNamespace configured incorrectly 1`] = `
 {
-  "$schema": "https://sap.github.io/open-resource-discovery/spec-v1/interfaces/Document.schema.json",
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
       "apiProtocol": "odata-v4",
