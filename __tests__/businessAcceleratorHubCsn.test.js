@@ -35,6 +35,11 @@ describe("ORD Generation for Business Accelerator Hub", () => {
             const document = ord(bahCsn);
             expect(document).not.toBeUndefined();
             expect(document).toMatchSnapshot();
+            expect(document.openResourceDiscovery).toBe("1.10");
+            expect(document.policyLevel).toBe("sap:core:v1");
+            expect(document.description).toBe("Business Accelerator Hub ORD Test");
+            expect(document.apiResources).toHaveLength(6);
+            expect(document.eventResources).toHaveLength(6);
         });
     });
 });

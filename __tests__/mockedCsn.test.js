@@ -110,5 +110,13 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
             expect(document.eventResources[1].ordId).toEqual(expect.stringContaining("CatalogService"));
         });
+        test("ORD Document should generate packages even without eventResources", () => {
+            const csnWithoutEvents = require("./__mocks__/csnWithoutEvents.json");
+            const document = ord(csnWithoutEvents);
+            console.log(document)
+            expect(document).not.toBeUndefined();
+            expect(document.packages).toBeDefined();
+            expect(document.packages.length).toBeGreaterThan(0);
+        });
     });
 });
