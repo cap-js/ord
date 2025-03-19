@@ -78,12 +78,10 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.entityTypes[0].partOfPackage).toEqual(expect.stringContaining("entityType"));
             expect(document.entityTypes[0].level).toEqual(expect.stringContaining("root-entity"));
 
-       /*     expect(document.apiResources[0]?.entityTypeMappings[0]?.entityTypeTargets).toEqual(expect.arrayContaining([
-                { "ordId": "sap.odm:entityType:SomeODMEntity:v1" },
-                { "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v1" }
-            ]));*/
+            expect(document.apiResources[0]?.entityTypeMappings?.entityTypeTargets).toBeUndefined();
         });
     });
+
 
     describe("Tests for ORD document when all the resources are private", () => {
         test("All services are private: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
@@ -113,7 +111,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         test("ORD Document should generate packages even without eventResources", () => {
             const csnWithoutEvents = require("./__mocks__/csnWithoutEvents.json");
             const document = ord(csnWithoutEvents);
-            console.log(document)
             expect(document).not.toBeUndefined();
             expect(document.packages).toBeDefined();
             expect(document.packages.length).toBeGreaterThan(0);

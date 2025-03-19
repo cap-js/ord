@@ -2,7 +2,7 @@ const cds = require("@sap/cds");
 const path = require("path");
 const { AUTHENTICATION_TYPE } = require('../lib/constants');
 const ord = require("../lib/ord");
-const bahCsn = require("./__mocks__/businessAcceleratorHubCsn.json");
+const bahCsn = require("./__mocks__/splitUpPackagesCsn.json");
 
 describe("ORD Generation for Business Accelerator Hub", () => {
 
