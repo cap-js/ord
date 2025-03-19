@@ -12,7 +12,6 @@ const {
     createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate,
-    createDataProductTemplate
 } = require('../../lib/templates');
 
 describe('templates', () => {
