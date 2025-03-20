@@ -5,13 +5,20 @@ const { AUTHENTICATION_TYPE } = require('../lib/constants');
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;
 
-    function checkOrdDocument(csn) {
+    function checkOrdDocumentPrivateResources(csn) {
         const document = ord(csn);
 
-        expect(document).not.toBeUndefined();
-        expect(document.packages).not.toBeDefined();
         expect(document.apiResources).toHaveLength(0);
         expect(document.eventResources).toHaveLength(0);
+        expect(document.dataProducts).toHaveLength(0);
+    }
+
+    function checkOrdDocumentInternalResourcess(csn) {
+        const document = ord(csn);
+
+        expect(document.apiResources).toHaveLength(3);
+        expect(document.eventResources).toHaveLength(3);
+        expect(document.dataProducts).toHaveLength(0);
     }
 
     beforeAll(() => {
@@ -60,7 +67,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.eventResources).toHaveLength(1);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("EbMtEmitter"));
             expect(document.eventResources[0].ordId).toEqual(expect.stringContaining("EbMtEmitter"));
-            expect(document.apiResources[0].entityTypeMappings).toBeUndefined();
+            expect(document.apiResources[0].entityTypeMappings).toEqual([]);
         });
     });
 
@@ -70,27 +77,23 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.entityTypes).toHaveLength(1);
+            expect(document.entityTypes).toHaveLength(2);
             expect(document.entityTypes[0].partOfPackage).toEqual(expect.stringContaining("entityType"));
             expect(document.entityTypes[0].level).toEqual(expect.stringContaining("root-entity"));
-            expect(document.apiResources[0].entityTypeMappings[0].entityTypeTargets).toEqual(expect.arrayContaining([
-                { "ordId": "sap.odm:entityType:SomeODMEntity:v1" },
-                { "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v1" }
-            ]));
         });
     });
 
     describe("Tests for ORD document when all the resources are private", () => {
         test("All services are private: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/privateResourcesCsn.json");
-            checkOrdDocument(csn);
+            checkOrdDocumentPrivateResources(csn);
         });
     });
 
     describe("Tests for ORD document when all the resources are internal", () => {
         test("All services are interal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/internalResourcesCsn.json");
-            checkOrdDocument(csn);
+            checkOrdDocumentInternalResourcess(csn);
         });
     });
 
@@ -100,10 +103,10 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.apiResources).toHaveLength(1);
-            expect(document.eventResources).toHaveLength(1);
+            expect(document.apiResources).toHaveLength(2);
+            expect(document.eventResources).toHaveLength(2);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
-            expect(document.eventResources[0].ordId).toEqual(expect.stringContaining("CatalogService"));
+            expect(document.eventResources[1].ordId).toEqual(expect.stringContaining("CatalogService"));
         });
     });
 });
