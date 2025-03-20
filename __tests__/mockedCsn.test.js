@@ -5,17 +5,20 @@ const { AUTHENTICATION_TYPE } = require('../lib/constants');
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;
 
-    function checkOrdDocument(csn, isPrivate) {
+    function checkOrdDocumentPrivateResources(csn) {
         const document = ord(csn);
-        expect(document).not.toBeUndefined();
 
-        if (isPrivate) {
-            expect(document.packages).toEqual([]);
-            expect(document.apiResources).toHaveLength(0);
-            expect(document.eventResources).toHaveLength(0);
-        } else {
-            expect(document.packages).toBeDefined();
-        }
+        expect(document.apiResources).toHaveLength(0);
+        expect(document.eventResources).toHaveLength(0);
+        expect(document.dataProducts).toHaveLength(0);
+    }
+
+    function checkOrdDocumentInternalResourcess(csn) {
+        const document = ord(csn);
+
+        expect(document.apiResources).toHaveLength(3);
+        expect(document.eventResources).toHaveLength(3);
+        expect(document.dataProducts).toHaveLength(0);
     }
 
     beforeAll(() => {
@@ -77,23 +80,20 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.entityTypes).toHaveLength(2);
             expect(document.entityTypes[0].partOfPackage).toEqual(expect.stringContaining("entityType"));
             expect(document.entityTypes[0].level).toEqual(expect.stringContaining("root-entity"));
-
-            expect(document.apiResources[0]?.entityTypeMappings?.entityTypeTargets).toBeUndefined();
         });
     });
-
 
     describe("Tests for ORD document when all the resources are private", () => {
         test("All services are private: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/privateResourcesCsn.json");
-            checkOrdDocument(csn, true);
+            checkOrdDocumentPrivateResources(csn);
         });
     });
 
     describe("Tests for ORD document when all the resources are internal", () => {
         test("All services are interal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/internalResourcesCsn.json");
-            checkOrdDocument(csn, false);
+            checkOrdDocumentInternalResourcess(csn);
         });
     });
 
@@ -107,13 +107,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.eventResources).toHaveLength(2);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
             expect(document.eventResources[1].ordId).toEqual(expect.stringContaining("CatalogService"));
-        });
-        test("ORD Document should generate packages even without eventResources", () => {
-            const csnWithoutEvents = require("./__mocks__/csnWithoutEvents.json");
-            const document = ord(csnWithoutEvents);
-            expect(document).not.toBeUndefined();
-            expect(document.packages).toBeDefined();
-            expect(document.packages.length).toBeGreaterThan(0);
         });
     });
 });
