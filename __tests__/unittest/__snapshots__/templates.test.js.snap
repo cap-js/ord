@@ -5,12 +5,14 @@ exports[`templates createAPIResourceTemplate should create API resource template
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
+    "entityTypeMappings": [],
     "entryPoints": [
       "/odata/v4/my",
     ],
     "extensible": {
       "supported": "no",
     },
+    "integrationDependency": null,
     "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:apiResource:MyService:v1",
     "partOfGroups": [
@@ -90,9 +92,11 @@ exports[`templates createEventResourceTemplate should create event resource temp
 [
   {
     "description": "CAP Event resource describing events / messages.",
+    "entityTypeMappings": [],
     "extensible": {
       "supported": "no",
     },
+    "integrationDependency": null,
     "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:eventResource:MyService:v1",
     "partOfGroups": [
@@ -124,9 +128,11 @@ exports[`templates createEventResourceTemplate should create event resource temp
 [
   {
     "description": "CAP Event resource describing events / messages.",
+    "entityTypeMappings": [],
     "extensible": {
       "supported": "no",
     },
+    "integrationDependency": null,
     "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:eventResource:MyService:v1",
     "partOfGroups": [
@@ -159,21 +165,14 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test:v1",
-          },
-        ],
-      },
-    ],
+    "entityTypeMappings": [],
     "entryPoints": [
       "/odata/v4/my",
     ],
     "extensible": {
       "supported": "yes",
     },
+    "integrationDependency": null,
     "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:apiResource:MyService:v1",
     "partOfGroups": [
@@ -215,9 +214,11 @@ exports[`templates ordExtension should add events with ORD Extension "visibility
 [
   {
     "description": "CAP Event resource describing events / messages.",
+    "entityTypeMappings": [],
     "extensible": {
       "supported": "yes",
     },
+    "integrationDependency": null,
     "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:eventResource:MyService:v1",
     "partOfGroups": [
@@ -245,10 +246,92 @@ exports[`templates ordExtension should add events with ORD Extension "visibility
 ]
 `;
 
-exports[`templates ordExtension should not add apiResources with ORD Extension "visibility=internal" 1`] = `[]`;
+exports[`templates ordExtension should include internal API resources but ensure they appear in a separate package 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entityTypeMappings": [],
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "yes",
+    },
+    "integrationDependency": null,
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-other:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "short description for test MyService apiResource",
+    "title": "This is test MyService apiResource title",
+    "version": "2.0.0",
+    "visibility": "internal",
+  },
+]
+`;
+
+exports[`templates ordExtension should include internal events but ensure they appear in a separate package 1`] = `
+[
+  {
+    "description": "CAP Event resource describing events / messages.",
+    "entityTypeMappings": [],
+    "extensible": {
+      "supported": "yes",
+    },
+    "integrationDependency": null,
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:eventResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": undefined,
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "asyncapi-v2",
+        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
+      },
+    ],
+    "shortDescription": "short description for test MyService event",
+    "title": "This is test MyService event title",
+    "version": "2.0.0",
+    "visibility": "internal",
+  },
+]
+`;
 
 exports[`templates ordExtension should not add apiResources with ORD Extension "visibility=private" 1`] = `[]`;
-
-exports[`templates ordExtension should not add events with ORD Extension "visibility=internal" 1`] = `[]`;
 
 exports[`templates ordExtension should not add events with ORD Extension "visibility=private" 1`] = `[]`;
