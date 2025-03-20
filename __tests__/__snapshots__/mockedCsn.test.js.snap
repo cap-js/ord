@@ -20,7 +20,6 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "extensible": {
         "supported": "yes",
       },
-      "integrationDependency": null,
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "customer.capirebookshopordsample:apiResource:AdminService:v1",
       "partOfGroups": [
@@ -58,14 +57,21 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CatalogService",
-      "entityTypeMappings": [],
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
       "entryPoints": [
         "/browse",
       ],
       "extensible": {
         "supported": "yes",
       },
-      "integrationDependency": null,
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "customer.capirebookshopordsample:apiResource:CatalogService:v1",
       "partOfGroups": [
@@ -103,14 +109,21 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [],
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
       "entryPoints": [
         "/browse",
       ],
       "extensible": {
         "supported": "yes",
       },
-      "integrationDependency": null,
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "customer.capirebookshopordsample:apiResource:CinemaService:v1",
       "partOfGroups": [
@@ -156,26 +169,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "version": "1.0.0",
     },
   ],
-  "dataProducts": [],
   "description": "this is an application description",
-  "entityTypes": [
-    {
-      "description": "Description for odm.bookshop.Authors",
-      "extensible": {
-        "supported": "no",
-      },
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "level": "sub-entity",
-      "localId": "odm.bookshop.Authors",
-      "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
-      "releaseStatus": "active",
-      "shortDescription": "Short description of odm.bookshop.Authors",
-      "title": "odm.bookshop.Authors",
-      "version": "1.0.0",
-      "visibility": "public",
-    },
-  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -189,7 +183,6 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "extensible": {
         "supported": "yes",
       },
-      "integrationDependency": null,
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "customer.capirebookshopordsample:eventResource:AdminService:v1",
       "partOfGroups": [
@@ -216,11 +209,9 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },
-      "integrationDependency": null,
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "customer.capirebookshopordsample:eventResource:CatalogService:v1",
       "partOfGroups": [
@@ -247,11 +238,9 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },
-      "integrationDependency": null,
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "customer.capirebookshopordsample:eventResource:CinemaService:v1",
       "partOfGroups": [
@@ -297,12 +286,12 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
   "openResourceDiscovery": "1.9",
   "packages": [
     {
-      "description": "This package contains public General for capire bookshop ord sample.",
+      "description": "Description for capire bookshop ord sample",
       "ordId": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Package containing public General",
+      "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
