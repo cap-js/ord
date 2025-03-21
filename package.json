@@ -26,7 +26,6 @@
         "@sap/cds": "^8.1.1"
     },
     "dependencies": {
-        "lodash": "^4.17.21",
         "@cap-js/asyncapi": "^1.0.3",
         "@cap-js/openapi": "^1.2.1",
         "bcrypt": "^5.1.1",
