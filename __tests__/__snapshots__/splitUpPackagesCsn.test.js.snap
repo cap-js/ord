@@ -1,0 +1,519 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for Business Accelerator Hub Successfully create ORD Documents for Business Accelerator Hub 1`] = `
+{
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
+  "apiResources": [
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for SupplierService",
+      "entityTypeMappings": [],
+      "entryPoints": [
+        "/odata/v4/supplier",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:apiResource:SupplierService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:SupplierService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:SupplierService:v1/SupplierService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:SupplierService:v1/SupplierService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of SupplierService",
+      "title": "SupplierService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for MaterialService",
+      "entityTypeMappings": [],
+      "entryPoints": [
+        "/odata/v4/material",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:apiResource:MaterialService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:MaterialService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:MaterialService:v1/MaterialService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:MaterialService:v1/MaterialService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of MaterialService",
+      "title": "MaterialService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for PurchaseOrderService",
+      "entityTypeMappings": [],
+      "entryPoints": [
+        "/odata/v4/purchase-order",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:apiResource:PurchaseOrderService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:PurchaseOrderService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:PurchaseOrderService:v1/PurchaseOrderService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:PurchaseOrderService:v1/PurchaseOrderService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of PurchaseOrderService",
+      "title": "PurchaseOrderService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for InternalDataProductService",
+      "entityTypeMappings": [],
+      "entryPoints": [
+        "/odata/v4/internal-data-product",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:apiResource:InternalDataProductService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:InternalDataProductService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:InternalDataProductService:v1/InternalDataProductService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:InternalDataProductService:v1/InternalDataProductService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of InternalDataProductService",
+      "title": "InternalDataProductService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for CustomerService",
+      "entityTypeMappings": [],
+      "entryPoints": [
+        "/odata/v4/customer",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:apiResource:CustomerService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CustomerService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CustomerService:v1/CustomerService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CustomerService:v1/CustomerService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of CustomerService",
+      "title": "CustomerService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for RestrictedDataProductService",
+      "entityTypeMappings": [],
+      "entryPoints": [
+        "/odata/v4/restricted-data-product",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:apiResource:RestrictedDataProductService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:RestrictedDataProductService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:RestrictedDataProductService:v1/RestrictedDataProductService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:RestrictedDataProductService:v1/RestrictedDataProductService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of RestrictedDataProductService",
+      "title": "RestrictedDataProductService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "consumptionBundles": [
+    {
+      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
+      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "shortDescription": "If we have another protected API then it will be another object",
+      "title": "Unprotected resources",
+      "version": "1.0.0",
+    },
+  ],
+  "description": "Business Accelerator Hub ORD Test",
+  "eventResources": [
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": [],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:eventResource:SupplierService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:SupplierService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:SupplierService:v1/SupplierService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "SupplierService event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": [],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:eventResource:MaterialService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:MaterialService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:MaterialService:v1/MaterialService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "MaterialService event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": [],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:eventResource:PurchaseOrderService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:PurchaseOrderService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:PurchaseOrderService:v1/PurchaseOrderService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "PurchaseOrderService event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": [],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:eventResource:InternalDataProductService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:InternalDataProductService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:InternalDataProductService:v1/InternalDataProductService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "InternalDataProductService event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": [],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:eventResource:CustomerService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CustomerService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CustomerService:v1/CustomerService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CustomerService event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": [],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:eventResource:RestrictedDataProductService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:RestrictedDataProductService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:RestrictedDataProductService:v1/RestrictedDataProductService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "RestrictedDataProductService event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "groups": [
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:SupplierService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Supplier Service",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:MaterialService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Material Service",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:PurchaseOrderService",
+      "groupTypeId": "sap.cds:service",
+      "title": "PurchaseOrder Service",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:InternalDataProductService",
+      "groupTypeId": "sap.cds:service",
+      "title": "InternalDataProduct Service",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CustomerService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Customer Service",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:RestrictedDataProductService",
+      "groupTypeId": "sap.cds:service",
+      "title": "RestrictedDataProduct Service",
+    },
+  ],
+  "openResourceDiscovery": "1.10",
+  "packages": [
+    {
+      "description": "This package contains public APIs for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing public APIs",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "This package contains public Events for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing public Events",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+  ],
+  "policyLevel": "sap:core:v1",
+  "products": [
+    {
+      "ordId": "customer:product:capire.bookshop.ord.sample:",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:customer:",
+    },
+  ],
+}
+`;

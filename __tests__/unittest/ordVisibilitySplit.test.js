@@ -10,7 +10,7 @@ const {
     createEntityTypeTemplate,
     createAPIResourceTemplate,
     createEventResourceTemplate,
-    createDataProductTemplate
+    _getPackageID
 } = require('../../lib/templates');
 
 describe('templates', () => {
@@ -237,80 +237,43 @@ describe('templates', () => {
             expect(eventResource).toHaveLength(0);
         });
     });
-
-    describe('createDataProductTemplate', () => {
+    describe('_getPackageID', () => {
         const packageIds = [
-            'sap.test.cdsrc.sample:package:test-dataProduct:v1',
-            'sap.test.cdsrc.sample:package:test-dataProduct-private:v1',
-            'sap.test.cdsrc.sample:package:test-dataProduct-internal:v1'
+            'sap.test:package:test-entityType-public:v1',
+            'sap.test:package:test-api-xyz:v1',
+            'customer.testNamespace:package:fallback-package:v1'
         ];
 
-        const appConfig = {
-            ordNamespace: 'customer.testNamespace',
-            appName: 'testAppName',
-            lastUpdate: '2024-03-13',
-            entityTypeMappings: []
-        };
-
-        it('should remove duplicate referenced entityTypes', () => {
-            const dataProductName = 'DuplicateEntityDataProduct';
-            const expectedOrdId = `${appConfig.ordNamespace}:dataProduct:${dataProductName}:v1`;
-
-            const updatedAppConfig = {
-                ...appConfig,
-                entityTypeMappings: [
-                    {
-                        entityTypeTargets: [
-                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` },
-                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
-                        ]
-                    }
-                ]
-            };
-
-            const dataProductDefinition = {
-                "@title": "Duplicate Entity Data Product",
-                "@ORD.Extensions.entityTypes": [
-                    { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
-                ]
-            };
-
-            const dataProductTemplate = createDataProductTemplate(dataProductName, dataProductDefinition, updatedAppConfig, packageIds);
-
-            expect(dataProductTemplate[0].ordId).toEqual(expectedOrdId);
-            expect(dataProductTemplate[0].entityTypeMappings[0].entityTypeTargets).toHaveLength(1);
-            expect(dataProductTemplate[0].entityTypeMappings[0].entityTypeTargets).toEqual([
-                { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
-            ]);
+        it('should use visibility-specific logic when resourceType is provided', () => {
+            const result = _getPackageID(
+                'customer.testNamespace',
+                packageIds,
+                'entityType',
+                'public'
+            );
+            expect(result).toBe('sap.test:package:test-entityType-public:v1');
         });
 
-        it('should assign the correct partOfPackage for public Data Product', () => {
-            const dataProductName = 'PublicDataProduct';
-            const dataProductDefinition = { "@ORD.Extensions.visibility": "public" };
-
-            const dataProductTemplate = createDataProductTemplate(dataProductName, dataProductDefinition, appConfig, packageIds);
-
-            expect(dataProductTemplate).not.toHaveLength(0);
-            expect(dataProductTemplate[0].partOfPackage).toBe('sap.test.cdsrc.sample:package:test-dataProduct:v1');
+        it('should use simple pattern when no visibility is specified', () => {
+            const result = _getPackageID(
+                'customer.testNamespace',
+                ['sap.test:package:test-simple-entityType-match:v1'],
+                'entityType'
+            );
+            expect(result).toBe('sap.test:package:test-simple-entityType-match:v1');
         });
 
-        it('should assign the correct partOfPackage for internal Data Product', () => {
-            const dataProductName = 'InternalDataProduct';
-            const dataProductDefinition = { "@ORD.Extensions.visibility": "internal" };
-
-            const dataProductTemplate = createDataProductTemplate(dataProductName, dataProductDefinition, appConfig, packageIds);
-
-            expect(dataProductTemplate).not.toHaveLength(0);
-            expect(dataProductTemplate[0].partOfPackage).toBe('sap.test.cdsrc.sample:package:test-dataProduct-internal:v1');
+        it('should use namespace fallback when no resourceType is provided', () => {
+            const result = _getPackageID(
+                'customer.testNamespace',
+                packageIds
+            );
+            expect(result).toBe('customer.testNamespace:package:fallback-package:v1');
         });
 
-        it('should return an empty array for private Data Product', () => {
-            const dataProductName = 'PrivateDataProduct';
-            const dataProductDefinition = { "@ORD.Extensions.visibility": "private" };
-
-            const dataProductTemplate = createDataProductTemplate(dataProductName, dataProductDefinition, appConfig, packageIds);
-
-            expect(dataProductTemplate).toHaveLength(0);
+        it('should return undefined when no packageIds are provided', () => {
+            const result = _getPackageID('customer.testNamespace');
+            expect(result).toBeUndefined();
         });
     });
 });

@@ -10,7 +10,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
         expect(document.apiResources).toHaveLength(0);
         expect(document.eventResources).toHaveLength(0);
-        expect(document.dataProducts).toHaveLength(0);
     }
 
     function checkOrdDocumentInternalResourcess(csn) {
@@ -18,7 +17,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
         expect(document.apiResources).toHaveLength(3);
         expect(document.eventResources).toHaveLength(3);
-        expect(document.dataProducts).toHaveLength(0);
     }
 
     beforeAll(() => {
