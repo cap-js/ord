@@ -34,7 +34,7 @@ describe('templates', () => {
 
     describe('createEntityTypeTemplate', () => {
         const packageIds = [
-            'sap.test.cdsrc.sample:package:test-entityType-public:v1',
+            'sap.test.cdsrc.sample:package:test-entityType:v1',
             'sap.test.cdsrc.sample:package:test-entityType-internal:v1'
         ];
 
@@ -77,7 +77,7 @@ describe('templates', () => {
 
             const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
 
-            expect(entityType).toBeNull(); // Should return null for private visibility
+            expect(entityType).toBeNull();
         });
 
         it('should assign the correct partOfPackage based on visibility', () => {
@@ -92,7 +92,7 @@ describe('templates', () => {
             const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
 
             expect(entityType).not.toBeNull();
-            expect(entityType.partOfPackage).toBe('sap.test.cdsrc.sample:package:test-entityType-public:v1');
+            expect(entityType.partOfPackage).toBe('sap.test.cdsrc.sample:package:test-entityType:v1');
         });
 
         it('should assign the correct partOfPackage for a non-public entity (e.g., internal)', () => {

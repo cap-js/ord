@@ -279,7 +279,7 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            const packageIds = ['sap.test.cdsrc.sample:package:test-event:v1', 'sap.test.cdsrc.sample:package:test-api:v1'];
+            const packageIds = ['sap.test.cdsrc.sample:package:test-event-internal:v1', 'sap.test.cdsrc.sample:package:test-api:v1'];
             const eventResourceTemplate = createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
             expect(eventResourceTemplate).toBeInstanceOf(Array);

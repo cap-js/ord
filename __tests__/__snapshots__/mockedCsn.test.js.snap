@@ -57,7 +57,15 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CatalogService",
-      "entityTypeMappings": [],
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
       "entryPoints": [
         "/browse",
       ],
@@ -101,7 +109,15 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [],
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
       "entryPoints": [
         "/browse",
       ],
@@ -211,7 +227,15 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -241,7 +265,15 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },

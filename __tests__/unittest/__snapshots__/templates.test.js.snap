@@ -162,7 +162,15 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [],
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test:v1",
+          },
+        ],
+      },
+    ],
     "entryPoints": [
       "/odata/v4/my",
     ],
@@ -210,7 +218,15 @@ exports[`templates ordExtension should add events with ORD Extension "visibility
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [],
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test:v1",
+          },
+        ],
+      },
+    ],
     "extensible": {
       "supported": "yes",
     },
@@ -246,7 +262,15 @@ exports[`templates ordExtension should include internal API resources but ensure
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [],
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test:v1",
+          },
+        ],
+      },
+    ],
     "entryPoints": [
       "/odata/v4/my",
     ],
@@ -294,7 +318,15 @@ exports[`templates ordExtension should include internal events but ensure they a
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [],
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test:v1",
+          },
+        ],
+      },
+    ],
     "extensible": {
       "supported": "yes",
     },
@@ -303,7 +335,7 @@ exports[`templates ordExtension should include internal events but ensure they a
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
     ],
-    "partOfPackage": undefined,
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-event-internal:v1",
     "releaseStatus": "active",
     "resourceDefinitions": [
       {
