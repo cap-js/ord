@@ -53,6 +53,58 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "2.0.0",
       "visibility": "public",
     },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for CinemaService",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [
+        "/browse",
+      ],
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:CinemaService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.edmx",
+        },
+      ],
+      "shortDescription": "short description for test CinemaService",
+      "title": "This is test Cinema Service title",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -91,6 +143,24 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
   ],
   "description": "this is my custom description",
+  "entityTypes": [
+    {
+      "description": "Description for odm.bookshop.Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "odm.bookshop.Authors",
+      "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of odm.bookshop.Authors",
+      "title": "odm.bookshop.Authors",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -128,6 +198,44 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "2.0.0",
       "visibility": "public",
     },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "short description for test CinemaService",
+      "title": "This is test Cinema Service title",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "groups": [
     {
@@ -149,18 +257,29 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "openResourceDiscovery": "1.10",
   "packages": [
     {
-      "description": "Description for capire bookshop ord sample",
+      "description": "This package contains public APIs for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
+      "shortDescription": "Package containing public APIs",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for capire bookshop ord sample",
+      "description": "This package contains internal APIs for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing internal APIs",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "This package contains public Events for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
@@ -170,37 +289,26 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.1",
     },
     {
-      "description": "Description for capire bookshop ord sample",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
+      "description": "This package contains internal Events for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
+      "shortDescription": "Package containing internal Events",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for capire bookshop ord sample",
+      "description": "This package contains public Entity Types for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
+      "shortDescription": "Package containing public Entity Types",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
-    },
-    {
-      "description": "Description for capire bookshop ord sample version 2",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "shortDescription": "Short description for capire bookshop ord sample version 2",
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "2.0.0",
     },
   ],
   "policyLevel": "sap:core:v1",
@@ -268,6 +376,58 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "2.0.0",
       "visibility": "public",
     },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for CinemaService",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [
+        "/browse",
+      ],
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:CinemaService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.edmx",
+        },
+      ],
+      "shortDescription": "short description for test CinemaService",
+      "title": "This is test Cinema Service title",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -306,6 +466,24 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
   ],
   "description": "this is my custom description",
+  "entityTypes": [
+    {
+      "description": "Description for odm.bookshop.Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "odm.bookshop.Authors",
+      "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of odm.bookshop.Authors",
+      "title": "odm.bookshop.Authors",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -343,6 +521,44 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "2.0.0",
       "visibility": "public",
     },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "short description for test CinemaService",
+      "title": "This is test Cinema Service title",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "groups": [
     {
@@ -364,18 +580,29 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "openResourceDiscovery": "1.10",
   "packages": [
     {
-      "description": "Description for capire bookshop ord sample",
+      "description": "This package contains public APIs for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
+      "shortDescription": "Package containing public APIs",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for capire bookshop ord sample",
+      "description": "This package contains internal APIs for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing internal APIs",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "This package contains public Events for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
@@ -385,37 +612,26 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.1",
     },
     {
-      "description": "Description for capire bookshop ord sample",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
+      "description": "This package contains internal Events for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
+      "shortDescription": "Package containing internal Events",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for capire bookshop ord sample",
+      "description": "This package contains public Entity Types for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
+      "shortDescription": "Package containing public Entity Types",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
-    },
-    {
-      "description": "Description for capire bookshop ord sample version 2",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "shortDescription": "Short description for capire bookshop ord sample version 2",
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "2.0.0",
     },
   ],
   "policyLevel": "sap:core:v1",
@@ -483,6 +699,58 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "2.0.0",
       "visibility": "public",
     },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for CinemaService",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [
+        "/browse",
+      ],
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:CinemaService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.edmx",
+        },
+      ],
+      "shortDescription": "short description for test CinemaService",
+      "title": "This is test Cinema Service title",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -521,6 +789,24 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
   ],
   "description": "this is my custom description",
+  "entityTypes": [
+    {
+      "description": "Description for odm.bookshop.Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "odm.bookshop.Authors",
+      "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of odm.bookshop.Authors",
+      "title": "odm.bookshop.Authors",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -558,6 +844,44 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "2.0.0",
       "visibility": "public",
     },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "extensible": {
+        "supported": "yes",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "short description for test CinemaService",
+      "title": "This is test Cinema Service title",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "groups": [
     {
@@ -579,18 +903,29 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "openResourceDiscovery": "1.10",
   "packages": [
     {
-      "description": "Description for capire bookshop ord sample",
+      "description": "This package contains public APIs for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
+      "shortDescription": "Package containing public APIs",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for capire bookshop ord sample",
+      "description": "This package contains internal APIs for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing internal APIs",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "This package contains public Events for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
@@ -600,37 +935,26 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.1",
     },
     {
-      "description": "Description for capire bookshop ord sample",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-integrationDependency:v1",
+      "description": "This package contains internal Events for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
+      "shortDescription": "Package containing internal Events",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
     {
-      "description": "Description for capire bookshop ord sample",
+      "description": "This package contains public Entity Types for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Short description of capire bookshop ord sample",
+      "shortDescription": "Package containing public Entity Types",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
-    },
-    {
-      "description": "Description for capire bookshop ord sample version 2",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "shortDescription": "Short description for capire bookshop ord sample version 2",
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "2.0.0",
     },
   ],
   "policyLevel": "sap:core:v1",

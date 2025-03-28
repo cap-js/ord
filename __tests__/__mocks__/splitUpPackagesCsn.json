@@ -1,0 +1,118 @@
+{
+    "definitions": {
+      "SupplierService": {
+        "kind": "service",
+        "title": "Supplier",
+        "visibility": "public",
+        "SupplierService.Suppliers": {
+          "kind": "entity",
+          "projection": {
+            "from": ["businessAcceleratorHub.Suppliers"]
+          }
+        }
+      },
+      "MaterialService": {
+        "kind": "service",
+        "title": "Material",
+        "visibility": "public",
+        "MaterialService.Materials": {
+          "kind": "entity",
+          "projection": {
+            "from": ["businessAcceleratorHub.Materials"]
+          }
+        }
+      },
+      "PurchaseOrderService": {
+        "kind": "service",
+        "title": "Purchase Order",
+        "visibility": "internal",
+        "PurchaseOrderService.PurchaseOrders": {
+          "kind": "entity",
+          "projection": {
+            "from": ["businessAcceleratorHub.PurchaseOrders"]
+          }
+        }
+      },
+      "InternalDataProductService": {
+        "kind": "service",
+        "title": "Confidential Orders",
+        "visibility": "internal",
+        "InternalDataProductService.ConfidentialOrders": {
+          "kind": "entity",
+          "projection": {
+            "from": ["businessAcceleratorHub.ConfidentialOrders"]
+          }
+        }
+      },
+      "CustomerService": {
+        "kind": "service",
+        "title": "Customer Service",
+        "visibility": "public",
+        "CustomerService.Customers": {
+          "kind": "entity",
+          "projection": {
+            "from": ["businessAcceleratorHub.Customers"]
+          }
+        }
+      },
+      "RestrictedDataProductService": {
+        "kind": "service",
+        "title": "Restricted Data Product Service",
+        "visibility": "private",
+        "RestrictedDataProductService.RestrictedData": {
+          "kind": "entity",
+          "projection": {
+            "from": ["businessAcceleratorHub.RestrictedData"]
+          }
+        }
+      },
+      "businessAcceleratorHub.Suppliers": {
+        "kind": "entity",
+        "visibility": "public",
+        "elements": {
+          "ID": { "type": "UUID", "key": true },
+          "name": { "type": "String" }
+        }
+      },
+      "businessAcceleratorHub.Materials": {
+        "kind": "entity",
+        "visibility": "public",
+        "elements": {
+          "ID": { "type": "UUID", "key": true },
+          "description": { "type": "String" }
+        }
+      },
+      "businessAcceleratorHub.PurchaseOrders": {
+        "kind": "entity",
+        "visibility": "internal",
+        "elements": {
+          "ID": { "type": "UUID", "key": true },
+          "amount": { "type": "Decimal" }
+        }
+      },
+      "businessAcceleratorHub.ConfidentialOrders": {
+        "kind": "entity",
+        "visibility": "internal",
+        "elements": {
+          "ID": { "type": "UUID", "key": true },
+          "sensitiveInfo": { "type": "String" }
+        }
+      },
+      "businessAcceleratorHub.Customers": {
+        "kind": "entity",
+        "visibility": "public",
+        "elements": {
+          "ID": { "type": "UUID", "key": true },
+          "fullName": { "type": "String" }
+        }
+      },
+      "businessAcceleratorHub.RestrictedData": {
+        "kind": "entity",
+        "visibility": "private",
+        "elements": {
+          "ID": { "type": "UUID", "key": true },
+          "confidentialInfo": { "type": "String" }
+        }
+      }
+    }
+  }
