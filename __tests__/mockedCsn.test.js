@@ -97,7 +97,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     });
 
     describe("Tests for ORD document when all the resources are internal", () => {
-        test("All services are interal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
+        test("All services are internal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/internalResourcesCsn.json");
             checkOrdDocumentInternal(csn);
         });
@@ -115,4 +115,19 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.eventResources[1].ordId).toEqual(expect.stringContaining("CatalogService"));
         });
     });
+
+    describe("Tests for ORD document when service is annotated as a primary Data Product`", () => {
+        test("Successfully create ORD Documents: ", () => {
+            const csn = require("./__mocks__/dataProductCsn.json");
+            const document = ord(csn);
+
+            expect(document).not.toBeUndefined();
+            expect(document.apiResources).toHaveLength(2)
+            const dataProductApiResources = document.apiResources.filter(resource => resource.implementationStandard === "sap.dp:data-subscription-api:v1");
+            expect(dataProductApiResources).toHaveLength(2);
+            expect(dataProductApiResources[0].resourceDefinitions).toHaveLength(1);
+            expect(dataProductApiResources[0].resourceDefinitions[0]).type === "sap-csn-interop-effective-v1";
+        });
+    });
+
 });
