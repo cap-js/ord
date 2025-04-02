@@ -82,7 +82,7 @@ describe('defaults', () => {
                 "env": {
                     "packages": [
                         {
-                            "vendor": "sap:vendor:Customer:"
+                            "vendor": "sap:vendor:SAP:"
                         }
                     ]
                 }
