@@ -11,7 +11,7 @@ const {
     createEntityTypeMappingsItemTemplate,
     createGroupsTemplateForService,
     createAPIResourceTemplate,
-    createEventResourceTemplate
+    createEventResourceTemplate,
 } = require('../../lib/templates');
 
 describe('templates', () => {
@@ -162,7 +162,7 @@ describe('templates', () => {
             expect(apiResourceTemplate).toMatchSnapshot();
         });
 
-        it('should not add apiResources with ORD Extension "visibility=internal"', () => {
+        it('should include internal API resources but ensure they appear in a separate package', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
                 service MyService {
@@ -188,13 +188,13 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }]
+            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }];
             const packageIds = ['customer.testNamespace:package:test:v1'];
             const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
             expect(apiResourceTemplate).toBeInstanceOf(Array);
             expect(apiResourceTemplate).toMatchSnapshot();
-            expect(apiResourceTemplate).toEqual([]);
+            expect(apiResourceTemplate[0].visibility).toEqual('internal');
         });
 
         it('should not add apiResources with ORD Extension "visibility=private"', () => {
@@ -259,7 +259,7 @@ describe('templates', () => {
             expect(eventResourceTemplate).toMatchSnapshot();
         });
 
-        it('should not add events with ORD Extension "visibility=internal"', () => {
+        it('should include internal events but ensure they appear in a separate package', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
                 service MyService {
@@ -279,12 +279,13 @@ describe('templates', () => {
                 };
             `);
             const srvDefinition = linkedModel.definitions[serviceName];
-            const packageIds = ['sap.test.cdsrc.sample:package:test-event:v1', 'sap.test.cdsrc.sample:package:test-api:v1'];
+            const packageIds = ['sap.test.cdsrc.sample:package:test-event-internal:v1', 'sap.test.cdsrc.sample:package:test-api:v1'];
             const eventResourceTemplate = createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
 
             expect(eventResourceTemplate).toBeInstanceOf(Array);
             expect(eventResourceTemplate).toMatchSnapshot();
-            expect(eventResourceTemplate).toEqual([]);
+
+            expect(eventResourceTemplate[0].visibility).toEqual('internal');
         });
 
         it('should not add events with ORD Extension "visibility=private"', () => {

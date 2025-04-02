@@ -1,0 +1,38 @@
+{
+    "$version": "2.0",
+    "definitions": {
+        "LocalService": {
+            "@ORD.Extensions.title": "This is Local Service title",
+            "kind": "service"
+        },
+        "LocalService.DummyEntityA": {
+            "@ODM.entityName": "SomeODMEntity",
+            "@ODM.oid": "id",
+            "@ODM.root": true,
+            "@title": "Dummy title of SomeODMEntity",
+            "elements": {
+                "id": { "key": true, "type": "cds.UUID" },
+                "propertyA": { "length": 10, "type": "cds.String" },
+                "propertyB": { "length": 20, "type": "cds.String" }
+            },
+            "kind": "entity",
+            "projection": { "from": { "ref": ["sap.cds.demo.EntityWithCorrespondingODMEntity"] } }
+        },
+        "sap.cds.demo.EntityWithCorrespondingODMEntity": {
+            "@ODM.entityName": "SomeODMEntity",
+            "@ODM.oid": "id",
+            "@ODM.root": true,
+            "@title": "Dummy title of SomeODMEntity",
+            "elements": {
+                "id": { "key": true, "type": "cds.UUID" },
+                "propertyA": { "length": 10, "type": "cds.String" },
+                "propertyB": { "length": 20, "type": "cds.String" }
+            },
+            "kind": "entity"
+        }
+    },
+    "meta": {
+        "creator": "CDS Compiler v5.4.4",
+        "flavor": "inferred"
+    }
+}

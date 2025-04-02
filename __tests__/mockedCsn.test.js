@@ -5,11 +5,20 @@ const { AUTHENTICATION_TYPE } = require('../lib/constants');
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;
 
-    function checkOrdDocument(csn) {
+    function checkOrdDocumentInternal(csn) {
         const document = ord(csn);
 
         expect(document).not.toBeUndefined();
-        expect(document.packages).not.toBeDefined();
+        expect(document.packages).toBeDefined();
+        expect(document.apiResources).toHaveLength(3);
+        expect(document.eventResources).toHaveLength(3);
+    }
+
+    function checkOrdDocumentPrivate(csn) {
+        const document = ord(csn);
+
+        expect(document).not.toBeUndefined();
+        expect(document.packages).toHaveLength(0);
         expect(document.apiResources).toHaveLength(0);
         expect(document.eventResources).toHaveLength(0);
     }
@@ -60,7 +69,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.eventResources).toHaveLength(1);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("EbMtEmitter"));
             expect(document.eventResources[0].ordId).toEqual(expect.stringContaining("EbMtEmitter"));
-            expect(document.apiResources[0].entityTypeMappings).toBeUndefined();
+            expect(document.apiResources[0].entityTypeMappings).toHaveLength(0);
         });
     });
 
@@ -70,7 +79,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.entityTypes).toHaveLength(1);
+            expect(document.entityTypes).toHaveLength(2);
             expect(document.entityTypes[0].partOfPackage).toEqual(expect.stringContaining("entityType"));
             expect(document.entityTypes[0].level).toEqual(expect.stringContaining("root-entity"));
             expect(document.apiResources[0].entityTypeMappings[0].entityTypeTargets).toEqual(expect.arrayContaining([
@@ -83,14 +92,14 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     describe("Tests for ORD document when all the resources are private", () => {
         test("All services are private: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/privateResourcesCsn.json");
-            checkOrdDocument(csn);
+            checkOrdDocumentPrivate(csn);
         });
     });
 
     describe("Tests for ORD document when all the resources are internal", () => {
-        test("All services are interal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
+        test("All services are internal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/internalResourcesCsn.json");
-            checkOrdDocument(csn);
+            checkOrdDocumentInternal(csn);
         });
     });
 
@@ -100,10 +109,25 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.apiResources).toHaveLength(1);
-            expect(document.eventResources).toHaveLength(1);
+            expect(document.apiResources).toHaveLength(2);
+            expect(document.eventResources).toHaveLength(2);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
-            expect(document.eventResources[0].ordId).toEqual(expect.stringContaining("CatalogService"));
+            expect(document.eventResources[1].ordId).toEqual(expect.stringContaining("CatalogService"));
         });
     });
+
+    describe("Tests for ORD document when service is annotated as a primary Data Product`", () => {
+        test("Successfully create ORD Documents: ", () => {
+            const csn = require("./__mocks__/dataProductCsn.json");
+            const document = ord(csn);
+
+            expect(document).not.toBeUndefined();
+            expect(document.apiResources).toHaveLength(2)
+            const dataProductApiResources = document.apiResources.filter(resource => resource.implementationStandard === "sap.dp:data-subscription-api:v1");
+            expect(dataProductApiResources).toHaveLength(2);
+            expect(dataProductApiResources[0].resourceDefinitions).toHaveLength(1);
+            expect(dataProductApiResources[0].resourceDefinitions[0]).type === "sap-csn-interop-effective-v1";
+        });
+    });
+
 });
