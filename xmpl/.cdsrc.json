@@ -14,10 +14,13 @@
         "namespace": "sap.sample",
         "description": "this is my custom description",
         "policyLevel": "sap:core:v1",
-        "customOrdContentFile": "./ord/custom.ord.json"
+        "customOrdContentFile": "./ord/custom.ord.json",
+        "odata_version": "v2"
     },
     "authentication": {
-        "types": ["basic"],
+        "types": [
+            "basic"
+        ],
         "credentials": {
             "admin": "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"
         }
