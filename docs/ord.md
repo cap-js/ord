@@ -13,7 +13,18 @@ Example:
   "ord": {
     "namespace": "sap.sample",
     "description": "this is my custom description",
-    "policyLevel": "sap:core:v1"
+    "policyLevel": "sap:core:v1",
+    "products": [
+        {
+            "ordId": "sap:product:eb.bm.tests:",
+            "vendor": "sap:vendor:SAP:"
+        }
+    ],
+    "packages": [
+        {
+            "vendor": "sap:vendor:SAP:"
+        }
+    ]
   }
 ```
 

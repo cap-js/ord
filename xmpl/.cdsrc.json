@@ -15,7 +15,6 @@
         "description": "this is my custom description",
         "policyLevel": "sap:core:v1",
         "customOrdContentFile": "./ord/custom.ord.json",
-        "existingProductOrdId": "",
         "products": [
             {
                 "ordId": "sap:product:eb.bm.tests:",
@@ -24,7 +23,7 @@
         ],
         "packages": [
             {
-                "vendor": "sap:vendor:Customer:"
+                "vendor": "sap:vendor:SAP:"
             }
         ]
     },
