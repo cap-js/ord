@@ -31,5 +31,13 @@
         "@cap-js/openapi": "^1.2.1",
         "bcrypt": "^5.1.1",
         "lodash": "^4.17.21"
+    },
+    "cds": {
+        "requires": {
+            "SAP ORD Service": {
+                "model": "@cap-js/ord/lib/ord-service",
+                "service": "OrdService"
+            }
+        }
     }
 }
