@@ -1,4 +1,4 @@
-@rest  @path: '/ord/v1'
+@rest  @path: '/ord/v2'
 @ORD.Extensions.implementationStandard: 'sap:ord-document-api:v1'
 service OrdService {
     @readonly
@@ -14,3 +14,9 @@ service OrdService {
     function api(service : String, format : String) returns {};
 }
 
+// note: /.well-known/open-resource-discovery needs another service
+@rest  @path: '/.well-known'
+@ORD.Extensions.implementationStandard: 'sap:ord-document-api:v1'
+service WellKnownService {
+    function ord() returns {};
+}
