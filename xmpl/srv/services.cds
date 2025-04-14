@@ -7,9 +7,6 @@ using from '@capire/incidents/db/schema';
 
 namespace sap.capire.incidents;
 
-// This helps CAP to discover already existing endpoint for ORD
-@rest @path:'/.well-known/open-resource-discovery'
-service OrdService {}
 
 annotate ProcessorService with @ORD.Extensions: {
     title           : 'This is Processor Service title',
