@@ -11,7 +11,7 @@ service OrdService {
         key id : String;
     }
 
-    function api(service : String, format : String) returns {};
+    function api(arg : String, service : String) returns {};
 }
 
 // note: /.well-known/open-resource-discovery needs another service
