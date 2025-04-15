@@ -126,17 +126,6 @@ cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 
 <img width="1300" alt="Sample Application Demo" style="border-radius:0.5rem;" src="./asset/etc/ordEndpoint.gif">
 
-#### ORD Endpoints in index HTML
-Set environment variable `ORD_INDEX_HTML` to `true` to enable the ORD endpoints in the index.html file.
-You can set environment variable in the terminal, IDE config or in the `.env` file.
-
-Add a new ```ord-service.cds``` file to ```ord``` folder with the following content:
-```
-// This helps CAP to discover already existing endpoint for ORD
-@rest @path:'/.well-known/open-resource-discovery'
-service OrdService {}
-```
-
 ### Customizing ORD Document
 
 You can find more information, such as how to customize the ORD Document, in this [document](./docs/ord.md).
