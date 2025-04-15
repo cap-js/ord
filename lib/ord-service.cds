@@ -6,12 +6,7 @@ service OrdService {
         key id : String;
     }
 
-    @readonly
-    entity csn {
-        key id : String;
-    }
-
-    function api(arg : String, service : String) returns {};
+    function api() returns {};
 }
 
 // note: /.well-known/open-resource-discovery needs another service
