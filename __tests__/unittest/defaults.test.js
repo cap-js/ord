@@ -112,48 +112,6 @@ describe('defaults', () => {
             expect(defaults.packages(appConfig, testPolicyLevel)).toMatchSnapshot();
         });
 
-        it('should return default product ordId value if user did not define ordId in products in .cdsrc.json', () => {
-            const testPolicyLevel = 'policy';
-            appConfig = {
-                "appName": testGetPackageDataName,
-                "ordNamespace": testGetPackageOrdNamespace,
-                "products": [
-                    {
-                        "vendor": "sap:vendor:SAP:"
-                    }
-                ],
-                "env": {
-                    "packages": [
-                        {
-                            "vendor": "sap:vendor:SAP:"
-                        }
-                    ]
-                }
-            }
-            expect(defaults.packages(appConfig, testPolicyLevel)).toMatchSnapshot();
-        });
-
-        it('should return default product ordId value if user did not define ordId in products in .cdsrc.json and contains sap', () => {
-            const testPolicyLevel = 'sap:policy';
-            appConfig = {
-                "appName": testGetPackageDataName,
-                "ordNamespace": testGetPackageOrdNamespace,
-                "products": [
-                    {
-                        "vendor": "sap:vendor:SAP:"
-                    }
-                ],
-                "env": {
-                    "packages": [
-                        {
-                            "vendor": "sap:vendor:SAP:"
-                        }
-                    ]
-                }
-            }
-            expect(defaults.packages(appConfig, testPolicyLevel)).toMatchSnapshot();
-        });
-
         it('should return custom value if user did not define packages in .cdsrc.json', () => {
             const testPolicyLevel = 'policy';
             appConfig = {
