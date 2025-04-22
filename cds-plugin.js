@@ -1,5 +1,10 @@
-require("./lib/plugin");
 const cds = require("@sap/cds");
+const {getAuthConfig} = require("./lib/authentication");
+
+// load auth config before any service is started
+cds.on("bootstrap", async () => {
+    getAuthConfig();
+});
 
 function _lazyRegisterCompileTarget() {
   const ord = require("./lib/index").ord;
