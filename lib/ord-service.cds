@@ -5,8 +5,6 @@ service OrdService {
     entity documents {
         key id : String;
     }
-
-    function api() returns {};
 }
 
 @rest  @path: '/.well-known/open-resource-discovery'
