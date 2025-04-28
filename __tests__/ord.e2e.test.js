@@ -198,3 +198,81 @@ describe("End-to-end test for ORD document", () => {
     });
 });
 
+describe("Tests for products and packages", () => {
+    let csn, ord, errorSpy;
+
+    beforeAll(async () => {
+        process.env.DEBUG = "true";
+        jest.spyOn(cds, "context", "get").mockReturnValue({
+            authConfig: {
+                types: [AUTHENTICATION_TYPE.Open]
+            }
+        });
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
+        cds.root = path.join(__dirname, "bookshop");
+        errorSpy = jest.spyOn(console, "error");
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.clearAllMocks();
+        jest.resetAllMocks();
+
+    });
+
+    it("should not contain products property if existingProductId provided", async () => {
+        cds.env.ord = {
+            existingProductORDId: "sap:product:SAPServiceCloudV2:"
+        };
+        csn = await cds.load(path.join(cds.root, "srv"));
+
+        const document = ord(csn);
+        expect(document).toMatchSnapshot();
+    });
+
+    it("should raise error log when custom product ordId starts with sap detected", async () => {
+        let csn, ord;
+        cds.root = path.join(__dirname, "bookshop");
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
+        cds.env.ord = {
+            "products": [
+                {
+                    "ordId": "sap:product:eb.bm.tests:",
+                    "vendor": "sap:vendor:SAP:"
+                }
+            ],
+        };
+        csn = await cds.load(path.join(cds.root, "srv"));
+
+        const document = ord(csn);
+        expect(document).toMatchSnapshot();
+        expect(errorSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it("should use valid custom products ordId", async () => {
+        let csn, ord;
+        cds.env.ord = {};
+        cds.root = path.join(__dirname, "bookshop");
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
+        cds.env.ord = {
+            "products": [
+                {
+                    "ordId": "customer:product:eb.bm.tests:",
+                    "vendor": "sap:vendor:SAP:"
+                }
+            ],
+        };
+        csn = await cds.load(path.join(cds.root, "srv"));
+
+        const document = ord(csn);
+        expect(document).toMatchSnapshot();
+        expect(errorSpy).toHaveBeenCalledTimes(0);
+    });
+});
+

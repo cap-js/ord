@@ -45,7 +45,7 @@ describe("extendOrdWithCustom", () => {
         it("should ignore and log warn if found ord top-level primitive property in customOrdFile", () => {
             const ordContent = {};
             prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, "testCustomORDContentFileThrowErrors.json");
-            const result = extendCustomORDContentIfExists(appConfig,ordContent);
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
 
             expect(warningSpy).toHaveBeenCalledTimes(3);
             expect(warningSpy).toHaveBeenCalledWith(
