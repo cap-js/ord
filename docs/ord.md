@@ -6,42 +6,42 @@ The CAP-JS ORD plugin automatically generates all values in the ORD document by 
 
 ## 1. Overriding Global Application Information
 
-    Global settings can be defined using the `present configuration` in your `cdsrc.json` or `package.json` file under the `ord` section.
+Global settings can be defined using the `present configuration` in your `cdsrc.json` or `package.json` file under the `ord` section.
 
-    **Example:**
+**Example:**
 
-    ```json
-    {
+```json
+{
     "ord": {
         "namespace": "sap.sample",
         "description": "This is my custom description",
         "policyLevel": "sap:core:v1"
     }
-    }
-    ```
+}
+```
 
 ---
 
 ## 2. Overriding Service-Level Information
 
-    Service-specific data can be added or overwritten using annotations in your `.cds` files with `@ORD.Extensions`.
+Service-specific data can be added or overwritten using annotations in your `.cds` files with `@ORD.Extensions`.
 
-    **Example:**
+**Example:**
 
-    ```cds
-    annotate ProcessorService with @ORD.Extensions: {
-        title: 'This is Processor Service title',
-        industry: [
-            'Retail',
-            'Consumer Products'
-        ],
-        lineOfBusiness: ['Sales'],
-        extensible: { supported: 'no' }
-    };
-    ```
+```js
+annotate ProcessorService with @ORD.Extensions: {
+    title: 'This is Processor Service title',
+    industry: [
+        'Retail',
+        'Consumer Products'
+    ],
+    lineOfBusiness: ['Sales'],
+    extensible: { supported: 'no' }
+};
+```
 
-    > **Note:**
-    > Standard annotations like `@Core.Description` and `@description` are also automatically read by the plugin.
+> **Note:**
+> Standard annotations like `@Core.Description` and `@description` are also automatically read by the plugin.
 
 ---
 
@@ -51,7 +51,7 @@ The ORD plugin allows adding **custom ORD content** via the `customOrdContentFil
 
 The override priority is as follows:
 
-```
+```js
 customOrdContent > ORD.Extensions Annotations > CAP Annotations > Plugin Defaults
 ```
 
