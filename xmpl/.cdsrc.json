@@ -18,7 +18,7 @@
         "existingProductORDId": "sap:product:SAPServiceCloudV2:",
         "products": [
             {
-                "ordId": "sap:product:eb.bm.tests:",
+                "ordId": "customer:product:eb.bm.tests:",
                 "vendor": "sap:vendor:SAP:"
             }
         ],

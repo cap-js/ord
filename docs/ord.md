@@ -14,17 +14,6 @@ Example:
     "namespace": "sap.sample",
     "description": "this is my custom description",
     "policyLevel": "sap:core:v1",
-    "products": [
-        {
-            "ordId": "sap:product:eb.bm.tests:",
-            "vendor": "sap:vendor:SAP:"
-        }
-    ],
-    "packages": [
-        {
-            "vendor": "sap:vendor:SAP:"
-        }
-    ]
   }
 ```
 
@@ -99,8 +88,54 @@ In the custom ORD file, you can:
     ]
 }
 ```
+## Adding Products
+We provide special rules for adding products:
+1. Define `existingProductORDId:` in `.cdsrc.json` if it is SAP existing product, avoiding duplicating product definition, e.g.:
+    ```js
+    // cdsrc.json
+    "ord": {
+            "namespace": "sap.sample",
+            "description": "this is my custom description",
+            "policyLevel": "sap:core:v1",
+            "customOrdContentFile": "./ord/custom.ord.json",
+            "existingProductORDId": "sap:product:SAPServiceCloudV2:"
+        }
+    ```
+    ORD document will not contain `products` at the root property, and packages will be assigned to the value of `existingProductORDId` in `partOfProducts`, e.g.:
+    ```js
+    "packages": [
+        {
+            "ordId": "sap.sample:package:capireordsample-api:v1",
+            "title": "capire ord sample",
+            "shortDescription": "Package containing public APIs",
+            "description": "This package contains public APIs for capire ord sample.",
+            "version": "1.0.0",
+            "partOfProducts": [
+                "sap:product:SAPServiceCloudV2:"
+            ],
+            "vendor": "sap:vendor:SAP:"
+        }
+    ]
+    ```
+2. Define and use Non-SAP products, please avoid defining `product ordId` starts with `sap`. Plugin will validate custom product ordId, if it's invalid, the default value will be used, e.g.:
+    ```js
+    // cdsrc.json
+    "ord": {
+            "namespace": "sap.sample",
+            "description": "this is my custom description",
+            "policyLevel": "sap:core:v1",
+            "customOrdContentFile": "./ord/custom.ord.json",
+            "products": [
+                {
+                    "ordId": "customer:product:eb.bm.tests:",
+                    "vendor": "sap:vendor:SAP:"
+                }
+      ],
+        }
+    ```
+3. Use default value provided by plugin if there is no extract settings.
 
-## Ord Root Property
+# Ord Root Property
 
 More information, see [ord document](https://pages.github.tools.sap/CentralEngineering/open-resource-discovery-specification/spec-v1/interfaces/document)
 | ORD Field | Type | Defaults | Preset/Annotation | Usage Example | Description |
