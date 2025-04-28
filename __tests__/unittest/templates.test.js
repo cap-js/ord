@@ -1,5 +1,6 @@
 const cds = require('@sap/cds');
-const { AUTHENTICATION_TYPE } = require('../../lib/constants');
+const { AUTHENTICATION_TYPE, ORD_ODM_ENTITY_NAME_ANNOTATION} = require('../../lib/constants');
+const { cloneDeep } = require('lodash');
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
     authConfig: {
@@ -36,6 +37,19 @@ describe('templates', () => {
     });
 
     describe('createEntityTypeMappingsItemTemplate', () => {
+        it('should return ORD_ODM_ENTITY_NAME_ANNOTATION for ordID', () => {
+            const model = cloneDeep(linkedModel.definitions['customer.testNamespace123.Books']);
+            model[ORD_ODM_ENTITY_NAME_ANNOTATION] = 'namespace customer.testNamespace123';
+            expect(createEntityTypeMappingsItemTemplate(model).ordId).toEqual('sap.odm:entityType:namespace customer.testNamespace123:v1');
+        });
+
+        it('should return append root to ordID if it is an root element', () => {
+            const model = cloneDeep(linkedModel.definitions['customer.testNamespace123.Books']);
+            model[ORD_ODM_ENTITY_NAME_ANNOTATION] = 'namespace customer.testNamespace123';
+            model['@ODM.root'] = true;
+            expect(createEntityTypeMappingsItemTemplate(model).ordId).toEqual('sap.odm:entityType:namespace customer.testNamespace123Root:v1');
+        });
+
         it('should return default value', () => {
             expect(createEntityTypeMappingsItemTemplate(linkedModel.definitions['customer.testNamespace123.Books'])).toBeUndefined();
         });
