@@ -15,6 +15,7 @@
         "description": "this is my custom description",
         "policyLevel": "sap:core:v1",
         "customOrdContentFile": "./ord/custom.ord.json",
+        "existingProductORDId": "sap:product:SAPServiceCloudV2:",
         "products": [
             {
                 "ordId": "sap:product:eb.bm.tests:",
