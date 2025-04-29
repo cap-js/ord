@@ -59,7 +59,6 @@ cds.build?.register?.('ord', class OrdBuildPlugin extends cds.build.Plugin {
             for (const resourceDefinition of apiResource.resourceDefinitions) {
                 const url = resourceDefinition.url;
                 const fileName = url.split('/').pop();
-                console.log('fileName', fileName)
                 const { _, response } = await getMetadata(url, model);
                 promises.push(
                     this.write(response).to(path.join(subDir, fileName))

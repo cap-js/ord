@@ -112,7 +112,17 @@ const ord = cds.compile.to.ord(csn);
 ```
 
 #### Command Line
+Build all ord related documents, including ordDocument and services resources files:
+```sh
+cds build --for ord
 
+## By default, it will be generated in _ord_gen dir, e.g.:
+## done > wrote output to:
+##   _ord_gen/ord-document.json
+##   _ord_gen/sap.sample:apiResource:AdminService:v1/AdminService.edmx
+##   _ord_gen/sap.sample:apiResource:AdminService:v1/AdminService.oas3.json
+```
+Only compile ord document:
 ```sh
 cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 ```
