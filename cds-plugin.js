@@ -1,5 +1,5 @@
 const cds = require("@sap/cds");
-const { fs, path } = cds.utils
+const { path } = cds.utils
 const { getAuthConfig } = require("./lib/authentication");
 
 // load auth config before any service is started
@@ -57,7 +57,7 @@ cds.build?.register?.('ord', class OrdBuildPlugin extends cds.build.Plugin {
             for (const resourceDefinition of apiResource.resourceDefinitions) {
                 const url = resourceDefinition.url;
                 const fileName = url.split('/').pop();
-                const { _, response } = await getMetadata(url, model);
+                const { _, response } = await getMetadata(url, model); // eslint-disable-line no-unused-vars
                 promises.push(
                     this.write(response).to(path.join(subDir, fileName))
                 )
