@@ -28,8 +28,6 @@ cds.build?.register?.('ord', class OrdBuildPlugin extends cds.build.Plugin {
 
     static taskDefaults = { src: cds.env.folders.srv }
 
-    //static hasTask() { return cds.requires.db?.kind === 'postgres' }
-
     init() {
         // different from the default build output structure
         this.task.dest = path.join(cds.root, '_ord_gen')
