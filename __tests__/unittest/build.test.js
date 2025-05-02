@@ -12,20 +12,14 @@ jest.mock('@sap/cds-dk', () => {
                         src: null,
                     };
                 }
-                write(content) {
+                write() {
                     return {
-                        to: (filePath) => {
-                            console.log(`Writing to ${filePath}`);
-                            // Simulate writing logic
+                        to: () => {
                             return Promise.resolve();
                         },
                     };
                 }
-                pushMessage(type, message) {
-                    console.log(`[${type}] ${message}`);
-                }
                 async model() {
-                    // Simulate loading the model
                     return Promise.resolve({});
                 }
             },
