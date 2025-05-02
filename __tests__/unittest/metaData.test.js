@@ -25,10 +25,10 @@ describe('metaData', () => {
         const url = '/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.oas3.json';
         const expectedResponse = {
             contentType: "application/json",
-            response: "Metadata for openapi",
+            response: "Openapi content",
         };
         openapi.mockImplementation(() => {
-            return "Metadata for openapi";
+            return "Openapi content";
         });
 
         const result = await getMetadata(url);
@@ -52,16 +52,17 @@ describe('metaData', () => {
         const url = '/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json';
         const expectedResponse = {
             contentType: "application/json",
-            response: "Metadata for asyncapi",
+            response: "Asyncapi content",
         };
         asyncapi.mockImplementation(() => {
-            return "Metadata for asyncapi";
+            return "Asyncapi content";
         });
 
         const result = await getMetadata(url);
 
         expect(result).toEqual(expectedResponse);
     });
+
     test('getMetadata should raise error when get asyncapi failed', async () => {
         const url = '/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json';
         asyncapi.mockImplementation(() => {
@@ -73,45 +74,38 @@ describe('metaData', () => {
             expect(error.message).toBe("AsyncApi error");
         }
     });
+
     test('getMetadata should return csn content for a given URL', async () => {
         const url = '/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.csn.json';
         const expectedResponse = {
             contentType: "application/json",
-            response: "Metadata for csn",
+            response: "Csn content",
         };
-        jest.spyOn(cds, 'compile').mockImplementation(() => {
-            return {
-                to: {
-                    csn: () => "Metadata for csn",
-                },
-            }
-        });
 
-        const result = await getMetadata(url);
+        const result = await getMetadata(url, "Csn content");
 
         expect(result).toEqual(expectedResponse);
     });
+
     test('getMetadata should raise error when get csn failed', async () => {
         const url = '/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.csn.json';
-        openapi.mockImplementation(() => {
-            throw new Error("Csn error");
-        });
         try {
-            await getMetadata(url);
+            await getMetadata(url, "");
         } catch (error) {
-            expect(error.message).toBe("Csn error");
+            expect(error.message).toContain("CSN not found for service");
         }
     });
+
     test('getMetadata should return edmx content for a given URL', async () => {
         const url = '/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.edmx';
         const expectedResponse = {
             contentType: "application/xml",
-            response: "Metadata for edmx",
+            response: "Edmx content",
         };
         jest.spyOn(cds, 'compile').mockImplementation(() => {
             return {
                 to: {
-                    edmx: () => "Metadata for edmx",
+                    edmx: () => "Edmx content",
                 },
             }
         });
@@ -120,6 +114,7 @@ describe('metaData', () => {
 
         expect(result).toEqual(expectedResponse);
     });
+
     test('getMetadata should raise error when get edmx failed', async () => {
         const url = '/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.edmx';
         openapi.mockImplementation(() => {
@@ -131,5 +126,4 @@ describe('metaData', () => {
             expect(error.message).toBe("Edmx error");
         }
     });
-
 });
