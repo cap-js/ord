@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-const { AUTHENTICATION_TYPE } = require('../../lib/constants');
+const { AUTHENTICATION_TYPE, ORD_ODM_ENTITY_NAME_ANNOTATION, ENTITY_RELATIONSHIP_ANNOTATION} = require('../../lib/constants');
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
     authConfig: {
@@ -12,6 +12,7 @@ const {
     createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate,
+    _getEntityTypeMappings,
 } = require('../../lib/templates');
 
 describe('templates', () => {
@@ -316,4 +317,18 @@ describe('templates', () => {
             expect(eventResourceTemplate).toEqual([]);
         });
     });
+
+    describe('getEntityTypeMappings', () => {
+        it('should clean up duplicates', () => {
+            const serviceDefinition = {
+                entities: [{}, {}, {}]
+            }
+            serviceDefinition.entities[0][ORD_ODM_ENTITY_NAME_ANNOTATION] = 'Something';
+            serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.sm:entityType:Else:v1';
+            serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.odm:Something:v1';
+            expect(_getEntityTypeMappings(serviceDefinition)).toEqual([{
+                entityTypeTargets: ["sap.odm:entityType:Something:v1", "sap.sm:entityType:entityType:Else"]
+            }]);
+        });
+    })
 });
