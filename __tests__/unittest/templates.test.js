@@ -327,7 +327,7 @@ describe('templates', () => {
             serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.sm:entityType:Else:v1';
             serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.odm:Something:v1';
             expect(_getEntityTypeMappings(serviceDefinition)).toEqual([{
-                entityTypeTargets: ["sap.odm:entityType:Something:v1", "sap.sm:entityType:entityType:Else"]
+                entityTypeTargets: [{ordId: "sap.odm:entityType:Something:v1"}, {ordId:"sap.sm:entityType:entityType:Else"}]
             }]);
         });
     })
