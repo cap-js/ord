@@ -132,16 +132,14 @@ describe('templates', () => {
         it('should add apiResources with ORD Extension "visibility=public"', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
-                service MyService {
-                    entity Books {
-                        key ID: UUID;
-                        title: String;
-                    }
-                }
                 @ODM.entityName: 'testOdmEntity'
-                entity Books {
+                entity MyBooks {
                     key ID: UUID;
                     title: String;
+                }
+
+                service MyService {
+                    entity Books as projection on MyBooks;
                 }
                 annotate MyService with @ORD.Extensions : {
                     title           : 'This is test MyService apiResource title',
@@ -166,16 +164,14 @@ describe('templates', () => {
         it('should include internal API resources but ensure they appear in a separate package', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
-                service MyService {
-                    entity Books {
-                        key ID: UUID;
-                        title: String;
-                    }
-                }
                 @ODM.entityName: 'testOdmEntity'
-                entity Books {
+                entity MyBooks {
                     key ID: UUID;
                     title: String;
+                }
+
+                service MyService {
+                    entity Books as projection on MyBooks;
                 }
                 annotate MyService with @ORD.Extensions : {
                     title           : 'This is test MyService apiResource title',
@@ -201,16 +197,14 @@ describe('templates', () => {
         it('should not add apiResources with ORD Extension "visibility=private"', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
-                service MyService {
-                    entity Books {
-                        key ID: UUID;
-                        title: String;
-                    }
-                }
                 @ODM.entityName: 'testOdmEntity'
-                entity Books {
+                entity MyBooks {
                     key ID: UUID;
                     title: String;
+                }
+
+                service MyService {
+                    entity Books as projection on MyBooks;
                 }
                 annotate MyService with @ORD.Extensions : {
                     title           : 'This is test MyService apiResource title',

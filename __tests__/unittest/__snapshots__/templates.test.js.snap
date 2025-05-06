@@ -166,7 +166,7 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
       {
         "entityTypeTargets": [
           {
-            "ordId": "sap.odm:entityType:test:v1",
+            "ordId": "sap.odm:entityType:testOdmEntity:v1",
           },
         ],
       },
@@ -218,15 +218,7 @@ exports[`templates ordExtension should add events with ORD Extension "visibility
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test:v1",
-          },
-        ],
-      },
-    ],
+    "entityTypeMappings": [],
     "extensible": {
       "supported": "yes",
     },
@@ -266,7 +258,7 @@ exports[`templates ordExtension should include internal API resources but ensure
       {
         "entityTypeTargets": [
           {
-            "ordId": "sap.odm:entityType:test:v1",
+            "ordId": "sap.odm:entityType:testOdmEntity:v1",
           },
         ],
       },
@@ -318,15 +310,7 @@ exports[`templates ordExtension should include internal events but ensure they a
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test:v1",
-          },
-        ],
-      },
-    ],
+    "entityTypeMappings": [],
     "extensible": {
       "supported": "yes",
     },
