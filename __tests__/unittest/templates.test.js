@@ -433,6 +433,56 @@ describe('templates', () => {
 
             expect(apiResourceTemplate).toMatchSnapshot();
         });
+
+        it('should find ordId on circular relations', () => {
+            const serviceName = 'MyService';
+            linkedModel = cds.linked(`
+                entity SecureApps {
+                    key ID          : String;
+                    components      : Association to many Components on components.app = $self;
+                    issues          : Association to many Issues on issues.apps = $self;
+                }
+
+                @ODM.entityName: 'DirectCompositionOdmEntity'
+                entity Components {
+                    app            : Association to SecureApps;
+                    incidents      : Association to many Incidents on incidents.component = $self;
+                }
+
+                @ODM.entityName: 'NestedCompositionOdmEntity'
+                entity Incidents {
+                    component       : Association to Components;
+                    issues          : Association to many Issues on issues.incidents = $self;
+                }
+
+                entity Issues {
+                    key ID          : String;
+                    incidents       : Association to Incidents;
+                    apps            : Association to SecureApps;
+                }
+
+                service MyService {
+                    entity Apps as projection on SecureApps;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService apiResource title',
+                    shortDescription: 'short description for test MyService apiResource',
+                    visibility : 'public',
+                    version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }]
+            const packageIds = ['customer.testNamespace:package:test:v1'];
+            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+
+            expect(apiResourceTemplate).toMatchSnapshot();
+        });
+
     });
 
     describe('getEntityTypeMappings', () => {
