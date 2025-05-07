@@ -264,7 +264,7 @@ exports[`templates ordExtension should add events with ORD Extension "visibility
 ]
 `;
 
-exports[`templates ordExtension should find composition and assertion entities for related service 1`] = `
+exports[`templates ordExtension should find composition and association entities for related service 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
