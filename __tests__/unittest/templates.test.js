@@ -311,7 +311,7 @@ describe('templates', () => {
             expect(eventResourceTemplate).toEqual([]);
         });
 
-        it('should find composition and assertion entities for related service', () => {
+        it('should find composition and association entities for related service', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
                 entity AppCustomers {
