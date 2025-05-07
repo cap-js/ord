@@ -351,6 +351,47 @@ describe('templates', () => {
 
             expect(apiResourceTemplate).toMatchSnapshot();
         });
+
+        it('should find association on nested entities for related service', () => {
+            const serviceName = 'MyService';
+            linkedModel = cds.linked(`
+                entity SecureApps {
+                    key ID          : String;
+                    components      : Composition of many Components on components.app = $self;
+                }
+
+                @ODM.entityName: 'directAssociationOdmEntity'
+                entity Components {
+                    app            : Association to SecureApps;
+                    incidents      : Association to many Incidents on incidents.component = $self;
+                }
+
+                @ODM.entityName: 'nestedAssociationOdmEntity'
+                entity Incidents {
+                    component       : Association to Components;
+                }
+
+                service MyService {
+                    entity Apps as projection on SecureApps;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService apiResource title',
+                    shortDescription: 'short description for test MyService apiResource',
+                    visibility : 'public',
+                    version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }]
+            const packageIds = ['customer.testNamespace:package:test:v1'];
+            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+
+            expect(apiResourceTemplate).toMatchSnapshot();
+        });
     });
 
     describe('getEntityTypeMappings', () => {
