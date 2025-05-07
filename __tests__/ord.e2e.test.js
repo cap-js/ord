@@ -132,6 +132,7 @@ describe("End-to-end test for ORD document", () => {
 
         test("Successfully create ORD Documents with defaults", () => {
             const document = ord(csn);
+            // todo check why test fails if run after previous tests
             expect(document).toMatchSnapshot();
         });
 

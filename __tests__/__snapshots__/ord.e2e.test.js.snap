@@ -7,15 +7,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for AdminService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:BusinessPartner:v1",
-            },
-          ],
-        },
-      ],
+      "entityTypeMappings": {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:test-from-extension:v1",
+          },
+        ],
+      },
       "entryPoints": [
         "/odata/v4/admin",
       ],
@@ -23,8 +21,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "ordId": "customer.capirebookshopordsample:apiResource:AdminService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:AdminService",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -35,7 +36,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.oas3.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v1/AdminService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -45,7 +46,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.edmx",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v1/AdminService.edmx",
         },
       ],
       "shortDescription": "short description for test AdminService",
@@ -56,7 +57,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/browse",
       ],
@@ -64,11 +64,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:apiResource:CinemaService:v1",
+      "ordId": "customer.capirebookshopordsample:apiResource:CinemaService:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService",
       ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -79,7 +79,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.oas3.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CinemaService:v1/CinemaService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -89,7 +89,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:CinemaService:v1/CinemaService.edmx",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CinemaService:v1/CinemaService.edmx",
         },
       ],
       "shortDescription": "short description for test CinemaService",
@@ -108,33 +108,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
     },
   ],
-  "dataProducts": [
-    {
-      "category": "business-object",
-      "description": "The Supplier data product offers access to all customers.",
-      "entityTypes": [
-        "sap.odm:entityType:BusinessPartner:v1",
-        "sap.sm:entityType:BusinessPartner:v1",
-      ],
-      "lastUpdate": "2024-06-20T14:04:01+01:00",
-      "localId": "Supplier",
-      "ordId": "sap.sm:dataProduct:Supplier:v1",
-      "outputPorts": [
-        {
-          "ordId": "sap.sm:apiResource:SupplierService:v1",
-        },
-      ],
-      "partOfPackage": "sap.sm:package:smDataProducts:v1",
-      "releaseStatus": "active",
-      "responsible": "sap:ach:CIC-DP-CO",
-      "shortDescription": "Ariba Supplier data product",
-      "title": "Supplier",
-      "type": "primary",
-      "version": "1.1.11",
-      "visibility": "public",
-    },
-  ],
-  "description": "this is my custom description",
+  "description": "this is an application description",
   "entityTypes": [
     {
       "description": "Description for odm.bookshop.Authors",
@@ -145,7 +119,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "level": "sub-entity",
       "localId": "odm.bookshop.Authors",
       "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "shortDescription": "Short description of odm.bookshop.Authors",
       "title": "odm.bookshop.Authors",
@@ -167,11 +141,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService",
       ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -182,7 +156,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
         },
       ],
       "shortDescription": "short description for test AdminService",
@@ -192,16 +166,15 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService",
       ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -212,7 +185,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
         },
       ],
       "shortDescription": "short description for test CinemaService",
@@ -223,79 +196,36 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   ],
   "groups": [
     {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:AdminService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test AdminService title",
     },
     {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:CatalogService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Catalog Service title",
     },
     {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
     },
   ],
-  "openResourceDiscovery": "1.10",
+  "openResourceDiscovery": "1.9",
   "packages": [
     {
-      "description": "This package contains public APIs for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "description": "This package contains public General for capire bookshop ord sample.",
+      "ordId": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "partOfProducts": [
         "customer:product:capire.bookshop.ord.sample:",
       ],
-      "shortDescription": "Package containing public APIs",
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "1.0.0",
-    },
-    {
-      "description": "This package contains internal APIs for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "shortDescription": "Package containing internal APIs",
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "1.0.0",
-    },
-    {
-      "description": "This package contains public Events for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "1.0.1",
-    },
-    {
-      "description": "This package contains internal Events for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "shortDescription": "Package containing internal Events",
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "1.0.0",
-    },
-    {
-      "description": "This package contains public Entity Types for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "shortDescription": "Package containing public Entity Types",
+      "shortDescription": "Package containing public General",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "sap:core:v1",
+  "policyLevel": "none",
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
@@ -363,7 +293,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/browse",
       ],
@@ -499,7 +428,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },
@@ -670,7 +598,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/browse",
       ],
@@ -806,7 +733,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },
@@ -978,7 +904,6 @@ exports[`Tests for products and packages should not contain products property if
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/browse",
       ],
@@ -1088,7 +1013,6 @@ exports[`Tests for products and packages should not contain products property if
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },
@@ -1209,7 +1133,6 @@ exports[`Tests for products and packages should raise error log when custom prod
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/browse",
       ],
@@ -1319,7 +1242,6 @@ exports[`Tests for products and packages should raise error log when custom prod
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },
@@ -1448,7 +1370,6 @@ exports[`Tests for products and packages should use valid custom products ordId 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/browse",
       ],
@@ -1558,7 +1479,6 @@ exports[`Tests for products and packages should use valid custom products ordId 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },

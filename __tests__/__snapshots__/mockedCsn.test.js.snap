@@ -57,7 +57,6 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CatalogService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/browse",
       ],
@@ -101,7 +100,6 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/browse",
       ],
@@ -211,7 +209,6 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },
@@ -241,7 +238,6 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "yes",
       },

@@ -7,7 +7,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for SupplierService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/odata/v4/supplier",
       ],
@@ -50,7 +49,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for MaterialService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/odata/v4/material",
       ],
@@ -93,7 +91,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for PurchaseOrderService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/odata/v4/purchase-order",
       ],
@@ -136,7 +133,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for InternalDataProductService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/odata/v4/internal-data-product",
       ],
@@ -179,7 +175,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CustomerService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/odata/v4/customer",
       ],
@@ -222,7 +217,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for RestrictedDataProductService",
-      "entityTypeMappings": [],
       "entryPoints": [
         "/odata/v4/restricted-data-product",
       ],
@@ -276,7 +270,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "no",
       },
@@ -305,7 +298,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "no",
       },
@@ -334,7 +326,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "no",
       },
@@ -363,7 +354,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "no",
       },
@@ -392,7 +382,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "no",
       },
@@ -421,7 +410,6 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [],
       "extensible": {
         "supported": "no",
       },
