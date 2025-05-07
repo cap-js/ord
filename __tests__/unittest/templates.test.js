@@ -320,12 +320,12 @@ describe('templates', () => {
                     incidents      : Association to many Incidents on incidents.customer = $self;
                 }
 
-                @ODM.entityName: 'compositionOdmEntity'
+                @ODM.entityName: 'CompositionOdmEntity'
                 entity Addresses {
                     customer       : Association to AppCustomers;
                 }
 
-                @ODM.entityName: 'associationOdmEntity'
+                @ODM.entityName: 'AssociationOdmEntity'
                 entity Incidents {
                     customer       : Association to AppCustomers;
                 }
@@ -360,13 +360,13 @@ describe('templates', () => {
                     components      : Association to many Components on components.app = $self;
                 }
 
-                @ODM.entityName: 'directAssociationOdmEntity'
+                @ODM.entityName: 'DirectAssociationOdmEntity'
                 entity Components {
                     app            : Association to SecureApps;
                     incidents      : Association to many Incidents on incidents.component = $self;
                 }
 
-                @ODM.entityName: 'nestedAssociationOdmEntity'
+                @ODM.entityName: 'NestedAssociationOdmEntity'
                 entity Incidents {
                     component       : Association to Components;
                 }
@@ -401,13 +401,13 @@ describe('templates', () => {
                     components      : Composition of many Components on components.app = $self;
                 }
 
-                @ODM.entityName: 'directCompositionOdmEntity'
+                @ODM.entityName: 'DirectCompositionOdmEntity'
                 entity Components {
                     app            : Association to SecureApps;
                     incidents      : Composition of many Incidents on incidents.component = $self;
                 }
 
-                @ODM.entityName: 'nestedCompositionOdmEntity'
+                @ODM.entityName: 'NestedCompositionOdmEntity'
                 entity Incidents {
                     component       : Association to Components;
                 }

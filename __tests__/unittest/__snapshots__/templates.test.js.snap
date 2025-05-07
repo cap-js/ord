@@ -273,10 +273,10 @@ exports[`templates ordExtension should find association on nested entities for r
       {
         "entityTypeTargets": [
           {
-            "ordId": "sap.odm:entityType:directAssociationOdmEntity:v1",
+            "ordId": "sap.odm:entityType:DirectAssociationOdmEntity:v1",
           },
           {
-            "ordId": "sap.odm:entityType:nestedAssociationOdmEntity:v1",
+            "ordId": "sap.odm:entityType:NestedAssociationOdmEntity:v1",
           },
         ],
       },
@@ -333,10 +333,10 @@ exports[`templates ordExtension should find composition and association entities
       {
         "entityTypeTargets": [
           {
-            "ordId": "sap.odm:entityType:compositionOdmEntity:v1",
+            "ordId": "sap.odm:entityType:CompositionOdmEntity:v1",
           },
           {
-            "ordId": "sap.odm:entityType:associationOdmEntity:v1",
+            "ordId": "sap.odm:entityType:AssociationOdmEntity:v1",
           },
         ],
       },
@@ -393,10 +393,10 @@ exports[`templates ordExtension should find composition on nested entities for r
       {
         "entityTypeTargets": [
           {
-            "ordId": "sap.odm:entityType:directCompositionOdmEntity:v1",
+            "ordId": "sap.odm:entityType:DirectCompositionOdmEntity:v1",
           },
           {
-            "ordId": "sap.odm:entityType:nestedCompositionOdmEntity:v1",
+            "ordId": "sap.odm:entityType:NestedCompositionOdmEntity:v1",
           },
         ],
       },
