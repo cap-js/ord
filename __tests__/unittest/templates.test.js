@@ -310,6 +310,47 @@ describe('templates', () => {
             expect(eventResourceTemplate).toMatchSnapshot();
             expect(eventResourceTemplate).toEqual([]);
         });
+
+        it('should find composition and assertion entities for related service', () => {
+            const serviceName = 'MyService';
+            linkedModel = cds.linked(`
+                entity AppCustomers {
+                    key ID         : String;
+                    addresses      : Composition of many Addresses on addresses.customer = $self;
+                    incidents      : Association to many Incidents on incidents.customer = $self;
+                }
+
+                @ODM.entityName: 'compositionOdmEntity'
+                entity Addresses {
+                    customer       : Association to AppCustomers;
+                }
+
+                @ODM.entityName: 'associationOdmEntity'
+                entity Incidents {
+                    customer       : Association to AppCustomers;
+                }
+
+                service MyService {
+                    entity Customers as projection on AppCustomers;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService apiResource title',
+                    shortDescription: 'short description for test MyService apiResource',
+                    visibility : 'public',
+                    version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }]
+            const packageIds = ['customer.testNamespace:package:test:v1'];
+            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+
+            expect(apiResourceTemplate).toMatchSnapshot();
+        });
     });
 
     describe('getEntityTypeMappings', () => {
@@ -318,11 +359,9 @@ describe('templates', () => {
                 entities: [{}, {}, {}]
             }
             serviceDefinition.entities[0][ORD_ODM_ENTITY_NAME_ANNOTATION] = 'Something';
-            serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.sm:entityType:Else:v1';
-            serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.odm:Something:v1';
-            expect(_getEntityTypeMappings(serviceDefinition)).toEqual([{
-                entityTypeTargets: [{ordId: "sap.odm:entityType:Something:v1"}, {ordId:"sap.sm:entityType:entityType:Else"}]
-            }]);
+            serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.sm:Else:v2';
+            serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.odm:Something';
+            expect(_getEntityTypeMappings(serviceDefinition)).toMatchSnapshot();
         });
     })
 });
