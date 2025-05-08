@@ -27,9 +27,7 @@
             "kind": "entity",
             "projection": {
                 "from": {
-                    "ref": [
-                        "sap.cds.demo.EntityWithCorrespondingODMEntity"
-                    ]
+                    "ref": ["sap.cds.demo.EntityWithCorrespondingODMEntity"]
                 }
             }
         },
@@ -54,9 +52,7 @@
             "kind": "entity",
             "projection": {
                 "from": {
-                    "ref": [
-                        "sap.cds.demo.SomeAribaEntity"
-                    ]
+                    "ref": ["sap.cds.demo.SomeAribaEntity"]
                 }
             }
         },

@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE } = require('../lib/constants');
+const { AUTHENTICATION_TYPE } = require("../lib/constants");
 
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;
@@ -27,8 +27,8 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         cds.root = path.join(__dirname, "bookshop");
         jest.spyOn(cds, "context", "get").mockReturnValue({
             authConfig: {
-                types: [AUTHENTICATION_TYPE.Open]
-            }
+                types: [AUTHENTICATION_TYPE.Open],
+            },
         });
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
@@ -39,7 +39,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             namespace: "sap.test.cdsrc.sample",
             openResourceDiscovery: "1.10",
             description: "this is my custom description",
-            policyLevel: "sap:core:v1"
+            policyLevel: "sap:core:v1",
         };
     });
 
@@ -82,10 +82,12 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.entityTypes).toHaveLength(2);
             expect(document.entityTypes[0].partOfPackage).toEqual(expect.stringContaining("entityType"));
             expect(document.entityTypes[0].level).toEqual(expect.stringContaining("root-entity"));
-            expect(document.apiResources[0].entityTypeMappings[0].entityTypeTargets).toEqual(expect.arrayContaining([
-                { "ordId": "sap.odm:entityType:SomeODMEntity:v1" },
-                { "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v1" }
-            ]));
+            expect(document.apiResources[0].entityTypeMappings[0].entityTypeTargets).toEqual(
+                expect.arrayContaining([
+                    { ordId: "sap.odm:entityType:SomeODMEntity:v1" },
+                    { ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1" },
+                ]),
+            );
         });
     });
 
@@ -122,12 +124,13 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.apiResources).toHaveLength(2)
-            const dataProductApiResources = document.apiResources.filter(resource => resource.implementationStandard === "sap.dp:data-subscription-api:v1");
+            expect(document.apiResources).toHaveLength(2);
+            const dataProductApiResources = document.apiResources.filter(
+                (resource) => resource.implementationStandard === "sap.dp:data-subscription-api:v1",
+            );
             expect(dataProductApiResources).toHaveLength(2);
             expect(dataProductApiResources[0].resourceDefinitions).toHaveLength(1);
             expect(dataProductApiResources[0].resourceDefinitions[0]).type === "sap-csn-interop-effective-v1";
         });
     });
-
 });
