@@ -5,7 +5,6 @@ exports[`templates createAPIResourceTemplate should create API resource template
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [],
     "entryPoints": [
       "/odata/v4/my",
     ],
@@ -91,7 +90,6 @@ exports[`templates createEventResourceTemplate should create event resource temp
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [],
     "extensible": {
       "supported": "no",
     },
@@ -126,7 +124,6 @@ exports[`templates createEventResourceTemplate should create event resource temp
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [],
     "extensible": {
       "supported": "no",
     },
@@ -233,7 +230,6 @@ exports[`templates ordExtension should add events with ORD Extension "visibility
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [],
     "extensible": {
       "supported": "yes",
     },
@@ -565,7 +561,6 @@ exports[`templates ordExtension should include internal events but ensure they a
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [],
     "extensible": {
       "supported": "yes",
     },
