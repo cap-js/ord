@@ -2,6 +2,7 @@ const cds = require('@sap/cds');
 const { compile: openapi } = require('@cap-js/openapi')
 const { compile: asyncapi } = require('@cap-js/asyncapi');
 const { getMetadata } = require('../../lib/index');
+const cdsc = require('@sap/cds-compiler/lib/main');
 
 jest.mock('@cap-js/openapi', () => ({
     compile: jest.fn(),
@@ -81,6 +82,9 @@ describe('metaData', () => {
             contentType: "application/json",
             response: "Csn content",
         };
+        jest.spyOn(cdsc.for, 'effective').mockImplementation(() => {
+            return expectedResponse.response;
+        });
 
         const result = await getMetadata(url, "Csn content");
 
@@ -89,10 +93,13 @@ describe('metaData', () => {
 
     test('getMetadata should raise error when get csn failed', async () => {
         const url = '/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.csn.json';
+        jest.spyOn(cdsc.for, 'effective').mockImplementation(() => {
+            throw new Error("Csn error");
+        });
         try {
             await getMetadata(url, "");
         } catch (error) {
-            expect(error.message).toContain("CSN not found for service");
+            expect(error.message).toContain("Csn error");
         }
     });
 

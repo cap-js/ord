@@ -20,6 +20,17 @@
             "title": "capire bookshop ord sample",
             "vendor": "customer:vendor:Customer:",
             "version": "1.0.1"
+        },
+        {
+            "description": "Description of capire bookshop ord sample data product",
+            "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-dataProduct:v1",
+            "partOfProducts": [
+                "customer:product:capire.bookshop.ord.sample:"
+            ],
+            "shortDescription": "Short description for capire bookshop ord sample data product",
+            "title": "capire bookshop ord sample data product",
+            "vendor": "customer:vendor:Customer:",
+            "version": "1.0.0"
         }
     ],
     "apiResources": [
@@ -68,6 +79,31 @@
             "extensible": {
                 "supported": "no"
             }
+        }
+    ],
+    "dataProducts": [
+        {
+            "ordId": "sap.test.cdsrc.sample:dataProduct:Supplier:v1",
+            "localId": "Supplier",
+            "title": "Supplier",
+            "shortDescription": "Capire Bookshop Supplier Data Product",
+            "description": "This Data Product exposes supplier-related data to consumers, aligned with the Capire bookshop sample.",
+            "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-dataProduct:v1",
+            "visibility": "public",
+            "releaseStatus": "active",
+            "version": "1.0.0",
+            "lastUpdate": "2024-06-20T14:04:01+01:00",
+            "type": "primary",
+            "category": "business-object",
+            "outputPorts": [
+                {
+                    "ordId": "sap.sample:apiResource:manualImplementedService:v1"
+                }
+            ],
+            "responsible": "customer:group:capire-team",
+            "entityTypes": [
+                "sap.odm:entityType:BusinessPartner:v1"
+            ]
         }
     ]
 }
