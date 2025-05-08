@@ -107,7 +107,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     describe("Tests for ORD document when there no events or entities in service definitions", () => {
         test("Successfully create ORD Documents: no Catalog service in apiResource; no Admin service in eventResources", () => {
-            const csn = require("./__mocks__/noApisOrNoEventsCsn.json");
+            const csn = require("./__mocks__/noApisCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -115,6 +115,16 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.eventResources).toHaveLength(2);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
             expect(document.eventResources[1].ordId).toEqual(expect.stringContaining("CatalogService"));
+        });
+
+        test("Successfully create ORD Documents: no eventResources", () => {
+            const csn = require("./__mocks__/csnWithoutEvents.json");
+            const document = ord(csn);
+
+            expect(document).not.toBeUndefined();
+            expect(document.apiResources).toHaveLength(2);
+            expect(document.eventResources).toHaveLength(0);
+            expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
         });
     });
 
