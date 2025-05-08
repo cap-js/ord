@@ -1,5 +1,5 @@
 const cds = require('@sap/cds');
-const { AUTHENTICATION_TYPE } = require('../../lib/constants');
+const { AUTHENTICATION_TYPE, ORD_ODM_ENTITY_NAME_ANNOTATION, ENTITY_RELATIONSHIP_ANNOTATION} = require('../../lib/constants');
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
     authConfig: {
@@ -12,6 +12,7 @@ const {
     createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate,
+    _getEntityTypeMappings,
 } = require('../../lib/templates');
 
 describe('templates', () => {
@@ -131,16 +132,14 @@ describe('templates', () => {
         it('should add apiResources with ORD Extension "visibility=public"', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
-                service MyService {
-                    entity Books {
-                        key ID: UUID;
-                        title: String;
-                    }
-                }
                 @ODM.entityName: 'testOdmEntity'
-                entity Books {
+                entity MyBooks {
                     key ID: UUID;
                     title: String;
+                }
+
+                service MyService {
+                    entity Books as projection on MyBooks;
                 }
                 annotate MyService with @ORD.Extensions : {
                     title           : 'This is test MyService apiResource title',
@@ -165,16 +164,14 @@ describe('templates', () => {
         it('should include internal API resources but ensure they appear in a separate package', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
-                service MyService {
-                    entity Books {
-                        key ID: UUID;
-                        title: String;
-                    }
-                }
                 @ODM.entityName: 'testOdmEntity'
-                entity Books {
+                entity MyBooks {
                     key ID: UUID;
                     title: String;
+                }
+
+                service MyService {
+                    entity Books as projection on MyBooks;
                 }
                 annotate MyService with @ORD.Extensions : {
                     title           : 'This is test MyService apiResource title',
@@ -200,16 +197,14 @@ describe('templates', () => {
         it('should not add apiResources with ORD Extension "visibility=private"', () => {
             const serviceName = 'MyService';
             linkedModel = cds.linked(`
-                service MyService {
-                    entity Books {
-                        key ID: UUID;
-                        title: String;
-                    }
-                }
                 @ODM.entityName: 'testOdmEntity'
-                entity Books {
+                entity MyBooks {
                     key ID: UUID;
                     title: String;
+                }
+
+                service MyService {
+                    entity Books as projection on MyBooks;
                 }
                 annotate MyService with @ORD.Extensions : {
                     title           : 'This is test MyService apiResource title',
@@ -315,5 +310,190 @@ describe('templates', () => {
             expect(eventResourceTemplate).toMatchSnapshot();
             expect(eventResourceTemplate).toEqual([]);
         });
+
+        it('should find composition and association entities for related service', () => {
+            const serviceName = 'MyService';
+            linkedModel = cds.linked(`
+                entity AppCustomers {
+                    key ID         : String;
+                    addresses      : Composition of many Addresses on addresses.customer = $self;
+                    incidents      : Association to many Incidents on incidents.customer = $self;
+                }
+
+                @ODM.entityName: 'CompositionOdmEntity'
+                entity Addresses {
+                    customer       : Association to AppCustomers;
+                }
+
+                @ODM.entityName: 'AssociationOdmEntity'
+                entity Incidents {
+                    customer       : Association to AppCustomers;
+                }
+
+                service MyService {
+                    entity Customers as projection on AppCustomers;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService apiResource title',
+                    shortDescription: 'short description for test MyService apiResource',
+                    visibility : 'public',
+                    version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }]
+            const packageIds = ['customer.testNamespace:package:test:v1'];
+            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+
+            expect(apiResourceTemplate).toMatchSnapshot();
+        });
+
+        it('should find association on nested entities for related service', () => {
+            const serviceName = 'MyService';
+            linkedModel = cds.linked(`
+                entity SecureApps {
+                    key ID          : String;
+                    components      : Association to many Components on components.app = $self;
+                }
+
+                @ODM.entityName: 'DirectAssociationOdmEntity'
+                entity Components {
+                    app            : Association to SecureApps;
+                    incidents      : Association to many Incidents on incidents.component = $self;
+                }
+
+                @ODM.entityName: 'NestedAssociationOdmEntity'
+                entity Incidents {
+                    component       : Association to Components;
+                }
+
+                service MyService {
+                    entity Apps as projection on SecureApps;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService apiResource title',
+                    shortDescription: 'short description for test MyService apiResource',
+                    visibility : 'public',
+                    version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }]
+            const packageIds = ['customer.testNamespace:package:test:v1'];
+            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+
+            expect(apiResourceTemplate).toMatchSnapshot();
+        });
+
+        it('should find composition on nested entities for related service', () => {
+            const serviceName = 'MyService';
+            linkedModel = cds.linked(`
+                entity SecureApps {
+                    key ID          : String;
+                    components      : Composition of many Components on components.app = $self;
+                }
+
+                @ODM.entityName: 'DirectCompositionOdmEntity'
+                entity Components {
+                    app            : Association to SecureApps;
+                    incidents      : Composition of many Incidents on incidents.component = $self;
+                }
+
+                @ODM.entityName: 'NestedCompositionOdmEntity'
+                entity Incidents {
+                    component       : Association to Components;
+                }
+
+                service MyService {
+                    entity Apps as projection on SecureApps;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService apiResource title',
+                    shortDescription: 'short description for test MyService apiResource',
+                    visibility : 'public',
+                    version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }]
+            const packageIds = ['customer.testNamespace:package:test:v1'];
+            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+
+            expect(apiResourceTemplate).toMatchSnapshot();
+        });
+
+        it('should find ordId on circular relations', () => {
+            const serviceName = 'MyService';
+            linkedModel = cds.linked(`
+                entity SecureApps {
+                    key ID          : String;
+                    components      : Association to many Components on components.app = $self;
+                    issues          : Association to many Issues on issues.apps = $self;
+                }
+
+                @ODM.entityName: 'DirectCompositionOdmEntity'
+                entity Components {
+                    app            : Association to SecureApps;
+                    incidents      : Association to many Incidents on incidents.component = $self;
+                }
+
+                @ODM.entityName: 'NestedCompositionOdmEntity'
+                entity Incidents {
+                    component       : Association to Components;
+                    issues          : Association to many Issues on issues.incidents = $self;
+                }
+
+                entity Issues {
+                    key ID          : String;
+                    incidents       : Association to Incidents;
+                    apps            : Association to SecureApps;
+                }
+
+                service MyService {
+                    entity Apps as projection on SecureApps;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService apiResource title',
+                    shortDescription: 'short description for test MyService apiResource',
+                    visibility : 'public',
+                    version : '2.0.0',
+                    partOfPackage : 'sap.test.cdsrc.sample:package:test-other:v1',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+            const srvDefinition = linkedModel.definitions[serviceName];
+            appConfig['entityTypeTargets'] = [{ 'ordId': 'sap.odm:entityType:test:v1' }]
+            const packageIds = ['customer.testNamespace:package:test:v1'];
+            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+
+            expect(apiResourceTemplate).toMatchSnapshot();
+        });
+
     });
+
+    describe('getEntityTypeMappings', () => {
+        it('should clean up duplicates', () => {
+            const serviceDefinition = {
+                entities: [{}, {}, {}]
+            }
+            serviceDefinition.entities[0][ORD_ODM_ENTITY_NAME_ANNOTATION] = 'Something';
+            serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.sm:Else:v2';
+            serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = 'sap.odm:Something';
+            expect(_getEntityTypeMappings(serviceDefinition)).toMatchSnapshot();
+        });
+    })
 });

@@ -69,7 +69,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.eventResources).toHaveLength(1);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("EbMtEmitter"));
             expect(document.eventResources[0].ordId).toEqual(expect.stringContaining("EbMtEmitter"));
-            expect(document.apiResources[0].entityTypeMappings).toHaveLength(0);
+            expect(document.apiResources[0].entityTypeMappings).toBeUndefined();
         });
     });
 

@@ -119,9 +119,9 @@ describe("End-to-end test for ORD document", () => {
         let csn, ord;
 
         beforeAll(async () => {
+            cds.root = path.join(__dirname, "bookshop");
             jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             ord = require("../lib/ord");
-            cds.root = path.join(__dirname, "bookshop");
             csn = await cds.load(path.join(cds.root, "srv"));
         });
 
