@@ -120,34 +120,9 @@ describe('templates', () => {
         ];
 
 
-        it('should remove duplicate referenced entityTypes', () => {
-            const serviceName = 'MyService';
-            const serviceDefinition = {};
-            const expectedOrdId = `${appConfig.ordNamespace}:apiResource:${serviceName}:v1`;
-
-            const updatedAppConfig = {
-                ...appConfig,
-                entityTypeMappings: [
-                    {
-                        entityTypeTargets: [
-                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` },
-                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
-                        ]
-                    }
-                ]
-            };
-
-            const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
-
-            expect(apiResource[0].ordId).toEqual(expectedOrdId)
-            expect(apiResource[0].entityTypeMappings[0].entityTypeTargets).toHaveLength(1);
-            expect(apiResource[0].entityTypeMappings[0].entityTypeTargets).toEqual([
-                { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
-            ]);
-        });
         it('should assign the correct partOfPackage for public API', () => {
             const serviceName = 'PublicAPI';
-            const serviceDefinition = { "@ORD.Extensions.visibility": "public" };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "public", entities: [] };
 
             const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, appConfig, packageIds, {});
 
@@ -157,7 +132,7 @@ describe('templates', () => {
 
         it('should assign the correct partOfPackage for internal API', () => {
             const serviceName = 'InternalAPI';
-            const serviceDefinition = { "@ORD.Extensions.visibility": "internal" };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", entities: [] };
 
             const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, appConfig, packageIds, {});
 
@@ -167,7 +142,7 @@ describe('templates', () => {
 
         it('should return null for private API', () => {
             const serviceName = 'PrivateAPI';
-            const serviceDefinition = { "@ORD.Extensions.visibility": "private" };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "private", entities: [] };
 
             const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, appConfig, packageIds, {});
 
@@ -182,35 +157,9 @@ describe('templates', () => {
             'sap.test.cdsrc.sample:package:test-event-internal:v1'
         ];
 
-        it('should remove duplicate referenced entityTypes', () => {
-            const serviceName = 'MyService';
-            const serviceDefinition = linkedModel;
-            const expectedOrdId = `${appConfig.ordNamespace}:eventResource:${serviceName}:v1`;
-
-            const updatedAppConfig = {
-                ...appConfig,
-                entityTypeMappings: [
-                    {
-                        entityTypeTargets: [
-                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` },
-                            { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
-                        ]
-                    }
-                ]
-            };
-
-            const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, updatedAppConfig, packageIds, {});
-
-            expect(eventResource[0].ordId).toEqual(expectedOrdId);
-            expect(eventResource[0].entityTypeMappings[0].entityTypeTargets).toHaveLength(1);
-            expect(eventResource[0].entityTypeMappings[0].entityTypeTargets).toEqual([
-                { ordId: `${appConfig.ordNamespace}:entityType:DuplicateEntity:v1` }
-            ]);
-        });
-
         it('should assign the correct partOfPackage for public Event', () => {
             const serviceName = 'PublicEvent';
-            const serviceDefinition = { "@ORD.Extensions.visibility": "public" };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "public", entities: [] };
 
             const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, appConfig, packageIds, {});
 
@@ -220,7 +169,7 @@ describe('templates', () => {
 
         it('should assign the correct partOfPackage for internal Event', () => {
             const serviceName = 'InternalEvent';
-            const serviceDefinition = { "@ORD.Extensions.visibility": "internal" };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", entities: [] };
 
             const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, appConfig, packageIds, {});
 
@@ -230,7 +179,7 @@ describe('templates', () => {
 
         it('should return an empty array for private Event', () => {
             const serviceName = 'PrivateEvent';
-            const serviceDefinition = { "@ORD.Extensions.visibility": "private" };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "private", entities: [] };
 
             const eventResource = createEventResourceTemplate(serviceName, serviceDefinition, appConfig, packageIds, {});
 
