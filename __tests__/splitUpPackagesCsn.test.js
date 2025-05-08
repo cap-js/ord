@@ -20,7 +20,7 @@ describe("ORD Generation for Business Accelerator Hub", () => {
             namespace: "sap.test.cdsrc.sample",
             openResourceDiscovery: "1.10",
             description: "Business Accelerator Hub ORD Test",
-            policyLevel: "sap:core:v1",
+            policyLevels: "sap:core:v1",
         };
     });
 
@@ -38,7 +38,7 @@ describe("ORD Generation for Business Accelerator Hub", () => {
             document.consumptionBundles.forEach((con) => delete con.lastUpdate);
             expect(document).toMatchSnapshot();
             expect(document.openResourceDiscovery).toBe("1.10");
-            expect(document.policyLevel).toBe("sap:core:v1");
+            expect(document.policyLevels).toBe("sap:core:v1");
             expect(document.description).toBe("Business Accelerator Hub ORD Test");
             expect(document.apiResources).toHaveLength(6);
             expect(document.eventResources).toHaveLength(6);
