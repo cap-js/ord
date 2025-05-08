@@ -14,13 +14,9 @@
         {
             "ordId": "sap.sm:apiResource:SupplierService:v1",
             "title": null,
-            "partOfGroups": [
-                "sap.cds:service:sap.test.cdsrc.sample:AdminService"
-            ],
+            "partOfGroups": ["sap.cds:service:sap.test.cdsrc.sample:AdminService"],
             "partOfPackage": "sap.sm:package:smDataProducts:v1",
-            "entryPoints": [
-                "/odata/v4/admin"
-            ],
+            "entryPoints": ["/odata/v4/admin"],
             "extensible": null,
             "entityTypeMappings": [
                 {

@@ -20,7 +20,7 @@ For more information, have a look at the [Open Resource Discovery](https://open-
 npm install @cap-js/ord
 ```
 
-> Note: `@cap-js/openapi` and `@cap-js/asyncapi` packages have been migrated from peerDependencies to dependencies in `package.json`. As a result, using globally installed packages may lead to conflicts.  If conflicts arises do `npm uninstall -g @cap-js/openapi @cap-js/asyncapi` and then `npm install` in your project directory.
+> Note: `@cap-js/openapi` and `@cap-js/asyncapi` packages have been migrated from peerDependencies to dependencies in `package.json`. As a result, using globally installed packages may lead to conflicts. If conflicts arises do `npm uninstall -g @cap-js/openapi @cap-js/asyncapi` and then `npm install` in your project directory.
 
 ### Authentication
 
@@ -30,6 +30,7 @@ To enforce authentication in the ORD Plugin, set the following environment varia
 - `BASIC_AUTH`: Contains credentials for `basic` authentication.
 
 If `ORD_AUTH_TYPE` is not set, the application starts without authentication. This variable accepts `open` and `basic` (UCL-mTLS is also planned).
+
 > Note: `open` cannot be combined with `basic` or any other (future) authentication types.
 
 #### Open
@@ -112,7 +113,9 @@ const ord = cds.compile.to.ord(csn);
 ```
 
 #### Command Line
+
 Build all ord related documents, including ordDocument and services resources files:
+
 ```sh
 cds build --for ord
 
@@ -122,7 +125,9 @@ cds build --for ord
 #    gen/ord/sap.sample:apiResource:AdminService:v1/AdminService.edmx
 #    gen/ord/sap.sample:apiResource:AdminService:v1/AdminService.oas3.json
 ```
+
 Only compile ord document:
+
 ```sh
 cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 ```

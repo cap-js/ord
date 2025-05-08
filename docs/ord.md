@@ -59,12 +59,12 @@ customOrdContent > ORD.Extensions Annotations > CAP Annotations > Plugin Default
 
 ```json
 {
-  "ord": {
-    "namespace": "sap.sample",
-    "description": "This is my custom description",
-    "policyLevel": "sap:core:v1",
-    "customOrdContentFile": "./path/to/custom.ord.json"
-  }
+    "ord": {
+        "namespace": "sap.sample",
+        "description": "This is my custom description",
+        "policyLevel": "sap:core:v1",
+        "customOrdContentFile": "./path/to/custom.ord.json"
+    }
 }
 ```
 
@@ -77,34 +77,32 @@ In your custom ORD file, you can:
 - Add new ORD resources (e.g., `dataProducts`) not supported by CAP.
 - Enhance existing generated resources (e.g., add a new `package` or an API resource).
 - Patch default generated resources:
-  - Override properties.
-  - Add new properties.
-  - Delete properties by setting them to `null`.
+    - Override properties.
+    - Add new properties.
+    - Delete properties by setting them to `null`.
 
 **Example `custom.ord.json`:**
 
 ```json
 {
-  "packages": [
-    {
-      "description": null,
-      "packageLinks": [
+    "packages": [
         {
-          "type": "terms-of-service",
-          "url": "https://www.sap.com/corporate/en/legal/terms-of-use.html"
+            "description": null,
+            "packageLinks": [
+                {
+                    "type": "terms-of-service",
+                    "url": "https://www.sap.com/corporate/en/legal/terms-of-use.html"
+                }
+            ],
+            "lineOfBusiness": ["Sales"]
         }
-      ],
-      "lineOfBusiness": [
-        "Sales"
-      ]
-    }
-  ],
-  "dataProducts": [
-    {
-      "ordId": "sap.sm:dataProduct:Supplier:v1"
-      // ...
-    }
-  ]
+    ],
+    "dataProducts": [
+        {
+            "ordId": "sap.sm:dataProduct:Supplier:v1"
+            // ...
+        }
+    ]
 }
 ```
 
@@ -122,13 +120,13 @@ To associate your resources with an existing SAP product, define `existingProduc
 
 ```json
 {
-  "ord": {
-    "namespace": "sap.sample",
-    "description": "This is my custom description",
-    "policyLevel": "sap:core:v1",
-    "customOrdContentFile": "./ord/custom.ord.json",
-    "existingProductORDId": "sap:product:SAPServiceCloudV2:"
-  }
+    "ord": {
+        "namespace": "sap.sample",
+        "description": "This is my custom description",
+        "policyLevel": "sap:core:v1",
+        "customOrdContentFile": "./ord/custom.ord.json",
+        "existingProductORDId": "sap:product:SAPServiceCloudV2:"
+    }
 }
 ```
 
@@ -138,15 +136,13 @@ To associate your resources with an existing SAP product, define `existingProduc
 
 ```json
 {
-  "ordId": "sap.sample:package:capireordsample-api:v1",
-  "title": "Capire ORD Sample",
-  "shortDescription": "Package containing public APIs",
-  "description": "This package contains public APIs for Capire ORD Sample.",
-  "version": "1.0.0",
-  "partOfProducts": [
-    "sap:product:SAPServiceCloudV2:"
-  ],
-  "vendor": "sap:vendor:SAP:"
+    "ordId": "sap.sample:package:capireordsample-api:v1",
+    "title": "Capire ORD Sample",
+    "shortDescription": "Package containing public APIs",
+    "description": "This package contains public APIs for Capire ORD Sample.",
+    "version": "1.0.0",
+    "partOfProducts": ["sap:product:SAPServiceCloudV2:"],
+    "vendor": "sap:vendor:SAP:"
 }
 ```
 
@@ -160,18 +156,18 @@ If defining a **custom product**, make sure its `ordId` **does not** start with 
 
 ```json
 {
-  "ord": {
-    "namespace": "sap.sample",
-    "description": "This is my custom description",
-    "policyLevel": "sap:core:v1",
-    "customOrdContentFile": "./ord/custom.ord.json",
-    "products": [
-      {
-        "ordId": "customer:product:eb.bm.tests:",
-        "vendor": "sap:vendor:SAP:"
-      }
-    ]
-  }
+    "ord": {
+        "namespace": "sap.sample",
+        "description": "This is my custom description",
+        "policyLevel": "sap:core:v1",
+        "customOrdContentFile": "./ord/custom.ord.json",
+        "products": [
+            {
+                "ordId": "customer:product:eb.bm.tests:",
+                "vendor": "sap:vendor:SAP:"
+            }
+        ]
+    }
 }
 ```
 
@@ -187,16 +183,15 @@ If no explicit product settings are provided, the plugin will automatically appl
 
 # Summary
 
-| Scenario                         | Approach                                               |
-| --------------------------------- | ------------------------------------------------------ |
-| Global Metadata                  | Define in `cdsrc.json` under `ord`                     |
-| Service Metadata                 | Use `@ORD.Extensions` annotations in `.cds` files      |
-| Custom ORD Content               | Use `customOrdContentFile`                             |
-| Linking to Existing SAP Products | Use `existingProductORDId`                             |
-| Defining Custom Products         | Add `products` section manually                        |
+| Scenario                         | Approach                                          |
+| -------------------------------- | ------------------------------------------------- |
+| Global Metadata                  | Define in `cdsrc.json` under `ord`                |
+| Service Metadata                 | Use `@ORD.Extensions` annotations in `.cds` files |
+| Custom ORD Content               | Use `customOrdContentFile`                        |
+| Linking to Existing SAP Products | Use `existingProductORDId`                        |
+| Defining Custom Products         | Add `products` section manually                   |
 
 ---
-
 
 # Ord Root Property
 

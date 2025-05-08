@@ -1,15 +1,14 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE } = require('../lib/constants');
+const { AUTHENTICATION_TYPE } = require("../lib/constants");
 
 describe("End-to-end test for ORD document", () => {
-
     beforeAll(() => {
         process.env.DEBUG = "true";
         jest.spyOn(cds, "context", "get").mockReturnValue({
             authConfig: {
-                types: [AUTHENTICATION_TYPE.Open]
-            }
+                types: [AUTHENTICATION_TYPE.Open],
+            },
         });
     });
 
@@ -41,8 +40,8 @@ describe("End-to-end test for ORD document", () => {
         test("Successfully create ORD Documents with defaults and applicationNamespace configured incorrectly", () => {
             cds.env.export = {
                 asyncapi: {
-                    applicationNamespace: "non-ord-namespace"
-                }
+                    applicationNamespace: "non-ord-namespace",
+                },
             };
             const document = ord(csn);
             expect(document).toMatchSnapshot();
@@ -71,18 +70,15 @@ describe("End-to-end test for ORD document", () => {
 
             test("The partOfPackage references an existing package", () => {
                 for (const apiResource of document.apiResources) {
-                    expect(
-                        document.packages.find(
-                            (pck) => pck.ordId === apiResource.partOfPackage
-                        )
-                    ).toBeDefined();
+                    expect(document.packages.find((pck) => pck.ordId === apiResource.partOfPackage)).toBeDefined();
                 }
             });
         });
 
         describe("eventResources", () => {
             // eslint-disable-next-line no-useless-escape
-            const GROUP_ID_REGEX = /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/;
+            const GROUP_ID_REGEX =
+                /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/;
 
             let document;
 
@@ -104,8 +100,7 @@ describe("End-to-end test for ORD document", () => {
                     const match = GROUP_ID_REGEX.exec(groupId);
                     if (match && match.groups?.service) {
                         let service = match.groups?.service;
-                        if (service.startsWith("undefined"))
-                            service = service.replace("undefined.", "");
+                        if (service.startsWith("undefined")) service = service.replace("undefined.", "");
                         const definition = csn.definitions[service];
                         expect(definition).toBeDefined();
                         expect(definition.kind).toEqual("service");
@@ -153,18 +148,15 @@ describe("End-to-end test for ORD document", () => {
 
             test("The partOfPackage references an existing package", () => {
                 for (const apiResource of document.apiResources) {
-                    expect(
-                        document.packages.find(
-                            (pck) => pck.ordId === apiResource.partOfPackage
-                        )
-                    ).toBeDefined();
+                    expect(document.packages.find((pck) => pck.ordId === apiResource.partOfPackage)).toBeDefined();
                 }
             });
         });
 
         describe("eventResources", () => {
             // eslint-disable-next-line no-useless-escape
-            const GROUP_ID_REGEX = /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/;
+            const GROUP_ID_REGEX =
+                /^([a-z0-9-]+(?:[.][a-z0-9-]+)*):([a-zA-Z0-9._\-/]+):([a-z0-9-]+(?:[.][a-z0-9-]+)*):(?<service>[a-zA-Z0-9._\-/]+)$/;
 
             let document;
 
@@ -186,8 +178,7 @@ describe("End-to-end test for ORD document", () => {
                     const match = GROUP_ID_REGEX.exec(groupId);
                     if (match && match.groups?.service) {
                         let service = match.groups?.service;
-                        if (service.startsWith("undefined"))
-                            service = service.replace("undefined.", "");
+                        if (service.startsWith("undefined")) service = service.replace("undefined.", "");
                         const definition = csn.definitions[service];
                         expect(definition).toBeDefined();
                         expect(definition.kind).toEqual("service");
@@ -205,8 +196,8 @@ describe("Tests for products and packages", () => {
         process.env.DEBUG = "true";
         jest.spyOn(cds, "context", "get").mockReturnValue({
             authConfig: {
-                types: [AUTHENTICATION_TYPE.Open]
-            }
+                types: [AUTHENTICATION_TYPE.Open],
+            },
         });
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
@@ -221,12 +212,11 @@ describe("Tests for products and packages", () => {
     afterAll(() => {
         jest.clearAllMocks();
         jest.resetAllMocks();
-
     });
 
     it("should not contain products property if existingProductId provided", async () => {
         cds.env.ord = {
-            existingProductORDId: "sap:product:SAPServiceCloudV2:"
+            existingProductORDId: "sap:product:SAPServiceCloudV2:",
         };
         csn = await cds.load(path.join(cds.root, "srv"));
 
@@ -240,11 +230,11 @@ describe("Tests for products and packages", () => {
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
         cds.env.ord = {
-            "products": [
+            products: [
                 {
-                    "ordId": "sap:product:eb.bm.tests:",
-                    "vendor": "sap:vendor:SAP:"
-                }
+                    ordId: "sap:product:eb.bm.tests:",
+                    vendor: "sap:vendor:SAP:",
+                },
             ],
         };
         csn = await cds.load(path.join(cds.root, "srv"));
@@ -261,11 +251,11 @@ describe("Tests for products and packages", () => {
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
         cds.env.ord = {
-            "products": [
+            products: [
                 {
-                    "ordId": "customer:product:eb.bm.tests:",
-                    "vendor": "sap:vendor:SAP:"
-                }
+                    ordId: "customer:product:eb.bm.tests:",
+                    vendor: "sap:vendor:SAP:",
+                },
             ],
         };
         csn = await cds.load(path.join(cds.root, "srv"));
@@ -275,4 +265,3 @@ describe("Tests for products and packages", () => {
         expect(errorSpy).toHaveBeenCalledTimes(0);
     });
 });
-
