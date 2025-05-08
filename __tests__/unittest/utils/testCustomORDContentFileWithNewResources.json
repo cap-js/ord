@@ -19,10 +19,7 @@
                 }
             ],
             "responsible": "sap:ach:CIC-DP-CO",
-            "entityTypes": [
-                "sap.odm:entityType:BusinessPartner:v1",
-                "sap.sm:entityType:BusinessPartner:v1"
-            ]
+            "entityTypes": ["sap.odm:entityType:BusinessPartner:v1", "sap.sm:entityType:BusinessPartner:v1"]
         }
     ]
 }

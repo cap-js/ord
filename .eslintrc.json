@@ -1,16 +1,16 @@
 {
     "env": {
-      "jest": true,
-      "commonjs": true,
-      "node": true,
-      "es2021": true
+        "jest": true,
+        "commonjs": true,
+        "node": true,
+        "es2021": true
     },
     "extends": "eslint:recommended",
     "parserOptions": {
         "ecmaVersion": "latest"
     },
     "rules": {
-      "no-unused-vars": ["warn", { "argsIgnorePattern": "lazy" }],
-      "no-extra-semi": 1
+        "no-unused-vars": ["warn", { "argsIgnorePattern": "lazy" }],
+        "no-extra-semi": 1
     }
 }

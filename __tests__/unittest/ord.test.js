@@ -1,5 +1,5 @@
-describe('ord', () => {
-    it('test placeholder', () => {
+describe("ord", () => {
+    it("test placeholder", () => {
         expect(true).toBe(true);
     });
 });

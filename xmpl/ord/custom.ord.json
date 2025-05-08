@@ -5,9 +5,7 @@
         {
             "description": "Description of capire bookshop ord sample version 2",
             "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v2",
-            "partOfProducts": [
-                "customer:product:capire.bookshop.ord.sample:"
-            ],
+            "partOfProducts": ["customer:product:capire.bookshop.ord.sample:"],
             "shortDescription": "Short description for capire bookshop ord sample version 2",
             "title": "capire bookshop ord sample",
             "vendor": "customer:vendor:Customer:",

@@ -35,10 +35,7 @@ describe("extendOrdWithCustom", () => {
         it("should skip if customOrdContentFile property in the .cdsrc.json points to NON-EXISTING custom ord file", () => {
             const ordContent = {};
             appConfig.env.customOrdContentFile = "./ord/NotExistingCustom.ord.json";
-            const result = extendCustomORDContentIfExists(
-                appConfig,
-                ordContent
-            );
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toEqual(ordContent);
         });
 
@@ -52,21 +49,15 @@ describe("extendOrdWithCustom", () => {
                 "[ord-plugin] -",
                 expect.stringContaining("Found ord top level primitive ord property in customOrdFile:"),
                 expect.anything(),
-                expect.stringContaining("Please define it in .cdsrc.json."));
+                expect.stringContaining("Please define it in .cdsrc.json."),
+            );
             expect(result).toMatchSnapshot();
         });
 
         it("should add new ord resources that are not supported by cap framework", () => {
             const ordContent = {};
-            prepareTestEnvironment(
-                {},
-                appConfig,
-                "testCustomORDContentFileWithNewResources.json"
-            );
-            const result = extendCustomORDContentIfExists(
-                appConfig,
-                ordContent
-            );
+            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithNewResources.json");
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });
 
@@ -79,15 +70,8 @@ describe("extendOrdWithCustom", () => {
                     },
                 ],
             };
-            prepareTestEnvironment(
-                {},
-                appConfig,
-                "testCustomORDContentFileWithEnhanced.json"
-            );
-            const result = extendCustomORDContentIfExists(
-                appConfig,
-                ordContent
-            );
+            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithEnhanced.json");
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });
 
@@ -103,9 +87,7 @@ describe("extendOrdWithCustom", () => {
                     {
                         ordId: "sap.sm:apiResource:SupplierService:v1",
                         title: "should be removed",
-                        partOfGroups: [
-                            "sap.cds:service:sap.test.cdsrc.sample:originalService",
-                        ],
+                        partOfGroups: ["sap.cds:service:sap.test.cdsrc.sample:originalService"],
                         partOfPackage: "sap.sm:package:smDataProducts:v2",
                         extensible: {
                             supported: "no",
@@ -125,9 +107,7 @@ describe("extendOrdWithCustom", () => {
                     },
                     {
                         ordId: "sap.sm:apiResource:orginalService:v2",
-                        partOfGroups: [
-                            "sap.cds:service:sap.test.cdsrc.sample:originalService",
-                        ],
+                        partOfGroups: ["sap.cds:service:sap.test.cdsrc.sample:originalService"],
                         partOfPackage: "sap.sm:package:smDataProducts:v2",
                         entityTypeMappings: [
                             {
@@ -137,15 +117,8 @@ describe("extendOrdWithCustom", () => {
                     },
                 ],
             };
-            prepareTestEnvironment(
-                {},
-                appConfig,
-                "testCustomORDContentFileWithPatch.json"
-            );
-            const result = extendCustomORDContentIfExists(
-                appConfig,
-                ordContent
-            );
+            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithPatch.json");
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });
     });
@@ -154,7 +127,5 @@ describe("extendOrdWithCustom", () => {
 function prepareTestEnvironment(ordEnvVariables, appConfig, testFileName) {
     cds.env["ord"] = ordEnvVariables;
     appConfig.env.customOrdContentFile = testFileName;
-    jest.spyOn(path, "join").mockReturnValueOnce(
-        `${__dirname}/utils/${testFileName}`
-    );
+    jest.spyOn(path, "join").mockReturnValueOnce(`${__dirname}/utils/${testFileName}`);
 }
