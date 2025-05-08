@@ -56,15 +56,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/browse",
       ],
@@ -200,15 +191,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "extensible": {
         "supported": "yes",
       },
@@ -379,15 +361,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/browse",
       ],
@@ -523,15 +496,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "extensible": {
         "supported": "yes",
       },
@@ -702,15 +666,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/browse",
       ],
@@ -846,15 +801,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1026,15 +972,6 @@ exports[`Tests for products and packages should not contain products property if
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/browse",
       ],
@@ -1144,15 +1081,6 @@ exports[`Tests for products and packages should not contain products property if
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1273,15 +1201,6 @@ exports[`Tests for products and packages should raise error log when custom prod
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/browse",
       ],
@@ -1391,15 +1310,6 @@ exports[`Tests for products and packages should raise error log when custom prod
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1528,15 +1438,6 @@ exports[`Tests for products and packages should use valid custom products ordId 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for CinemaService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/browse",
       ],
@@ -1646,15 +1547,6 @@ exports[`Tests for products and packages should use valid custom products ordId 
     },
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-            },
-          ],
-        },
-      ],
       "extensible": {
         "supported": "yes",
       },

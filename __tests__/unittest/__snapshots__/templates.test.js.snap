@@ -5,7 +5,6 @@ exports[`templates createAPIResourceTemplate should create API resource template
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [],
     "entryPoints": [
       "/odata/v4/my",
     ],
@@ -91,7 +90,6 @@ exports[`templates createEventResourceTemplate should create event resource temp
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [],
     "extensible": {
       "supported": "no",
     },
@@ -126,7 +124,6 @@ exports[`templates createEventResourceTemplate should create event resource temp
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [],
     "extensible": {
       "supported": "no",
     },
@@ -157,6 +154,21 @@ exports[`templates createEventResourceTemplate should create event resource temp
 ]
 `;
 
+exports[`templates getEntityTypeMappings should clean up duplicates 1`] = `
+[
+  {
+    "entityTypeTargets": [
+      {
+        "ordId": "sap.odm:entityType:Something:v1",
+      },
+      {
+        "ordId": "sap.sm:entityType:Else:v2",
+      },
+    ],
+  },
+]
+`;
+
 exports[`templates ordExtension should add apiResources with ORD Extension "visibility=public" 1`] = `
 [
   {
@@ -166,7 +178,7 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
       {
         "entityTypeTargets": [
           {
-            "ordId": "sap.odm:entityType:test:v1",
+            "ordId": "sap.odm:entityType:testOdmEntity:v1",
           },
         ],
       },
@@ -218,15 +230,6 @@ exports[`templates ordExtension should add events with ORD Extension "visibility
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test:v1",
-          },
-        ],
-      },
-    ],
     "extensible": {
       "supported": "yes",
     },
@@ -257,6 +260,246 @@ exports[`templates ordExtension should add events with ORD Extension "visibility
 ]
 `;
 
+exports[`templates ordExtension should find association on nested entities for related service 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:DirectAssociationOdmEntity:v1",
+          },
+          {
+            "ordId": "sap.odm:entityType:NestedAssociationOdmEntity:v1",
+          },
+        ],
+      },
+    ],
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "yes",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-other:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "short description for test MyService apiResource",
+    "title": "This is test MyService apiResource title",
+    "version": "2.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`templates ordExtension should find composition and association entities for related service 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:CompositionOdmEntity:v1",
+          },
+          {
+            "ordId": "sap.odm:entityType:AssociationOdmEntity:v1",
+          },
+        ],
+      },
+    ],
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "yes",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-other:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "short description for test MyService apiResource",
+    "title": "This is test MyService apiResource title",
+    "version": "2.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`templates ordExtension should find composition on nested entities for related service 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:DirectCompositionOdmEntity:v1",
+          },
+          {
+            "ordId": "sap.odm:entityType:NestedCompositionOdmEntity:v1",
+          },
+        ],
+      },
+    ],
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "yes",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-other:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "short description for test MyService apiResource",
+    "title": "This is test MyService apiResource title",
+    "version": "2.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`templates ordExtension should find ordId on circular relations 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entityTypeMappings": [
+      {
+        "entityTypeTargets": [
+          {
+            "ordId": "sap.odm:entityType:DirectCompositionOdmEntity:v1",
+          },
+          {
+            "ordId": "sap.odm:entityType:NestedCompositionOdmEntity:v1",
+          },
+        ],
+      },
+    ],
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "yes",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-other:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "short description for test MyService apiResource",
+    "title": "This is test MyService apiResource title",
+    "version": "2.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
 exports[`templates ordExtension should include internal API resources but ensure they appear in a separate package 1`] = `
 [
   {
@@ -266,7 +509,7 @@ exports[`templates ordExtension should include internal API resources but ensure
       {
         "entityTypeTargets": [
           {
-            "ordId": "sap.odm:entityType:test:v1",
+            "ordId": "sap.odm:entityType:testOdmEntity:v1",
           },
         ],
       },
@@ -318,15 +561,6 @@ exports[`templates ordExtension should include internal events but ensure they a
 [
   {
     "description": "CAP Event resource describing events / messages.",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test:v1",
-          },
-        ],
-      },
-    ],
     "extensible": {
       "supported": "yes",
     },
