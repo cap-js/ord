@@ -22,9 +22,7 @@
         {
             "description": "Description of capire bookshop ord sample data product",
             "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-dataProduct:v1",
-            "partOfProducts": [
-                "customer:product:capire.bookshop.ord.sample:"
-            ],
+            "partOfProducts": ["customer:product:capire.bookshop.ord.sample:"],
             "shortDescription": "Short description for capire bookshop ord sample data product",
             "title": "capire bookshop ord sample data product",
             "vendor": "customer:vendor:Customer:",
@@ -99,9 +97,7 @@
                 }
             ],
             "responsible": "customer:group:capire-team",
-            "entityTypes": [
-                "sap.odm:entityType:BusinessPartner:v1"
-            ]
+            "entityTypes": ["sap.odm:entityType:BusinessPartner:v1"]
         }
     ]
 }
