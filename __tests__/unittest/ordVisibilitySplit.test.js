@@ -14,23 +14,11 @@ const {
 } = require("../../lib/templates");
 
 describe("templates", () => {
-    let linkedModel;
-
     const appConfig = {
         ordNamespace: "customer.testNamespace",
         appName: "testAppName",
         lastUpdate: "2022-12-19T15:47:04+00:00",
     };
-
-    beforeAll(() => {
-        linkedModel = cds.linked(`
-            namespace customer.testNamespace123;
-            entity Books {
-                key ID: UUID;
-                title: String;
-            }
-        `);
-    });
 
     describe("createEntityTypeTemplate", () => {
         const packageIds = [

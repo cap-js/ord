@@ -23,12 +23,12 @@ extend service ProcessorService {
     }
 }
 
-@AsyncAPI.Title        : 'SAP Incident Management'
-@AsyncAPI.SchemaVersion: '1.0'
+@AsyncAPI.Title                  : 'SAP Incident Management'
+@AsyncAPI.SchemaVersion          : '1.0'
+@DataIntegration.dataProduct.type: 'primary'
 service LocalService {
     entity Entertainment as projection on my.Cinema;
-
-    entity Film as projection on my.Movie;
+    entity Film          as projection on my.Movie;
 
     event TitleChange : {
         ID    : Integer;
@@ -36,9 +36,7 @@ service LocalService {
     }
 }
 
-annotate LocalService with @ORD.Extensions: {
-    title         : 'This is Local Service title'
-};
+annotate LocalService with @ORD.Extensions: {title: 'This is Local Service title'};
 
 annotate AdminService with @ORD.Extensions: {
     title         : 'This is Admin Service title',
