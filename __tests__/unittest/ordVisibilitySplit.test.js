@@ -14,8 +14,6 @@ const {
 } = require("../../lib/templates");
 
 describe("templates", () => {
-    let linkedModel;
-
     const appConfig = {
         ordNamespace: "customer.testNamespace",
         appName: "testAppName",
