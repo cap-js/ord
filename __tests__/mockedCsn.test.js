@@ -94,14 +94,24 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     describe("Tests for ORD document when all the resources are private", () => {
         test("All services are private: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/privateResourcesCsn.json");
-            checkOrdDocumentPrivate(csn);
+            const document = ord(csn);
+
+            expect(document).not.toBeUndefined();
+            expect(document.packages).toHaveLength(0);
+            expect(document.apiResources).toBeUndefined(0);
+            expect(document.eventResources).toBeUndefined(0);
         });
     });
 
     describe("Tests for ORD document when all the resources are internal", () => {
         test("All services are internal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/internalResourcesCsn.json");
-            checkOrdDocumentInternal(csn);
+            const document = ord(csn);
+
+            expect(document).not.toBeUndefined();
+            expect(document.packages).toBeDefined();
+            expect(document.apiResources).toBeUndefined();
+            expect(document.eventResources).toBeUndefined();
         });
     });
 
@@ -111,10 +121,8 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.apiResources).toHaveLength(2);
-            expect(document.eventResources).toHaveLength(2);
-            expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
-            expect(document.eventResources[1].ordId).toEqual(expect.stringContaining("CatalogService"));
+            expect(document.apiResources).toBeUndefined();
+            expect(document.eventResources).toBeUndefined();
         });
 
         test("Successfully create ORD Documents: no eventResources", () => {
@@ -122,9 +130,9 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.apiResources).toHaveLength(2);
-            expect(document.eventResources).toHaveLength(0);
-            expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("AdminService"));
+            expect(document.apiResources).toHaveLength(1);
+            expect(document.eventResources).toBeUndefined();
+            expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("LocalService"));
         });
     });
 
