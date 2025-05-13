@@ -494,7 +494,9 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "sap:core:v1",
+  "policyLevels": [
+    "sap:core:v1",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",

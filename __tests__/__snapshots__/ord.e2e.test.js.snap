@@ -293,7 +293,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "sap:core:v1",
+  "policyLevels": [
+    "sap:core:v1",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
@@ -598,7 +600,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "sap:core:v1",
+  "policyLevels": [
+    "sap:core:v1",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
@@ -903,7 +907,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "sap:core:v1",
+  "policyLevels": [
+    "sap:core:v1",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
@@ -1140,7 +1146,9 @@ exports[`Tests for products and packages should not contain products property if
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "none",
+  "policyLevels": [
+    "none",
+  ],
 }
 `;
 
@@ -1369,7 +1377,9 @@ exports[`Tests for products and packages should raise error log when custom prod
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "none",
+  "policyLevels": [
+    "none",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
@@ -1606,7 +1616,9 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "none",
+  "policyLevels": [
+    "none",
+  ],
   "products": [
     {
       "ordId": "customer:product:eb.bm.tests:",
