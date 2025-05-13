@@ -274,7 +274,11 @@ exports[`defaults packages should use existingProductId if provided in .cdsrc.js
 ]
 `;
 
-exports[`defaults policyLevels should return default value 1`] = `"none"`;
+exports[`defaults policyLevels should return default value 1`] = `
+[
+  "none",
+]
+`;
 
 exports[`defaults products should return default value 1`] = `
 [

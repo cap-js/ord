@@ -39,7 +39,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             namespace: "sap.test.cdsrc.sample",
             openResourceDiscovery: "1.10",
             description: "this is my custom description",
-            policyLevels: "sap:core:v1",
+            policyLevels: ["sap:core:v1"],
         };
     });
 

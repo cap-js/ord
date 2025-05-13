@@ -51,25 +51,25 @@ describe("defaults", () => {
         const testGetPackageOrdNamespace = "customer.sample";
         var appConfig = {};
         it("should return default value if policyLevels contains sap", () => {
-            const testpolicyLevels = "sap:policy";
+            const testPolicyLevels = ["sap:policy"];
             appConfig = {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
             };
-            expect(defaults.packages(appConfig, testpolicyLevels)).toMatchSnapshot();
+            expect(defaults.packages(appConfig, testPolicyLevels)).toMatchSnapshot();
         });
 
         it("should return default value if policyLevels does not contain sap", () => {
-            const testpolicyLevels = "policy";
+            const testPolicyLevels = ["policy"];
             appConfig = {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
             };
-            expect(defaults.packages(appConfig, testpolicyLevels)).toMatchSnapshot();
+            expect(defaults.packages(appConfig, testPolicyLevels)).toMatchSnapshot();
         });
 
         it("should return custom value if user defined in .cdsrc.json", () => {
-            const testpolicyLevels = "policy";
+            const testPolicyLevels = ["policy"];
             appConfig = {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
@@ -87,21 +87,21 @@ describe("defaults", () => {
                     ],
                 },
             };
-            expect(defaults.packages(appConfig, testpolicyLevels)).toMatchSnapshot();
+            expect(defaults.packages(appConfig, testPolicyLevels)).toMatchSnapshot();
         });
 
         it("should use existingProductId if provided in .cdsrc.json", () => {
-            const testpolicyLevels = "policy";
+            const testPolicyLevels = ["policy"];
             appConfig = {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
                 existingProductORDId: "sap:product:SAPServiceCloudV2:",
             };
-            expect(defaults.packages(appConfig, testpolicyLevels)).toMatchSnapshot();
+            expect(defaults.packages(appConfig, testPolicyLevels)).toMatchSnapshot();
         });
 
         it("should use existingProductId if existingProductId and custom product both provided in .cdsrc.json", () => {
-            const testpolicyLevels = "policy";
+            const testPolicyLevels = ["policy"];
             appConfig = {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
@@ -113,11 +113,11 @@ describe("defaults", () => {
                     },
                 ],
             };
-            expect(defaults.packages(appConfig, testpolicyLevels)).toMatchSnapshot();
+            expect(defaults.packages(appConfig, testPolicyLevels)).toMatchSnapshot();
         });
 
         it("should use custom vendor if it defined in .cdsrc.json", () => {
-            const testpolicyLevels = "policy";
+            const testPolicyLevels = ["policy"];
             appConfig = {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
@@ -129,16 +129,16 @@ describe("defaults", () => {
                     ],
                 },
             };
-            expect(defaults.packages(appConfig, testpolicyLevels)).toMatchSnapshot();
+            expect(defaults.packages(appConfig, testPolicyLevels)).toMatchSnapshot();
         });
 
         it("should not contain partOfProducts if no productsOrdId found", () => {
-            const testpolicyLevels = "policy";
+            const testPolicyLevels = ["policy"];
             appConfig = {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
             };
-            expect(defaults.packages(appConfig, testpolicyLevels)).toMatchSnapshot();
+            expect(defaults.packages(appConfig, testPolicyLevels)).toMatchSnapshot();
         });
     });
 

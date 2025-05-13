@@ -297,7 +297,9 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "version": "1.0.0",
     },
   ],
-  "policyLevels": "none",
+  "policyLevels": [
+    "none",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
