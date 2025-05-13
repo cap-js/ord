@@ -10,7 +10,7 @@ namespace sap.capire.incidents;
 annotate ProcessorService with @ORD.Extensions: {
     title           : 'This is Processor Service title',
     shortDescription: 'short description for Processor Service',
-    visibility      : 'public',
+    visibility      : 'internal',
     extensible      : {supported: 'no'}
 };
 
@@ -23,12 +23,12 @@ extend service ProcessorService {
     }
 }
 
-@AsyncAPI.Title        : 'SAP Incident Management'
-@AsyncAPI.SchemaVersion: '1.0'
+@AsyncAPI.Title                  : 'SAP Incident Management'
+@AsyncAPI.SchemaVersion          : '1.0'
+@DataIntegration.dataProduct.type: 'primary'
 service LocalService {
     entity Entertainment as projection on my.Cinema;
-
-    entity Film as projection on my.Movie;
+    entity Film          as projection on my.Movie;
 
     event TitleChange : {
         ID    : Integer;
@@ -36,9 +36,7 @@ service LocalService {
     }
 }
 
-annotate LocalService with @ORD.Extensions: {
-    title         : 'This is Local Service title'
-};
+annotate LocalService with @ORD.Extensions: {title: 'This is Local Service title'};
 
 annotate AdminService with @ORD.Extensions: {
     title         : 'This is Admin Service title',
@@ -46,7 +44,7 @@ annotate AdminService with @ORD.Extensions: {
         'Retail',
         'Consumer Products'
     ],
-    lineOfBusiness: ['Sales']
+    lineOfBusiness: ['Sales'],
 };
 
 annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';

@@ -5,24 +5,6 @@ const { AUTHENTICATION_TYPE } = require("../lib/constants");
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;
 
-    function checkOrdDocumentInternal(csn) {
-        const document = ord(csn);
-
-        expect(document).not.toBeUndefined();
-        expect(document.packages).toBeDefined();
-        expect(document.apiResources).toHaveLength(3);
-        expect(document.eventResources).toHaveLength(3);
-    }
-
-    function checkOrdDocumentPrivate(csn) {
-        const document = ord(csn);
-
-        expect(document).not.toBeUndefined();
-        expect(document.packages).toHaveLength(0);
-        expect(document.apiResources).toHaveLength(0);
-        expect(document.eventResources).toHaveLength(0);
-    }
-
     beforeAll(() => {
         cds.root = path.join(__dirname, "bookshop");
         jest.spyOn(cds, "context", "get").mockReturnValue({
@@ -39,7 +21,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             namespace: "sap.test.cdsrc.sample",
             openResourceDiscovery: "1.10",
             description: "this is my custom description",
-            policyLevel: "sap:core:v1",
+            policyLevels: ["sap:core:v1"],
         };
     });
 
@@ -98,20 +80,20 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
             expect(document).not.toBeUndefined();
             expect(document.packages).toHaveLength(0);
-            expect(document.apiResources).toBeUndefined(0);
-            expect(document.eventResources).toBeUndefined(0);
+            expect(document.apiResources).toBeUndefined();
+            expect(document.eventResources).toBeUndefined();
         });
     });
 
     describe("Tests for ORD document when all the resources are internal", () => {
-        test("All services are internal: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
+        test("All services are internal: Successfully create ORD Documents with packages, apiResources and eventResources lists", () => {
             const csn = require("./__mocks__/internalResourcesCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
             expect(document.packages).toBeDefined();
-            expect(document.apiResources).toBeUndefined();
-            expect(document.eventResources).toBeUndefined();
+            expect(document.apiResources).toBeDefined();
+            expect(document.eventResources).toBeDefined();
         });
     });
 

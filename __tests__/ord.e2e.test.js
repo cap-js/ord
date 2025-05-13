@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE } = require("../lib/constants");
+const { AUTHENTICATION_TYPE, CDS_ELEMENT_KIND } = require("../lib/constants");
 
 describe("End-to-end test for ORD document", () => {
     beforeAll(() => {
@@ -100,10 +100,9 @@ describe("End-to-end test for ORD document", () => {
                     const match = GROUP_ID_REGEX.exec(groupId);
                     if (match && match.groups?.service) {
                         let service = match.groups?.service;
-                        if (service.startsWith("undefined")) service = service.replace("undefined.", "");
                         const definition = csn.definitions[service];
                         expect(definition).toBeDefined();
-                        expect(definition.kind).toEqual("service");
+                        expect(definition.kind).toEqual(CDS_ELEMENT_KIND.event);
                     }
                 }
             });
@@ -178,10 +177,9 @@ describe("End-to-end test for ORD document", () => {
                     const match = GROUP_ID_REGEX.exec(groupId);
                     if (match && match.groups?.service) {
                         let service = match.groups?.service;
-                        if (service.startsWith("undefined")) service = service.replace("undefined.", "");
                         const definition = csn.definitions[service];
                         expect(definition).toBeDefined();
-                        expect(definition.kind).toEqual("service");
+                        expect(definition.kind).toEqual(CDS_ELEMENT_KIND.event);
                     }
                 }
             });

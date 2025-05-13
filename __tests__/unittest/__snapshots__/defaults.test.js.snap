@@ -67,7 +67,7 @@ exports[`defaults packages should return custom value if user defined in .cdsrc.
 ]
 `;
 
-exports[`defaults packages should return default value if policyLevel contains sap 1`] = `
+exports[`defaults packages should return default value if policyLevels contains sap 1`] = `
 [
   {
     "description": "This package contains public APIs for My Package.",
@@ -216,7 +216,7 @@ exports[`defaults packages should return default value if policyLevel contains s
 ]
 `;
 
-exports[`defaults packages should return default value if policyLevel does not contain sap 1`] = `
+exports[`defaults packages should return default value if policyLevels does not contain sap 1`] = `
 [
   {
     "description": "This package contains public General for My Package.",
@@ -274,7 +274,11 @@ exports[`defaults packages should use existingProductId if provided in .cdsrc.js
 ]
 `;
 
-exports[`defaults policyLevel should return default value 1`] = `"none"`;
+exports[`defaults policyLevels should return default value 1`] = `
+[
+  "none",
+]
+`;
 
 exports[`defaults products should return default value 1`] = `
 [

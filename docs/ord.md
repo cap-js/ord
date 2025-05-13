@@ -15,7 +15,7 @@ Global settings can be defined using the `present configuration` in your `cdsrc.
     "ord": {
         "namespace": "sap.sample",
         "description": "This is my custom description",
-        "policyLevel": "sap:core:v1"
+        "policyLevels": ["sap:core:v1"]
     }
 }
 ```
@@ -62,7 +62,7 @@ customOrdContent > ORD.Extensions Annotations > CAP Annotations > Plugin Default
     "ord": {
         "namespace": "sap.sample",
         "description": "This is my custom description",
-        "policyLevel": "sap:core:v1",
+        "policyLevels": ["sap:core:v1"],
         "customOrdContentFile": "./path/to/custom.ord.json"
     }
 }
@@ -123,7 +123,7 @@ To associate your resources with an existing SAP product, define `existingProduc
     "ord": {
         "namespace": "sap.sample",
         "description": "This is my custom description",
-        "policyLevel": "sap:core:v1",
+        "policyLevels": ["sap:core:v1"],
         "customOrdContentFile": "./ord/custom.ord.json",
         "existingProductORDId": "sap:product:SAPServiceCloudV2:"
     }
@@ -159,7 +159,7 @@ If defining a **custom product**, make sure its `ordId` **does not** start with 
     "ord": {
         "namespace": "sap.sample",
         "description": "This is my custom description",
-        "policyLevel": "sap:core:v1",
+        "policyLevels": ["sap:core:v1"],
         "customOrdContentFile": "./ord/custom.ord.json",
         "products": [
             {

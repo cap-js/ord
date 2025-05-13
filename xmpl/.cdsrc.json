@@ -11,9 +11,9 @@
         }
     },
     "ord": {
-        "namespace": "sap.sample",
+        "namespace": "customer.sample",
         "description": "this is my custom description",
-        "policyLevel": "sap:core:v1",
+        "policyLevels": ["sap:core:v1"],
         "customOrdContentFile": "./ord/custom.ord.json",
         "existingProductORDId": "sap:product:SAPServiceCloudV2:",
         "products": [

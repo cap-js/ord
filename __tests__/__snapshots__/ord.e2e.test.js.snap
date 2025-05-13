@@ -155,20 +155,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService:v1",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService.BookCreated:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService.BookCreated",
       ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "releaseStatus": "active",
@@ -181,23 +174,81 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService.BookCreated:v1/AdminService.BookCreated.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
+      "shortDescription": "AdminService.BookCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
       "visibility": "public",
     },
     {
       "description": "CAP Event resource describing events / messages.",
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService:v1",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService.BookDeleted:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService.BookDeleted",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService.BookDeleted:v1/AdminService.BookDeleted.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "AdminService.BookDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService.BookUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService.BookUpdated",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService.BookUpdated:v1/AdminService.BookUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "AdminService.BookUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService.MovieCreated:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService.MovieCreated",
       ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
       "releaseStatus": "active",
@@ -210,11 +261,69 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService.MovieCreated:v1/CinemaService.MovieCreated.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test CinemaService",
-      "title": "This is test Cinema Service title",
+      "shortDescription": "CinemaService.MovieCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService.MovieDeleted:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService.MovieDeleted",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService.MovieDeleted:v1/CinemaService.MovieDeleted.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService.MovieUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService.MovieUpdated",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService.MovieUpdated:v1/CinemaService.MovieUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "internal",
     },
@@ -293,7 +402,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "sap:core:v1",
+  "policyLevels": [
+    "sap:core:v1",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
@@ -460,20 +571,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService:v1",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService.BookCreated:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService.BookCreated",
       ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "releaseStatus": "active",
@@ -486,23 +590,81 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService.BookCreated:v1/AdminService.BookCreated.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
+      "shortDescription": "AdminService.BookCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
       "visibility": "public",
     },
     {
       "description": "CAP Event resource describing events / messages.",
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService:v1",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService.BookDeleted:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService.BookDeleted",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService.BookDeleted:v1/AdminService.BookDeleted.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "AdminService.BookDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService.BookUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService.BookUpdated",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService.BookUpdated:v1/AdminService.BookUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "AdminService.BookUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService.MovieCreated:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService.MovieCreated",
       ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
       "releaseStatus": "active",
@@ -515,11 +677,69 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService.MovieCreated:v1/CinemaService.MovieCreated.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test CinemaService",
-      "title": "This is test Cinema Service title",
+      "shortDescription": "CinemaService.MovieCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService.MovieDeleted:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService.MovieDeleted",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService.MovieDeleted:v1/CinemaService.MovieDeleted.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService.MovieUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService.MovieUpdated",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService.MovieUpdated:v1/CinemaService.MovieUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "internal",
     },
@@ -598,7 +818,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "sap:core:v1",
+  "policyLevels": [
+    "sap:core:v1",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
@@ -765,20 +987,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService:v1",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService.BookCreated:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:AdminService",
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService.BookCreated",
       ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "releaseStatus": "active",
@@ -791,23 +1006,81 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService.BookCreated:v1/AdminService.BookCreated.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
+      "shortDescription": "AdminService.BookCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
       "visibility": "public",
     },
     {
       "description": "CAP Event resource describing events / messages.",
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService:v1",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService.BookDeleted:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService.BookDeleted",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService.BookDeleted:v1/AdminService.BookDeleted.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "AdminService.BookDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:AdminService.BookUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:AdminService.BookUpdated",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService.BookUpdated:v1/AdminService.BookUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "AdminService.BookUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService.MovieCreated:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService.MovieCreated",
       ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
       "releaseStatus": "active",
@@ -820,11 +1093,69 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService.MovieCreated:v1/CinemaService.MovieCreated.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test CinemaService",
-      "title": "This is test Cinema Service title",
+      "shortDescription": "CinemaService.MovieCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService.MovieDeleted:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService.MovieDeleted",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService.MovieDeleted:v1/CinemaService.MovieDeleted.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:eventResource:CinemaService.MovieUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:CinemaService.MovieUpdated",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CinemaService.MovieUpdated:v1/CinemaService.MovieUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "internal",
     },
@@ -903,7 +1234,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "sap:core:v1",
+  "policyLevels": [
+    "sap:core:v1",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
@@ -1045,20 +1378,13 @@ exports[`Tests for products and packages should not contain products property if
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:AdminService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService.BookCreated:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:AdminService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService.BookCreated",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -1071,23 +1397,23 @@ exports[`Tests for products and packages should not contain products property if
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService.BookCreated:v1/AdminService.BookCreated.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
+      "shortDescription": "AdminService.BookCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
       "visibility": "public",
     },
     {
       "description": "CAP Event resource describing events / messages.",
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService.BookDeleted:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:CinemaService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService.BookDeleted",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -1100,11 +1426,127 @@ exports[`Tests for products and packages should not contain products property if
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService.BookDeleted:v1/AdminService.BookDeleted.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test CinemaService",
-      "title": "This is test Cinema Service title",
+      "shortDescription": "AdminService.BookDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService.BookUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:AdminService.BookUpdated",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService.BookUpdated:v1/AdminService.BookUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "AdminService.BookUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService.MovieCreated:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService.MovieCreated",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService.MovieCreated:v1/CinemaService.MovieCreated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService.MovieDeleted:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService.MovieDeleted",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService.MovieDeleted:v1/CinemaService.MovieDeleted.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService.MovieUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService.MovieUpdated",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService.MovieUpdated:v1/CinemaService.MovieUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "internal",
     },
@@ -1140,7 +1582,9 @@ exports[`Tests for products and packages should not contain products property if
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "none",
+  "policyLevels": [
+    "none",
+  ],
 }
 `;
 
@@ -1274,20 +1718,13 @@ exports[`Tests for products and packages should raise error log when custom prod
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:AdminService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService.BookCreated:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:AdminService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService.BookCreated",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -1300,23 +1737,23 @@ exports[`Tests for products and packages should raise error log when custom prod
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService.BookCreated:v1/AdminService.BookCreated.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
+      "shortDescription": "AdminService.BookCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
       "visibility": "public",
     },
     {
       "description": "CAP Event resource describing events / messages.",
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService.BookDeleted:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:CinemaService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService.BookDeleted",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -1329,11 +1766,127 @@ exports[`Tests for products and packages should raise error log when custom prod
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService.BookDeleted:v1/AdminService.BookDeleted.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test CinemaService",
-      "title": "This is test Cinema Service title",
+      "shortDescription": "AdminService.BookDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService.BookUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:AdminService.BookUpdated",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService.BookUpdated:v1/AdminService.BookUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "AdminService.BookUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService.MovieCreated:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService.MovieCreated",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService.MovieCreated:v1/CinemaService.MovieCreated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService.MovieDeleted:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService.MovieDeleted",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService.MovieDeleted:v1/CinemaService.MovieDeleted.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService.MovieUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService.MovieUpdated",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService.MovieUpdated:v1/CinemaService.MovieUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "internal",
     },
@@ -1369,7 +1922,9 @@ exports[`Tests for products and packages should raise error log when custom prod
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "none",
+  "policyLevels": [
+    "none",
+  ],
   "products": [
     {
       "ordId": "customer:product:capire.bookshop.ord.sample:",
@@ -1511,20 +2066,13 @@ exports[`Tests for products and packages should use valid custom products ordId 
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:AdminService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService.BookCreated:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:AdminService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService.BookCreated",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -1537,23 +2085,23 @@ exports[`Tests for products and packages should use valid custom products ordId 
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService:v1/AdminService.asyncapi2.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService.BookCreated:v1/AdminService.BookCreated.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test AdminService",
-      "title": "This is test AdminService title",
-      "version": "2.0.0",
+      "shortDescription": "AdminService.BookCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
       "visibility": "public",
     },
     {
       "description": "CAP Event resource describing events / messages.",
       "extensible": {
-        "supported": "yes",
+        "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService:v1",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService.BookDeleted:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:CinemaService",
+        "sap.cds:service:customer.capirebookshopordsample:AdminService.BookDeleted",
       ],
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
@@ -1566,11 +2114,127 @@ exports[`Tests for products and packages should use valid custom products ordId 
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService:v1/CinemaService.asyncapi2.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService.BookDeleted:v1/AdminService.BookDeleted.asyncapi2.json",
         },
       ],
-      "shortDescription": "short description for test CinemaService",
-      "title": "This is test Cinema Service title",
+      "shortDescription": "AdminService.BookDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:AdminService.BookUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:AdminService.BookUpdated",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:AdminService.BookUpdated:v1/AdminService.BookUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "AdminService.BookUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService.MovieCreated:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService.MovieCreated",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService.MovieCreated:v1/CinemaService.MovieCreated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieCreated event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService.MovieDeleted:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService.MovieDeleted",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService.MovieDeleted:v1/CinemaService.MovieDeleted.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieDeleted event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:CinemaService.MovieUpdated:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:CinemaService.MovieUpdated",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:CinemaService.MovieUpdated:v1/CinemaService.MovieUpdated.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "CinemaService.MovieUpdated event resource",
+      "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "internal",
     },
@@ -1606,7 +2270,9 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "version": "1.0.0",
     },
   ],
-  "policyLevel": "none",
+  "policyLevels": [
+    "none",
+  ],
   "products": [
     {
       "ordId": "customer:product:eb.bm.tests:",
