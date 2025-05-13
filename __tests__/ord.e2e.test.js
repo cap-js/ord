@@ -263,3 +263,46 @@ describe("Tests for products and packages", () => {
         expect(errorSpy).toHaveBeenCalledTimes(0);
     });
 });
+
+describe("Tests for eventResource and apiResource", () => {
+    let ord;
+
+    beforeAll(() => {
+        process.env.DEBUG = "true";
+        jest.spyOn(cds, "context", "get").mockReturnValue({
+            authConfig: {
+                types: [AUTHENTICATION_TYPE.Open],
+            },
+        });
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
+        cds.root = path.join(__dirname, "bookshop");
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.clearAllMocks();
+        jest.resetAllMocks();
+    });
+
+    it("should not contain apiResource if only event in service", async () => {
+        const linkedModel = cds.linked(`
+                service MyService {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                }
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'internal',
+                };
+            `);
+
+        const document = ord(linkedModel);
+        expect(document.apiResources).toBeUndefined();
+        expect(document.eventResources).toHaveLength(1);
+        expect(document.groups).toBeUndefined();
+    });
+});
