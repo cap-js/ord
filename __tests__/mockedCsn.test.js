@@ -47,9 +47,10 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.apiResources).toBeUndefined();
+            expect(document.apiResources).toHaveLength(1);
             expect(document.eventResources).toHaveLength(1);
             expect(document.eventResources[0].ordId).toEqual(expect.stringContaining("EbMtEmitter"));
+            expect(document).toMatchSnapshot();
         });
     });
 

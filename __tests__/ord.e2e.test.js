@@ -305,4 +305,42 @@ describe("Tests for eventResource and apiResource", () => {
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toBeUndefined();
     });
+
+    it("should generate apiResource if actions in service", async () => {
+        const linkedModel = cds.linked(`
+                service MyService {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                    action   add(x : Integer, to : Integer) returns Integer;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'internal'
+                };
+            `);
+
+        const document = ord(linkedModel);
+        expect(document.apiResources).toHaveLength(1);
+        expect(document.eventResources).toHaveLength(1);
+        expect(document.groups).toHaveLength(1);
+    });
+
+    it("should generate apiResource if functions in service", async () => {
+        const linkedModel = cds.linked(`
+                service MyService {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                    function getRatings() returns Integer;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'internal'
+                };
+            `);
+
+        const document = ord(linkedModel);
+        expect(document.apiResources).toHaveLength(1);
+        expect(document.eventResources).toHaveLength(1);
+        expect(document.groups).toHaveLength(1);
+    });
 });
