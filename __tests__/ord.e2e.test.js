@@ -288,7 +288,7 @@ describe("Tests for eventResource and apiResource", () => {
         jest.resetAllMocks();
     });
 
-    it("should not contain apiResource if only event in service", async () => {
+    it("should not contain apiResource if only event in service, but should contain groups", async () => {
         const linkedModel = cds.linked(`
                 service MyService {
                     event ServiceEvent : {
@@ -303,7 +303,7 @@ describe("Tests for eventResource and apiResource", () => {
         const document = ord(linkedModel);
         expect(document.apiResources).toBeUndefined();
         expect(document.eventResources).toHaveLength(1);
-        expect(document.groups).toBeUndefined();
+        expect(document.groups[0].groupId).toEqual("sap.cds:service:customer.capirebookshopordsample:MyService");
     });
 
     it("should generate apiResource if actions in service", async () => {
