@@ -102,7 +102,7 @@ describe("End-to-end test for ORD document", () => {
                         let service = match.groups?.service;
                         const definition = csn.definitions[service];
                         expect(definition).toBeDefined();
-                        expect(definition.kind).toEqual(CDS_ELEMENT_KIND.event);
+                        expect(definition.kind).toEqual(CDS_ELEMENT_KIND.service);
                     }
                 }
             });
@@ -179,7 +179,7 @@ describe("End-to-end test for ORD document", () => {
                         let service = match.groups?.service;
                         const definition = csn.definitions[service];
                         expect(definition).toBeDefined();
-                        expect(definition.kind).toEqual(CDS_ELEMENT_KIND.event);
+                        expect(definition.kind).toEqual(CDS_ELEMENT_KIND.service);
                     }
                 }
             });
