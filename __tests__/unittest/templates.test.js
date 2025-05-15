@@ -3,6 +3,8 @@ const {
     AUTHENTICATION_TYPE,
     ORD_ODM_ENTITY_NAME_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
+    ORD_EXTENSIONS_PREFIX,
+    RESOURCE_VISIBILITY,
 } = require("../../lib/constants");
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
@@ -17,6 +19,7 @@ const {
     createAPIResourceTemplate,
     createEventResourceTemplate,
     _getEntityTypeMappings,
+    _propagateORDVisibility,
 } = require("../../lib/templates");
 
 describe("templates", () => {
@@ -117,6 +120,29 @@ describe("templates", () => {
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
             expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        });
+
+        it("should not create API resource template when the visibility is private", () => {
+            const serviceName = "MyService";
+            const testNamespace = "customer.testNamespace.";
+            const model = cds.linked(`
+                namespace customer.testNamespace;
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'private'
+                };
+            `);
+            const packageIds = [
+                "sap.test.cdsrc.sample:package:test-event:v1",
+                "sap.test.cdsrc.sample:package:test-api:v1",
+            ];
+            const srvDefinition = model.definitions[testNamespace + serviceName];
+            expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toEqual([]);
         });
     });
 
@@ -528,6 +554,86 @@ describe("templates", () => {
             serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.sm:Else:v2";
             serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.odm:Something";
             expect(_getEntityTypeMappings(serviceDefinition)).toMatchSnapshot();
+        });
+    });
+
+    describe("propagateORDVisibility", () => {
+        it("should propagate visibility private", () => {
+            linkedModel = cds.linked(`
+                entity AppCustomers {
+                    key ID         : String;
+                    addresses      : Composition of many Addresses on addresses.customer = $self;
+                }
+
+                @ODM.entityName: 'CompositionOdmEntity'
+                entity Addresses {
+                    customer       : Association to AppCustomers;
+                }
+
+                service MyService {
+                    entity Customers as projection on AppCustomers;
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                }
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'private',
+                };
+            `);
+            const model = _propagateORDVisibility(linkedModel);
+            const eventDefinition = model.definitions["MyService.ServiceEvent"];
+            expect(eventDefinition[ORD_EXTENSIONS_PREFIX + "visibility"]).toEqual(RESOURCE_VISIBILITY.private);
+        });
+
+        it("should propagate visibility internal", () => {
+            linkedModel = cds.linked(`
+                entity AppCustomers {
+                    key ID         : String;
+                    addresses      : Composition of many Addresses on addresses.customer = $self;
+                }
+
+                @ODM.entityName: 'CompositionOdmEntity'
+                entity Addresses {
+                    customer       : Association to AppCustomers;
+                }
+
+                service MyService {
+                    entity Customers as projection on AppCustomers;
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                }
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'internal',
+                };
+            `);
+            const model = _propagateORDVisibility(linkedModel);
+            const eventDefinition = model.definitions["MyService.ServiceEvent"];
+            expect(eventDefinition[ORD_EXTENSIONS_PREFIX + "visibility"]).toEqual(RESOURCE_VISIBILITY.internal);
+        });
+
+        it("should not propagate if there is no visibility annotation", () => {
+            linkedModel = cds.linked(`
+                entity AppCustomers {
+                    key ID         : String;
+                    addresses      : Composition of many Addresses on addresses.customer = $self;
+                }
+
+                @ODM.entityName: 'CompositionOdmEntity'
+                entity Addresses {
+                    customer       : Association to AppCustomers;
+                }
+
+                service MyService {
+                    entity Customers as projection on AppCustomers;
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                }
+            `);
+            const model = _propagateORDVisibility(linkedModel);
+            const eventDefinition = model.definitions["MyService.ServiceEvent"];
+            expect(eventDefinition[ORD_EXTENSIONS_PREFIX + "visibility"]).toBeUndefined();
         });
     });
 });

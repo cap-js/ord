@@ -11,7 +11,7 @@ entity Cinema {
 }
 
 @ObjectModel.compositionRoot  : true
-@EntityRelationship.entityType: 'sap.sample:Movie'
+@EntityRelationship.entityType: 'customer.sample:Movie'
 @title                        : 'Movie Title'
 entity Movie {
     key id : UUID;

@@ -44,7 +44,7 @@ annotate AdminService with @ORD.Extensions: {
         'Retail',
         'Consumer Products'
     ],
-    lineOfBusiness: ['Sales']
+    lineOfBusiness: ['Sales'],
 };
 
 annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';
