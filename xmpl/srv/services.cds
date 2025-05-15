@@ -10,7 +10,7 @@ namespace sap.capire.incidents;
 annotate ProcessorService with @ORD.Extensions: {
     title           : 'This is Processor Service title',
     shortDescription: 'short description for Processor Service',
-    visibility      : 'internal',
+    visibility      : 'public',
     extensible      : {supported: 'no'}
 };
 
