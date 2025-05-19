@@ -113,6 +113,14 @@
                 "ID": { "type": "UUID", "key": true },
                 "confidentialInfo": { "type": "String" }
             }
+        },
+        "businessAcceleratorHub.Created": {
+            "kind": "event",
+            "visibility": "private",
+            "elements": {
+                "ID": { "type": "UUID", "key": true },
+                "confidentialInfo": { "type": "String" }
+            }
         }
     }
 }

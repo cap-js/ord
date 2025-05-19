@@ -1,0 +1,163 @@
+{
+    "definitions": {
+        "AdminEntity": {
+            "kind": "entity",
+            "@requires": "authenticated-user"
+        },
+        "AdminService.Books": {
+            "kind": "entity",
+            "projection": {
+                "from": {
+                    "ref": ["sap.capire.bookshop.Books"]
+                }
+            },
+            "elements": {
+                "createdAt": {
+                    "@cds.on.insert": {
+                        "=": "$now"
+                    },
+                    "@UI.HiddenFilter": true,
+                    "@UI.ExcludeFromNavigationContext": true,
+                    "@Core.Immutable": true,
+                    "@title": "{i18n>CreatedAt}",
+                    "@readonly": true,
+                    "type": "cds.Timestamp"
+                },
+                "createdBy": {
+                    "@cds.on.insert": {
+                        "=": "$user"
+                    },
+                    "@UI.HiddenFilter": true,
+                    "@UI.ExcludeFromNavigationContext": true,
+                    "@Core.Immutable": true,
+                    "@title": "{i18n>CreatedBy}",
+                    "@readonly": true,
+                    "@description": "{i18n>UserID.Description}",
+                    "type": "User",
+                    "length": 255
+                },
+                "modifiedAt": {
+                    "@cds.on.insert": {
+                        "=": "$now"
+                    },
+                    "@cds.on.update": {
+                        "=": "$now"
+                    },
+                    "@UI.HiddenFilter": true,
+                    "@UI.ExcludeFromNavigationContext": true,
+                    "@title": "{i18n>ChangedAt}",
+                    "@readonly": true,
+                    "type": "cds.Timestamp"
+                },
+                "modifiedBy": {
+                    "@cds.on.insert": {
+                        "=": "$user"
+                    },
+                    "@cds.on.update": {
+                        "=": "$user"
+                    },
+                    "@UI.HiddenFilter": true,
+                    "@UI.ExcludeFromNavigationContext": true,
+                    "@title": "{i18n>ChangedBy}",
+                    "@readonly": true,
+                    "@description": "{i18n>UserID.Description}",
+                    "type": "User",
+                    "length": 255
+                },
+                "ID": {
+                    "key": true,
+                    "type": "cds.Integer"
+                },
+                "title": {
+                    "localized": true,
+                    "type": "cds.String",
+                    "length": 111
+                },
+                "descr": {
+                    "localized": true,
+                    "type": "cds.String",
+                    "length": 1111
+                },
+                "author": {
+                    "type": "cds.Association",
+                    "target": "AdminService.Authors",
+                    "keys": [
+                        {
+                            "ref": ["ID"]
+                        }
+                    ]
+                },
+                "genre": {
+                    "type": "cds.Association",
+                    "target": "AdminService.Genres",
+                    "keys": [
+                        {
+                            "ref": ["ID"]
+                        }
+                    ]
+                },
+                "stock": {
+                    "type": "cds.Integer"
+                },
+                "price": {
+                    "type": "cds.Decimal",
+                    "precision": 9,
+                    "scale": 2
+                },
+                "currency": {
+                    "@title": "{i18n>Currency}",
+                    "@description": "{i18n>CurrencyCode.Description}",
+                    "type": "Currency",
+                    "target": "AdminService.Currencies",
+                    "keys": [
+                        {
+                            "ref": ["code"]
+                        }
+                    ]
+                },
+                "texts": {
+                    "type": "cds.Composition",
+                    "cardinality": {
+                        "max": "*"
+                    },
+                    "target": "AdminService.Books.texts",
+                    "on": [
+                        {
+                            "ref": ["texts", "ID"]
+                        },
+                        "=",
+                        {
+                            "ref": ["ID"]
+                        }
+                    ]
+                },
+                "localized": {
+                    "type": "cds.Association",
+                    "target": "AdminService.Books.texts",
+                    "on": [
+                        {
+                            "ref": ["localized", "ID"]
+                        },
+                        "=",
+                        {
+                            "ref": ["ID"]
+                        },
+                        "and",
+                        {
+                            "ref": ["localized", "locale"]
+                        },
+                        "=",
+                        {
+                            "ref": ["$user", "locale"]
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "meta": {
+        "creator": "CDS Compiler v5.4.4",
+        "flavor": "inferred"
+    },
+    "$version": "2.0"
+}

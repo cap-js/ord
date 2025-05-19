@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE } = require("../lib/constants");
+const { AUTHENTICATION_TYPE, CDS_ELEMENT_KIND } = require("../lib/constants");
 
 describe("End-to-end test for ORD document", () => {
     beforeAll(() => {
@@ -100,10 +100,9 @@ describe("End-to-end test for ORD document", () => {
                     const match = GROUP_ID_REGEX.exec(groupId);
                     if (match && match.groups?.service) {
                         let service = match.groups?.service;
-                        if (service.startsWith("undefined")) service = service.replace("undefined.", "");
                         const definition = csn.definitions[service];
                         expect(definition).toBeDefined();
-                        expect(definition.kind).toEqual("service");
+                        expect(definition.kind).toEqual(CDS_ELEMENT_KIND.service);
                     }
                 }
             });
@@ -178,10 +177,9 @@ describe("End-to-end test for ORD document", () => {
                     const match = GROUP_ID_REGEX.exec(groupId);
                     if (match && match.groups?.service) {
                         let service = match.groups?.service;
-                        if (service.startsWith("undefined")) service = service.replace("undefined.", "");
                         const definition = csn.definitions[service];
                         expect(definition).toBeDefined();
-                        expect(definition.kind).toEqual("service");
+                        expect(definition.kind).toEqual(CDS_ELEMENT_KIND.service);
                     }
                 }
             });
@@ -263,5 +261,86 @@ describe("Tests for products and packages", () => {
         const document = ord(csn);
         expect(document).toMatchSnapshot();
         expect(errorSpy).toHaveBeenCalledTimes(0);
+    });
+});
+
+describe("Tests for eventResource and apiResource", () => {
+    let ord;
+
+    beforeAll(() => {
+        process.env.DEBUG = "true";
+        jest.spyOn(cds, "context", "get").mockReturnValue({
+            authConfig: {
+                types: [AUTHENTICATION_TYPE.Open],
+            },
+        });
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
+        cds.root = path.join(__dirname, "bookshop");
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.clearAllMocks();
+        jest.resetAllMocks();
+    });
+
+    it("should not contain apiResource if only event in service, but should contain groups", async () => {
+        const linkedModel = cds.linked(`
+                service MyService {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                }
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'internal',
+                };
+            `);
+
+        const document = ord(linkedModel);
+        expect(document.apiResources).toBeUndefined();
+        expect(document.eventResources).toHaveLength(1);
+        expect(document.groups[0].groupId).toEqual("sap.cds:service:customer.capirebookshopordsample:MyService");
+    });
+
+    it("should generate apiResource if actions in service", async () => {
+        const linkedModel = cds.linked(`
+                service MyService {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                    action   add(x : Integer, to : Integer) returns Integer;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'internal'
+                };
+            `);
+
+        const document = ord(linkedModel);
+        expect(document.apiResources).toHaveLength(1);
+        expect(document.eventResources).toHaveLength(1);
+        expect(document.groups).toHaveLength(1);
+    });
+
+    it("should generate apiResource if functions in service", async () => {
+        const linkedModel = cds.linked(`
+                service MyService {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                    function getRatings() returns Integer;
+                }
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'internal'
+                };
+            `);
+
+        const document = ord(linkedModel);
+        expect(document.apiResources).toHaveLength(1);
+        expect(document.eventResources).toHaveLength(1);
+        expect(document.groups).toHaveLength(1);
     });
 });
