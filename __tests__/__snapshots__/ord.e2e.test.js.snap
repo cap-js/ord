@@ -921,6 +921,131 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
 }
 `;
 
+exports[`Tests for eventResource and apiResource should block MTXServices when multitenancy is enbaled 1`] = `
+{
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
+  "apiResources": [
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for cds.xt.MyService",
+      "entryPoints": [
+        "/odata/v4/my",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:cds.xt.MyService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:cds.xt.MyService",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:cds.xt.MyService:v1/cds.xt.MyService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:cds.xt.MyService:v1/cds.xt.MyService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of cds.xt.MyService",
+      "title": "cds.xt.MyService",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+  ],
+  "consumptionBundles": [
+    {
+      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "shortDescription": "If we have another protected API then it will be another object",
+      "title": "Unprotected resources",
+      "version": "1.0.0",
+    },
+  ],
+  "description": "this is an application description",
+  "eventResources": [
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:cds.xt.MyService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:cds.xt.MyService",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:cds.xt.MyService:v1/cds.xt.MyService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "cds.xt.MyService event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+  ],
+  "groups": [
+    {
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:cds.xt.MyService",
+      "groupTypeId": "sap.cds:service",
+      "title": "My Service",
+    },
+  ],
+  "openResourceDiscovery": "1.9",
+  "packages": [
+    {
+      "description": "This package contains public General for capire bookshop ord sample.",
+      "ordId": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing public General",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+  ],
+  "policyLevels": [
+    "none",
+  ],
+  "products": [
+    {
+      "ordId": "customer:product:capire.bookshop.ord.sample:",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:customer:",
+    },
+  ],
+}
+`;
+
 exports[`Tests for products and packages should not contain products property if existingProductId provided 1`] = `
 {
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
