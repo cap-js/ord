@@ -261,6 +261,7 @@ describe("Tests for products and packages", () => {
         const document = ord(csn);
         expect(document).toMatchSnapshot();
         expect(errorSpy).toHaveBeenCalledTimes(0);
+        cds.env.ord = {};
     });
 });
 
@@ -342,5 +343,31 @@ describe("Tests for eventResource and apiResource", () => {
         expect(document.apiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
+    });
+
+    it("should block MTXServices when multitenancy is enbaled", async () => {
+        const linkedModel = cds.linked(`
+                namespace cds.xt;
+                service MTXServices {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                };
+                service MyService {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                    function getRatings() returns Integer;
+                };
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'internal'
+                };
+            `);
+
+        const document = ord(linkedModel);
+        expect(document.apiResources).toHaveLength(1);
+        expect(document.eventResources).toHaveLength(1);
+        expect(document.groups).toHaveLength(1);
+        expect(document).toMatchSnapshot();
     });
 });
