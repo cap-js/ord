@@ -8,6 +8,7 @@
     "license": "Apache-2.0",
     "main": "cds-plugin.js",
     "files": [
+        "cds-plugin.js",
         "lib",
         "data",
         "LICENSES"
@@ -24,7 +25,7 @@
         "prettier": "3.5.3"
     },
     "peerDependencies": {
-        "@sap/cds": "^8.1.1",
+        "@sap/cds": "^8.9.3",
         "@sap/cds-dk": "^8.9.3"
     },
     "dependencies": {

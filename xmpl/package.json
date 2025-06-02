@@ -3,13 +3,14 @@
     "description": "this is a xmpl application description",
     "version": "1.0.0",
     "dependencies": {
-        "@cap-js/ord": "*",
-        "@sap/cds": "*",
+        "@cap-js/ord": "file:../../ord",
         "@sap/cds-mtxs": "^2"
     },
     "devDependencies": {
         "@cap-js/sqlite": "*",
-        "@capire/incidents": "file:../path/to/incidents"
+        "@capire/incidents": "file:../../../incidents-app",
+        "@sap/cds-dk": "^8",
+        "@sap/cds": "^8"
     },
     "private": true,
     "cds": {
