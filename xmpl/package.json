@@ -4,13 +4,14 @@
     "version": "1.0.0",
     "dependencies": {
         "@cap-js/ord": "file:../../ord",
+        "@cap-js/sqlite": ">=2",
         "@sap/cds-mtxs": "^3"
     },
     "private": true,
     "cds": {
         "profile": "with-mtx-sidecar",
         "requires": {
-            "[production]": {
+            "[development]": {
                 "multitenancy": true
             }
         }
