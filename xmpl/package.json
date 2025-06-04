@@ -4,19 +4,13 @@
     "version": "1.0.0",
     "dependencies": {
         "@cap-js/ord": "file:../../ord",
-        "@sap/cds-mtxs": "^2"
-    },
-    "devDependencies": {
-        "@cap-js/sqlite": "*",
-        "@capire/incidents": "file:../../../incidents-app",
-        "@sap/cds-dk": "^8",
-        "@sap/cds": "^8"
+        "@sap/cds-mtxs": "^3"
     },
     "private": true,
     "cds": {
         "profile": "with-mtx-sidecar",
         "requires": {
-            "[local-multitenancy]": {
+            "[production]": {
                 "multitenancy": true
             }
         }
