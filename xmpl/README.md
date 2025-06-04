@@ -1,30 +1,40 @@
-# ORD XMPL
+# How to local run xmpl for dev
 
-This guide explains how to run ORD xmpl.
-
-## How to Deploy
-
-1. **Clone the repository under calesi project**
+1. **Clone the monorepo**
 
     ```sh
-    # under /calesi/plugins/
+    git clone https://github.com/cap-js/calesi.git
+    ```
+
+2. **Add a Pugin inside /plugins**
+
+    ```sh
+    cd plugins
     git clone https://github.com/cap-js/ord.git
-    cd /ord/xmpl
     ```
 
-2. **Install dependencies**
+3. **Add ord/xmpl to workspaces**
+
+    ```json
+    #/calesi/package.json
+    "workspaces": [
+        "incidents-app",
+        "plugins/*",
+        "plugins/ord/xmpl/"
+    ],
+    ```
+
+4. **Install dependency**
+    ```sh
+    # in root folder /calesi
+    npm i
+    ```
+5. **Run xmpl application**
 
     ```sh
-    npm install
+    # in /calesi/plugins/ord/xmpl
+    cds watch
+
+    # build resources files
+    cds build --for ord
     ```
-
-    3. **Run the plugin locally**
-
-        - Use the following command to start the service in development mode:
-            ```sh
-            cds w
-            ```
-        - This runs the Node.js-based XMPL plugin using CAP (SAP Cloud Application Programming Model).
-
-    4. **Configure the plugin**
-        - Edit `config.json` in the `xmpl` directory to match your environment and requirements.
