@@ -1,4 +1,5 @@
 const cds = require("@sap/cds");
+const path = require("path");
 const OrdBuildPlugin = require("../../lib/build");
 const { BUILD_DEFAULT_PATH, ORD_SERVICE_NAME } = require("../../lib/constants");
 
@@ -153,15 +154,15 @@ describe("Build", () => {
         expect(promise.length).toEqual(0);
     });
 
-    it("should update resource URLs with relative paths", () => {
+    it("should update resource URLs with relative paths and without colunms", () => {
         const buildClass = new OrdBuildPlugin();
         const ordDocument = {
             apiResources: [
                 {
                     ordId: "sap.sm:apiResource:SupplierService:v1",
                     resourceDefinitions: [
-                        { url: "/ord/v1/resource1" },
-                        { url: "/ord/v1/resource2" },
+                        { url: "/ord/v1/resource1:v1" },
+                        { url: "/ord/v1/resource2:v1" },
                     ],
                 },
             ],
@@ -169,18 +170,24 @@ describe("Build", () => {
                 {
                     ordId: "sap.sm:eventResource:SupplierService:v1",
                     resourceDefinitions: [
-                        { url: "/ord/v1/event1" },
-                        { url: "/ord/v1/event2" },
+                        { url: "/ord/v1/event1:v1" },
+                        { url: "/ord/v1/event2:v1" },
                     ],
                 },
             ],
         };
-        const updatedOrdDocument = buildClass.postProcessWithRelativePath(ordDocument);
+        const updatedOrdDocument = buildClass.postProcess(ordDocument);
         expect(updatedOrdDocument.apiResources[0].resourceDefinitions[0].url).toBe(
-            `${BUILD_DEFAULT_PATH}/resource1`
+            path.join(
+                BUILD_DEFAULT_PATH,
+                "resource1_v1"
+            )
         );
         expect(updatedOrdDocument.eventResources[0].resourceDefinitions[0].url).toBe(
-            `${BUILD_DEFAULT_PATH}/event1`
+            path.join(
+                BUILD_DEFAULT_PATH,
+                "event1_v1"
+            )
         );
     });
 });
