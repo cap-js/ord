@@ -2,7 +2,7 @@ using {sap.cds.demo as my} from '../db/schema';
 using {
     ProcessorService,
     AdminService
-} from '../srv/incidents-services';
+} from './incidents-services';
 
 namespace sap.capire.incidents;
 
