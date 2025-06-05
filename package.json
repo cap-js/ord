@@ -6,6 +6,9 @@
     "author": "SAP SE (https://www.sap.com)",
     "homepage": "https://cap.cloud.sap/",
     "license": "Apache-2.0",
+    "workspaces": [
+        "xmpl"
+    ],
     "main": "cds-plugin.js",
     "files": [
         "cds-plugin.js",
