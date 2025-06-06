@@ -145,6 +145,24 @@ cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 
 You can find more information, such as how to customize the ORD Document, in this [document](./docs/ord.md).
 
+## How to setup dev environment and run xmpl locally
+
+1. **Install dependency**
+    ```sh
+    npm i
+    ```
+2. **Run xmpl application**
+
+    ```sh
+    cd xmpl/
+
+    # watch xmpl application
+    cds watch
+
+    # build resources files
+    cds build --for ord
+    ```
+
 ## Support, Feedback, Contributing
 
 This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/cap-js/ord/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).

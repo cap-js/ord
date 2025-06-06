@@ -6,8 +6,12 @@
     "author": "SAP SE (https://www.sap.com)",
     "homepage": "https://cap.cloud.sap/",
     "license": "Apache-2.0",
+    "workspaces": [
+        "xmpl"
+    ],
     "main": "cds-plugin.js",
     "files": [
+        "cds-plugin.js",
         "lib",
         "data",
         "LICENSES"
@@ -24,8 +28,8 @@
         "prettier": "3.5.3"
     },
     "peerDependencies": {
-        "@sap/cds": "^8.1.1",
-        "@sap/cds-dk": "^8.9.3"
+        "@sap/cds": ">=9",
+        "@sap/cds-dk": ">=9"
     },
     "dependencies": {
         "@cap-js/asyncapi": "^1.0.3",

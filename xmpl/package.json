@@ -3,19 +3,15 @@
     "description": "this is a xmpl application description",
     "version": "1.0.0",
     "dependencies": {
-        "@cap-js/ord": "*",
-        "@sap/cds": "*",
-        "@sap/cds-mtxs": "^2"
-    },
-    "devDependencies": {
-        "@cap-js/sqlite": "*",
-        "@capire/incidents": "file:../path/to/incidents"
+        "@cap-js/ord": "file:../../ord",
+        "@cap-js/sqlite": ">=2",
+        "@sap/cds-mtxs": "^3"
     },
     "private": true,
     "cds": {
         "profile": "with-mtx-sidecar",
         "requires": {
-            "[local-multitenancy]": {
+            "[development]": {
                 "multitenancy": true
             }
         }
