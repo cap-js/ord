@@ -1,4 +1,5 @@
 const cds = require("@sap/cds");
+const path = require("path");
 const OrdBuildPlugin = require("../../lib/build");
 const { BUILD_DEFAULT_PATH, ORD_SERVICE_NAME } = require("../../lib/constants");
 
@@ -151,5 +152,40 @@ describe("Build", () => {
         await buildClass._writeResourcesFiles(resObj, {}, promise);
         expect(console.log).toHaveBeenCalledTimes(1);
         expect(promise.length).toEqual(0);
+    });
+
+    it("should update resource URLs with relative paths and without colunms", () => {
+        const buildClass = new OrdBuildPlugin();
+        const ordDocument = {
+            apiResources: [
+                {
+                    ordId: "customer.sample:apiResource:ProcessorService:v1",
+                    resourceDefinitions: [
+                        { url: "/ord/v1/customer.sample:apiResource:ProcessorService:v1/ProcessorService.oas3.json" },
+                        { url: "/ord/v1/customer.sample:apiResource:ProcessorService:v2/ProcessorService.oas3.json" },
+                    ],
+                },
+            ],
+            eventResources: [
+                {
+                    ordId: "customer.sample:eventResource:ProcessorService:v1",
+                    resourceDefinitions: [
+                        {
+                            url: "/ord/v1/customer.sample:eventResource:ProcessorService:v1/ProcessorService.asyncapi2.json",
+                        },
+                        {
+                            url: "/ord/v1/customer.sample:eventResource:ProcessorService:v2/ProcessorService.asyncapi2.json",
+                        },
+                    ],
+                },
+            ],
+        };
+        const updatedOrdDocument = buildClass.postProcess(ordDocument);
+        expect(updatedOrdDocument.apiResources[0].resourceDefinitions[0].url).toBe(
+            path.join("customer.sample_apiResource_ProcessorService_v1", "ProcessorService.oas3.json"),
+        );
+        expect(updatedOrdDocument.eventResources[0].resourceDefinitions[0].url).toBe(
+            path.join("customer.sample_eventResource_ProcessorService_v1", "ProcessorService.asyncapi2.json"),
+        );
     });
 });
