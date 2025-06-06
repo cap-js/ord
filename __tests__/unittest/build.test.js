@@ -159,23 +159,33 @@ describe("Build", () => {
         const ordDocument = {
             apiResources: [
                 {
-                    ordId: "sap.sm:apiResource:SupplierService:v1",
-                    resourceDefinitions: [{ url: "/ord/v1/resource1:v1" }, { url: "/ord/v1/resource2:v1" }],
+                    ordId: "customer.sample:apiResource:ProcessorService:v1",
+                    resourceDefinitions: [
+                        { url: "/ord/v1/customer.sample:apiResource:ProcessorService:v1/ProcessorService.oas3.json" },
+                        { url: "/ord/v1/customer.sample:apiResource:ProcessorService:v2/ProcessorService.oas3.json" },
+                    ],
                 },
             ],
             eventResources: [
                 {
-                    ordId: "sap.sm:eventResource:SupplierService:v1",
-                    resourceDefinitions: [{ url: "/ord/v1/event1:v1" }, { url: "/ord/v1/event2:v1" }],
+                    ordId: "customer.sample:eventResource:ProcessorService:v1",
+                    resourceDefinitions: [
+                        {
+                            url: "/ord/v1/customer.sample:eventResource:ProcessorService:v1/ProcessorService.asyncapi2.json",
+                        },
+                        {
+                            url: "/ord/v1/customer.sample:eventResource:ProcessorService:v2/ProcessorService.asyncapi2.json",
+                        },
+                    ],
                 },
             ],
         };
         const updatedOrdDocument = buildClass.postProcess(ordDocument);
         expect(updatedOrdDocument.apiResources[0].resourceDefinitions[0].url).toBe(
-            path.join(BUILD_DEFAULT_PATH, "resource1_v1"),
+            path.join("customer.sample_apiResource_ProcessorService_v1", "ProcessorService.oas3.json"),
         );
         expect(updatedOrdDocument.eventResources[0].resourceDefinitions[0].url).toBe(
-            path.join(BUILD_DEFAULT_PATH, "event1_v1"),
+            path.join("customer.sample_eventResource_ProcessorService_v1", "ProcessorService.asyncapi2.json"),
         );
     });
 });
