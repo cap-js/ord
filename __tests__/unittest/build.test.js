@@ -93,7 +93,7 @@ describe("Build", () => {
     });
 
     it("should write the ord document and resources files", async () => {
-        jest.spyOn(console, "log").mockImplementation(() => { });
+        jest.spyOn(console, "log").mockImplementation(() => {});
         jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation((resObj, model, promises) => {
             for (const resource of resObj) {
                 const subDir = cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, resource.ordId);
@@ -111,7 +111,7 @@ describe("Build", () => {
     });
 
     it("should skip when OpenResourceDiscoveryService founded", async () => {
-        jest.spyOn(console, "log").mockImplementation(() => { });
+        jest.spyOn(console, "log").mockImplementation(() => {});
         const buildClass = new OrdBuildPlugin();
         const resObj = [
             {
@@ -130,7 +130,7 @@ describe("Build", () => {
     });
 
     it("should output error when getMetadata failed", async () => {
-        jest.spyOn(console, "log").mockImplementation(() => { });
+        jest.spyOn(console, "log").mockImplementation(() => {});
         const getMetadataMock = jest.spyOn(require("../../lib/index"), "getMetadata");
         const errorMessage = "Failed to get metadata";
         getMetadataMock.mockImplementation(() => {
@@ -160,34 +160,22 @@ describe("Build", () => {
             apiResources: [
                 {
                     ordId: "sap.sm:apiResource:SupplierService:v1",
-                    resourceDefinitions: [
-                        { url: "/ord/v1/resource1:v1" },
-                        { url: "/ord/v1/resource2:v1" },
-                    ],
+                    resourceDefinitions: [{ url: "/ord/v1/resource1:v1" }, { url: "/ord/v1/resource2:v1" }],
                 },
             ],
             eventResources: [
                 {
                     ordId: "sap.sm:eventResource:SupplierService:v1",
-                    resourceDefinitions: [
-                        { url: "/ord/v1/event1:v1" },
-                        { url: "/ord/v1/event2:v1" },
-                    ],
+                    resourceDefinitions: [{ url: "/ord/v1/event1:v1" }, { url: "/ord/v1/event2:v1" }],
                 },
             ],
         };
         const updatedOrdDocument = buildClass.postProcess(ordDocument);
         expect(updatedOrdDocument.apiResources[0].resourceDefinitions[0].url).toBe(
-            path.join(
-                BUILD_DEFAULT_PATH,
-                "resource1_v1"
-            )
+            path.join(BUILD_DEFAULT_PATH, "resource1_v1"),
         );
         expect(updatedOrdDocument.eventResources[0].resourceDefinitions[0].url).toBe(
-            path.join(
-                BUILD_DEFAULT_PATH,
-                "event1_v1"
-            )
+            path.join(BUILD_DEFAULT_PATH, "event1_v1"),
         );
     });
 });
