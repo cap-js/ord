@@ -1,7 +1,7 @@
 const cds = require("@sap/cds");
 const path = require("path");
 const OrdBuildPlugin = require("../../lib/build");
-const { BUILD_DEFAULT_PATH, ORD_SERVICE_NAME } = require("../../lib/constants");
+const { BUILD_DEFAULT_PATH } = require("../../lib/constants");
 const index = require("../../lib/index");
 
 jest.mock("@sap/cds-dk", () => {
@@ -138,7 +138,7 @@ describe("Build", () => {
         const plugin = new OrdBuildPlugin();
         plugin.model = jest.fn().mockResolvedValue(mockModel);
         const buildClass = new OrdBuildPlugin();
-        const promise = await buildClass.build();
+        await buildClass.build();
         expect(buildClass._writeResourcesFiles).toHaveBeenCalledTimes(1);
     });
 
