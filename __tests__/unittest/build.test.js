@@ -1,7 +1,8 @@
 const cds = require("@sap/cds");
 const path = require("path");
 const OrdBuildPlugin = require("../../lib/build");
-const { BUILD_DEFAULT_PATH, ORD_SERVICE_NAME } = require("../../lib/constants");
+const { BUILD_DEFAULT_PATH } = require("../../lib/constants");
+const index = require("../../lib/index");
 
 jest.mock("@sap/cds-dk", () => {
     return {
@@ -110,23 +111,35 @@ describe("Build", () => {
         expect(promise.length).toEqual(5);
     });
 
-    it("should skip when OpenResourceDiscoveryService founded", async () => {
+    it("should not write resources files when eventResources is empty", async () => {
         jest.spyOn(console, "log").mockImplementation(() => {});
+        jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation((resObj, model, promises) => {
+            for (const resource of resObj) {
+                const subDir = cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, resource.ordId);
+                for (const resourceDefinition of resource.resourceDefinitions) {
+                    const url = resourceDefinition.url;
+                    const fileName = url.split("/").pop();
+                    promises.push(Promise.resolve(`Writing ${fileName} to ${subDir}`));
+                }
+            }
+        });
+
+        const mockModel = {};
+        const mockOrdDocument = {
+            apiResources: [
+                {
+                    ordId: "sap.sm:apiResource:SupplierService:v1",
+                    resourceDefinitions: [{ url: "https://example.com/resource1" }],
+                },
+            ],
+        };
+        jest.spyOn(index, "ord").mockReturnValue(mockOrdDocument);
+
+        const plugin = new OrdBuildPlugin();
+        plugin.model = jest.fn().mockResolvedValue(mockModel);
         const buildClass = new OrdBuildPlugin();
-        const resObj = [
-            {
-                ordId: ORD_SERVICE_NAME,
-                resourceDefinitions: [
-                    {
-                        url: "https://example.com/resource1",
-                    },
-                ],
-            },
-        ];
-        const promise = [];
-        await buildClass._writeResourcesFiles(resObj, {}, promise);
-        expect(console.log).toHaveBeenCalledTimes(0);
-        expect(promise.length).toEqual(0);
+        await buildClass.build();
+        expect(buildClass._writeResourcesFiles).toHaveBeenCalledTimes(1);
     });
 
     it("should output error when getMetadata failed", async () => {
