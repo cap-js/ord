@@ -28,8 +28,8 @@
         "prettier": "3.5.3"
     },
     "peerDependencies": {
-        "@sap/cds": ">=9",
-        "@sap/cds-dk": ">=9"
+        "@sap/cds": ">=8",
+        "@sap/cds-dk": ">=8"
     },
     "dependencies": {
         "@cap-js/asyncapi": "^1.0.3",
