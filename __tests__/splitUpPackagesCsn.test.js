@@ -40,8 +40,8 @@ describe("ORD Generation for Business Accelerator Hub", () => {
             expect(document.openResourceDiscovery).toBe("1.10");
             expect(document.policyLevels).toEqual(["sap:core:v1"]);
             expect(document.description).toBe("Business Accelerator Hub ORD Test");
-            expect(document.apiResources).toHaveLength(6);
-            expect(document.eventResources).toHaveLength(6);
+            expect(document.apiResources).toHaveLength(7);
+            expect(document.eventResources).toHaveLength(1);
         });
     });
 });
