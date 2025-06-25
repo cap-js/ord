@@ -1,13 +1,17 @@
 {
     "name": "@cap-js/ord",
-    "version": "1.3.0",
+    "version": "1.3.3",
     "description": "CAP Plugin for generating ORD document.",
     "repository": "cap-js/ord",
     "author": "SAP SE (https://www.sap.com)",
     "homepage": "https://cap.cloud.sap/",
     "license": "Apache-2.0",
+    "workspaces": [
+        "xmpl"
+    ],
     "main": "cds-plugin.js",
     "files": [
+        "cds-plugin.js",
         "lib",
         "data",
         "LICENSES"
@@ -24,8 +28,8 @@
         "prettier": "3.5.3"
     },
     "peerDependencies": {
-        "@sap/cds": "^8.1.1",
-        "@sap/cds-dk": "^8.9.3"
+        "@sap/cds": ">=8.9.4",
+        "@sap/cds-dk": ">=8.9.5"
     },
     "dependencies": {
         "@cap-js/asyncapi": "^1.0.3",

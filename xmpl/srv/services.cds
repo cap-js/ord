@@ -2,8 +2,7 @@ using {sap.cds.demo as my} from '../db/schema';
 using {
     ProcessorService,
     AdminService
-} from '@capire/incidents/srv/services';
-using from '@capire/incidents/db/schema';
+} from './incidents-services';
 
 namespace sap.capire.incidents;
 
@@ -25,7 +24,6 @@ extend service ProcessorService {
 
 @AsyncAPI.Title                  : 'SAP Incident Management'
 @AsyncAPI.SchemaVersion          : '1.0'
-@DataIntegration.dataProduct.type: 'primary'
 service LocalService {
     entity Entertainment as projection on my.Cinema;
     entity Film          as projection on my.Movie;
@@ -50,3 +48,13 @@ annotate AdminService with @ORD.Extensions: {
 annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';
 annotate sap.capire.incidents.Addresses with @ODM.entityName: 'Addresses';
 annotate sap.capire.incidents.Incidents with @ODM.entityName: 'Incidents';
+
+@title : 'Entertainment Data Product'
+@DataIntegration.dataProduct.type: 'primary'
+service EntertainmentDataProduct {
+
+    entity Cinema        as projection on my.Cinema;
+    entity Film          as projection on my.Movie;
+    entity Show          as projection on my.Show;
+
+}

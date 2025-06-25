@@ -1,15 +1,17 @@
 {
     "name": "ord-sample-mtx",
     "dependencies": {
-        "@sap/cds": "^7",
-        "@sap/cds-hana": "^2",
-        "@sap/cds-mtxs": "^2",
-        "@sap/xssec": "^3",
-        "express": "^4",
-        "passport": ">=0.6.0"
+        "@cap-js/hana": "^2",
+        "@sap/cds": "^9",
+        "@sap/cds-mtxs": "^3",
+        "@sap/xssec": "^4",
+        "express": "^4"
     },
     "devDependencies": {
-        "@cap-js/sqlite": "^1"
+        "@cap-js/sqlite": "^2"
+    },
+    "engines": {
+        "node": "^22"
     },
     "scripts": {
         "start": "cds-serve"

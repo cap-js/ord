@@ -1,6 +1,8 @@
 const cds = require("@sap/cds");
+const path = require("path");
 const OrdBuildPlugin = require("../../lib/build");
-const { BUILD_DEFAULT_PATH, ORD_SERVICE_NAME } = require("../../lib/constants");
+const { BUILD_DEFAULT_PATH } = require("../../lib/constants");
+const index = require("../../lib/index");
 
 jest.mock("@sap/cds-dk", () => {
     return {
@@ -109,23 +111,35 @@ describe("Build", () => {
         expect(promise.length).toEqual(5);
     });
 
-    it("should skip when OpenResourceDiscoveryService founded", async () => {
+    it("should not write resources files when eventResources is empty", async () => {
         jest.spyOn(console, "log").mockImplementation(() => {});
+        jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation((resObj, model, promises) => {
+            for (const resource of resObj) {
+                const subDir = cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, resource.ordId);
+                for (const resourceDefinition of resource.resourceDefinitions) {
+                    const url = resourceDefinition.url;
+                    const fileName = url.split("/").pop();
+                    promises.push(Promise.resolve(`Writing ${fileName} to ${subDir}`));
+                }
+            }
+        });
+
+        const mockModel = {};
+        const mockOrdDocument = {
+            apiResources: [
+                {
+                    ordId: "sap.sm:apiResource:SupplierService:v1",
+                    resourceDefinitions: [{ url: "https://example.com/resource1" }],
+                },
+            ],
+        };
+        jest.spyOn(index, "ord").mockReturnValue(mockOrdDocument);
+
+        const plugin = new OrdBuildPlugin();
+        plugin.model = jest.fn().mockResolvedValue(mockModel);
         const buildClass = new OrdBuildPlugin();
-        const resObj = [
-            {
-                ordId: ORD_SERVICE_NAME,
-                resourceDefinitions: [
-                    {
-                        url: "https://example.com/resource1",
-                    },
-                ],
-            },
-        ];
-        const promise = [];
-        await buildClass._writeResourcesFiles(resObj, {}, promise);
-        expect(console.log).toHaveBeenCalledTimes(0);
-        expect(promise.length).toEqual(0);
+        await buildClass.build();
+        expect(buildClass._writeResourcesFiles).toHaveBeenCalledTimes(1);
     });
 
     it("should output error when getMetadata failed", async () => {
@@ -151,5 +165,40 @@ describe("Build", () => {
         await buildClass._writeResourcesFiles(resObj, {}, promise);
         expect(console.log).toHaveBeenCalledTimes(1);
         expect(promise.length).toEqual(0);
+    });
+
+    it("should update resource URLs with relative paths and without colunms", () => {
+        const buildClass = new OrdBuildPlugin();
+        const ordDocument = {
+            apiResources: [
+                {
+                    ordId: "customer.sample:apiResource:ProcessorService:v1",
+                    resourceDefinitions: [
+                        { url: "/ord/v1/customer.sample:apiResource:ProcessorService:v1/ProcessorService.oas3.json" },
+                        { url: "/ord/v1/customer.sample:apiResource:ProcessorService:v2/ProcessorService.oas3.json" },
+                    ],
+                },
+            ],
+            eventResources: [
+                {
+                    ordId: "customer.sample:eventResource:ProcessorService:v1",
+                    resourceDefinitions: [
+                        {
+                            url: "/ord/v1/customer.sample:eventResource:ProcessorService:v1/ProcessorService.asyncapi2.json",
+                        },
+                        {
+                            url: "/ord/v1/customer.sample:eventResource:ProcessorService:v2/ProcessorService.asyncapi2.json",
+                        },
+                    ],
+                },
+            ],
+        };
+        const updatedOrdDocument = buildClass.postProcess(ordDocument);
+        expect(updatedOrdDocument.apiResources[0].resourceDefinitions[0].url).toBe(
+            path.join("customer.sample_apiResource_ProcessorService_v1", "ProcessorService.oas3.json"),
+        );
+        expect(updatedOrdDocument.eventResources[0].resourceDefinitions[0].url).toBe(
+            path.join("customer.sample_eventResource_ProcessorService_v1", "ProcessorService.asyncapi2.json"),
+        );
     });
 });

@@ -115,6 +115,16 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.eventResources).toBeUndefined();
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("LocalService"));
         });
+
+        test("Should generate eventResource if the service contains", () => {
+            const csn = require("./__mocks__/csnWithOneEvent.json");
+            const document = ord(csn);
+
+            expect(document).not.toBeUndefined();
+            expect(document.apiResources).toHaveLength(2);
+            expect(document.eventResources).toHaveLength(1);
+            expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("LocalService"));
+        });
     });
 
     describe("Tests for ORD document when service is annotated as a primary Data Product`", () => {
@@ -123,13 +133,19 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.apiResources).toHaveLength(2);
+            expect(document.apiResources).toHaveLength(1);
             const dataProductApiResources = document.apiResources.filter(
                 (resource) => resource.implementationStandard === "sap.dp:data-subscription-api:v1",
             );
-            expect(dataProductApiResources).toHaveLength(2);
+            expect(dataProductApiResources).toHaveLength(1);
             expect(dataProductApiResources[0].resourceDefinitions).toHaveLength(1);
             expect(dataProductApiResources[0].resourceDefinitions[0]).type === "sap-csn-interop-effective-v1";
+        });
+
+        test("Should not generate duplicate apiResources when the servie is annotated as primary data product ", () => {
+            const csn = require("./__mocks__/dataProductCsn.json");
+            const document = ord(csn);
+            expect(document.apiResources).toHaveLength(1);
         });
     });
 });

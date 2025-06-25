@@ -256,6 +256,48 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
       "version": "1.0.0",
       "visibility": "public",
     },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for BusinessAcceleratorHub",
+      "entryPoints": [
+        "/odata/v4/business-accelerator-hub",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "ordId": "sap.test.cdsrc.sample:apiResource:BusinessAcceleratorHub:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:BusinessAcceleratorHub",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:BusinessAcceleratorHub:v1/BusinessAcceleratorHub.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:BusinessAcceleratorHub:v1/BusinessAcceleratorHub.edmx",
+        },
+      ],
+      "shortDescription": "Short description of BusinessAcceleratorHub",
+      "title": "BusinessAcceleratorHub",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
   ],
   "consumptionBundles": [
     {
@@ -273,9 +315,9 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
       "extensible": {
         "supported": "no",
       },
-      "ordId": "sap.test.cdsrc.sample:eventResource:SupplierService:v1",
+      "ordId": "sap.test.cdsrc.sample:eventResource:BusinessAcceleratorHub:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:SupplierService",
+        "sap.cds:service:sap.test.cdsrc.sample:BusinessAcceleratorHub",
       ],
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
       "releaseStatus": "active",
@@ -288,150 +330,10 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
           ],
           "mediaType": "application/json",
           "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:SupplierService:v1/SupplierService.asyncapi2.json",
+          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:BusinessAcceleratorHub:v1/BusinessAcceleratorHub.asyncapi2.json",
         },
       ],
-      "shortDescription": "SupplierService event resource",
-      "title": "ODM capirebookshopordsample Events",
-      "version": "1.0.0",
-      "visibility": "public",
-    },
-    {
-      "description": "CAP Event resource describing events / messages.",
-      "extensible": {
-        "supported": "no",
-      },
-      "ordId": "sap.test.cdsrc.sample:eventResource:MaterialService:v1",
-      "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:MaterialService",
-      ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "releaseStatus": "active",
-      "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:MaterialService:v1/MaterialService.asyncapi2.json",
-        },
-      ],
-      "shortDescription": "MaterialService event resource",
-      "title": "ODM capirebookshopordsample Events",
-      "version": "1.0.0",
-      "visibility": "public",
-    },
-    {
-      "description": "CAP Event resource describing events / messages.",
-      "extensible": {
-        "supported": "no",
-      },
-      "ordId": "sap.test.cdsrc.sample:eventResource:PurchaseOrderService:v1",
-      "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:PurchaseOrderService",
-      ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "releaseStatus": "active",
-      "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:PurchaseOrderService:v1/PurchaseOrderService.asyncapi2.json",
-        },
-      ],
-      "shortDescription": "PurchaseOrderService event resource",
-      "title": "ODM capirebookshopordsample Events",
-      "version": "1.0.0",
-      "visibility": "public",
-    },
-    {
-      "description": "CAP Event resource describing events / messages.",
-      "extensible": {
-        "supported": "no",
-      },
-      "ordId": "sap.test.cdsrc.sample:eventResource:InternalDataProductService:v1",
-      "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:InternalDataProductService",
-      ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "releaseStatus": "active",
-      "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:InternalDataProductService:v1/InternalDataProductService.asyncapi2.json",
-        },
-      ],
-      "shortDescription": "InternalDataProductService event resource",
-      "title": "ODM capirebookshopordsample Events",
-      "version": "1.0.0",
-      "visibility": "public",
-    },
-    {
-      "description": "CAP Event resource describing events / messages.",
-      "extensible": {
-        "supported": "no",
-      },
-      "ordId": "sap.test.cdsrc.sample:eventResource:CustomerService:v1",
-      "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:CustomerService",
-      ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "releaseStatus": "active",
-      "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:CustomerService:v1/CustomerService.asyncapi2.json",
-        },
-      ],
-      "shortDescription": "CustomerService event resource",
-      "title": "ODM capirebookshopordsample Events",
-      "version": "1.0.0",
-      "visibility": "public",
-    },
-    {
-      "description": "CAP Event resource describing events / messages.",
-      "extensible": {
-        "supported": "no",
-      },
-      "ordId": "sap.test.cdsrc.sample:eventResource:RestrictedDataProductService:v1",
-      "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:RestrictedDataProductService",
-      ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "releaseStatus": "active",
-      "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "asyncapi-v2",
-          "url": "/ord/v1/sap.test.cdsrc.sample:eventResource:RestrictedDataProductService:v1/RestrictedDataProductService.asyncapi2.json",
-        },
-      ],
-      "shortDescription": "RestrictedDataProductService event resource",
+      "shortDescription": "BusinessAcceleratorHub event resource",
       "title": "ODM capirebookshopordsample Events",
       "version": "1.0.0",
       "visibility": "public",
@@ -467,6 +369,11 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:RestrictedDataProductService",
       "groupTypeId": "sap.cds:service",
       "title": "RestrictedDataProduct Service",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:BusinessAcceleratorHub",
+      "groupTypeId": "sap.cds:service",
+      "title": "BusinessAcceleratorHub Service",
     },
   ],
   "openResourceDiscovery": "1.10",
