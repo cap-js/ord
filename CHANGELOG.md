@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.3.3 (2024-06-25)
+
+## What's Changed
+
+- Provide a better data product example
+- Fix: eventResources and dataProduct annotation
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.2...v1.3.3
+
 ## 1.3.2 (2024-06-18)
 
 ## What's Changed
