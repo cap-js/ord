@@ -114,7 +114,15 @@ describe("templates", () => {
     describe("createAPIResourceTemplate", () => {
         it("should create API resource template correctly", () => {
             const serviceName = "MyService";
-            const srvDefinition = linkedModel;
+            const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+            const srvDefinition = model.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
@@ -149,7 +157,15 @@ describe("templates", () => {
     describe("createEventResourceTemplate", () => {
         it("should create event resource template correctly", () => {
             const serviceName = "MyService";
-            const srvDefinition = linkedModel;
+            const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+            const srvDefinition = model.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
@@ -159,7 +175,15 @@ describe("templates", () => {
 
         it("should create event resource template correctly with packageIds including namespace", () => {
             const serviceName = "MyService";
-            const srvDefinition = linkedModel;
+            const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+            const srvDefinition = model.definitions["MyService"];
             const packageIds = ["customer.testNamespace:package:test:v1"];
             expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
