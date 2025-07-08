@@ -12,10 +12,10 @@ jest.spyOn(cds, "context", "get").mockReturnValue({
         types: [AUTHENTICATION_TYPE.Open],
     },
 });
-const { createAPIResourceTemplate } = require("../../lib/templates");
+const { createAPIResourceTemplate, createEventResourceTemplate } = require("../../lib/templates");
 
 describe("namespace", () => {
-    it("should have namespace", () => {
+    it("should strip application namespace from local namespace", () => {
         const appConfig = {
             ordNamespace: "customer.testNamespace",
             appName: "testAppName",
@@ -39,5 +39,33 @@ describe("namespace", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions[testNamespace + serviceName];
         expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+    });
+
+    it("should strip contain full local namespace", () => {
+        const appConfig = {
+            ordNamespace: "customer.testNamespace",
+            appName: "testAppName",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+        };
+        const serviceName = "MyService";
+        const testNamespace = "other.namespace.";
+        const model = cds.linked(`
+                namespace other.namespace;
+
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'public'
+                };
+            `);
+        const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
+        const srvDefinition = model.definitions[testNamespace + serviceName];
+        expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 });
