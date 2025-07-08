@@ -409,7 +409,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }

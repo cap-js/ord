@@ -301,7 +301,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }
@@ -608,7 +608,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }
@@ -915,7 +915,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }
@@ -1040,7 +1040,7 @@ exports[`Tests for eventResource and apiResource should block MTXServices when m
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }
@@ -1510,7 +1510,7 @@ exports[`Tests for products and packages should raise error log when custom prod
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }

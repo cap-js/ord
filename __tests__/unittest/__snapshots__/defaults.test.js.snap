@@ -286,7 +286,7 @@ exports[`defaults products should return default value 1`] = `
     "ordId": "customer:product:My.Product:",
     "shortDescription": "Short description of My Product",
     "title": "My Product",
-    "vendor": "customer:vendor:customer:",
+    "vendor": "customer:vendor:Customer:",
   },
 ]
 `;
