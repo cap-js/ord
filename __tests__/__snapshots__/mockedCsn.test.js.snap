@@ -305,7 +305,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }
@@ -430,7 +430,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }
