@@ -18,6 +18,7 @@ entity Books : managed {
 }
 
 @ODM.entityName: 'odm.bookshop.Authors'
+@EntityRelationship.entityType: 'customer.foo:Authors'
 entity Authors : managed {
     key ID    : Integer;
         name  : String(111);

@@ -61,10 +61,11 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
-            expect(document.entityTypes).toHaveLength(2);
+            expect(document.entityTypes).toHaveLength(1);
             expect(document.entityTypes[0].partOfPackage).toEqual(
                 "sap.test.cdsrc.sample:package:capirebookshopordsample:v1", //for customer, no package by type
             );
+            expect(document.entityTypes[0].ordId).toEqual("sap.sm:entityType:SomeAribaDummyEntity:v1");
             expect(document.entityTypes[0].level).toEqual(expect.stringContaining("root-entity"));
             expect(document.apiResources[0].entityTypeMappings[0].entityTypeTargets).toEqual(
                 expect.arrayContaining([
