@@ -14,7 +14,7 @@ jest.spyOn(cds, "context", "get").mockReturnValue({
 });
 const { createAPIResourceTemplate, createEventResourceTemplate } = require("../../lib/templates");
 
-describe("namespace", () => {
+describe("namespace local and global", () => {
     it("should strip application namespace from local namespace", () => {
         const appConfig = {
             ordNamespace: "customer.testNamespace",
@@ -42,7 +42,7 @@ describe("namespace", () => {
         expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
-    it("should strip contain full local namespace", () => {
+    it("should not strip a different local namespace", () => {
         const appConfig = {
             ordNamespace: "customer.testNamespace",
             appName: "testAppName",

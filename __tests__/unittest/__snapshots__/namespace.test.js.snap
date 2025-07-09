@@ -1,88 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`namespace should strip application namespace from local namespace 1`] = `
-[
-  {
-    "apiProtocol": "odata-v4",
-    "description": "Description for MyService",
-    "entryPoints": [
-      "/odata/v4/my",
-    ],
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:nested.MyService:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/MyService.oas3.json",
-      },
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/xml",
-        "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/MyService.edmx",
-      },
-    ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
-    "version": "1.0.0",
-    "visibility": "public",
-  },
-]
-`;
-
-exports[`namespace should strip application namespace from local namespace 2`] = `
-[
-  {
-    "description": "CAP Event resource describing events / messages.",
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:eventResource:nested.MyService:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "asyncapi-v2",
-        "url": "/ord/v1/customer.testNamespace:eventResource:nested.MyService:v1/MyService.asyncapi2.json",
-      },
-    ],
-    "shortDescription": "MyService event resource",
-    "title": "ODM testAppName Events",
-    "version": "1.0.0",
-    "visibility": "public",
-  },
-]
-`;
-
-exports[`namespace should strip contain full local namespace 1`] = `
+exports[`namespace local and global should not strip a different local namespace 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
@@ -96,7 +14,7 @@ exports[`namespace should strip contain full local namespace 1`] = `
     "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:apiResource:other.namespace.MyService:v1",
     "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
+      "sap.cds:service:customer.testNamespace:other.namespace.MyService",
     ],
     "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
     "releaseStatus": "active",
@@ -130,7 +48,7 @@ exports[`namespace should strip contain full local namespace 1`] = `
 ]
 `;
 
-exports[`namespace should strip contain full local namespace 2`] = `
+exports[`namespace local and global should not strip a different local namespace 2`] = `
 [
   {
     "description": "CAP Event resource describing events / messages.",
@@ -140,7 +58,7 @@ exports[`namespace should strip contain full local namespace 2`] = `
     "lastUpdate": "2022-12-19T15:47:04+00:00",
     "ordId": "customer.testNamespace:eventResource:other.namespace.MyService:v1",
     "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
+      "sap.cds:service:customer.testNamespace:other.namespace.MyService",
     ],
     "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
     "releaseStatus": "active",
@@ -154,6 +72,88 @@ exports[`namespace should strip contain full local namespace 2`] = `
         "mediaType": "application/json",
         "type": "asyncapi-v2",
         "url": "/ord/v1/customer.testNamespace:eventResource:other.namespace.MyService:v1/MyService.asyncapi2.json",
+      },
+    ],
+    "shortDescription": "MyService event resource",
+    "title": "ODM testAppName Events",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`namespace local and global should strip application namespace from local namespace 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:nested.MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:nested.MyService",
+    ],
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "Short description of MyService",
+    "title": "MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`namespace local and global should strip application namespace from local namespace 2`] = `
+[
+  {
+    "description": "CAP Event resource describing events / messages.",
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:eventResource:nested.MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:nested.MyService",
+    ],
+    "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "asyncapi-v2",
+        "url": "/ord/v1/customer.testNamespace:eventResource:nested.MyService:v1/MyService.asyncapi2.json",
       },
     ],
     "shortDescription": "MyService event resource",

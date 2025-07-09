@@ -85,6 +85,19 @@ describe("templates", () => {
     });
 
     describe("createGroupsTemplateForService", () => {
+        let serviceDefinition;
+        beforeAll(() => {
+            const model = cds.linked(`
+                service testServiceName {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+            `);
+            serviceDefinition = model.definitions["testServiceName"];
+        });
+
         it("should return default value when groupIds do not have groupId", () => {
             const testServiceName = "testServiceName";
             const testResult = {
@@ -92,17 +105,17 @@ describe("templates", () => {
                 groupTypeId: "sap.cds:service",
                 title: "test Service",
             };
-            expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
+            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
         });
 
         it('should return default value with a proper Service title when "Service" keyword is missing', () => {
             const testServiceName = "testServName";
             const testResult = {
-                groupId: "sap.cds:service:customer.testNamespace:testServName",
+                groupId: "sap.cds:service:customer.testNamespace:testServiceName",
                 groupTypeId: "sap.cds:service",
                 title: "testServName Service",
             };
-            expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
+            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
         });
 
         it("should return undefined when no service definition", () => {
