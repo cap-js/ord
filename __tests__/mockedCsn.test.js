@@ -56,12 +56,15 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     describe("Tests for ORD document checking if entityTypes and entityTypeMappings are generated correctly", () => {
         test("Successfully create ORD Document: entityTypes with local entities and entityTypeMappings containing referenced entities", () => {
+            cds.env.ord.policyLevels = ["none"];
             const csn = require("./__mocks__/localAndNonODMReferencedEntitiesCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
             expect(document.entityTypes).toHaveLength(2);
-            expect(document.entityTypes[0].partOfPackage).toEqual(expect.stringContaining("entityType"));
+            expect(document.entityTypes[0].partOfPackage).toEqual(
+                "sap.test.cdsrc.sample:package:capirebookshopordsample:v1", //for customer, no package by type
+            );
             expect(document.entityTypes[0].level).toEqual(expect.stringContaining("root-entity"));
             expect(document.apiResources[0].entityTypeMappings[0].entityTypeTargets).toEqual(
                 expect.arrayContaining([

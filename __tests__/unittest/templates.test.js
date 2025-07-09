@@ -30,6 +30,7 @@ describe("templates", () => {
         ordNamespace: "customer.testNamespace",
         appName: "testAppName",
         lastUpdate: "2022-12-19T15:47:04+00:00",
+        policyLevels: ["none"],
     };
 
     beforeAll(() => {
@@ -94,7 +95,7 @@ describe("templates", () => {
             };
 
             const entityType = createEntityTypeTemplate(appConfigWithSAPPolicy, packageIds, someEntity);
-            expect(entityType).toBeNull();
+            expect(entityType).toEqual([]);
         });
     });
 
