@@ -30,6 +30,7 @@ describe("templates", () => {
         ordNamespace: "customer.testNamespace",
         appName: "testAppName",
         lastUpdate: "2022-12-19T15:47:04+00:00",
+        policyLevels: ["none"],
     };
 
     beforeAll(() => {
@@ -81,6 +82,20 @@ describe("templates", () => {
             expect(entityType).toMatchSnapshot();
             expect(entityType.version).toEqual("1.0.0");
             expect(entityType.level).toEqual("sub-entity");
+        });
+
+        it("should not entity types with SAP policy level as entity types should then be added through a central registry and we must not create an overlap", () => {
+            const someEntity = {
+                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1",
+                entityName: "SomeAribaDummyEntity",
+            };
+            const appConfigWithSAPPolicy = {
+                ...appConfig,
+                policyLevels: ["sap:core:v1"],
+            };
+
+            const entityType = createEntityTypeTemplate(appConfigWithSAPPolicy, packageIds, someEntity);
+            expect(entityType).toEqual([]);
         });
     });
 
