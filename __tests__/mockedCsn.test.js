@@ -143,7 +143,10 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             );
             expect(dataProductApiResources).toHaveLength(1);
             expect(dataProductApiResources[0].resourceDefinitions).toHaveLength(1);
-            expect(dataProductApiResources[0].resourceDefinitions[0]).type === "sap-csn-interop-effective-v1";
+            expect(dataProductApiResources[0].resourceDefinitions[0].type).toEqual("sap-csn-interop-effective-v1");
+            expect(dataProductApiResources[0].partOfPackage).toEqual(
+                "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+            );
         });
 
         test("Should not generate duplicate apiResources when the servie is annotated as primary data product ", () => {
