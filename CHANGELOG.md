@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.3.4 (2024-07-09)
+
+## What's Changed
+
+- Adjust default values for vendor to "customer:vendor:Customer"
+- Improved runtime of cmd `cds build --for ord`
+- Alignment of publishing with SAP Open Resource Discovery (ORD) global repository strategy
+- Fix: DP package assignment
+- Fix: error of ORD-IDs with duplicate namespace components
+- Fix: error of cmd `cds build --for ord`
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.4...v1.3.3
+
 ## 1.3.3 (2024-06-25)
 
 ## What's Changed
