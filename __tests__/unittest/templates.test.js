@@ -30,6 +30,7 @@ describe("templates", () => {
         ordNamespace: "customer.testNamespace",
         appName: "testAppName",
         lastUpdate: "2022-12-19T15:47:04+00:00",
+        policyLevels: ["none"],
     };
 
     beforeAll(() => {
@@ -82,9 +83,36 @@ describe("templates", () => {
             expect(entityType.version).toEqual("1.0.0");
             expect(entityType.level).toEqual("sub-entity");
         });
+
+        it("should not entity types with SAP policy level as entity types should then be added through a central registry and we must not create an overlap", () => {
+            const someEntity = {
+                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1",
+                entityName: "SomeAribaDummyEntity",
+            };
+            const appConfigWithSAPPolicy = {
+                ...appConfig,
+                policyLevels: ["sap:core:v1"],
+            };
+
+            const entityType = createEntityTypeTemplate(appConfigWithSAPPolicy, packageIds, someEntity);
+            expect(entityType).toEqual([]);
+        });
     });
 
     describe("createGroupsTemplateForService", () => {
+        let serviceDefinition;
+        beforeAll(() => {
+            const model = cds.linked(`
+                service testServiceName {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+            `);
+            serviceDefinition = model.definitions["testServiceName"];
+        });
+
         it("should return default value when groupIds do not have groupId", () => {
             const testServiceName = "testServiceName";
             const testResult = {
@@ -92,17 +120,17 @@ describe("templates", () => {
                 groupTypeId: "sap.cds:service",
                 title: "test Service",
             };
-            expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
+            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
         });
 
         it('should return default value with a proper Service title when "Service" keyword is missing', () => {
             const testServiceName = "testServName";
             const testResult = {
-                groupId: "sap.cds:service:customer.testNamespace:testServName",
+                groupId: "sap.cds:service:customer.testNamespace:testServiceName",
                 groupTypeId: "sap.cds:service",
                 title: "testServName Service",
             };
-            expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
+            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
         });
 
         it("should return undefined when no service definition", () => {
@@ -114,7 +142,15 @@ describe("templates", () => {
     describe("createAPIResourceTemplate", () => {
         it("should create API resource template correctly", () => {
             const serviceName = "MyService";
-            const srvDefinition = linkedModel;
+            const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+            const srvDefinition = model.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
@@ -149,7 +185,15 @@ describe("templates", () => {
     describe("createEventResourceTemplate", () => {
         it("should create event resource template correctly", () => {
             const serviceName = "MyService";
-            const srvDefinition = linkedModel;
+            const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+            const srvDefinition = model.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
@@ -159,7 +203,15 @@ describe("templates", () => {
 
         it("should create event resource template correctly with packageIds including namespace", () => {
             const serviceName = "MyService";
-            const srvDefinition = linkedModel;
+            const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+            const srvDefinition = model.definitions["MyService"];
             const packageIds = ["customer.testNamespace:package:test:v1"];
             expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
