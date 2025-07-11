@@ -10,6 +10,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 - Adjust default values for vendor to "customer:vendor:Customer"
 - Improved runtime of cmd `cds build --for ord`
+- Alignment of publishing with SAP Open Resource Discovery (ORD) global repository strategy
+- Fix: DP package assignment
 - Fix: error of ORD-IDs with duplicate namespace components
 - Fix: error of cmd `cds build --for ord`
 
