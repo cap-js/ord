@@ -370,4 +370,29 @@ describe("Tests for eventResource and apiResource", () => {
         expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
     });
+
+    it("should block OpenResourceDiscoveryService", async () => {
+        const linkedModel = cds.linked(`
+                service OpenResourceDiscoveryService {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                };
+                service MyService {
+                    event ServiceEvent : {
+                        ID    : Integer;
+                    }
+                    function getRatings() returns Integer;
+                };
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'internal'
+                };
+            `);
+
+        const document = ord(linkedModel);
+        expect(document.apiResources).toHaveLength(1);
+        expect(document.eventResources).toHaveLength(1);
+        expect(document.groups).toHaveLength(1);
+        expect(document).toMatchSnapshot();
+    });
 });
