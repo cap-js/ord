@@ -1,11 +1,5 @@
 const cds = require("@sap/cds");
-const {
-    AUTHENTICATION_TYPE,
-    ORD_ODM_ENTITY_NAME_ANNOTATION,
-    ENTITY_RELATIONSHIP_ANNOTATION,
-    ORD_EXTENSIONS_PREFIX,
-    RESOURCE_VISIBILITY,
-} = require("../../lib/constants");
+const { AUTHENTICATION_TYPE } = require("../../lib/constants");
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
     authConfig: {

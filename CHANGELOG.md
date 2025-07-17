@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.3.4 (2024-07-17)
+
+## What's Changed
+
+- Block OpenResourceDiscoveryService in ord document
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.4...v1.3.5
+
 ## 1.3.4 (2024-07-09)
 
 ## What's Changed
