@@ -72,6 +72,17 @@ jest.mock("../../lib/index", () => {
     };
 });
 
+jest.mock("cli-progress", () => {
+    return {
+        SingleBar: class {
+            constructor() {}
+            start() {}
+            update() {}
+            stop() {}
+        },
+    };
+});
+
 describe("Build", () => {
     beforeAll(() => {
         process.env.DEBUG = "true";
@@ -163,7 +174,7 @@ describe("Build", () => {
         ];
         const promise = [];
         await buildClass._writeResourcesFiles(resObj, {}, promise);
-        expect(console.log).toHaveBeenCalledTimes(1);
+        expect(console.log).toHaveBeenCalledTimes(0);
         expect(promise.length).toEqual(0);
     });
 
