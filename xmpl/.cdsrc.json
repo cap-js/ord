@@ -15,7 +15,6 @@
         "description": "this is my custom description",
         "policyLevels": ["sap:core:v1"],
         "customOrdContentFile": "./ord/custom.ord.json",
-        "defaultVisibility": "internal",
         "existingProductORDId": "sap:product:SAPServiceCloudV2:",
         "products": [
             {
