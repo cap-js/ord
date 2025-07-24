@@ -193,6 +193,31 @@ If no explicit product settings are provided, the plugin will automatically appl
 
 ---
 
+# Parameters
+
+### `defaultVisibility`
+
+The `defaultVisibility` property sets the default visibility for resources generated in the ORD document.
+Possible values include `"public"`, `"internal"`, or `"private"`.
+If not specified, the plugin uses its built-in default.
+
+**Example:**
+
+```json
+{
+    "ord": {
+        "namespace": "sap.sample",
+        "description": "This is my custom description",
+        "policyLevels": ["sap:core:v1"],
+        "defaultVisibility": "public"
+    }
+}
+```
+
+> **Note:** You can override visibility for individual resources using service-level annotations or custom ORD content.
+
+---
+
 # Ord Root Property
 
 More information, see [ord document](https://pages.github.tools.sap/CentralEngineering/open-resource-discovery-specification/spec-v1/interfaces/document)
