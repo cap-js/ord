@@ -68,6 +68,7 @@ describe("visibility handling", () => {
         const ordExtensions = { implementationStandard: "sap:ord-document-api:v1" };
         const definition = {};
         expect(_handleVisibility(ordExtensions, definition, "private")).toBe("public");
+        expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("public");
     });
 
     it("returns definition[ORD_EXTENSIONS_PREFIX + visibility] if present", () => {
@@ -93,8 +94,14 @@ describe("visibility handling", () => {
         expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.private)).toBe("private");
         expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.internal)).toBe("internal");
     });
-});
 
+    it("Does not use public visibility by deafult if implementationStandard is not in allowed values", () => {
+        const ordExtensions = { implementationStandard: "I-AM-NOT-A-STANDARD" };
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, "private")).toBe("private");
+        expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("internal");
+    });
+});
 describe("templates", () => {
     let linkedModel;
     let warningSpy;
