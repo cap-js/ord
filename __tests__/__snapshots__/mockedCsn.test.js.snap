@@ -413,3 +413,128 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
   ],
 }
 `;
+
+exports[`Tests for ORD document generated out of mocked csn files Tests for ORD document when there no events or entities in service definitions Successfully create ORD Document: no exposedEntityTypes field in apiResource 1`] = `
+{
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
+  "apiResources": [
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for EbMtEmitter",
+      "entryPoints": [
+        "/odata/v4/eb-mt-emitter",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:EbMtEmitter:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:EbMtEmitter",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:EbMtEmitter:v1/EbMtEmitter.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:EbMtEmitter:v1/EbMtEmitter.edmx",
+        },
+      ],
+      "shortDescription": "Short description of EbMtEmitter",
+      "title": "EbMtEmitter",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "consumptionBundles": [
+    {
+      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "shortDescription": "If we have another protected API then it will be another object",
+      "title": "Unprotected resources",
+      "version": "1.0.0",
+    },
+  ],
+  "description": "this is an application description",
+  "eventResources": [
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:eventResource:EbMtEmitter:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:EbMtEmitter",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capirebookshopordsample:eventResource:EbMtEmitter:v1/EbMtEmitter.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "EbMtEmitter event resource",
+      "title": "ODM capirebookshopordsample Events",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "groups": [
+    {
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:EbMtEmitter",
+      "groupTypeId": "sap.cds:service",
+      "title": "EbMtEmitter Service",
+    },
+  ],
+  "openResourceDiscovery": "1.9",
+  "packages": [
+    {
+      "description": "This package contains public General for capire bookshop ord sample.",
+      "ordId": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing public General",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+  ],
+  "policyLevels": [
+    "none",
+  ],
+  "products": [
+    {
+      "ordId": "customer:product:capire.bookshop.ord.sample:",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+    },
+  ],
+}
+`;

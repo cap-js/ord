@@ -41,7 +41,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     });
 
     describe("Tests for ORD document when there no events or entities in service definitions", () => {
-        test("Successfully create ORD Document: no entityTypeMappings field in apiResource", () => {
+        test("Successfully create ORD Document: no exposedEntityTypes field in apiResource", () => {
             cds.env = {};
             const csn = require("./__mocks__/noEntitiesInServiceDefinitionCsn.json");
             const document = ord(csn);
@@ -54,8 +54,8 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         });
     });
 
-    describe("Tests for ORD document checking if entityTypes and entityTypeMappings are generated correctly", () => {
-        test("Successfully create ORD Document: entityTypes with local entities and entityTypeMappings containing referenced entities", () => {
+    describe("Tests for ORD document checking if entityTypes and exposedEntityTypes are generated correctly", () => {
+        test("Successfully create ORD Document: entityTypes with local entities and exposedEntityTypes containing referenced entities", () => {
             cds.env.ord.policyLevels = ["none"];
             const csn = require("./__mocks__/localAndNonODMReferencedEntitiesCsn.json");
             const document = ord(csn);

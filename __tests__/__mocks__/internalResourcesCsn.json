@@ -8,7 +8,7 @@
             "@ORD.Extensions.visibility": "internal",
             "@ORD.Extensions.version": "2.0.0",
             "@ORD.Extensions.extensible.supported": "yes",
-            "@ORD.Extensions.entityTypeMappings.entityTypeTargets": [
+            "@ORD.Extensions.exposedEntityTypes": [
                 {
                     "ordId": "sap.odm:entityType:test-from-extension:v1"
                 }

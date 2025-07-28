@@ -92,16 +92,12 @@ describe("extendOrdWithCustom", () => {
                         extensible: {
                             supported: "no",
                         },
-                        entityTypeMappings: [
+                        exposedEntityTypes: [
                             {
-                                entityTypeTargets: [
-                                    {
-                                        ordId: "sap.odm:entityType:BusinessPartner:v2",
-                                    },
-                                    {
-                                        ordId: "sap.odm:entityType:BusinessPartner:v3",
-                                    },
-                                ],
+                                ordId: "sap.odm:entityType:BusinessPartner:v2",
+                            },
+                            {
+                                ordId: "sap.odm:entityType:BusinessPartner:v3",
                             },
                         ],
                     },
@@ -109,11 +105,6 @@ describe("extendOrdWithCustom", () => {
                         ordId: "sap.sm:apiResource:orginalService:v2",
                         partOfGroups: ["sap.cds:service:sap.test.cdsrc.sample:originalService"],
                         partOfPackage: "sap.sm:package:smDataProducts:v2",
-                        entityTypeMappings: [
-                            {
-                                entityTypeTargets: [],
-                            },
-                        ],
                     },
                 ],
             };
