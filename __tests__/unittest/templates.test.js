@@ -14,11 +14,11 @@ jest.spyOn(cds, "context", "get").mockReturnValue({
 });
 const {
     createEntityTypeTemplate,
-    createEntityTypeMappingsItemTemplate,
+    createExposedEntityTypesItemTemplate,
     createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate,
-    _getEntityTypeMappings,
+    _getExposedEntityTypes,
     _propagateORDVisibility,
 } = require("../../lib/templates");
 
@@ -47,7 +47,7 @@ describe("templates", () => {
     describe("createEntityTypeMappingsItemTemplate", () => {
         it("should return default value", () => {
             expect(
-                createEntityTypeMappingsItemTemplate(linkedModel.definitions["customer.testNamespace123.Books"]),
+                createExposedEntityTypesItemTemplate(linkedModel.definitions["customer.testNamespace123.Books"]),
             ).toBeUndefined();
         });
     });
@@ -597,7 +597,7 @@ describe("templates", () => {
         });
     });
 
-    describe("getEntityTypeMappings", () => {
+    describe("getExposedEntityTypes", () => {
         it("should clean up duplicates", () => {
             const serviceDefinition = {
                 entities: [{}, {}, {}],
@@ -605,7 +605,7 @@ describe("templates", () => {
             serviceDefinition.entities[0][ORD_ODM_ENTITY_NAME_ANNOTATION] = "Something";
             serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.sm:Else:v2";
             serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.odm:Something";
-            expect(_getEntityTypeMappings(serviceDefinition)).toMatchSnapshot();
+            expect(_getExposedEntityTypes(serviceDefinition)).toMatchSnapshot();
         });
     });
 

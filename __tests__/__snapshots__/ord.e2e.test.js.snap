@@ -7,17 +7,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for AdminService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:BusinessPartner:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/odata/v4/admin",
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:BusinessPartner:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -137,13 +133,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -285,17 +279,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for AdminService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:BusinessPartner:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/odata/v4/admin",
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:BusinessPartner:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -415,13 +405,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -563,17 +551,13 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "apiProtocol": "odata-v4",
       "description": "Description for AdminService",
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:BusinessPartner:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/odata/v4/admin",
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:BusinessPartner:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -693,13 +677,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1091,15 +1073,13 @@ exports[`Tests for products and packages should not contain products property if
     {
       "apiProtocol": "odata-v4",
       "description": "Description for AdminService",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "entryPoints": [
         "/odata/v4/admin",
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -1196,13 +1176,11 @@ exports[`Tests for products and packages should not contain products property if
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1304,15 +1282,13 @@ exports[`Tests for products and packages should raise error log when custom prod
     {
       "apiProtocol": "odata-v4",
       "description": "Description for AdminService",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "entryPoints": [
         "/odata/v4/admin",
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -1409,13 +1385,11 @@ exports[`Tests for products and packages should raise error log when custom prod
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1525,15 +1499,13 @@ exports[`Tests for products and packages should use valid custom products ordId 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for AdminService",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "entryPoints": [
         "/odata/v4/admin",
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -1630,13 +1602,11 @@ exports[`Tests for products and packages should use valid custom products ordId 
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },

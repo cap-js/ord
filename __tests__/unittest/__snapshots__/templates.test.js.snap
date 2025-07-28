@@ -154,17 +154,13 @@ exports[`templates createEventResourceTemplate should create event resource temp
 ]
 `;
 
-exports[`templates getEntityTypeMappings should clean up duplicates 1`] = `
+exports[`templates getExposedEntityTypes should clean up duplicates 1`] = `
 [
   {
-    "entityTypeTargets": [
-      {
-        "ordId": "sap.odm:entityType:Something:v1",
-      },
-      {
-        "ordId": "sap.sm:entityType:Else:v2",
-      },
-    ],
+    "ordId": "sap.odm:entityType:Something:v1",
+  },
+  {
+    "ordId": "sap.sm:entityType:Else:v2",
   },
 ]
 `;
@@ -174,17 +170,13 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:testOdmEntity:v1",
-          },
-        ],
-      },
-    ],
     "entryPoints": [
       "/odata/v4/my",
+    ],
+    "exposedEntityTypes": [
+      {
+        "ordId": "sap.odm:entityType:testOdmEntity:v1",
+      },
     ],
     "extensible": {
       "supported": "yes",
@@ -265,20 +257,16 @@ exports[`templates ordExtension should find association on nested entities for r
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:DirectAssociationOdmEntity:v1",
-          },
-          {
-            "ordId": "sap.odm:entityType:NestedAssociationOdmEntity:v1",
-          },
-        ],
-      },
-    ],
     "entryPoints": [
       "/odata/v4/my",
+    ],
+    "exposedEntityTypes": [
+      {
+        "ordId": "sap.odm:entityType:DirectAssociationOdmEntity:v1",
+      },
+      {
+        "ordId": "sap.odm:entityType:NestedAssociationOdmEntity:v1",
+      },
     ],
     "extensible": {
       "supported": "yes",
@@ -325,20 +313,16 @@ exports[`templates ordExtension should find composition and association entities
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:CompositionOdmEntity:v1",
-          },
-          {
-            "ordId": "sap.odm:entityType:AssociationOdmEntity:v1",
-          },
-        ],
-      },
-    ],
     "entryPoints": [
       "/odata/v4/my",
+    ],
+    "exposedEntityTypes": [
+      {
+        "ordId": "sap.odm:entityType:CompositionOdmEntity:v1",
+      },
+      {
+        "ordId": "sap.odm:entityType:AssociationOdmEntity:v1",
+      },
     ],
     "extensible": {
       "supported": "yes",
@@ -385,20 +369,16 @@ exports[`templates ordExtension should find composition on nested entities for r
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:DirectCompositionOdmEntity:v1",
-          },
-          {
-            "ordId": "sap.odm:entityType:NestedCompositionOdmEntity:v1",
-          },
-        ],
-      },
-    ],
     "entryPoints": [
       "/odata/v4/my",
+    ],
+    "exposedEntityTypes": [
+      {
+        "ordId": "sap.odm:entityType:DirectCompositionOdmEntity:v1",
+      },
+      {
+        "ordId": "sap.odm:entityType:NestedCompositionOdmEntity:v1",
+      },
     ],
     "extensible": {
       "supported": "yes",
@@ -445,20 +425,16 @@ exports[`templates ordExtension should find ordId on circular relations 1`] = `
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:DirectCompositionOdmEntity:v1",
-          },
-          {
-            "ordId": "sap.odm:entityType:NestedCompositionOdmEntity:v1",
-          },
-        ],
-      },
-    ],
     "entryPoints": [
       "/odata/v4/my",
+    ],
+    "exposedEntityTypes": [
+      {
+        "ordId": "sap.odm:entityType:DirectCompositionOdmEntity:v1",
+      },
+      {
+        "ordId": "sap.odm:entityType:NestedCompositionOdmEntity:v1",
+      },
     ],
     "extensible": {
       "supported": "yes",
@@ -505,17 +481,13 @@ exports[`templates ordExtension should include internal API resources but ensure
   {
     "apiProtocol": "odata-v4",
     "description": "Description for MyService",
-    "entityTypeMappings": [
-      {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:testOdmEntity:v1",
-          },
-        ],
-      },
-    ],
     "entryPoints": [
       "/odata/v4/my",
+    ],
+    "exposedEntityTypes": [
+      {
+        "ordId": "sap.odm:entityType:testOdmEntity:v1",
+      },
     ],
     "extensible": {
       "supported": "yes",

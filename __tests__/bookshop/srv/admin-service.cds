@@ -28,5 +28,5 @@ annotate AdminService with @ORD.Extensions: {
     visibility        : 'public',
     version           : '2.0.0',
     extensible        : {supported: 'yes'},
-    entityTypeMappings: {entityTypeTargets: [{ordId: 'sap.odm:entityType:test-from-extension:v1'}]},
+    exposedEntityTypes: [{ordId: 'sap.odm:entityType:test-from-extension:v1'}],
 };

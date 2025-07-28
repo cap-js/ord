@@ -7,15 +7,13 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for AdminService",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "entryPoints": [
         "/odata/v4/admin",
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -155,13 +153,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
