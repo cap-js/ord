@@ -19,8 +19,10 @@ const {
     createAPIResourceTemplate,
     createEventResourceTemplate,
     _getEntityTypeMappings,
+    _getExposedEntityTypes,
     _propagateORDVisibility,
 } = require("../../lib/templates");
+const { list } = require("@sap/cds/lib/ql/cds-ql");
 
 describe("templates", () => {
     let linkedModel;
@@ -606,6 +608,20 @@ describe("templates", () => {
             serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.sm:Else:v2";
             serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.odm:Something";
             expect(_getEntityTypeMappings(serviceDefinition)).toMatchSnapshot();
+        });
+    });
+
+    describe("getExposedEntityTypes", () => {
+        it("should clean up duplicates", () => {
+            const serviceDefinition = {
+                entities: [{}, {}, {}],
+            };
+            serviceDefinition.entities[0][ORD_ODM_ENTITY_NAME_ANNOTATION] = "Something";
+            serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.sm:Else:v2";
+            serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.odm:Something";
+            const exposedEntityTypes = _getExposedEntityTypes(serviceDefinition);
+            expect(exposedEntityTypes).toMatchSnapshot();
+            expect(exposedEntityTypes.length).toEqual(2);
         });
     });
 
