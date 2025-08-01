@@ -61,8 +61,13 @@ describe("visibility handling", () => {
         const ordExtensions = {};
         const definition = {};
         expect(_handleVisibility(ordExtensions, definition, "notallowed")).toBe("public");
+
         expect(loggerSpy).toHaveBeenCalledWith(
-            'Default visibility "notallowed" is not supported. Using "public" as fallback.',
+            "Default visibility",
+            "notallowed",
+            "is not supported. Using",
+            RESOURCE_VISIBILITY.public,
+            "as fallback.",
         );
     });
 
