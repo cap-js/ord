@@ -24,7 +24,6 @@ const {
     _propagateORDVisibility,
     _handleVisibility,
 } = require("../../lib/templates");
-const { list } = require("@sap/cds/lib/ql/cds-ql");
 
 const { Logger } = require("../../lib/logger");
 

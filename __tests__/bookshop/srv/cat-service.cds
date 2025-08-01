@@ -14,7 +14,7 @@ service CatalogService @(path: '/browse') {
         };
 
     @requires: 'authenticated-user'
-    action submitOrder(book : Books:ID, quantity : Integer);
+    action submitOrder(book: Books:ID, quantity: Integer);
 
     event BookCreated : {
         ID    : Integer;
@@ -32,9 +32,9 @@ service CatalogService @(path: '/browse') {
 }
 
 annotate CatalogService with @ORD.Extensions: {
-    title             : 'This is test Catalog Service title',
-    shortDescription  : 'short description for test CatalogService',
-    visibility        : 'private',
-    version           : '2.0.0',
-    extensible        : {supported: 'yes'}
+    title           : 'This is test Catalog Service title',
+    shortDescription: 'short description for test CatalogService',
+    visibility      : 'private',
+    version         : '2.0.0',
+    extensible      : {supported: 'yes'}
 };
