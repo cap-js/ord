@@ -5,6 +5,7 @@ const {
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_EXTENSIONS_PREFIX,
     RESOURCE_VISIBILITY,
+    ALLOWED_VISIBILITY,
 } = require("../../lib/constants");
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
@@ -21,9 +22,93 @@ const {
     _getEntityTypeMappings,
     _getExposedEntityTypes,
     _propagateORDVisibility,
+    _handleVisibility,
 } = require("../../lib/templates");
 const { list } = require("@sap/cds/lib/ql/cds-ql");
 
+const { Logger } = require("../../lib/logger");
+
+describe("visibility handling", () => {
+    let loggerSpy;
+    beforeEach(() => {
+        loggerSpy = jest.spyOn(Logger, "warn").mockImplementation(() => {});
+    });
+    afterEach(() => {
+        loggerSpy.mockRestore();
+    });
+
+    it("returns internal for primary data product service", () => {
+        const ordExtensions = {};
+        const definition = { "@DataIntegration.dataProduct.type": "primary" };
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.public)).toBe(
+            RESOURCE_VISIBILITY.internal,
+        );
+    });
+
+    it("returns extension visibility if present and valid", () => {
+        const ordExtensions = { visibility: "internal" };
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.public)).toBe("internal");
+    });
+
+    it("returns config value if valid", () => {
+        const ordExtensions = {};
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, "public")).toBe("public");
+    });
+
+    it("falls back to public and logs warning for invalid config value", () => {
+        const ordExtensions = {};
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, "notallowed")).toBe("public");
+
+        expect(loggerSpy).toHaveBeenCalledWith(
+            "Default visibility",
+            "notallowed",
+            "is not supported. Using",
+            RESOURCE_VISIBILITY.public,
+            "as fallback.",
+        );
+    });
+
+    it("returns public for implementationStandard sap:ord-document-api:v1", () => {
+        const ordExtensions = { implementationStandard: "sap:ord-document-api:v1" };
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, "private")).toBe("public");
+        expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("public");
+    });
+
+    it("returns definition[ORD_EXTENSIONS_PREFIX + visibility] if present", () => {
+        const ordExtensions = {};
+        const definition = { "@ORD.Extensions.visibility": "internal" };
+        expect(_handleVisibility(ordExtensions, definition, "public")).toBe("internal");
+    });
+
+    it("returns public if no visibility is defined", () => {
+        const ordExtensions = {};
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition)).toBe("public");
+    });
+
+    it("Allowed visibility values are respected", () => {
+        const ordExtensions = {};
+        const definition = {};
+        expect(ALLOWED_VISIBILITY).toContain(RESOURCE_VISIBILITY.public);
+        expect(ALLOWED_VISIBILITY).toContain(RESOURCE_VISIBILITY.internal);
+        expect(ALLOWED_VISIBILITY).toContain(RESOURCE_VISIBILITY.private);
+        // Test with all allowed visibility values
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.public)).toBe("public");
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.private)).toBe("private");
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.internal)).toBe("internal");
+    });
+
+    it("Does not use public visibility by deafult if implementationStandard is not in allowed values", () => {
+        const ordExtensions = { implementationStandard: "I-AM-NOT-A-STANDARD" };
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, "private")).toBe("private");
+        expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("internal");
+    });
+});
 describe("templates", () => {
     let linkedModel;
     let warningSpy;
