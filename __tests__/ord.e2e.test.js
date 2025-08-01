@@ -423,7 +423,7 @@ describe("Tests for eventResource and apiResource", () => {
         const document = ord(linkedModel);
         expect(document.apiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
-        expect(document.groups).toHaveLength(2);
+        expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
     });
 
@@ -449,11 +449,14 @@ describe("Tests for eventResource and apiResource", () => {
                     visibility : 'internal'
                 };
             `);
-
+        cds.requires.ExternalService = {
+            kind: "external",
+            model: "external-model",
+        };
         const document = ord(linkedModel);
         expect(document.apiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
-        expect(document.groups).toHaveLength(2);
+        expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
     });
 });
