@@ -17,6 +17,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "entryPoints": [
         "/odata/v4/admin",
       ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -162,6 +167,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
           },
         ],
       },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },

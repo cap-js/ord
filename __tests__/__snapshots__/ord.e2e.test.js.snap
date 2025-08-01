@@ -19,6 +19,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "entryPoints": [
         "/odata/v4/admin",
       ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -144,6 +149,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           },
         ],
       },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -297,6 +307,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "entryPoints": [
         "/odata/v4/admin",
       ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -422,6 +437,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           },
         ],
       },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -575,6 +595,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "entryPoints": [
         "/odata/v4/admin",
       ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -700,6 +725,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           },
         ],
       },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1101,6 +1131,11 @@ exports[`Tests for products and packages should not contain products property if
       "entryPoints": [
         "/odata/v4/admin",
       ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1203,6 +1238,11 @@ exports[`Tests for products and packages should not contain products property if
           },
         ],
       },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1314,6 +1354,11 @@ exports[`Tests for products and packages should raise error log when custom prod
       "entryPoints": [
         "/odata/v4/admin",
       ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1416,6 +1461,11 @@ exports[`Tests for products and packages should raise error log when custom prod
           },
         ],
       },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1535,6 +1585,11 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "entryPoints": [
         "/odata/v4/admin",
       ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -1637,6 +1692,11 @@ exports[`Tests for products and packages should use valid custom products ordId 
           },
         ],
       },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
