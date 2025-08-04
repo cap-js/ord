@@ -18,8 +18,8 @@
     },
     "cds": {
         "requires": {
-            "external": {
-                "service": "ExternalService"
+            "ExternalService": {
+                "model": "srv/external/ExternalService"
             }
         }
     }
