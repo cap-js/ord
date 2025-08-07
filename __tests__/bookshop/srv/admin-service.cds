@@ -18,8 +18,8 @@ service AdminService @(requires: 'authenticated-user') {
         title : String @title: 'Title';
     }
 
-    function sum(x : Integer, y : Integer)  returns Integer;
-    action   add(x : Integer, to : Integer) returns Integer;
+    function sum(x: Integer, y: Integer)  returns Integer;
+    action   add(x: Integer, to: Integer) returns Integer;
 }
 
 annotate AdminService with @ORD.Extensions: {
