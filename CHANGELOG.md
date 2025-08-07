@@ -4,7 +4,22 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## 1.3.5 (2024-07-17)
+## 1.3.6 (2025-08-07)
+
+## What's Changed
+
+- Feat: add progressBar
+- Feat: support exposedEntityTypes
+- Feat: introducing defaultVisibility parameter in config
+- Feat: skip ord service for java project
+
+## New Contributors
+
+- @SAPzer0 made their first contribution in https://github.com/cap-js/ord/pull/206
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.5...v1.3.6
+
+## 1.3.5 (2025-07-17)
 
 ## What's Changed
 
@@ -12,7 +27,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 **Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.4...v1.3.5
 
-## 1.3.4 (2024-07-09)
+## 1.3.4 (2025-07-09)
 
 ## What's Changed
 
@@ -25,7 +40,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 **Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.4...v1.3.3
 
-## 1.3.3 (2024-06-25)
+## 1.3.3 (2025-06-25)
 
 ## What's Changed
 
@@ -34,7 +49,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 **Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.2...v1.3.3
 
-## 1.3.2 (2024-06-18)
+## 1.3.2 (2025-06-18)
 
 ## What's Changed
 
@@ -42,7 +57,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 **Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.1...v1.3.2
 
-## 1.3.1 (2024-06-13)
+## 1.3.1 (2025-06-13)
 
 ### What's Changed
 
@@ -52,7 +67,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 **Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.0...v1.3.1
 
-## 1.3.0 (2024-05-20)
+## 1.3.0 (2025-05-20)
 
 ### What's Changed
 
