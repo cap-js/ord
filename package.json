@@ -40,10 +40,11 @@
     },
     "cds": {
         "requires": {
-            "[!java]": {
-                "SAP ORD Service": {
-                    "model": "@cap-js/ord/lib/ord-service"
-                }
+            "SAP ORD Service": {
+                "model": "@cap-js/ord/lib/ord-service"
+            },
+            "[java]": {
+                "SAP ORD Service": false
             }
         }
     }
