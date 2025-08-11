@@ -3,6 +3,7 @@ const { getAuthConfig } = require("./lib/authentication");
 
 if (cds.cli.command === "build") {
     cds.build?.register?.("ord", require("./lib/build"));
+    cds.build?.register?.("dpd", require("./lib/buildDpd"));
 }
 
 // load auth config before any service is started
