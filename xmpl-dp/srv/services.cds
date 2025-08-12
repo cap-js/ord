@@ -48,7 +48,9 @@ annotate AdminService with @ORD.Extensions: {
 annotate AdminService with @ORD.dataProduct: {
     title: 'Admin Service Data Product',
     type: 'primary',
-    visibility: 'public'
+    visibility: 'public',
+    industry: ['Retail', 'Consumer Products'],
+    lineOfBusiness: ['Sales', 'Marketing']
 };
 
 annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';
