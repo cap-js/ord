@@ -7,7 +7,8 @@
     "homepage": "https://cap.cloud.sap/",
     "license": "Apache-2.0",
     "workspaces": [
-        "xmpl"
+        "xmpl",
+        "xmpl-dp"
     ],
     "main": "cds-plugin.js",
     "files": [

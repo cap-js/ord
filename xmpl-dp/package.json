@@ -1,6 +1,6 @@
 {
-    "name": "@capire/ord-sample",
-    "description": "this is a xmpl application description",
+    "name": "@capire/ord-sample-dp",
+    "description": "DPD test application",
     "version": "1.0.0",
     "dependencies": {
         "@cap-js/ord": "file:../../ord",
