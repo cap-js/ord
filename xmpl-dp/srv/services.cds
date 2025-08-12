@@ -50,7 +50,10 @@ annotate AdminService with @ORD.dataProduct: {
     type: 'primary',
     visibility: 'public',
     industry: ['Retail', 'Consumer Products'],
-    lineOfBusiness: ['Sales', 'Marketing']
+    lineOfBusiness: ['Sales', 'Marketing'],
+    releaseStatus: 'beta',
+    deprecationDate: '2025-12-31',
+    sunsetDate: '2026-06-30'
 };
 
 annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';
