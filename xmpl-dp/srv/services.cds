@@ -3,15 +3,11 @@ using {
     ProcessorService,
     AdminService
 } from './incidents-services';
+using from './test-annotations';
 
 namespace sap.capire.incidents;
 
-annotate ProcessorService with @ORD.Extensions: {
-    title           : 'This is Processor Service title',
-    shortDescription: 'short description for Processor Service',
-    visibility      : 'public',
-    extensible      : {supported: 'no'}
-};
+// ProcessorService annotations removed - not generating DPD for this service
 
 @AsyncAPI.Title        : 'SAP Incident Management'
 @AsyncAPI.SchemaVersion: '1.0'
@@ -34,31 +30,19 @@ service LocalService {
     }
 }
 
-annotate LocalService with @ORD.Extensions: {title: 'This is Local Service title'};
-
-annotate AdminService with @ORD.Extensions: {
-    title         : 'This is Admin Service title',
-    industry      : [
-        'Retail',
-        'Consumer Products'
-    ],
-    lineOfBusiness: ['Sales'],
-};
-
-annotate AdminService with @ORD.dataProduct: {
-    title: 'Admin Service Data Product',
-    type: 'primary',
-    visibility: 'public',
-    industry: ['Retail', 'Consumer Products'],
-    lineOfBusiness: ['Sales', 'Marketing'],
-    releaseStatus: 'beta',
-    deprecationDate: '2025-12-31',
-    sunsetDate: '2026-06-30'
-};
+// AdminService with correct organizational standard annotations
+@title: 'Admin Service Data Product'
+@DataIntegration.dataProduct.type: 'primary'
+extend service AdminService {}
 
 annotate sap.capire.incidents.Customers with @ODM.entityName: 'Customers';
+annotate sap.capire.incidents.Customers with @EntityRelationship.entityType: 'sap.capire.incidents:Customers';
+
 annotate sap.capire.incidents.Addresses with @ODM.entityName: 'Addresses';
+annotate sap.capire.incidents.Addresses with @EntityRelationship.entityType: 'sap.capire.incidents:Addresses';
+
 annotate sap.capire.incidents.Incidents with @ODM.entityName: 'Incidents';
+annotate sap.capire.incidents.Incidents with @EntityRelationship.entityType: 'sap.capire.incidents:Incidents';
 
 @title : 'Entertainment Data Product'
 @DataIntegration.dataProduct.type: 'primary'

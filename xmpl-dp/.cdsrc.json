@@ -1,5 +1,6 @@
 {
     "dpd": {
+        "namespace": "xmpl-dp",
         "dataProducts": {
             "enabled": true
         }

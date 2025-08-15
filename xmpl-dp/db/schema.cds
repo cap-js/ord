@@ -3,6 +3,7 @@ namespace sap.cds.demo;
 @ODM.root                     : true
 @ODM.entityName               : 'Cinema'
 @ODM.oid                      : 'id'
+@EntityRelationship.entityType: 'customer.sample:Cinema'
 @title                        : 'Cinema Title'
 entity Cinema {
     key id : UUID;
@@ -11,6 +12,7 @@ entity Cinema {
 }
 
 @ObjectModel.compositionRoot  : true
+@ODM.entityName               : 'Movie'
 @EntityRelationship.entityType: 'customer.sample:Movie'
 @title                        : 'Movie Details'
 entity Movie {
@@ -23,6 +25,7 @@ entity Movie {
 }
 
 
+@ODM.entityName               : 'Show'
 @EntityRelationship.entityType: 'customer.sample:Show'
 @title                        : 'Show Details'
 entity Show {
