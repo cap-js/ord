@@ -1,0 +1,6 @@
+{
+    "ord": {
+        "description": "ORD configuration for Java sample.",
+        "enabled": true
+    }
+}
