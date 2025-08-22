@@ -29,8 +29,16 @@ const { Logger } = require("../../lib/logger");
 
 describe("visibility handling", () => {
     let loggerSpy;
+    let appConfig;
     beforeEach(() => {
         loggerSpy = jest.spyOn(Logger, "warn").mockImplementation(() => {});
+        appConfig = {
+            ordNamespace: "customer.testNamespace",
+            appName: "testAppName",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+            policyLevels: ["none"],
+            env: { defaultVisibility: "public" },
+        };
     });
     afterEach(() => {
         loggerSpy.mockRestore();
@@ -107,7 +115,44 @@ describe("visibility handling", () => {
         expect(_handleVisibility(ordExtensions, definition, "private")).toBe("private");
         expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("internal");
     });
+
+    it("returns undefined if ORD.Extensions.visibility is private", () => {
+        const serviceName = "customer.testNamespace.MyService";
+        const serviceDefinition = {
+            "name": serviceName,
+            "@ORD.Extensions.visibility": "private",
+        };
+        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
+        expect(group).toBeUndefined();
+    });
+
+    it("returns group object if ORD.Extensions.visibility is internal", () => {
+        const serviceName = "customer.testNamespace.MyService";
+        const serviceDefinition = {
+            "name": serviceName,
+            "@ORD.Extensions.visibility": "internal",
+        };
+        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
+        expect(group).toEqual({
+            groupId: "sap.cds:service:customer.testNamespace:MyService",
+            groupTypeId: "sap.cds:service",
+            title: "My Service",
+        });
+    });
+
+    it("returns group object if ORD.Extensions.visibility is not set", () => {
+        const serviceName = "customer.testNamespace.MyService";
+        const serviceDefinition = { name: serviceName };
+        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
+        expect(group).toEqual({
+            groupId: "sap.cds:service:customer.testNamespace:MyService",
+            groupTypeId: "sap.cds:service",
+            title: "My Service",
+        });
+    });
+    
 });
+
 describe("templates", () => {
     let linkedModel;
     let warningSpy;
