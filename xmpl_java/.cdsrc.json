@@ -16,11 +16,5 @@
                 "vendor": "sap:vendor:SAP:"
             }
         ]
-    },
-    "authentication": {
-        "types": ["basic"],
-        "credentials": {
-            "admin": "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"
-        }
     }
 }
