@@ -43,6 +43,12 @@
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>com.sap.cds</groupId>
+			<artifactId>cds-feature-ord</artifactId>
+			<version>${cds.services.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -114,6 +120,7 @@
 							<commands>
 								<command>build --for java</command>
 								<command>deploy --to h2 --with-mocks --dry --out "${project.basedir}/src/main/resources/schema-h2.sql"</command>
+								<command>compile --to ord srv -o "${project.basedir}/src/main/resources/ord/open-resource-discovery.json"</command>
 							</commands>
 						</configuration>
 					</execution>
