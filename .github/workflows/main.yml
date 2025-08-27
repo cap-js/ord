@@ -17,6 +17,11 @@ jobs:
               with:
                   node-version: 22
 
+            - name: Install dependencies and prepare documents
+              run: |
+                  npm install -g @sap/cds-dk
+                  npm install @sap/cds
+
             - name: Node.js Test
               run: |
                   npm i
@@ -31,5 +36,6 @@ jobs:
             - name: Build and test Java sample
               run: |
                   cd xmpl_java
+                  npm i
                   cds build --for ord
                   mvn clean test
