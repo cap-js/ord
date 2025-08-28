@@ -10,6 +10,7 @@
         "xmpl",
         "xmpl_java"
     ],
+    "main": "cds-plugin.js",
     "exports": {
         ".": {
             "require": "./lib/index.js",

@@ -29,7 +29,7 @@ jobs:
                       ${{ runner.os }}-node-
 
             - name: Install deps
-              run: npm ci
+              run: npm i
 
             - name: Run native ESM compatibility script
               run: node test/esm/esmCompatibility.mjs
