@@ -11,6 +11,7 @@
     },
     "rules": {
         "no-unused-vars": ["warn", { "argsIgnorePattern": "lazy" }],
-        "no-extra-semi": 1
+        "no-extra-semi": 1,
+        "no-console": "off"
     }
 }
