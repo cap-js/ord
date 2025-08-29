@@ -3,7 +3,6 @@ const path = require("path");
 const OrdBuildPlugin = require("../../lib/build");
 const { BUILD_DEFAULT_PATH } = require("../../lib/constants");
 const index = require("../../lib/index");
-const { build } = require("@sap/cds-dk");
 
 jest.mock("@sap/cds-dk", () => {
     return {
