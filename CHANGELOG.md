@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.3.8 (2025-09-01)
+
+## What's Changed
+
+- Feat: Setup Java sample
+- Feat: setup java pipeline
+- Fix: Support CommonJs
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.7...v1.3.8
+
 ## 1.3.7 (2025-08-19)
 
 ## What's Changed
