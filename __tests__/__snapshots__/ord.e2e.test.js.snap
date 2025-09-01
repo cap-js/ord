@@ -218,11 +218,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "title": "This is test AdminService title",
     },
     {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
-      "groupTypeId": "sap.cds:service",
-      "title": "This is test Catalog Service title",
-    },
-    {
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
@@ -506,11 +501,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "title": "This is test AdminService title",
     },
     {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
-      "groupTypeId": "sap.cds:service",
-      "title": "This is test Catalog Service title",
-    },
-    {
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
@@ -792,11 +782,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:AdminService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test AdminService title",
-    },
-    {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:CatalogService",
-      "groupTypeId": "sap.cds:service",
-      "title": "This is test Catalog Service title",
     },
     {
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
@@ -1557,11 +1542,6 @@ exports[`Tests for products and packages should not contain products property if
       "title": "This is test AdminService title",
     },
     {
-      "groupId": "sap.cds:service:customer.capirebookshopordsample:CatalogService",
-      "groupTypeId": "sap.cds:service",
-      "title": "This is test Catalog Service title",
-    },
-    {
       "groupId": "sap.cds:service:customer.capirebookshopordsample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
@@ -1778,11 +1758,6 @@ exports[`Tests for products and packages should raise error log when custom prod
       "groupId": "sap.cds:service:customer.capirebookshopordsample:AdminService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test AdminService title",
-    },
-    {
-      "groupId": "sap.cds:service:customer.capirebookshopordsample:CatalogService",
-      "groupTypeId": "sap.cds:service",
-      "title": "This is test Catalog Service title",
     },
     {
       "groupId": "sap.cds:service:customer.capirebookshopordsample:CinemaService",
@@ -2009,11 +1984,6 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "groupId": "sap.cds:service:customer.capirebookshopordsample:AdminService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test AdminService title",
-    },
-    {
-      "groupId": "sap.cds:service:customer.capirebookshopordsample:CatalogService",
-      "groupTypeId": "sap.cds:service",
-      "title": "This is test Catalog Service title",
     },
     {
       "groupId": "sap.cds:service:customer.capirebookshopordsample:CinemaService",
