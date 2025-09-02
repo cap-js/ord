@@ -82,6 +82,33 @@ describe("defaults", () => {
                     packages: [
                         {
                             vendor: "sap:vendor:SAP:",
+                            tags: ["custom"],
+                        },
+                    ],
+                },
+                policyLevels: ["policy"],
+            };
+            expect(defaults.packages(appConfig)).toMatchSnapshot();
+        });
+
+        it("should return only custom value if user definitions in .cdsrc.json are done correctly", () => {
+            appConfig = {
+                appName: testGetPackageDataName,
+                ordNamespace: testGetPackageOrdNamespace,
+                products: [
+                    {
+                        ordId: "customer:product:eb.bm.tests:",
+                        vendor: "sap:vendor:SAP:",
+                    },
+                ],
+                env: {
+                    packages: [
+                        {
+                            licenseType: "important license", // valid type
+                            runtimeRestriction: 4, // incorrect type
+                            industry: "Finance", // incorrect type
+                            labels: ["correct"], // valid type
+                            invalidKey: "should be removed", // invalid key
                         },
                     ],
                 },
