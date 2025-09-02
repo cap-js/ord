@@ -82,6 +82,7 @@ describe("defaults", () => {
                     packages: [
                         {
                             vendor: "sap:vendor:SAP:",
+                            tags: ["custom"],
                         },
                     ],
                 },

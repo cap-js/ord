@@ -60,6 +60,9 @@ exports[`defaults packages should return custom value if user defined in .cdsrc.
       "customer:product:eb.bm.tests:",
     ],
     "shortDescription": "Package containing public General",
+    "tags": [
+      "custom",
+    ],
     "title": "My Package",
     "vendor": "sap:vendor:SAP:",
     "version": "1.0.0",
