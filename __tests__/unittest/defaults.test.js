@@ -108,6 +108,7 @@ describe("defaults", () => {
                             runtimeRestriction: 4, // incorrect type
                             industry: "Finance", // incorrect type
                             labels: ["correct"], // valid type
+                            invalidKey: "should be removed", // invalid key
                         },
                     ],
                 },
