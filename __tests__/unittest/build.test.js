@@ -10,7 +10,7 @@ jest.mock("@sap/cds-dk", () => {
             Plugin: class {
                 constructor() {
                     this.task = {
-                        dest: "",
+                        dest: undefined,
                         src: null,
                     };
                 }
@@ -99,6 +99,14 @@ describe("Build", () => {
     });
 
     it("should set the task destination to gen/ord", () => {
+        const buildClass = new OrdBuildPlugin();
+        const customDest = "test";
+        buildClass.task.dest = customDest;
+        buildClass.init();
+        expect(buildClass.task.dest).toBe(customDest);
+    });
+
+    it("should set the task destination with custom dest", () => {
         const buildClass = new OrdBuildPlugin();
         buildClass.init();
         expect(buildClass.task.dest).toBe(cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH));
