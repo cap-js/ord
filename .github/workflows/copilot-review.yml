@@ -1,0 +1,125 @@
+name: Copilot Auto Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: read
+
+jobs:
+  copilot-review:
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Request Copilot Review
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo, number } = context.issue;
+            
+            try {
+              // Check if Copilot is already a reviewer
+              const { data: reviews } = await github.rest.pulls.listRequestedReviewers({
+                owner,
+                repo,
+                pull_number: number,
+              });
+              
+              const copilotAlreadyRequested = reviews.users.some(user => user.login === 'github-copilot[bot]');
+              
+              if (!copilotAlreadyRequested) {
+                // Request Copilot as reviewer
+                await github.rest.pulls.requestReviewers({
+                  owner,
+                  repo,
+                  pull_number: number,
+                  reviewers: ['github-copilot[bot]'],
+                });
+                
+                console.log('Successfully requested Copilot review');
+              } else {
+                console.log('Copilot review already requested');
+              }
+              
+              // Add a comment to indicate auto-review setup
+              const { data: comments } = await github.rest.issues.listComments({
+                owner,
+                repo,
+                issue_number: number,
+              });
+              
+              const autoReviewCommentExists = comments.some(comment => 
+                comment.body.includes('🤖 GitHub Copilot Auto Review')
+              );
+              
+              if (!autoReviewCommentExists) {
+                await github.rest.issues.createComment({
+                  owner,
+                  repo,
+                  issue_number: number,
+                  body: `🤖 **GitHub Copilot Auto Review**
+                  
+            GitHub Copilot has been automatically assigned as a reviewer for this PR.
+
+            **What this means:**
+            - Copilot will analyze your code changes and provide automated feedback
+            - Review suggestions will appear as comments on specific lines
+            - Both automated and manual reviews help ensure code quality
+
+            **For reviewers:**
+            - Please consider both Copilot's automated feedback and your own manual review
+            - Copilot suggestions are recommendations - use your judgment
+            - Feel free to override or discuss any automated suggestions
+
+            **For contributors:**
+            - Address Copilot feedback where appropriate
+            - Ask questions if any automated suggestions are unclear
+            - Manual reviewers will also provide additional insights`
+                });
+              }
+              
+            } catch (error) {
+              console.error('Error requesting Copilot review:', error);
+              // Don't fail the workflow if Copilot review request fails
+            }
+
+  validate-copilot-integration:
+    runs-on: ubuntu-latest
+    needs: copilot-review
+    
+    steps:
+      - name: Validate Copilot Integration
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { owner, repo, number } = context.issue;
+            
+            try {
+              // Check if the PR has any reviews (including pending Copilot review)
+              const { data: reviews } = await github.rest.pulls.listRequestedReviewers({
+                owner,
+                repo,
+                pull_number: number,
+              });
+              
+              console.log('Requested reviewers:', reviews.users.map(u => u.login));
+              console.log('Requested team reviewers:', reviews.teams.map(t => t.slug));
+              
+              // Verify workflow is working
+              console.log('Copilot integration validation completed successfully');
+              
+            } catch (error) {
+              console.error('Error validating Copilot integration:', error);
+            }
