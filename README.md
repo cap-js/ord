@@ -167,6 +167,45 @@ You can find more information, such as how to customize the ORD Document, in thi
 
 This project is open to feature requests/suggestions, bug reports etc. via [GitHub issues](https://github.com/cap-js/ord/issues). Contribution and feedback are encouraged and always welcome. For more information about how to contribute, the project structure, as well as additional contribution information, see our [Contribution Guidelines](CONTRIBUTING.md).
 
+### 🤖 Automated Code Review
+
+This repository uses **GitHub Copilot** as an automated reviewer to help maintain code quality and consistency. Here's what you need to know:
+
+#### For Contributors
+
+When you open a pull request:
+- **Automatic Assignment**: GitHub Copilot will be automatically assigned as a reviewer
+- **Automated Feedback**: You'll receive automated code review suggestions on your changes  
+- **Dual Review Process**: Your PR benefits from both automated (Copilot) and manual human review
+- **Address Suggestions**: Consider and address feedback from both automated and manual reviewers
+- **Ask Questions**: If automated suggestions are unclear, ask for clarification in the PR comments
+
+#### For Reviewers
+
+When reviewing pull requests:
+- **Review Copilot Feedback**: Consider any automated suggestions provided by Copilot
+- **Use Your Judgment**: Manual review takes precedence - override automated suggestions when appropriate
+- **Provide Human Context**: Add business logic and contextual insights that automated tools might miss
+- **Collaborative Review**: Work with both the contributor and automated feedback to ensure quality
+
+#### What Copilot Reviews
+
+The automated review process checks for:
+- **Code Quality**: Best practices, patterns, and maintainability
+- **Security**: Potential security vulnerabilities and concerns  
+- **Consistency**: Adherence to project coding standards and conventions
+- **Testing**: Suggestions for test coverage and quality improvements
+- **Documentation**: Recommendations for code comments and documentation
+
+#### Configuration
+
+The Copilot integration is configured through:
+- **Workflow**: `.github/workflows/copilot-review.yml` - Handles automatic assignment
+- **CODEOWNERS**: `.github/CODEOWNERS` - Defines review ownership including Copilot
+- **PR Template**: `.github/pull_request_template.md` - Guides contributors through the review process
+
+This automated review system helps maintain high code quality while supporting development velocity. Both automated and manual reviews are valuable for creating robust, maintainable code.
+
 ## Security / Disclosure
 
 If you find any bug that may be a security problem, please follow our instructions at [in our security policy](https://github.com/cap-js/ord/issues/security/policy) on how to report it. Please do not create GitHub issues for security-related doubts or problems.

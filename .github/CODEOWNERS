@@ -1,0 +1,33 @@
+# Global code owners for the ORD plugin repository
+# These users/teams will be automatically assigned as reviewers for all PRs
+
+# Main codebase - Core maintainers should always review
+* @cap-js/ord-maintainers
+
+# GitHub Copilot as automated reviewer for all code changes
+* @github-copilot[bot]
+
+# Specific file patterns for focused review
+*.js @github-copilot[bot]
+*.mjs @github-copilot[bot]
+*.json @github-copilot[bot]
+
+# Configuration files need careful review
+.github/workflows/* @cap-js/ord-maintainers @github-copilot[bot]
+package.json @cap-js/ord-maintainers @github-copilot[bot]
+.cdsrc.json @github-copilot[bot]
+
+# Documentation changes
+*.md @github-copilot[bot]
+docs/* @github-copilot[bot]
+
+# Test files for automated review
+__tests__/* @github-copilot[bot]
+*.test.js @github-copilot[bot]
+
+# Library files - core functionality
+lib/* @cap-js/ord-maintainers @github-copilot[bot]
+
+# Examples and samples
+xmpl/* @github-copilot[bot]
+xmpl_java/* @github-copilot[bot]

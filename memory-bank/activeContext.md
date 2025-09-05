@@ -4,6 +4,15 @@
 
 ### Recent Development Activity
 
+**Latest Development (Current)**:
+
+- **GitHub Copilot Integration**: Implemented automated code review using GitHub Copilot
+  - Added `copilot-review.yml` workflow for automatic reviewer assignment
+  - Created CODEOWNERS file to include Copilot as default reviewer
+  - Implemented PR template with automated review guidance
+  - Added comprehensive test suite for Copilot integration verification
+  - Updated README and created detailed integration documentation
+
 **Latest Release (v1.3.9 - September 2, 2025)**:
 
 - Fixed visibility handling for private resources (no group creation)
@@ -18,10 +27,11 @@
 
 ### Current Development Priorities
 
-1. **Java Runtime Support**: Expanding support for CAP Java applications
-2. **Visibility Management**: Refining resource visibility controls and group handling
-3. **Package Configuration**: Enhanced package attribute loading and customization
-4. **Authentication Evolution**: Preparing for UCL-mTLS authentication support
+1. **GitHub Copilot Integration**: Newly implemented automated code review system
+2. **Java Runtime Support**: Expanding support for CAP Java applications
+3. **Visibility Management**: Refining resource visibility controls and group handling
+4. **Package Configuration**: Enhanced package attribute loading and customization
+5. **Authentication Evolution**: Preparing for UCL-mTLS authentication support
 
 ## Active Decisions and Considerations
 
@@ -105,6 +115,13 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Efficient CSN model processing
 - Minimal memory footprint during generation
 - Progress reporting for long-running build operations
+
+**Code Review Process**:
+
+- Dual review system: automated (GitHub Copilot) + manual review
+- Automated quality checks for consistency, security, and best practices
+- Human reviewers focus on business logic and architectural decisions
+- Collaborative approach between automated and manual feedback
 
 ## Learnings and Project Insights
 
