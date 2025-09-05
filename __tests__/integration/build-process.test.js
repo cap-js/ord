@@ -1,7 +1,6 @@
 const fs = require("fs");
 const path = require("path");
 const { execSync } = require("child_process");
-const cds = require("@sap/cds");
 
 describe("Build Process Integration Tests", () => {
     let testProjectDir;
