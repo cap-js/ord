@@ -22,10 +22,17 @@ jobs:
                   npm install -g @sap/cds-dk
                   npm install @sap/cds
 
-            - name: Node.js Test
-              run: |
-                  npm i
-                  npm run test
+            - name: Install project dependencies
+              run: npm i
+
+            - name: Run Unit Tests
+              run: npm run test:unit
+
+            - name: Run Integration Tests
+              run: npm run test:integration
+
+            - name: Run All Tests with Coverage
+              run: npm run test:all
 
             - name: Set up JDK 21
               uses: actions/setup-java@v4
