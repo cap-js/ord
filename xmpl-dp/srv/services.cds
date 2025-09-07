@@ -3,7 +3,6 @@ using {
     ProcessorService,
     AdminService
 } from './incidents-services';
-using from './test-annotations';
 
 namespace sap.capire.incidents;
 
