@@ -1,0 +1,19 @@
+{
+  "allow": "*",
+  "allowedPrefixes": [],
+  "alias": {
+    "entities.include": "includeEntities",
+    "entities.exclude": "excludeEntities",
+    "columns.map": "columnMapping",
+    "types.map": "typeMapping",
+    "flags.includeManaged": "includeManaged",
+    "flags.includeVirtual": "includeVirtual",
+    "flags.includeComputed": "includeComputed"
+  },
+  "normalizers": {
+    "includeEntities": "arrayify",
+    "excludeEntities": "arrayify"
+  },
+  "schemaUrl": "https://raw.github.tools.sap/bdc-fos/dp-metadata/main/schemas/json/share-schema.json",
+  "schemaLocalFile": "share-schema.json"
+}

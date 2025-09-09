@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Share (minimal)",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "namespace": { "type": "string" },
+    "title": { "type": "string" },
+    "shortDescription": { "type": "string" },
+    "description": { "type": "string" },
+    "version": { "type": "string" },
+    "hdlfsSchemas": { "type": "array" },
+    "extensible": { "type": "object" }
+  },
+  "required": [
+    "name",
+    "namespace",
+    "title",
+    "shortDescription",
+    "description",
+    "version",
+    "hdlfsSchemas",
+    "extensible"
+  ],
+  "additionalProperties": true
+}

@@ -1,0 +1,9 @@
+{
+  "allow": "*",
+  "allowedPrefixes": [],
+  "alias": {},
+  "normalizers": {},
+  "schemaUrl": "https://raw.github.tools.sap/bdc-fos/dp-metadata/main/schemas/json/csn-document-schema.json",
+  "schemaLocalFile": "csn-document-schema.json"
+}
+

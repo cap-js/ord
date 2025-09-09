@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "CSN Document (minimal)",
+  "type": "object",
+  "properties": {
+    "definitions": { "type": "object" },
+    "meta": { "type": "object" }
+  },
+  "required": ["definitions", "meta"],
+  "additionalProperties": true
+}

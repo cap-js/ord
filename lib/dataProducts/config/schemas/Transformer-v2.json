@@ -1,0 +1,166 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Transformer Schema V2",
+  "x-version": "2.0.0",
+  "type": "object",
+  "additionalProperties": false,
+  "definitions": {
+    "Parameters": {
+      "type": "object",
+      "title": "Transformation parameters",
+      "additionalProperties": true,
+      "propertyNames": {
+        "pattern": "^(?! )(?!.* $)[a-z0-9_@A-Z]+$"
+      }
+    },
+    "Step": {
+      "type": "object",
+      "title": "Transformation Step",
+      "additionalProperties": false,
+      "propertyNames": {
+        "pattern": "^(?! )(?!.* $)[a-z][a-zA-Z0-9_]*$"
+      },
+      "properties": {
+        "libraries": {
+          "type": "array",
+          "items": {
+            "$ref": "SharedDefinitions-v2.json#/definitions/Library"
+          }
+        },
+        "stepType": {
+          "type": "string",
+          "default": "PROCODE",
+          "enum": [
+            "LOWCODE",
+            "PROCODE",
+            "PDW"
+          ]
+        },
+        "stepKey": {
+          "type": "string"
+        },
+        "packageName": {
+          "type": "string"
+        },
+        "packageVersion": {
+          "type": "string"
+        },
+        "entryPoint": {
+          "type": "string",
+          "default": "main"
+        },
+        "maxExecutionTimeMinutes": {
+          "type": "integer",
+          "description": "Maximum time in minutes that the transformation is allowed to run. If the transformation exceeds this time, its execution will be cancelled. Default: 720 minutes/12 hours",
+          "default": 720
+        },
+        "parameters": {
+          "$ref": "#/definitions/Parameters"
+        },
+        "sparkConfig": {
+          "$ref": "SharedDefinitions-v2.json#/definitions/SparkConfig"
+        },
+        "envConfig": {
+          "$ref": "SharedDefinitions-v2.json#/definitions/SparkEnvConfig"
+        },
+        "computeConfig": {
+          "$ref": "SharedDefinitions-v2.json#/definitions/SparkComputeConfig"
+        }
+      },
+      "required": [
+        "stepKey",
+        "packageName",
+        "packageVersion",
+        "entryPoint"
+      ]
+    }
+  },
+  "propertyNames": {
+    "pattern": "^(?! )(?!.* $)[a-z][a-zA-Z0-9_]*$"
+  },
+  "properties": {
+    "dpdType": {
+      "type": "string",
+      "enum": [
+        "sap.fos.transformer"
+      ]
+    },
+    "dpdVersion": {
+      "type": "string",
+      "description": "Major version of the DPD schema that this transformer is built upon",
+      "enum": [
+        "v2"
+      ]
+    },
+    "name": {
+      "type": "string",
+      "description": "Transformer name",
+      "pattern": "^(?! )(?!.* $)[a-zA-Z0-9-_]*$",
+      "minLength": 1,
+      "maxLength": 125
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^(?! )(?!.* $)[a-z0-9]+(?:[.][a-z0-9]+)*$",
+      "minLength": 1,
+      "maxLength": 117,
+      "description": "Transformer namespace",
+      "examples": [
+        "sap.s4.afc"
+      ]
+    },
+    "version": {
+      "type": "string",
+      "description": "Transformer version\nVersion number of transformer is not off importance at the current version. Please set it to 1.0.0 for now.\nWe will revise and update in the future.",
+      "pattern": "^(?! )(?!.* $)(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$",
+      "examples": [
+        "1.0.0"
+      ]
+    },
+    "unixCronScheduleInUTC": {
+      "type": "string"
+    },
+    "maxExecutionTimeMinutes": {
+      "type": "integer",
+      "description": "Maximum time in minutes that the transformation is allowed to run. If the transformation exceeds this time, its execution will be cancelled. Default: 720 minutes/12 hours",
+      "default": 720
+    },
+    "parameters": {
+      "$ref": "#/definitions/Parameters"
+    },
+    "sparkConfig": {
+      "$ref": "SharedDefinitions-v2.json#/definitions/SparkConfig"
+    },
+    "envConfig": {
+      "$ref": "SharedDefinitions-v2.json#/definitions/SparkEnvConfig"
+    },
+    "computeConfig": {
+      "$ref": "SharedDefinitions-v2.json#/definitions/SparkComputeConfig"
+    },
+    "libraries": {
+      "type": "array",
+      "items": {
+        "$ref": "SharedDefinitions-v2.json#/definitions/Library"
+      }
+    },
+    "steps": {
+      "type": "array",
+      "description": "Defines transformation steps applied by this transformer",
+      "items": {
+        "$ref": "#/definitions/Step"
+      },
+      "minItems": 1,
+      "maxItems": 1
+    }
+  },
+  "required": [
+    "dpdVersion",
+    "dpdType",
+    "name",
+    "namespace",
+    "version",
+    "unixCronScheduleInUTC",
+    "steps"
+  ]
+}
+

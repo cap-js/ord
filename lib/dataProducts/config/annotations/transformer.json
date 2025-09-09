@@ -1,0 +1,20 @@
+{
+  "allow": "*",
+  "allowedPrefixes": [
+    "spark."
+  ],
+  "alias": {
+    "packageName": "package",
+    "entryPoint": "entrypoint",
+    "spark.version": "sparkVersion",
+    "spark.packages": "packages",
+    "spark.driverMemory": "driverMemory",
+    "spark.executorMemory": "executorMemory",
+    "cron": "cronSchedule"
+  },
+  "normalizers": {
+    "packages": "arrayify"
+  },
+  "schemaUrl": "https://raw.github.tools.sap/bdc-fos/dp-metadata/main/schemas/json/v2/Transformer-v2.json",
+  "schemaLocalFile": "Transformer-v2.json"
+}

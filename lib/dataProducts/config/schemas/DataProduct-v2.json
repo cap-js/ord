@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Data Product v2 (minimal)",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "version": { "type": "string" },
+    "title": { "type": "string" },
+    "shortDescription": { "type": "string" },
+    "description": { "type": "string" },
+    "type": { "type": "string" },
+    "category": { "type": "string" },
+    "responsible": { "type": "string" },
+    "partOfPackage": { "type": "string" },
+    "shares": { "type": "array" }
+  },
+  "required": [
+    "name", "version", "title", "shortDescription", "description",
+    "type", "category", "responsible", "partOfPackage", "shares"
+  ],
+  "additionalProperties": true
+}
