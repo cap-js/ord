@@ -1,0 +1,20 @@
+{
+    "ord": {
+        "namespace": "customer.sample",
+        "description": "this is my custom description",
+        "policyLevels": ["sap:core:v1"],
+        "customOrdContentFile": "./ord/custom.ord.json",
+        "existingProductORDId": "sap:product:SAPServiceCloudV2:",
+        "products": [
+            {
+                "ordId": "customer:product:eb.bm.tests:",
+                "vendor": "sap:vendor:SAP:"
+            }
+        ],
+        "packages": [
+            {
+                "vendor": "sap:vendor:SAP:"
+            }
+        ]
+    }
+}

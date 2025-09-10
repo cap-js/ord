@@ -17,5 +17,7 @@
     "prettier.useEditorConfig": false,
     "[cds]": {
         "editor.defaultFormatter": "SAPSE.vscode-cds"
-    }
+    },
+    "java.compile.nullAnalysis.mode": "automatic",
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
