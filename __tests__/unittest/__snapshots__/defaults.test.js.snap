@@ -60,6 +60,9 @@ exports[`defaults packages should return custom value if user defined in .cdsrc.
       "customer:product:eb.bm.tests:",
     ],
     "shortDescription": "Package containing public General",
+    "tags": [
+      "custom",
+    ],
     "title": "My Package",
     "vendor": "sap:vendor:SAP:",
     "version": "1.0.0",
@@ -229,6 +232,26 @@ exports[`defaults packages should return default value if policyLevels does not 
 ]
 `;
 
+exports[`defaults packages should return only custom value if user definitions in .cdsrc.json are done correctly 1`] = `
+[
+  {
+    "description": "This package contains public General for My Package.",
+    "labels": [
+      "correct",
+    ],
+    "licenseType": "important license",
+    "ordId": "customer.sample:package:MyPackage:v1",
+    "partOfProducts": [
+      "customer:product:eb.bm.tests:",
+    ],
+    "shortDescription": "Package containing public General",
+    "title": "My Package",
+    "vendor": "customer:vendor:Customer:",
+    "version": "1.0.0",
+  },
+]
+`;
+
 exports[`defaults packages should use custom vendor if it defined in .cdsrc.json 1`] = `
 [
   {
@@ -286,7 +309,7 @@ exports[`defaults products should return default value 1`] = `
     "ordId": "customer:product:My.Product:",
     "shortDescription": "Short description of My Product",
     "title": "My Product",
-    "vendor": "customer:vendor:customer:",
+    "vendor": "customer:vendor:Customer:",
   },
 ]
 `;

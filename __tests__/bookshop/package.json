@@ -15,5 +15,12 @@
     },
     "scripts": {
         "start": "cds-serve"
+    },
+    "cds": {
+        "requires": {
+            "ExternalService": {
+                "model": "srv/external/ExternalService"
+            }
+        }
     }
 }

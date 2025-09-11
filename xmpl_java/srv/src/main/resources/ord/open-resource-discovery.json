@@ -1,0 +1,510 @@
+{
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
+  "openResourceDiscovery": "1.9",
+  "policyLevels": [
+    "sap:core:v1"
+  ],
+  "description": "this is my custom description",
+  "consumptionBundles": [
+    {
+      "ordId": "ordcds:consumptionBundle:noAuth:v1",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-27T09:57:32+01:00",
+      "title": "Unprotected resources",
+      "shortDescription": "If we have another protected API then it will be another object",
+      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication"
+    }
+  ],
+  "groups": [
+    {
+      "groupId": "sap.cds:service:customer.sample:CatalogService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Catalog Service"
+    },
+    {
+      "groupId": "sap.cds:service:customer.sample:ProcessorService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is Processor Service title"
+    },
+    {
+      "groupId": "sap.cds:service:customer.sample:AdminService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is Admin Service title"
+    },
+    {
+      "groupId": "sap.cds:service:customer.sample:sap.capire.incidents.LocalService",
+      "groupTypeId": "sap.cds:service",
+      "title": "This is Local Service title"
+    },
+    {
+      "groupId": "sap.cds:service:customer.sample:sap.capire.incidents.EntertainmentDataProduct",
+      "groupTypeId": "sap.cds:service",
+      "title": "EntertainmentDataProduct Service"
+    }
+  ],
+  "packages": [
+    {
+      "ordId": "customer.sample:package:ordcds-api:v1",
+      "title": "ord cds",
+      "shortDescription": "Package containing public APIs",
+      "description": "This package contains public APIs for ord cds.",
+      "version": "1.0.0",
+      "partOfProducts": [
+        "sap:product:SAPServiceCloudV2:"
+      ],
+      "vendor": "sap:vendor:SAP:"
+    },
+    {
+      "ordId": "customer.sample:package:ordcds-api-internal:v1",
+      "title": "ord cds",
+      "shortDescription": "Package containing internal APIs",
+      "description": "This package contains internal APIs for ord cds.",
+      "version": "1.0.0",
+      "partOfProducts": [
+        "sap:product:SAPServiceCloudV2:"
+      ],
+      "vendor": "sap:vendor:SAP:"
+    },
+    {
+      "ordId": "customer.sample:package:ordcds-event:v1",
+      "title": "ord cds",
+      "shortDescription": "Package containing public Events",
+      "description": "This package contains public Events for ord cds.",
+      "version": "1.0.0",
+      "partOfProducts": [
+        "sap:product:SAPServiceCloudV2:"
+      ],
+      "vendor": "sap:vendor:SAP:"
+    }
+  ],
+  "apiResources": [
+    {
+      "ordId": "customer.sample:apiResource:CatalogService:v1",
+      "title": "CatalogService",
+      "shortDescription": "Short description of CatalogService",
+      "description": "Description for CatalogService",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-27T09:57:32+01:00",
+      "visibility": "public",
+      "partOfPackage": "customer.sample:package:ordcds-api:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.sample:CatalogService"
+      ],
+      "releaseStatus": "active",
+      "apiProtocol": "odata-v4",
+      "resourceDefinitions": [
+        {
+          "type": "openapi-v3",
+          "mediaType": "application/json",
+          "url": "/ord/v1/customer.sample:apiResource:CatalogService:v1/CatalogService.oas3.json",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        },
+        {
+          "type": "edmx",
+          "mediaType": "application/xml",
+          "url": "/ord/v1/customer.sample:apiResource:CatalogService:v1/CatalogService.edmx",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        }
+      ],
+      "entryPoints": [
+        "/odata/v4/catalog"
+      ],
+      "extensible": {
+        "supported": "no"
+      }
+    },
+    {
+      "ordId": "customer.sample:apiResource:ProcessorService:v1",
+      "title": "This is Processor Service title",
+      "shortDescription": "short description for Processor Service",
+      "description": "Description for ProcessorService",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-27T09:57:32+01:00",
+      "visibility": "public",
+      "partOfPackage": "customer.sample:package:ordcds-api:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.sample:ProcessorService"
+      ],
+      "releaseStatus": "active",
+      "apiProtocol": "odata-v4",
+      "resourceDefinitions": [
+        {
+          "type": "openapi-v3",
+          "mediaType": "application/json",
+          "url": "/ord/v1/customer.sample:apiResource:ProcessorService:v1/ProcessorService.oas3.json",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        },
+        {
+          "type": "edmx",
+          "mediaType": "application/xml",
+          "url": "/ord/v1/customer.sample:apiResource:ProcessorService:v1/ProcessorService.edmx",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        }
+      ],
+      "entryPoints": [
+        "/odata/v4/processor"
+      ],
+      "extensible": {
+        "supported": "no"
+      },
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:Incidents:v1"
+            },
+            {
+              "ordId": "sap.odm:entityType:Customers:v1"
+            },
+            {
+              "ordId": "sap.odm:entityType:Addresses:v1"
+            }
+          ]
+        }
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:Incidents:v1"
+        },
+        {
+          "ordId": "sap.odm:entityType:Customers:v1"
+        },
+        {
+          "ordId": "sap.odm:entityType:Addresses:v1"
+        }
+      ]
+    },
+    {
+      "ordId": "customer.sample:apiResource:AdminService:v1",
+      "title": "This is Admin Service title",
+      "shortDescription": "Short description of AdminService",
+      "description": "Description for AdminService",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-27T09:57:32+01:00",
+      "visibility": "public",
+      "partOfPackage": "customer.sample:package:ordcds-api:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.sample:AdminService"
+      ],
+      "releaseStatus": "active",
+      "apiProtocol": "odata-v4",
+      "resourceDefinitions": [
+        {
+          "type": "openapi-v3",
+          "mediaType": "application/json",
+          "url": "/ord/v1/customer.sample:apiResource:AdminService:v1/AdminService.oas3.json",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        },
+        {
+          "type": "edmx",
+          "mediaType": "application/xml",
+          "url": "/ord/v1/customer.sample:apiResource:AdminService:v1/AdminService.edmx",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        }
+      ],
+      "entryPoints": [
+        "/odata/v4/admin"
+      ],
+      "extensible": {
+        "supported": "no"
+      },
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:Customers:v1"
+            },
+            {
+              "ordId": "sap.odm:entityType:Addresses:v1"
+            },
+            {
+              "ordId": "sap.odm:entityType:Incidents:v1"
+            }
+          ]
+        }
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:Customers:v1"
+        },
+        {
+          "ordId": "sap.odm:entityType:Addresses:v1"
+        },
+        {
+          "ordId": "sap.odm:entityType:Incidents:v1"
+        }
+      ],
+      "industry": [
+        "Retail",
+        "Consumer Products"
+      ],
+      "lineOfBusiness": [
+        "Sales"
+      ]
+    },
+    {
+      "ordId": "customer.sample:apiResource:sap.capire.incidents.LocalService:v1",
+      "title": "This is Local Service title",
+      "shortDescription": "Short description of sap.capire.incidents.LocalService",
+      "description": "Description for sap.capire.incidents.LocalService",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-27T09:57:32+01:00",
+      "visibility": "public",
+      "partOfPackage": "customer.sample:package:ordcds-api:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.sample:sap.capire.incidents.LocalService"
+      ],
+      "releaseStatus": "active",
+      "apiProtocol": "odata-v4",
+      "resourceDefinitions": [
+        {
+          "type": "openapi-v3",
+          "mediaType": "application/json",
+          "url": "/ord/v1/customer.sample:apiResource:sap.capire.incidents.LocalService:v1/sap.capire.incidents.LocalService.oas3.json",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        },
+        {
+          "type": "edmx",
+          "mediaType": "application/xml",
+          "url": "/ord/v1/customer.sample:apiResource:sap.capire.incidents.LocalService:v1/sap.capire.incidents.LocalService.edmx",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        }
+      ],
+      "entryPoints": [
+        "/odata/v4/local"
+      ],
+      "extensible": {
+        "supported": "no"
+      },
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:Cinema:v1"
+            },
+            {
+              "ordId": "customer.sample:entityType:Movie:v1"
+            },
+            {
+              "ordId": "customer.sample:entityType:Show:v1"
+            }
+          ]
+        }
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:Cinema:v1"
+        },
+        {
+          "ordId": "customer.sample:entityType:Movie:v1"
+        },
+        {
+          "ordId": "customer.sample:entityType:Show:v1"
+        }
+      ]
+    },
+    {
+      "ordId": "customer.sample:apiResource:sap.capire.incidents.EntertainmentDataProduct:v1",
+      "title": "Entertainment Data Product",
+      "shortDescription": "Short description of sap.capire.incidents.EntertainmentDataProduct",
+      "description": "Description for sap.capire.incidents.EntertainmentDataProduct",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-27T09:57:32+01:00",
+      "visibility": "internal",
+      "partOfPackage": "customer.sample:package:ordcds-api-internal:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.sample:sap.capire.incidents.EntertainmentDataProduct"
+      ],
+      "releaseStatus": "active",
+      "apiProtocol": "rest",
+      "resourceDefinitions": [
+        {
+          "type": "sap-csn-interop-effective-v1",
+          "mediaType": "application/json",
+          "url": "/ord/v1/customer.sample:apiResource:sap.capire.incidents.EntertainmentDataProduct:v1/sap.capire.incidents.EntertainmentDataProduct.csn.json",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        }
+      ],
+      "entryPoints": [],
+      "extensible": {
+        "supported": "no"
+      },
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:Cinema:v1"
+            },
+            {
+              "ordId": "customer.sample:entityType:Movie:v1"
+            },
+            {
+              "ordId": "customer.sample:entityType:Show:v1"
+            }
+          ]
+        }
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:Cinema:v1"
+        },
+        {
+          "ordId": "customer.sample:entityType:Movie:v1"
+        },
+        {
+          "ordId": "customer.sample:entityType:Show:v1"
+        }
+      ],
+      "direction": "outbound",
+      "implementationStandard": "sap.dp:data-subscription-api:v1"
+    }
+  ],
+  "eventResources": [
+    {
+      "ordId": "customer.sample:eventResource:sap.capire.incidents.LocalService:v1",
+      "title": "This is Local Service title",
+      "shortDescription": "sap.capire.incidents.LocalService event resource",
+      "description": "CAP Event resource describing events / messages.",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-27T09:57:32+01:00",
+      "releaseStatus": "active",
+      "partOfPackage": "customer.sample:package:ordcds-event:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.sample:sap.capire.incidents.LocalService"
+      ],
+      "visibility": "public",
+      "resourceDefinitions": [
+        {
+          "type": "asyncapi-v2",
+          "mediaType": "application/json",
+          "url": "/ord/v1/customer.sample:eventResource:sap.capire.incidents.LocalService:v1/sap.capire.incidents.LocalService.asyncapi2.json",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        }
+      ],
+      "extensible": {
+        "supported": "no"
+      },
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:Cinema:v1"
+            },
+            {
+              "ordId": "customer.sample:entityType:Movie:v1"
+            },
+            {
+              "ordId": "customer.sample:entityType:Show:v1"
+            }
+          ]
+        }
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:Cinema:v1"
+        },
+        {
+          "ordId": "customer.sample:entityType:Movie:v1"
+        },
+        {
+          "ordId": "customer.sample:entityType:Show:v1"
+        }
+      ]
+    },
+    {
+      "ordId": "customer.sample:eventResource:ProcessorService:v1",
+      "title": "This is Processor Service title",
+      "shortDescription": "short description for Processor Service",
+      "description": "CAP Event resource describing events / messages.",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-27T09:57:32+01:00",
+      "releaseStatus": "active",
+      "partOfPackage": "customer.sample:package:ordcds-event:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.sample:ProcessorService"
+      ],
+      "visibility": "public",
+      "resourceDefinitions": [
+        {
+          "type": "asyncapi-v2",
+          "mediaType": "application/json",
+          "url": "/ord/v1/customer.sample:eventResource:ProcessorService:v1/ProcessorService.asyncapi2.json",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        }
+      ],
+      "extensible": {
+        "supported": "no"
+      },
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:Incidents:v1"
+            },
+            {
+              "ordId": "sap.odm:entityType:Customers:v1"
+            },
+            {
+              "ordId": "sap.odm:entityType:Addresses:v1"
+            }
+          ]
+        }
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:Incidents:v1"
+        },
+        {
+          "ordId": "sap.odm:entityType:Customers:v1"
+        },
+        {
+          "ordId": "sap.odm:entityType:Addresses:v1"
+        }
+      ]
+    }
+  ]
+}

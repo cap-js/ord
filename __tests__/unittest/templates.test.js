@@ -5,6 +5,7 @@ const {
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_EXTENSIONS_PREFIX,
     RESOURCE_VISIBILITY,
+    ALLOWED_VISIBILITY,
 } = require("../../lib/constants");
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
@@ -19,8 +20,138 @@ const {
     createAPIResourceTemplate,
     createEventResourceTemplate,
     _getEntityTypeMappings,
+    _getExposedEntityTypes,
     _propagateORDVisibility,
+    _handleVisibility,
 } = require("../../lib/templates");
+
+const { Logger } = require("../../lib/logger");
+
+describe("visibility handling", () => {
+    let loggerSpy;
+    let appConfig;
+    beforeEach(() => {
+        loggerSpy = jest.spyOn(Logger, "warn").mockImplementation(() => {});
+        appConfig = {
+            ordNamespace: "customer.testNamespace",
+            appName: "testAppName",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+            policyLevels: ["none"],
+            env: { defaultVisibility: "public" },
+        };
+    });
+    afterEach(() => {
+        loggerSpy.mockRestore();
+    });
+
+    it("returns internal for primary data product service", () => {
+        const ordExtensions = {};
+        const definition = { "@DataIntegration.dataProduct.type": "primary" };
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.public)).toBe(
+            RESOURCE_VISIBILITY.internal,
+        );
+    });
+
+    it("returns extension visibility if present and valid", () => {
+        const ordExtensions = { visibility: "internal" };
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.public)).toBe("internal");
+    });
+
+    it("returns config value if valid", () => {
+        const ordExtensions = {};
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, "public")).toBe("public");
+    });
+
+    it("falls back to public and logs warning for invalid config value", () => {
+        const ordExtensions = {};
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, "notallowed")).toBe("public");
+
+        expect(loggerSpy).toHaveBeenCalledWith(
+            "Default visibility",
+            "notallowed",
+            "is not supported. Using",
+            RESOURCE_VISIBILITY.public,
+            "as fallback.",
+        );
+    });
+
+    it("returns public for implementationStandard sap:ord-document-api:v1", () => {
+        const ordExtensions = { implementationStandard: "sap:ord-document-api:v1" };
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, "private")).toBe("public");
+        expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("public");
+    });
+
+    it("returns definition[ORD_EXTENSIONS_PREFIX + visibility] if present", () => {
+        const ordExtensions = {};
+        const definition = { "@ORD.Extensions.visibility": "internal" };
+        expect(_handleVisibility(ordExtensions, definition, "public")).toBe("internal");
+    });
+
+    it("returns public if no visibility is defined", () => {
+        const ordExtensions = {};
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition)).toBe("public");
+    });
+
+    it("Allowed visibility values are respected", () => {
+        const ordExtensions = {};
+        const definition = {};
+        expect(ALLOWED_VISIBILITY).toContain(RESOURCE_VISIBILITY.public);
+        expect(ALLOWED_VISIBILITY).toContain(RESOURCE_VISIBILITY.internal);
+        expect(ALLOWED_VISIBILITY).toContain(RESOURCE_VISIBILITY.private);
+        // Test with all allowed visibility values
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.public)).toBe("public");
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.private)).toBe("private");
+        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.internal)).toBe("internal");
+    });
+
+    it("Does not use public visibility by deafult if implementationStandard is not in allowed values", () => {
+        const ordExtensions = { implementationStandard: "I-AM-NOT-A-STANDARD" };
+        const definition = {};
+        expect(_handleVisibility(ordExtensions, definition, "private")).toBe("private");
+        expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("internal");
+    });
+
+    it("returns undefined if ORD.Extensions.visibility is private", () => {
+        const serviceName = "customer.testNamespace.MyService";
+        const serviceDefinition = {
+            "name": serviceName,
+            "@ORD.Extensions.visibility": "private",
+        };
+        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
+        expect(group).toBeUndefined();
+    });
+
+    it("returns group object if ORD.Extensions.visibility is internal", () => {
+        const serviceName = "customer.testNamespace.MyService";
+        const serviceDefinition = {
+            "name": serviceName,
+            "@ORD.Extensions.visibility": "internal",
+        };
+        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
+        expect(group).toEqual({
+            groupId: "sap.cds:service:customer.testNamespace:MyService",
+            groupTypeId: "sap.cds:service",
+            title: "My Service",
+        });
+    });
+
+    it("returns group object if ORD.Extensions.visibility is not set", () => {
+        const serviceName = "customer.testNamespace.MyService";
+        const serviceDefinition = { name: serviceName };
+        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
+        expect(group).toEqual({
+            groupId: "sap.cds:service:customer.testNamespace:MyService",
+            groupTypeId: "sap.cds:service",
+            title: "My Service",
+        });
+    });
+    
+});
 
 describe("templates", () => {
     let linkedModel;
@@ -30,6 +161,7 @@ describe("templates", () => {
         ordNamespace: "customer.testNamespace",
         appName: "testAppName",
         lastUpdate: "2022-12-19T15:47:04+00:00",
+        policyLevels: ["none"],
     };
 
     beforeAll(() => {
@@ -82,9 +214,36 @@ describe("templates", () => {
             expect(entityType.version).toEqual("1.0.0");
             expect(entityType.level).toEqual("sub-entity");
         });
+
+        it("should not entity types with SAP policy level as entity types should then be added through a central registry and we must not create an overlap", () => {
+            const someEntity = {
+                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1",
+                entityName: "SomeAribaDummyEntity",
+            };
+            const appConfigWithSAPPolicy = {
+                ...appConfig,
+                policyLevels: ["sap:core:v1"],
+            };
+
+            const entityType = createEntityTypeTemplate(appConfigWithSAPPolicy, packageIds, someEntity);
+            expect(entityType).toEqual([]);
+        });
     });
 
     describe("createGroupsTemplateForService", () => {
+        let serviceDefinition;
+        beforeAll(() => {
+            const model = cds.linked(`
+                service testServiceName {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+            `);
+            serviceDefinition = model.definitions["testServiceName"];
+        });
+
         it("should return default value when groupIds do not have groupId", () => {
             const testServiceName = "testServiceName";
             const testResult = {
@@ -92,17 +251,17 @@ describe("templates", () => {
                 groupTypeId: "sap.cds:service",
                 title: "test Service",
             };
-            expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
+            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
         });
 
         it('should return default value with a proper Service title when "Service" keyword is missing', () => {
             const testServiceName = "testServName";
             const testResult = {
-                groupId: "sap.cds:service:customer.testNamespace:testServName",
+                groupId: "sap.cds:service:customer.testNamespace:testServiceName",
                 groupTypeId: "sap.cds:service",
                 title: "testServName Service",
             };
-            expect(createGroupsTemplateForService(testServiceName, linkedModel, appConfig)).toEqual(testResult);
+            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
         });
 
         it("should return undefined when no service definition", () => {
@@ -114,7 +273,15 @@ describe("templates", () => {
     describe("createAPIResourceTemplate", () => {
         it("should create API resource template correctly", () => {
             const serviceName = "MyService";
-            const srvDefinition = linkedModel;
+            const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+            const srvDefinition = model.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
@@ -149,7 +316,15 @@ describe("templates", () => {
     describe("createEventResourceTemplate", () => {
         it("should create event resource template correctly", () => {
             const serviceName = "MyService";
-            const srvDefinition = linkedModel;
+            const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+            const srvDefinition = model.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
@@ -159,7 +334,15 @@ describe("templates", () => {
 
         it("should create event resource template correctly with packageIds including namespace", () => {
             const serviceName = "MyService";
-            const srvDefinition = linkedModel;
+            const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+            const srvDefinition = model.definitions["MyService"];
             const packageIds = ["customer.testNamespace:package:test:v1"];
             expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
@@ -554,6 +737,20 @@ describe("templates", () => {
             serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.sm:Else:v2";
             serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.odm:Something";
             expect(_getEntityTypeMappings(serviceDefinition)).toMatchSnapshot();
+        });
+    });
+
+    describe("getExposedEntityTypes", () => {
+        it("should clean up duplicates", () => {
+            const serviceDefinition = {
+                entities: [{}, {}, {}],
+            };
+            serviceDefinition.entities[0][ORD_ODM_ENTITY_NAME_ANNOTATION] = "Something";
+            serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.sm:Else:v2";
+            serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.odm:Something";
+            const exposedEntityTypes = _getExposedEntityTypes(serviceDefinition);
+            expect(exposedEntityTypes).toMatchSnapshot();
+            expect(exposedEntityTypes.length).toEqual(2);
         });
     });
 

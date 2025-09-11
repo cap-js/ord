@@ -1,0 +1,91 @@
+{
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
+  "openResourceDiscovery": "1.9",
+  "policyLevels": [
+    "none"
+  ],
+  "description": "this is an application description",
+  "consumptionBundles": [
+    {
+      "ordId": "ordcds:consumptionBundle:noAuth:v1",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-21T12:50:32+01:00",
+      "title": "Unprotected resources",
+      "shortDescription": "If we have another protected API then it will be another object",
+      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication"
+    }
+  ],
+  "groups": [
+    {
+      "groupId": "sap.cds:service:customer.ordcds:CatalogService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Catalog Service"
+    }
+  ],
+  "products": [
+    {
+      "ordId": "customer:product:ord.cds:",
+      "title": "ord cds",
+      "shortDescription": "Short description of ord cds",
+      "vendor": "customer:vendor:Customer:"
+    }
+  ],
+  "packages": [
+    {
+      "ordId": "customer.ordcds:package:ordcds:v1",
+      "title": "ord cds",
+      "shortDescription": "Package containing public General",
+      "description": "This package contains public General for ord cds.",
+      "version": "1.0.0",
+      "partOfProducts": [
+        "customer:product:ord.cds:"
+      ],
+      "vendor": "customer:vendor:Customer:"
+    }
+  ],
+  "apiResources": [
+    {
+      "ordId": "customer.ordcds:apiResource:CatalogService:v1",
+      "title": "CatalogService",
+      "shortDescription": "Short description of CatalogService",
+      "description": "Description for CatalogService",
+      "version": "1.0.0",
+      "lastUpdate": "2025-08-21T12:50:32+01:00",
+      "visibility": "public",
+      "partOfPackage": "customer.ordcds:package:ordcds:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.ordcds:CatalogService"
+      ],
+      "releaseStatus": "active",
+      "apiProtocol": "odata-v4",
+      "resourceDefinitions": [
+        {
+          "type": "openapi-v3",
+          "mediaType": "application/json",
+          "url": "/ord/v1/customer.ordcds:apiResource:CatalogService:v1/CatalogService.oas3.json",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        },
+        {
+          "type": "edmx",
+          "mediaType": "application/xml",
+          "url": "/ord/v1/customer.ordcds:apiResource:CatalogService:v1/CatalogService.edmx",
+          "accessStrategies": [
+            {
+              "type": "open"
+            }
+          ]
+        }
+      ],
+      "entryPoints": [
+        "/odata/v4/catalog"
+      ],
+      "extensible": {
+        "supported": "no"
+      }
+    }
+  ]
+}

@@ -17,6 +17,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "entryPoints": [
         "/odata/v4/admin",
       ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -152,24 +157,6 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     },
   ],
   "description": "this is an application description",
-  "entityTypes": [
-    {
-      "description": "Description for odm.bookshop.Authors",
-      "extensible": {
-        "supported": "no",
-      },
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "level": "sub-entity",
-      "localId": "odm.bookshop.Authors",
-      "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
-      "releaseStatus": "active",
-      "shortDescription": "Short description of odm.bookshop.Authors",
-      "title": "odm.bookshop.Authors",
-      "version": "1.0.0",
-      "visibility": "public",
-    },
-  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -180,6 +167,11 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
           },
         ],
       },
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
       "extensible": {
         "supported": "yes",
       },
@@ -305,7 +297,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }
@@ -430,7 +422,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "ordId": "customer:product:capire.bookshop.ord.sample:",
       "shortDescription": "Short description of capire bookshop ord sample",
       "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:customer:",
+      "vendor": "customer:vendor:Customer:",
     },
   ],
 }
