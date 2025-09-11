@@ -1,5 +1,6 @@
 {
-  "allow": "*",
+  "allowlistMode": "dynamic",
+  "allowlist": ["*"],
   "allowedPrefixes": [],
   "alias": {
     "entities.include": "includeEntities",
