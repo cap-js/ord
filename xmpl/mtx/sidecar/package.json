@@ -5,7 +5,7 @@
         "@sap/cds": "^9",
         "@sap/cds-mtxs": "^3",
         "@sap/xssec": "^4",
-        "express": "^4"
+        "express": "^5.0.0"
     },
     "devDependencies": {
         "@cap-js/sqlite": "^2"
