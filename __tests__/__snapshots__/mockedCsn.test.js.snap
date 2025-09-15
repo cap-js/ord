@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Tests for ORD document generated out of mocked csn files Tests for ORD document when .cdsrc.json has no \`ord\` property Successfully create ORD Documents with no \`ord\` in .cdsrc.json 1`] = `
 {

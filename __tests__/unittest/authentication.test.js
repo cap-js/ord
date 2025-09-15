@@ -188,7 +188,7 @@ describe("authentication", () => {
             process.env.ORD_AUTH_TYPE = '["InvalidType"]';
             Logger.error = jest.fn();
 
-            expect(() => getAuthConfig()).toThrowError("Invalid authentication configuration");
+            expect(() => getAuthConfig()).toThrow("Invalid authentication configuration");
             expect(Logger.error).toHaveBeenCalledTimes(1);
         });
     });

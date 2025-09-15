@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`End-to-end test for ORD document Tests for default ORD document when .cdsrc.json is not present Successfully create ORD Documents with defaults 1`] = `
 {

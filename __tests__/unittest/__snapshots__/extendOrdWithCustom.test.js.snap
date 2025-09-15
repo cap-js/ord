@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`extendOrdWithCustom extendCustomORDContentIfExists should add new ord resources that are not supported by cap framework 1`] = `
 {
