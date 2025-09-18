@@ -4,7 +4,14 @@
 
 ### Recent Development Activity
 
-**Latest Completed Feature (September 5, 2025)**:
+**Latest Completed Feature (September 18, 2025)**:
+
+- ** MCP Integration Enhancement**:
+    - Enhanced MCP integration to work even when no regular API resources exist
+    - Added comprehensive MCP integration tests that verify both plugin available/unavailable scenarios
+    - Maintained backward compatibility and preserved all existing functionality
+
+**Previous Completed Feature (September 5, 2025)**:
 
 - **Version Suffix Handling for Data Products**: Implemented new pattern for CAP framework data products where service names with `.v1` or `.v2` suffixes result in ORD IDs like `:apiResource::v1` or `:v2` instead of `:apiResource:.v1:v1`
 - Added comprehensive version extraction logic with strict validation

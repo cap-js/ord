@@ -266,7 +266,7 @@ describe("Tests for products and packages", () => {
 });
 
 describe("Tests for eventResource and apiResource", () => {
-    let ord;
+    let ord, isMCPPluginAvailableMock;
 
     beforeAll(() => {
         process.env.DEBUG = "true";
@@ -275,6 +275,8 @@ describe("Tests for eventResource and apiResource", () => {
                 types: [AUTHENTICATION_TYPE.Open],
             },
         });
+        isMCPPluginAvailableMock = jest.spyOn(require("../lib/metaData"), "isMCPPluginAvailable");
+        isMCPPluginAvailableMock.mockReturnValue(false);
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
         cds.root = path.join(__dirname, "bookshop");
@@ -305,6 +307,21 @@ describe("Tests for eventResource and apiResource", () => {
         expect(document.apiResources).toBeUndefined();
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups[0].groupId).toEqual("sap.cds:service:customer.capirebookshopordsample:MyService");
+    });
+
+    it("should generate mcp apiResource mcp plugin is available", async () => {
+        isMCPPluginAvailableMock.mockReturnValue(true);
+        const linkedModel = cds.linked(`
+                service MyService {
+
+                    action   add(x : Integer, to : Integer) returns Integer;
+                }
+            `);
+
+        const document = ord(linkedModel);
+        expect(document.apiResources).toHaveLength(2);
+        const mcpResource = document.apiResources.find((resource) => resource.apiProtocol === "mcp");
+        expect(mcpResource).toMatchSnapshot();
     });
 
     it("should generate apiResource if actions in service", async () => {

@@ -2,6 +2,8 @@ const cds = require("@sap/cds");
 const { compile: openapi } = require("@cap-js/openapi");
 const { compile: asyncapi } = require("@cap-js/asyncapi");
 const { getMetadata } = require("../../lib/index");
+const metaData = require("../../lib/metaData");
+const { isMCPPluginAvailable } = metaData;
 const cdsc = require("@sap/cds-compiler/lib/main");
 
 jest.mock("@cap-js/openapi", () => ({
@@ -131,5 +133,23 @@ describe("metaData", () => {
         } catch (error) {
             expect(error.message).toBe("Edmx error");
         }
+    });
+
+    describe("isMCPPluginAvailable", () => {
+        test("should return true when MCP plugin is available", () => {
+            const result = isMCPPluginAvailable(() => {
+                return true;
+            });
+
+            expect(result).toBe(true);
+        });
+
+        test("should return false when MCP plugin is not available", () => {
+            const result = isMCPPluginAvailable(() => {
+                throw new Error("Cannot resolve module");
+            });
+
+            expect(result).toBe(false);
+        });
     });
 });
