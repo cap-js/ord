@@ -19,6 +19,7 @@ const {
     createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate,
+    createMCPAPIResourceTemplate,
     _getEntityTypeMappings,
     _getExposedEntityTypes,
     _propagateORDVisibility,
@@ -150,7 +151,6 @@ describe("visibility handling", () => {
             title: "My Service",
         });
     });
-    
 });
 
 describe("templates", () => {
@@ -345,6 +345,38 @@ describe("templates", () => {
             const srvDefinition = model.definitions["MyService"];
             const packageIds = ["customer.testNamespace:package:test:v1"];
             expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        });
+    });
+
+    describe("createMCPAPIResourceTemplate", () => {
+        it("should create MCP API resource template correctly", () => {
+            const packageIds = ["customer.testNamespace:package:api:v1"];
+            const accessStrategies = [{ type: "open" }];
+
+            const result = createMCPAPIResourceTemplate(appConfig, packageIds, accessStrategies);
+
+            expect(result).toEqual({
+                ordId: "customer.testNamespace:apiResource:mcp-server:v1",
+                title: "MCP Server for testAppName",
+                shortDescription: "This is the MCP server to interact with the testAppName",
+                description: "This is the MCP server to interact with the testAppName",
+                version: "1.0.0",
+                lastUpdate: "2022-12-19T15:47:04+00:00",
+                visibility: "public",
+                partOfPackage: "customer.testNamespace:package:api:v1",
+                releaseStatus: "active",
+                apiProtocol: "mcp",
+                resourceDefinitions: [
+                    {
+                        type: "custom",
+                        mediaType: "application/json",
+                        url: "/ord/v1/customer.testNamespace:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+                        accessStrategies: [{ type: "open" }],
+                    },
+                ],
+                entryPoints: [],
+                extensible: { supported: "no" },
+            });
         });
     });
 
