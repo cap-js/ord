@@ -70,7 +70,7 @@
 			<!-- JAVA VERSION -->
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.14.0</version>
+				<version>3.14.1</version>
 				<configuration>
 					<release>${jdk.version}</release>
 					<encoding>UTF-8</encoding>
