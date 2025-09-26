@@ -4,7 +4,7 @@
 
 ### Recent Development Activity
 
-**Latest Completed Feature (September 26, 2025)**:
+**Current Development (September 26, 2025)**:
 
 - **Dual Annotation Support for Data Products**: Enhanced data product service exposure to support both `@DataIntegration.dataProduct.type: 'primary'` and the simpler `@data.product` annotation
 - Either annotation is now sufficient to create data product ORD resources with full feature parity
@@ -14,7 +14,13 @@
 - Added comprehensive test coverage (36 new tests across multiple test suites)
 - Full backward compatibility maintained - no breaking changes
 
-**Previous Major Feature (September 5, 2025)**:
+**Recently Completed (September 18, 2025)**:
+
+- **MCP Integration Enhancement**: Enhanced MCP integration to work even when no regular API resources exist
+- Added comprehensive MCP integration tests that verify both plugin available/unavailable scenarios
+- Maintained backward compatibility and preserved all existing functionality
+
+**Previously Completed (September 5, 2025)**:
 
 - **Version Suffix Handling for Data Products**: Implemented new pattern for CAP framework data products where service names with `.v1` or `.v2` suffixes result in ORD IDs like `:apiResource::v1` or `:v2` instead of `:apiResource:.v1:v1`
 - Added comprehensive version extraction logic with strict validation
@@ -132,77 +138,24 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Minimal memory footprint during generation
 - Progress reporting for long-running build operations
 
-## Learnings and Project Insights
+## Key Learnings
 
-### Key Technical Insights
-
-**CSN Processing Complexity**:
-
-- CAP CSN models can be highly complex with nested relationships
-- Service definitions require careful analysis to extract ORD-relevant information
-- Entity relationships need proper mapping to ORD entity types
-- Event definitions require special handling for AsyncAPI integration
+### Current Implementation Insights
 
 **Data Product Annotation Handling**:
-
 - Dual annotation support requires careful precedence logic to avoid conflicts
 - `@DataIntegration.dataProduct.type: 'primary'` takes precedence over `@data.product` when both are present
-- Boolean coercion (using `!!`) is essential for consistent true/false returns from detection functions
-- Version suffix extraction applies to both annotation types seamlessly
 - Both annotations trigger identical ORD resource properties for consistency
 
-**Data Product Version Handling**:
-
-- Version suffix extraction requires strict pattern validation to avoid false positives
+**Version Suffix Processing**:
+- Version suffix extraction requires strict pattern validation (`/\.v(\d+)$/`)
 - Namespace processing must be applied to clean service names to prevent duplication
-- Semantic versioning conversion (v1 → 1.0.0) provides consistent version format
-- Feature must be scoped only to primary data products to maintain backward compatibility
+- Feature scoped only to primary data products to maintain backward compatibility
 
-**Authentication Challenges**:
-
-- Balancing security with ease of development
-- Environment variable configuration can be complex for teams
-- Basic authentication with bcrypt provides good security baseline
-- Future UCL-mTLS support will require significant architecture changes
-
-**Customization Balance**:
-
-- Users need extensive customization capabilities
-- Too much flexibility can break ORD compliance
-- Annotation-based customization provides good developer experience
-- Custom ORD content files offer maximum flexibility for advanced users
-
-### Integration Learnings
-
-**CAP Framework Integration**:
-
-- Plugin registration patterns work well with CAP's architecture
-- Build system integration requires careful handling of file generation
-- Service definition approach provides clean runtime API implementation
-- Compiler integration enables programmatic ORD generation
-
-**External Tool Integration**:
-
-- OpenAPI and AsyncAPI plugins provide essential resource definitions
-- EDMX generation maintains OData protocol compliance
-- Resource definition file generation requires careful path management
-- Cross-platform compatibility (Windows/Linux/macOS) needs attention
-
-### User Experience Insights
-
-**Developer Workflow**:
-
-- Zero-configuration approach works well for standard CAP applications
-- Annotation-based customization feels natural to CAP developers
-- Build integration provides familiar development experience
-- Runtime API endpoints enable dynamic discovery scenarios
-
-**Enterprise Requirements**:
-
-- Authentication is critical for production deployments
-- Visibility controls are essential for internal/external resource separation
-- Custom ORD content enables integration with enterprise catalogs
-- Performance at scale requires ongoing optimization
+**MCP Integration**:
+- Conditional API resource generation based on plugin availability
+- Comprehensive test coverage essential for optional feature scenarios
+- Backward compatibility maintained across integration scenarios
 
 ## Next Steps and Considerations
 
