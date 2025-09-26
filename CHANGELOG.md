@@ -4,6 +4,40 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.3.10 (2025-09-26)
+
+## What's Changed
+
+- Feat: use custom build dest by @zongqichen in https://github.com/cap-js/ord/pull/227
+- chore: Support vipe coding by @swennemers in https://github.com/cap-js/ord/pull/235
+- Configure Renovate by @renovate[bot] in https://github.com/cap-js/ord/pull/166
+- Update spring boot to v3.5.5 by @renovate[bot] in https://github.com/cap-js/ord/pull/243
+- Update dependency org.codehaus.mojo:flatten-maven-plugin to v1.7.2 by @renovate[bot] in https://github.com/cap-js/ord/pull/242
+- Update dependency node to v22 by @renovate[bot] in https://github.com/cap-js/ord/pull/255
+- Update dependency express to v5 by @renovate[bot] in https://github.com/cap-js/ord/pull/253
+- Update cds.services.version to v4.3.0 by @renovate[bot] in https://github.com/cap-js/ord/pull/246
+- Update actions/setup-node action to v5 by @renovate[bot] in https://github.com/cap-js/ord/pull/252
+- Update actions/setup-java action to v5 by @renovate[bot] in https://github.com/cap-js/ord/pull/251
+- Update schwma/parse-changelog-action action to v1.2.0 by @renovate[bot] in https://github.com/cap-js/ord/pull/249
+- Update dependency prettier to v3.6.2 by @renovate[bot] in https://github.com/cap-js/ord/pull/247
+- Update martinbeentjes/npm-get-version-action action to v1.3.1 by @renovate[bot] in https://github.com/cap-js/ord/pull/248
+- Update actions/checkout action to v5 by @renovate[bot] in https://github.com/cap-js/ord/pull/250
+- chore(deps): update dependency org.apache.maven.plugins:maven-surefire-plugin to v3.5.4 by @renovate[bot] in https://github.com/cap-js/ord/pull/256
+- feat: implement version suffix handling for data product services by @swennemers in https://github.com/cap-js/ord/pull/239
+- chore(deps): update dependency jest to v30 by @renovate[bot] in https://github.com/cap-js/ord/pull/257
+- Fix: remove old java xmpl files by @zongqichen in https://github.com/cap-js/ord/pull/258
+- fix(deps): update spring boot to v3.5.6 by @renovate[bot] in https://github.com/cap-js/ord/pull/261
+- fix(deps): update cds.services.version to v4.3.1 by @renovate[bot] in https://github.com/cap-js/ord/pull/259
+- chore(deps): update dependency org.codehaus.mojo:flatten-maven-plugin to v1.7.3 by @renovate[bot] in https://github.com/cap-js/ord/pull/262
+- chore(deps): update dependency org.apache.maven.plugins:maven-compiler-plugin to v3.14.1 by @renovate[bot] in https://github.com/cap-js/ord/pull/263
+- feat: add support for @data.product annotation for data product services by @swennemers in https://github.com/cap-js/ord/pull/264
+
+## New Contributors
+
+- @renovate[bot] made their first contribution in https://github.com/cap-js/ord/pull/166
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.9...v1.3.10
+
 ## 1.3.9 (2025-09-02)
 
 ## What's Changed
