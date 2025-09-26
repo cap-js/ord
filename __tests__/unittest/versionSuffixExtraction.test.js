@@ -1,5 +1,5 @@
 const { createAPIResourceTemplate } = require("../../lib/templates");
-const { DATA_PRODUCT_ANNOTATION, DATA_PRODUCT_TYPE } = require("../../lib/constants");
+const { DATA_PRODUCT_ANNOTATION, DATA_PRODUCT_SIMPLE_ANNOTATION, DATA_PRODUCT_TYPE } = require("../../lib/constants");
 
 describe("Version Suffix Extraction for Data Product Services", () => {
     const mockAppConfig = {
@@ -303,6 +303,113 @@ describe("Version Suffix Extraction for Data Product Services", () => {
             expect(result[0].resourceDefinitions[0].type).toBe("sap-csn-interop-effective-v1");
             expect(result[0].ordId).toBe("sap.test:apiResource:DataService:v2");
             expect(result[0].version).toBe("2.0.0");
+        });
+    });
+
+    describe("Tests with @data.product annotation", () => {
+        test("should handle .v1 suffix correctly with @data.product annotation", () => {
+            const serviceDefinition = {
+                name: "sap.test.DataService.v1",
+                [DATA_PRODUCT_SIMPLE_ANNOTATION]: true,
+            };
+
+            const result = createAPIResourceTemplate(
+                "DataService.v1",
+                serviceDefinition,
+                mockAppConfig,
+                mockPackageIds,
+                mockAccessStrategies,
+            );
+
+            expect(result).toHaveLength(1);
+            expect(result[0].ordId).toBe("sap.test:apiResource:DataService:v1");
+            expect(result[0].version).toBe("1.0.0");
+            expect(result[0].partOfGroups[0]).toBe("sap.cds:service:sap.test:DataService");
+            expect(result[0].apiProtocol).toBe("rest");
+            expect(result[0].direction).toBe("outbound");
+            expect(result[0].implementationStandard).toBe("sap.dp:data-subscription-api:v1");
+        });
+
+        test("should handle .v2 suffix correctly with @data.product annotation", () => {
+            const serviceDefinition = {
+                name: "sap.test.DataService.v2",
+                [DATA_PRODUCT_SIMPLE_ANNOTATION]: "yes",
+            };
+
+            const result = createAPIResourceTemplate(
+                "DataService.v2",
+                serviceDefinition,
+                mockAppConfig,
+                mockPackageIds,
+                mockAccessStrategies,
+            );
+
+            expect(result).toHaveLength(1);
+            expect(result[0].ordId).toBe("sap.test:apiResource:DataService:v2");
+            expect(result[0].version).toBe("2.0.0");
+            expect(result[0].partOfGroups[0]).toBe("sap.cds:service:sap.test:DataService");
+        });
+
+        test("should use current behavior when @data.product is false", () => {
+            const serviceDefinition = {
+                name: "sap.test.DataService.v2",
+                [DATA_PRODUCT_SIMPLE_ANNOTATION]: false,
+            };
+
+            const result = createAPIResourceTemplate(
+                "DataService.v2",
+                serviceDefinition,
+                mockAppConfig,
+                mockPackageIds,
+                mockAccessStrategies,
+            );
+
+            expect(result).toHaveLength(1);
+            expect(result[0].ordId).toBe("sap.test:apiResource:DataService.v2:v1");
+            expect(result[0].version).toBe("1.0.0");
+            expect(result[0].partOfGroups[0]).toBe("sap.cds:service:sap.test:DataService.v2");
+        });
+
+        test("should prioritize @DataIntegration.dataProduct.type over @data.product for version extraction", () => {
+            const serviceDefinition = {
+                name: "sap.test.DataService.v3",
+                [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                [DATA_PRODUCT_SIMPLE_ANNOTATION]: false,
+            };
+
+            const result = createAPIResourceTemplate(
+                "DataService.v3",
+                serviceDefinition,
+                mockAppConfig,
+                mockPackageIds,
+                mockAccessStrategies,
+            );
+
+            expect(result).toHaveLength(1);
+            expect(result[0].ordId).toBe("sap.test:apiResource:DataService:v3");
+            expect(result[0].version).toBe("3.0.0");
+            expect(result[0].partOfGroups[0]).toBe("sap.cds:service:sap.test:DataService");
+        });
+
+        test("should apply @data.product when @DataIntegration.dataProduct.type is not primary", () => {
+            const serviceDefinition = {
+                name: "sap.test.DataService.v2",
+                [DATA_PRODUCT_ANNOTATION]: "secondary",
+                [DATA_PRODUCT_SIMPLE_ANNOTATION]: true,
+            };
+
+            const result = createAPIResourceTemplate(
+                "DataService.v2",
+                serviceDefinition,
+                mockAppConfig,
+                mockPackageIds,
+                mockAccessStrategies,
+            );
+
+            expect(result).toHaveLength(1);
+            expect(result[0].ordId).toBe("sap.test:apiResource:DataService:v2");
+            expect(result[0].version).toBe("2.0.0");
+            expect(result[0].partOfGroups[0]).toBe("sap.cds:service:sap.test:DataService");
         });
     });
 });

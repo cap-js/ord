@@ -155,4 +155,41 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(document.apiResources).toHaveLength(1);
         });
     });
+
+    describe("Tests for ORD document when service is annotated with @data.product", () => {
+        test("Successfully create ORD Documents with @data.product annotation", () => {
+            const csn = require("./__mocks__/dataProductSimpleAnnotationCsn.json");
+            const document = ord(csn);
+
+            expect(document).not.toBeUndefined();
+            expect(document.apiResources).toHaveLength(1);
+            const dataProductApiResources = document.apiResources.filter(
+                (resource) => resource.implementationStandard === "sap.dp:data-subscription-api:v1",
+            );
+            expect(dataProductApiResources).toHaveLength(1);
+            expect(dataProductApiResources[0].resourceDefinitions).toHaveLength(1);
+            expect(dataProductApiResources[0].resourceDefinitions[0].type).toEqual("sap-csn-interop-effective-v1");
+            expect(dataProductApiResources[0].partOfPackage).toEqual(
+                "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+            );
+            expect(dataProductApiResources[0].visibility).toEqual("internal");
+            expect(dataProductApiResources[0].apiProtocol).toEqual("rest");
+            expect(dataProductApiResources[0].direction).toEqual("outbound");
+        });
+
+        test("Should not generate duplicate apiResources when the service is annotated with @data.product", () => {
+            const csn = require("./__mocks__/dataProductSimpleAnnotationCsn.json");
+            const document = ord(csn);
+            expect(document.apiResources).toHaveLength(1);
+        });
+
+        test("Should create event resources for @data.product annotated services", () => {
+            const csn = require("./__mocks__/dataProductSimpleAnnotationCsn.json");
+            const document = ord(csn);
+
+            expect(document).not.toBeUndefined();
+            expect(document.eventResources).toHaveLength(1);
+            expect(document.eventResources[0].visibility).toEqual("internal");
+        });
+    });
 });
