@@ -23,10 +23,8 @@ const {
     _getExposedEntityTypes,
     _propagateORDVisibility,
     _handleVisibility,
+    isPrimaryDataProductService,
 } = require("../../lib/templates");
-
-// Import the function directly for testing
-const { isPrimaryDataProductService } = require("../../lib/templates");
 
 const { Logger } = require("../../lib/logger");
 
