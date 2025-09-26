@@ -141,7 +141,31 @@
 
 ## What's Left to Build
 
-### Recently Completed (September 5, 2025) ✅
+### Recently Completed (September 26, 2025) ✅
+
+**Data Product APIs - Dual Annotation Support**:
+
+- ✅ Implemented support for `@data.product` annotation alongside existing `@DataIntegration.dataProduct.type: 'primary'`
+- ✅ Either annotation is now sufficient to create data product ORD resources with full feature parity
+- ✅ Added precedence logic: `@DataIntegration.dataProduct.type: 'primary'` takes priority when both annotations are present
+- ✅ Services with `@data.product` (truthy values) get all data product ORD properties:
+    - `implementationStandard: "sap.dp:data-subscription-api:v1"`
+    - `apiProtocol: "rest"`
+    - `direction: "outbound"`
+    - `visibility: "internal"` (default)
+    - CSN resource definitions instead of OpenAPI/EDMX
+    - Version suffix extraction support
+- ✅ Enhanced `isPrimaryDataProductService` function with proper boolean return values
+- ✅ Added new constant `DATA_PRODUCT_SIMPLE_ANNOTATION = "@data.product"` to constants.js
+- ✅ Created comprehensive test coverage (36 new tests):
+    - New mock CSN data (`dataProductSimpleAnnotationCsn.json`)
+    - Updated mockedCsn.test.js with `@data.product` test cases
+    - Added dedicated unit tests in templates.test.js for `isPrimaryDataProductService`
+    - Enhanced version suffix extraction tests with dual annotation scenarios
+- ✅ Full backward compatibility maintained - no breaking changes
+- ✅ All tests passing (180 total tests, 14 test suites, 97.43% code coverage)
+
+### Previously Completed (September 5, 2025) ✅
 
 **Data Product APIs - Version Suffix Handling**:
 

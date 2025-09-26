@@ -4,7 +4,17 @@
 
 ### Recent Development Activity
 
-**Latest Completed Feature (September 5, 2025)**:
+**Latest Completed Feature (September 26, 2025)**:
+
+- **Dual Annotation Support for Data Products**: Enhanced data product service exposure to support both `@DataIntegration.dataProduct.type: 'primary'` and the simpler `@data.product` annotation
+- Either annotation is now sufficient to create data product ORD resources with full feature parity
+- `@DataIntegration.dataProduct.type: 'primary'` takes precedence when both annotations are present
+- Services with `@data.product` (truthy values) get same ORD properties: `sap.dp:data-subscription-api:v1`, REST protocol, outbound direction, internal visibility
+- Enhanced `isPrimaryDataProductService` function to handle both annotation patterns
+- Added comprehensive test coverage (36 new tests across multiple test suites)
+- Full backward compatibility maintained - no breaking changes
+
+**Previous Major Feature (September 5, 2025)**:
 
 - **Version Suffix Handling for Data Products**: Implemented new pattern for CAP framework data products where service names with `.v1` or `.v2` suffixes result in ORD IDs like `:apiResource::v1` or `:v2` instead of `:apiResource:.v1:v1`
 - Added comprehensive version extraction logic with strict validation
@@ -132,6 +142,14 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Service definitions require careful analysis to extract ORD-relevant information
 - Entity relationships need proper mapping to ORD entity types
 - Event definitions require special handling for AsyncAPI integration
+
+**Data Product Annotation Handling**:
+
+- Dual annotation support requires careful precedence logic to avoid conflicts
+- `@DataIntegration.dataProduct.type: 'primary'` takes precedence over `@data.product` when both are present
+- Boolean coercion (using `!!`) is essential for consistent true/false returns from detection functions
+- Version suffix extraction applies to both annotation types seamlessly
+- Both annotations trigger identical ORD resource properties for consistency
 
 **Data Product Version Handling**:
 

@@ -1,0 +1,119 @@
+{
+    "namespace": "sap.capire.incidents",
+    "definitions": {
+        "sap.capire.incidents.SimpleDataService": {
+            "kind": "service",
+            "@AsyncAPI.Title": "SAP Simple Data Product",
+            "@AsyncAPI.SchemaVersion": "1.0",
+            "@ORD.Extensions.title": "This is Simple Data Service title",
+            "@data.product": true
+        },
+        "sap.capire.incidents.SimpleDataService.Product": {
+            "kind": "entity",
+            "@ODM.root": true,
+            "@ODM.entityName": "Product",
+            "@ODM.oid": "id",
+            "@title": "Product Title",
+            "projection": {
+                "from": {
+                    "ref": ["sap.cds.demo.Product"]
+                }
+            },
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "name": {
+                    "type": "cds.String",
+                    "length": 100
+                },
+                "description": {
+                    "type": "cds.String",
+                    "length": 500
+                }
+            }
+        },
+        "sap.capire.incidents.SimpleDataService.Category": {
+            "kind": "entity",
+            "@ObjectModel.compositionRoot": true,
+            "@EntityRelationship.entityType": "sap.sample:Category",
+            "@title": "Category Title",
+            "projection": {
+                "from": {
+                    "ref": ["sap.cds.demo.Category"]
+                }
+            },
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "name": {
+                    "type": "cds.String",
+                    "length": 50
+                },
+                "parentId": {
+                    "type": "cds.UUID"
+                }
+            }
+        },
+        "sap.capire.incidents.SimpleDataService.DataChange": {
+            "kind": "event",
+            "elements": {
+                "ID": {
+                    "type": "cds.Integer"
+                },
+                "changeType": {
+                    "@title": "Change Type",
+                    "type": "cds.String"
+                }
+            }
+        },
+        "sap.cds.demo.Product": {
+            "kind": "entity",
+            "@ODM.root": true,
+            "@ODM.entityName": "Product",
+            "@ODM.oid": "id",
+            "@title": "Product Title",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "name": {
+                    "type": "cds.String",
+                    "length": 100
+                },
+                "description": {
+                    "type": "cds.String",
+                    "length": 500
+                }
+            }
+        },
+        "sap.cds.demo.Category": {
+            "kind": "entity",
+            "@ObjectModel.compositionRoot": true,
+            "@EntityRelationship.entityType": "sap.sample:Category",
+            "@title": "Category Title",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "name": {
+                    "type": "cds.String",
+                    "length": 50
+                },
+                "parentId": {
+                    "type": "cds.UUID"
+                }
+            }
+        }
+    },
+    "meta": {
+        "creator": "CDS Compiler v5.4.4",
+        "flavor": "inferred"
+    },
+    "$version": "2.0"
+}
