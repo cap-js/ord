@@ -5,3 +5,16 @@ spring:
   sql.init.platform: h2
 cds:
   data-source.auto-config.enabled: false
+  security:
+    authentication:
+      mode: mock
+    mock:
+      enabled: true
+      users:
+        - name: ord-internal
+          password: ""
+          roles: []
+          internalUser: true
+        - name: user
+          password: password
+          roles: []

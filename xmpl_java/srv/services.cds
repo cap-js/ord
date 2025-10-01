@@ -6,6 +6,9 @@ using {
 
 namespace sap.capire.incidents;
 
+annotate ProcessorService with @requires: 'any';
+annotate AdminService with @requires: 'any';
+
 annotate ProcessorService with @ORD.Extensions: {
     title           : 'This is Processor Service title',
     shortDescription: 'short description for Processor Service',
@@ -24,7 +27,7 @@ extend service ProcessorService {
 
 @AsyncAPI.Title        : 'SAP Incident Management'
 @AsyncAPI.SchemaVersion: '1.0'
-service LocalService {
+service LocalService @(requires: 'any') {
     entity Entertainment as projection on my.Cinema;
     entity Film          as projection on my.Movie;
 
@@ -51,7 +54,7 @@ annotate sap.capire.incidents.Incidents with @ODM.entityName: 'Incidents';
 
 @title                           : 'Entertainment Data Product'
 @DataIntegration.dataProduct.type: 'primary'
-service EntertainmentDataProduct {
+service EntertainmentDataProduct @(requires: 'any') {
 
     entity Cinema as projection on my.Cinema;
     entity Film   as projection on my.Movie;

@@ -9,7 +9,7 @@
     {
       "ordId": "ordcds:consumptionBundle:noAuth:v1",
       "version": "1.0.0",
-      "lastUpdate": "2025-09-16T13:15:18+01:00",
+      "lastUpdate": "2025-10-01T13:39:37+01:00",
       "title": "Unprotected resources",
       "shortDescription": "If we have another protected API then it will be another object",
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication"
@@ -84,7 +84,7 @@
       "shortDescription": "Short description of CatalogService",
       "description": "Description for CatalogService",
       "version": "1.0.0",
-      "lastUpdate": "2025-09-16T13:15:18+01:00",
+      "lastUpdate": "2025-10-01T13:39:37+01:00",
       "visibility": "public",
       "partOfPackage": "customer.sample:package:ordcds-api:v1",
       "partOfGroups": [
@@ -127,7 +127,7 @@
       "shortDescription": "short description for Processor Service",
       "description": "Description for ProcessorService",
       "version": "1.0.0",
-      "lastUpdate": "2025-09-16T13:15:18+01:00",
+      "lastUpdate": "2025-10-01T13:39:37+01:00",
       "visibility": "public",
       "partOfPackage": "customer.sample:package:ordcds-api:v1",
       "partOfGroups": [
@@ -196,7 +196,7 @@
       "shortDescription": "Short description of AdminService",
       "description": "Description for AdminService",
       "version": "1.0.0",
-      "lastUpdate": "2025-09-16T13:15:18+01:00",
+      "lastUpdate": "2025-10-01T13:39:37+01:00",
       "visibility": "public",
       "partOfPackage": "customer.sample:package:ordcds-api:v1",
       "partOfGroups": [
@@ -272,7 +272,7 @@
       "shortDescription": "Short description of sap.capire.incidents.LocalService",
       "description": "Description for sap.capire.incidents.LocalService",
       "version": "1.0.0",
-      "lastUpdate": "2025-09-16T13:15:18+01:00",
+      "lastUpdate": "2025-10-01T13:39:37+01:00",
       "visibility": "public",
       "partOfPackage": "customer.sample:package:ordcds-api:v1",
       "partOfGroups": [
@@ -341,7 +341,7 @@
       "shortDescription": "Short description of sap.capire.incidents.EntertainmentDataProduct",
       "description": "Description for sap.capire.incidents.EntertainmentDataProduct",
       "version": "1.0.0",
-      "lastUpdate": "2025-09-16T13:15:18+01:00",
+      "lastUpdate": "2025-10-01T13:39:37+01:00",
       "visibility": "internal",
       "partOfPackage": "customer.sample:package:ordcds-api-internal:v1",
       "partOfGroups": [
@@ -402,7 +402,7 @@
       "shortDescription": "sap.capire.incidents.LocalService event resource",
       "description": "CAP Event resource describing events / messages.",
       "version": "1.0.0",
-      "lastUpdate": "2025-09-16T13:15:18+01:00",
+      "lastUpdate": "2025-10-01T13:39:37+01:00",
       "releaseStatus": "active",
       "partOfPackage": "customer.sample:package:ordcds-event:v1",
       "partOfGroups": [
@@ -457,7 +457,7 @@
       "shortDescription": "short description for Processor Service",
       "description": "CAP Event resource describing events / messages.",
       "version": "1.0.0",
-      "lastUpdate": "2025-09-16T13:15:18+01:00",
+      "lastUpdate": "2025-10-01T13:39:37+01:00",
       "releaseStatus": "active",
       "partOfPackage": "customer.sample:package:ordcds-event:v1",
       "partOfGroups": [
