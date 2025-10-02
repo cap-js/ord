@@ -1196,6 +1196,35 @@ exports[`Tests for eventResource and apiResource should exclude external service
       "title": "My Service",
     },
   ],
+  "integrationDependencies": [
+    {
+      "aspects": [
+        {
+          "apiResources": [],
+          "description": "Consumes events and/or APIs from external service ExternalService",
+          "eventResources": [],
+          "mandatory": true,
+          "supportMultipleProviders": false,
+          "title": "External Service Consumption",
+        },
+      ],
+      "description": "Integration dependency for consuming external service ExternalService",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:integrationDependency:ExternalService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:ExternalService",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Integration dependency for ExternalService",
+      "title": "ExternalService Integration Dependency",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "openResourceDiscovery": "1.9",
   "packages": [
     {
