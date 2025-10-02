@@ -141,11 +141,44 @@
 
 ## What's Left to Build
 
+### Recently Completed (September 26, 2025) ✅
+
+**Data Product APIs - Dual Annotation Support**:
+
+- ✅ Implemented support for `@data.product` annotation alongside existing `@DataIntegration.dataProduct.type: 'primary'`
+- ✅ Either annotation is now sufficient to create data product ORD resources with full feature parity
+- ✅ Added precedence logic: `@DataIntegration.dataProduct.type: 'primary'` takes priority when both annotations are present
+- ✅ Services with `@data.product` (truthy values) get all data product ORD properties:
+    - `implementationStandard: "sap.dp:data-subscription-api:v1"`
+    - `apiProtocol: "rest"`
+    - `direction: "outbound"`
+    - `visibility: "internal"` (default)
+    - CSN resource definitions instead of OpenAPI/EDMX
+    - Version suffix extraction support
+- ✅ Enhanced `isPrimaryDataProductService` function with proper boolean return values
+- ✅ Added new constant `DATA_PRODUCT_SIMPLE_ANNOTATION = "@data.product"` to constants.js
+- ✅ Created comprehensive test coverage (36 new tests):
+    - New mock CSN data (`dataProductSimpleAnnotationCsn.json`)
+    - Updated mockedCsn.test.js with `@data.product` test cases
+    - Added dedicated unit tests in templates.test.js for `isPrimaryDataProductService`
+    - Enhanced version suffix extraction tests with dual annotation scenarios
+- ✅ Full backward compatibility maintained - no breaking changes
+- ✅ All tests passing (180 total tests, 14 test suites, 97.43% code coverage)
+
+### Previously Completed (September 5, 2025) ✅
+
+**Data Product APIs - Version Suffix Handling**:
+
+- ✅ Implemented new pattern for CAP data product services with version suffixes
+- ✅ Service names with `.v1` or `.v2` suffixes now generate clean ORD IDs (`:apiResource:ServiceName:v1` instead of `:apiResource:ServiceName.v1:v1`)
+- ✅ Added strict regex validation (`/\.v(\d+)$/`) for version extraction
+- ✅ Fixed namespace processing to prevent ORD ID duplication
+- ✅ Scoped feature to primary data products only (`@DataIntegration.dataProduct.type: "primary"`)
+- ✅ Maintained full backward compatibility for all existing services
+- ✅ Created comprehensive test suite with 14 test cases covering all scenarios
+- ✅ All tests passing (163 total tests, 14 test suites)
+
 ### Immediate Development (Next Release)
-
-**Data Product APIs - Version Suffix handling**
-
-- CAP introduced a new pattern for data product related CDS services, that CDS service names that are suffixed with `.v1` or `.v2` will take the `.v1` version as major version and remove this suffix for the ORD-ID generation to avoid a duplicated version suffix in the ORD-ID (avoid `<namespace>:apiResource:<serviceName>.v1:v1`, but have it as `<namespace>:apiResource:<serviceName>:v1`).
 
 **MCP API exposure** 🔄:
 

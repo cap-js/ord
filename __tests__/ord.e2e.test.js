@@ -49,7 +49,7 @@ describe("End-to-end test for ORD document", () => {
 
         test("Exception thrown while package.json not found", () => {
             cds.root = path.join(__dirname, "folderWithNoPackageJson");
-            expect(() => ord(csn)).toThrowError("package.json not found in the project root directory");
+            expect(() => ord(csn)).toThrow("package.json not found in the project root directory");
         });
 
         describe("apiResources", () => {
