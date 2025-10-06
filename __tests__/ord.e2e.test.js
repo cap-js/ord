@@ -5,6 +5,7 @@ const { AUTHENTICATION_TYPE, CDS_ELEMENT_KIND } = require("../lib/constants");
 describe("End-to-end test for ORD document", () => {
     beforeAll(() => {
         process.env.DEBUG = "true";
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         jest.spyOn(cds, "context", "get").mockReturnValue({
             authConfig: {
                 types: [AUTHENTICATION_TYPE.Open],
@@ -23,7 +24,6 @@ describe("End-to-end test for ORD document", () => {
         beforeAll(async () => {
             cds.root = path.join(__dirname, "bookshop");
             csn = await cds.load(path.join(cds.root, "srv"));
-            jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             ord = require("../lib/ord");
         });
 
@@ -275,8 +275,6 @@ describe("Tests for eventResource and apiResource", () => {
                 types: [AUTHENTICATION_TYPE.Open],
             },
         });
-        isMCPPluginAvailableMock = jest.spyOn(require("../lib/metaData"), "isMCPPluginAvailable");
-        isMCPPluginAvailableMock.mockReturnValue(false);
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
         cds.root = path.join(__dirname, "bookshop");
@@ -310,15 +308,24 @@ describe("Tests for eventResource and apiResource", () => {
     });
 
     it("should generate mcp apiResource mcp plugin is available", async () => {
-        isMCPPluginAvailableMock.mockReturnValue(true);
+        let ordWithMCP;
+        jest.isolateModules(() => {
+            jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../lib/metaData"), "isMCPPluginAvailable").mockReturnValue(true);
+            jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
+                authConfig: { types: [AUTHENTICATION_TYPE.Open] },
+            });
+            ordWithMCP = require("../lib/ord");
+        });
+
         const linkedModel = cds.linked(`
                 service MyService {
-
-                    action   add(x : Integer, to : Integer) returns Integer;
+                    action add(x : Integer, to : Integer) returns Integer;
                 }
             `);
 
-        const document = ord(linkedModel);
+        const document = ordWithMCP(linkedModel);
+
         expect(document.apiResources).toHaveLength(2);
         const mcpResource = document.apiResources.find((resource) => resource.apiProtocol === "mcp");
         expect(mcpResource).toMatchSnapshot();

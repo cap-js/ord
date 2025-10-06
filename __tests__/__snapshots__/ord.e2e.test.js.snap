@@ -1349,6 +1349,33 @@ exports[`Tests for eventResource and apiResource should exclude service when it 
 }
 `;
 
+exports[`Tests for eventResource and apiResource should generate mcp apiResource mcp plugin is available 1`] = `
+{
+  "apiProtocol": "mcp",
+  "description": "This is the MCP server to interact with the cap-js-ord",
+  "entryPoints": [],
+  "extensible": {
+    "supported": "no",
+  },
+  "lastUpdate": "2024-11-04T14:33:25+01:00",
+  "ordId": "customer.capjsord:apiResource:mcp-server:v1",
+  "partOfPackage": "customer.capjsord:package:capjsord:v1",
+  "releaseStatus": "active",
+  "resourceDefinitions": [
+    {
+      "accessStrategies": undefined,
+      "mediaType": "application/json",
+      "type": "custom",
+      "url": "/ord/v1/customer.capjsord:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+    },
+  ],
+  "shortDescription": "This is the MCP server to interact with the cap-js-ord",
+  "title": "MCP Server for cap-js-ord",
+  "version": "1.0.0",
+  "visibility": "public",
+}
+`;
+
 exports[`Tests for products and packages should not contain products property if existingProductId provided 1`] = `
 {
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
