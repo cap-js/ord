@@ -265,6 +265,44 @@ describe("Tests for products and packages", () => {
     });
 });
 
+
+
+
+describe("Tests for Data Product definition", () => {
+    let csn, ord, errorSpy;
+
+    beforeAll(async () => {
+        process.env.DEBUG = "true";
+        jest.spyOn(cds, "context", "get").mockReturnValue({
+            authConfig: {
+                types: [AUTHENTICATION_TYPE.Open],
+            },
+        });
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
+        cds.root = path.join(__dirname, "bookshop");
+        errorSpy = jest.spyOn(console, "error");
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.clearAllMocks();
+        jest.resetAllMocks();
+    });
+
+    it("Check interop CSN", async () => {
+      let foo = 'foo'
+      expect(foo).toBe('foo');
+    });
+
+});
+
+
+
+
 describe("Tests for eventResource and apiResource", () => {
     let ord;
 
