@@ -266,7 +266,7 @@ describe("Tests for products and packages", () => {
 });
 
 describe("Tests for Data Product definition", () => {
-    let csn, ord, errorSpy;
+    let csn, ord;
 
     beforeAll(async () => {
         process.env.DEBUG = "true";
@@ -311,7 +311,7 @@ describe("Tests for Data Product definition", () => {
             expect(outputPort.csnModel).toHaveProperty("definitions");
             expect(outputPort.csnModel).toHaveProperty("i18n");
         }
-        
+
         expect(document).toMatchSnapshot();
     });
 
