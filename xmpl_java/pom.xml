@@ -14,7 +14,7 @@
 
 		<!-- DEPENDENCIES VERSION -->
 		<jdk.version>21</jdk.version>
-		<cds.services.version>4.3.1</cds.services.version>
+		<cds.services.version>4.3.2</cds.services.version>
 		<spring.boot.version>3.5.6</spring.boot.version>
 		<xsuaa.version>4.3.1</xsuaa.version>
 
@@ -131,7 +131,7 @@
 			<!-- PROJECT STRUCTURE CHECKS -->
 			<plugin>
 				<artifactId>maven-enforcer-plugin</artifactId>
-				<version>3.6.1</version>
+				<version>3.6.2</version>
 				<executions>
 					<execution>
 						<id>Project Structure Checks</id>
