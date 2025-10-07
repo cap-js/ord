@@ -1,7 +1,7 @@
-const { interopCSN } = require("../../lib/interop-csn.js");
+const { interopCSN } = require("../../lib/interopCsn.js");
 
 jest.mock("@sap/cds/lib/i18n/localize", () => ({
-    bundles4: jest.fn()
+    bundles4: jest.fn(),
 }));
 
 const localize = require("@sap/cds/lib/i18n/localize");
@@ -12,17 +12,15 @@ describe("interop-csn", () => {
     });
 
     it("should transform CSN with i18n and annotations", () => {
-        localize.bundles4.mockReturnValue([
-            ["en", { "service.title": "My Service", "unused.key": "Unused" }]
-        ]);
+        localize.bundles4.mockReturnValue([["en", { "service.title": "My Service", "unused.key": "Unused" }]]);
         const csn = {
             definitions: {
                 "com.example.MyService": {
-                    kind: "service",
+                    "kind": "service",
                     "@title": "{i18n>service.title}",
-                    "@cds.autoexpose": true
-                }
-            }
+                    "@cds.autoexpose": true,
+                },
+            },
         };
         expect(interopCSN(csn)).toMatchSnapshot();
     });
@@ -31,19 +29,19 @@ describe("interop-csn", () => {
         localize.bundles4.mockReturnValue([]);
         const csn = {
             definitions: {
-                "TestEntity": {
-                    kind: "entity",
+                TestEntity: {
+                    "kind": "entity",
                     "@Common.Label": "Entity Label",
                     "@description": "Description",
                     "@cds.autoexpose": true,
-                    elements: {
+                    "elements": {
                         field1: {
                             "@title": "Field Title",
-                            "@label": "Field Label"
-                        }
-                    }
-                }
-            }
+                            "@label": "Field Label",
+                        },
+                    },
+                },
+            },
         };
         expect(interopCSN(csn)).toMatchSnapshot();
     });
@@ -52,8 +50,8 @@ describe("interop-csn", () => {
         localize.bundles4.mockReturnValue([]);
         const csn = {
             definitions: {
-                "customer.namespace.MyService.v2": { kind: "service" }
-            }
+                "customer.namespace.MyService.v2": { kind: "service" },
+            },
         };
         expect(interopCSN(csn)).toMatchSnapshot();
     });
@@ -61,15 +59,15 @@ describe("interop-csn", () => {
     it("should filter unused i18n texts", () => {
         localize.bundles4.mockReturnValue([
             ["en", { "used.key": "Used", "unused.key": "Unused" }],
-            ["de", { "unused.key": "Unbenutzt" }]
+            ["de", { "unused.key": "Unbenutzt" }],
         ]);
         const csn = {
             definitions: {
-                "TestService": {
-                    kind: "service",
-                    "@title": "{i18n>used.key}"
-                }
-            }
+                TestService: {
+                    "kind": "service",
+                    "@title": "{i18n>used.key}",
+                },
+            },
         };
         expect(interopCSN(csn)).toMatchSnapshot();
     });
