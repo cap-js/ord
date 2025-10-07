@@ -265,9 +265,6 @@ describe("Tests for products and packages", () => {
     });
 });
 
-
-
-
 describe("Tests for Data Product definition", () => {
     let csn, ord, errorSpy;
 
@@ -293,15 +290,78 @@ describe("Tests for Data Product definition", () => {
         jest.resetAllMocks();
     });
 
-    it("Check interop CSN", async () => {
-      let interopCsn = 'foo';  // here I want to get the interopCSN for DPBooks
-      expect(interopCsn).toBe('foo'); // so that I can check it ...
+    it("Check interop CSN for Data Product", async () => {
+        const { interopCSN } = require("../lib/interop-csn");
+        csn = await cds.load(path.join(cds.root, "srv"));
+
+        const interopCsn = interopCSN(csn);
+
+        expect(interopCsn).toHaveProperty("csnInteropEffective", "1.0");
+        expect(interopCsn).toHaveProperty("meta.flavor", "effective");
+        expect(interopCsn).toHaveProperty("definitions");
+        expect(interopCsn).toHaveProperty("i18n");
+        expect(interopCsn).toMatchSnapshot();
     });
 
+    it("Check interop CSN annotation mapping", async () => {
+        const { interopCSN } = require("../lib/interop-csn");
+
+        // Create test CSN with various annotations
+        const testCsn = {
+            definitions: {
+                TestService: {
+                    "kind": "service",
+                    "@title": "Test Service Title",
+                    "@Common.Label": "Service Common Label",
+                },
+                TestEntity: {
+                    "kind": "entity",
+                    "@description": "Entity Description",
+                    "@label": "Entity Label",
+                    "@cds.autoexpose": true,
+                    "elements": {
+                        field1: {
+                            "@title": "Field Title",
+                            "@Common.Label": "Field Common Label",
+                        },
+                    },
+                },
+            },
+        };
+
+        const interopCsn = interopCSN(testCsn);
+
+        // Check annotation mappings
+        expect(interopCsn.definitions.TestService["@EndUserText.label"]).toBe("Service Common Label");
+        expect(interopCsn.definitions.TestEntity["@EndUserText.quickInfo"]).toBe("Entity Description");
+        expect(interopCsn.definitions.TestEntity.elements.field1["@EndUserText.label"]).toBe("Field Common Label");
+
+        // Check removed annotations
+        expect(interopCsn.definitions.TestEntity["@cds.autoexpose"]).toBeUndefined();
+
+        expect(interopCsn).toMatchSnapshot();
+    });
+
+    it("Check interop CSN service name parsing", async () => {
+        const { interopCSN } = require("../lib/interop-csn");
+
+        const testCsn = {
+            definitions: {
+                "customer.namespace.TestService.v3": { kind: "service" },
+                "SimpleService": { kind: "service" }
+            }
+        };
+
+        const interopCsn = interopCSN(testCsn);
+
+        // Should not set document info for multiple services
+        expect(interopCsn.meta.document).toBeUndefined();
+        expect(interopCsn.meta.__name).toBeUndefined();
+        expect(interopCsn.meta.__namespace).toBeUndefined();
+        
+        expect(interopCsn).toMatchSnapshot();
+    });
 });
-
-
-
 
 describe("Tests for eventResource and apiResource", () => {
     let ord;

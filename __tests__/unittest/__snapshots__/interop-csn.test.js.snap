@@ -1,0 +1,103 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`interop-csn should extract service metadata 1`] = `
+{
+  "csnInteropEffective": "1.0",
+  "definitions": {
+    "customer.namespace.MyService.v2": {
+      "kind": "service",
+    },
+  },
+  "i18n": {},
+  "meta": {
+    "__name": "MyService",
+    "__namespace": "customer.namespace",
+    "document": {
+      "version": "2.0.0",
+    },
+    "flavor": "effective",
+  },
+}
+`;
+
+exports[`interop-csn should filter unused i18n texts 1`] = `
+{
+  "csnInteropEffective": "1.0",
+  "definitions": {
+    "TestService": {
+      "@EndUserText.label": "{i18n>used.key}",
+      "kind": "service",
+    },
+  },
+  "i18n": {
+    "en": {
+      "used.key": "Used",
+    },
+  },
+  "meta": {
+    "__name": "TestService",
+    "document": {
+      "version": "1.0.0",
+    },
+    "flavor": "effective",
+  },
+}
+`;
+
+exports[`interop-csn should handle annotation mapping 1`] = `
+{
+  "csnInteropEffective": "1.0",
+  "definitions": {
+    "TestEntity": {
+      "@EndUserText.label": "Entity Label",
+      "@EndUserText.quickInfo": "Description",
+      "elements": {
+        "field1": {
+          "@EndUserText.label": "Field Title",
+        },
+      },
+      "kind": "entity",
+    },
+  },
+  "i18n": {},
+  "meta": {
+    "flavor": "effective",
+  },
+}
+`;
+
+exports[`interop-csn should handle empty definitions 1`] = `
+{
+  "csnInteropEffective": "1.0",
+  "definitions": {},
+  "i18n": {},
+  "meta": {
+    "flavor": "effective",
+  },
+}
+`;
+
+exports[`interop-csn should transform CSN with i18n and annotations 1`] = `
+{
+  "csnInteropEffective": "1.0",
+  "definitions": {
+    "com.example.MyService": {
+      "@EndUserText.label": "{i18n>service.title}",
+      "kind": "service",
+    },
+  },
+  "i18n": {
+    "en": {
+      "service.title": "My Service",
+    },
+  },
+  "meta": {
+    "__name": "MyService",
+    "__namespace": "com.example",
+    "document": {
+      "version": "1.0.0",
+    },
+    "flavor": "effective",
+  },
+}
+`;
