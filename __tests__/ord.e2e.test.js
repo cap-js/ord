@@ -294,8 +294,8 @@ describe("Tests for Data Product definition", () => {
     });
 
     it("Check interop CSN", async () => {
-      let foo = 'foo'
-      expect(foo).toBe('foo');
+      let interopCsn = 'foo';  // here I want to get the interopCSN for DPBooks
+      expect(interopCsn).toBe('foo'); // so that I can check it ...
     });
 
 });
