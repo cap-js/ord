@@ -26,7 +26,8 @@ entity Customers : managed {
 
 entity Addresses : cuid, managed {
   customer_ID   : String;
-  customer      : Association to Customers on customer.ID = customer_ID;
+  customer      : Association to Customers
+                    on customer.ID = customer_ID;
   city          : String;
   postCode      : String;
   streetAddress : String;
@@ -38,12 +39,15 @@ entity Addresses : cuid, managed {
  */
 entity Incidents : cuid, managed {
   customer_ID  : String;
-  customer     : Association to Customers on customer.ID = customer_ID;
+  customer     : Association to Customers
+                   on customer.ID = customer_ID;
   title        : String @title: 'Title';
   urgency_code : String;
-  urgency      : Association to Urgency on urgency.code = urgency_code;
+  urgency      : Association to Urgency
+                   on urgency.code = urgency_code;
   status_code  : String;
-  status       : Association to Status on status.code = status_code;
+  status       : Association to Status
+                   on status.code = status_code;
 }
 
 entity Status : CodeList {
