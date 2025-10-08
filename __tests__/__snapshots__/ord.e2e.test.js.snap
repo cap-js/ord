@@ -101,6 +101,53 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for sap.capdpprod.DPBooks.v1",
+      "direction": "outbound",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "implementationStandard": "sap.dp:data-subscription-api:v1",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:sap.capdpprod.DPBooks",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "sap-csn-interop-effective-v1",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1/sap.capdpprod.DPBooks.v1.csn.json",
+        },
+      ],
+      "shortDescription": "Short description of sap.capdpprod.DPBooks.v1",
+      "title": "sap.capdpprod.DPBooks.v1",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -221,6 +268,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:sap.capdpprod.DPBooks.v1",
+      "groupTypeId": "sap.cds:service",
+      "title": "v1 Service",
     },
   ],
   "openResourceDiscovery": "1.10",
@@ -384,6 +436,53 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for sap.capdpprod.DPBooks.v1",
+      "direction": "outbound",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "implementationStandard": "sap.dp:data-subscription-api:v1",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:sap.capdpprod.DPBooks",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "sap-csn-interop-effective-v1",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1/sap.capdpprod.DPBooks.v1.csn.json",
+        },
+      ],
+      "shortDescription": "Short description of sap.capdpprod.DPBooks.v1",
+      "title": "sap.capdpprod.DPBooks.v1",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -504,6 +603,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:sap.capdpprod.DPBooks.v1",
+      "groupTypeId": "sap.cds:service",
+      "title": "v1 Service",
     },
   ],
   "openResourceDiscovery": "1.10",
@@ -667,6 +771,53 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for sap.capdpprod.DPBooks.v1",
+      "direction": "outbound",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "implementationStandard": "sap.dp:data-subscription-api:v1",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1",
+      "partOfGroups": [
+        "sap.cds:service:sap.test.cdsrc.sample:sap.capdpprod.DPBooks",
+      ],
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "sap-csn-interop-effective-v1",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1/sap.capdpprod.DPBooks.v1.csn.json",
+        },
+      ],
+      "shortDescription": "Short description of sap.capdpprod.DPBooks.v1",
+      "title": "sap.capdpprod.DPBooks.v1",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -787,6 +938,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "groupId": "sap.cds:service:sap.test.cdsrc.sample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
+    },
+    {
+      "groupId": "sap.cds:service:sap.test.cdsrc.sample:sap.capdpprod.DPBooks.v1",
+      "groupTypeId": "sap.cds:service",
+      "title": "v1 Service",
     },
   ],
   "openResourceDiscovery": "1.10",
@@ -943,7 +1099,7 @@ exports[`Tests for Data Product definition Check interop CSN annotation mapping 
 }
 `;
 
-exports[`Tests for Data Product definition Check interop CSN for Data Product 1`] = `
+exports[`Tests for Data Product definition Check interop CSN content 1`] = `
 {
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
@@ -1045,6 +1201,53 @@ exports[`Tests for Data Product definition Check interop CSN for Data Product 1`
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for sap.capdpprod.DPBooks.v1",
+      "direction": "outbound",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "implementationStandard": "sap.dp:data-subscription-api:v1",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:sap.capdpprod.DPBooks",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "sap-csn-interop-effective-v1",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1/sap.capdpprod.DPBooks.v1.csn.json",
+        },
+      ],
+      "shortDescription": "Short description of sap.capdpprod.DPBooks.v1",
+      "title": "sap.capdpprod.DPBooks.v1",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -1140,6 +1343,11 @@ exports[`Tests for Data Product definition Check interop CSN for Data Product 1`
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
     },
+    {
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:sap.capdpprod.DPBooks.v1",
+      "groupTypeId": "sap.cds:service",
+      "title": "v1 Service",
+    },
   ],
   "openResourceDiscovery": "1.9",
   "packages": [
@@ -1166,6 +1374,1163 @@ exports[`Tests for Data Product definition Check interop CSN for Data Product 1`
       "vendor": "customer:vendor:Customer:",
     },
   ],
+}
+`;
+
+exports[`Tests for Data Product definition Check interop CSN content 2`] = `
+{
+  "$version": "2.0",
+  "csnInteropEffective": "1.0",
+  "definitions": {
+    "sap.capdpprod.DPBooks.v1": {
+      "@data.product": true,
+      "kind": "service",
+    },
+    "sap.capdpprod.DPBooks.v1.Authors": {
+      "@EntityRelationship.entityType": "customer.foo:Authors",
+      "@ODM.entityName": "odm.bookshop.Authors",
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer",
+        },
+        "books": {
+          "cardinality": {
+            "max": "*",
+          },
+          "on": [
+            {
+              "ref": [
+                "books",
+                "author_ID",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "ID",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Books",
+          "type": "cds.Association",
+        },
+        "createdAt": {
+          "@Core.Immutable": true,
+          "@EndUserText.label": "{i18n>CreatedAt}",
+          "@UI.ExcludeFromNavigationContext": true,
+          "@UI.HiddenFilter": true,
+          "@cds.on.insert": {
+            "=": "$now",
+          },
+          "@readonly": true,
+          "type": "cds.Timestamp",
+        },
+        "createdBy": {
+          "@Core.Immutable": true,
+          "@EndUserText.label": "{i18n>CreatedBy}",
+          "@EndUserText.quickInfo": "{i18n>UserID.Description}",
+          "@UI.ExcludeFromNavigationContext": true,
+          "@UI.HiddenFilter": true,
+          "@cds.on.insert": {
+            "=": "$user",
+          },
+          "@readonly": true,
+          "length": 255,
+          "type": "cds.String",
+        },
+        "modifiedAt": {
+          "@EndUserText.label": "{i18n>ChangedAt}",
+          "@UI.ExcludeFromNavigationContext": true,
+          "@UI.HiddenFilter": true,
+          "@cds.on.insert": {
+            "=": "$now",
+          },
+          "@cds.on.update": {
+            "=": "$now",
+          },
+          "@readonly": true,
+          "type": "cds.Timestamp",
+        },
+        "modifiedBy": {
+          "@EndUserText.label": "{i18n>ChangedBy}",
+          "@EndUserText.quickInfo": "{i18n>UserID.Description}",
+          "@UI.ExcludeFromNavigationContext": true,
+          "@UI.HiddenFilter": true,
+          "@cds.on.insert": {
+            "=": "$user",
+          },
+          "@cds.on.update": {
+            "=": "$user",
+          },
+          "@readonly": true,
+          "length": 255,
+          "type": "cds.String",
+        },
+        "name": {
+          "length": 111,
+          "type": "cds.String",
+        },
+      },
+      "kind": "entity",
+    },
+    "sap.capdpprod.DPBooks.v1.Books": {
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer",
+        },
+        "author": {
+          "on": [
+            {
+              "ref": [
+                "author",
+                "ID",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "author_ID",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Authors",
+          "type": "cds.Association",
+        },
+        "author_ID": {
+          "type": "cds.Integer",
+        },
+        "createdAt": {
+          "@Core.Immutable": true,
+          "@EndUserText.label": "{i18n>CreatedAt}",
+          "@UI.ExcludeFromNavigationContext": true,
+          "@UI.HiddenFilter": true,
+          "@cds.on.insert": {
+            "=": "$now",
+          },
+          "@readonly": true,
+          "type": "cds.Timestamp",
+        },
+        "createdBy": {
+          "@Core.Immutable": true,
+          "@EndUserText.label": "{i18n>CreatedBy}",
+          "@EndUserText.quickInfo": "{i18n>UserID.Description}",
+          "@UI.ExcludeFromNavigationContext": true,
+          "@UI.HiddenFilter": true,
+          "@cds.on.insert": {
+            "=": "$user",
+          },
+          "@readonly": true,
+          "length": 255,
+          "type": "cds.String",
+        },
+        "currency": {
+          "@EndUserText.label": "{i18n>Currency}",
+          "@EndUserText.quickInfo": "{i18n>CurrencyCode.Description}",
+          "on": [
+            {
+              "ref": [
+                "currency",
+                "code",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "currency_code",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Currencies",
+          "type": "cds.Association",
+        },
+        "currency_code": {
+          "@EndUserText.label": "{i18n>Currency}",
+          "@EndUserText.quickInfo": "{i18n>CurrencyCode.Description}",
+          "length": 3,
+          "type": "cds.String",
+        },
+        "descr": {
+          "length": 1111,
+          "type": "cds.String",
+        },
+        "genre": {
+          "on": [
+            {
+              "ref": [
+                "genre",
+                "ID",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "genre_ID",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Genres",
+          "type": "cds.Association",
+        },
+        "genre_ID": {
+          "type": "cds.Integer",
+        },
+        "localized": {
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "ID",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "ID",
+              ],
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Books.texts",
+          "type": "cds.Association",
+        },
+        "modifiedAt": {
+          "@EndUserText.label": "{i18n>ChangedAt}",
+          "@UI.ExcludeFromNavigationContext": true,
+          "@UI.HiddenFilter": true,
+          "@cds.on.insert": {
+            "=": "$now",
+          },
+          "@cds.on.update": {
+            "=": "$now",
+          },
+          "@readonly": true,
+          "type": "cds.Timestamp",
+        },
+        "modifiedBy": {
+          "@EndUserText.label": "{i18n>ChangedBy}",
+          "@EndUserText.quickInfo": "{i18n>UserID.Description}",
+          "@UI.ExcludeFromNavigationContext": true,
+          "@UI.HiddenFilter": true,
+          "@cds.on.insert": {
+            "=": "$user",
+          },
+          "@cds.on.update": {
+            "=": "$user",
+          },
+          "@readonly": true,
+          "length": 255,
+          "type": "cds.String",
+        },
+        "price": {
+          "precision": 9,
+          "scale": 2,
+          "type": "cds.Decimal",
+        },
+        "stock": {
+          "type": "cds.Integer",
+        },
+        "texts": {
+          "cardinality": {
+            "max": "*",
+          },
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "ID",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "ID",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Books.texts",
+          "type": "cds.Composition",
+        },
+        "title": {
+          "length": 111,
+          "type": "cds.String",
+        },
+      },
+      "kind": "entity",
+    },
+    "sap.capdpprod.DPBooks.v1.Books.texts": {
+      "@cds.autoexposed": true,
+      "@odata.draft.enabled": false,
+      "elements": {
+        "ID": {
+          "@odata.containment.ignore": true,
+          "key": true,
+          "type": "cds.Integer",
+        },
+        "descr": {
+          "length": 1111,
+          "type": "cds.String",
+        },
+        "locale": {
+          "@EndUserText.label": "{i18n>LanguageCode}",
+          "key": true,
+          "length": 14,
+          "type": "cds.String",
+        },
+        "title": {
+          "length": 111,
+          "type": "cds.String",
+        },
+      },
+      "kind": "entity",
+    },
+    "sap.capdpprod.DPBooks.v1.Currencies": {
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name",
+          },
+        },
+      ],
+      "@cds.autoexposed": true,
+      "@cds.odata.valuelist": true,
+      "@cds.persistence.skip": false,
+      "elements": {
+        "code": {
+          "@Common.Text": {
+            "=": "name",
+          },
+          "@EndUserText.label": "{i18n>CurrencyCode}",
+          "key": true,
+          "length": 3,
+          "type": "cds.String",
+        },
+        "descr": {
+          "@EndUserText.label": "{i18n>Description}",
+          "length": 1000,
+          "type": "cds.String",
+        },
+        "localized": {
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "code",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "code",
+              ],
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Currencies.texts",
+          "type": "cds.Association",
+        },
+        "minorUnit": {
+          "@EndUserText.label": "{i18n>CurrencyMinorUnit}",
+          "type": "cds.Int16",
+        },
+        "name": {
+          "@EndUserText.label": "{i18n>Name}",
+          "length": 255,
+          "type": "cds.String",
+        },
+        "symbol": {
+          "@EndUserText.label": "{i18n>CurrencySymbol}",
+          "length": 5,
+          "type": "cds.String",
+        },
+        "texts": {
+          "cardinality": {
+            "max": "*",
+          },
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "code",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "code",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Currencies.texts",
+          "type": "cds.Composition",
+        },
+      },
+      "kind": "entity",
+    },
+    "sap.capdpprod.DPBooks.v1.Currencies.texts": {
+      "@cds.autoexposed": true,
+      "@odata.draft.enabled": false,
+      "elements": {
+        "code": {
+          "@Common.Text": {
+            "=": "name",
+          },
+          "@EndUserText.label": "{i18n>CurrencyCode}",
+          "@odata.containment.ignore": true,
+          "key": true,
+          "length": 3,
+          "type": "cds.String",
+        },
+        "descr": {
+          "@EndUserText.label": "{i18n>Description}",
+          "length": 1000,
+          "type": "cds.String",
+        },
+        "locale": {
+          "@EndUserText.label": "{i18n>LanguageCode}",
+          "key": true,
+          "length": 14,
+          "type": "cds.String",
+        },
+        "name": {
+          "@EndUserText.label": "{i18n>Name}",
+          "length": 255,
+          "type": "cds.String",
+        },
+      },
+      "kind": "entity",
+    },
+    "sap.capdpprod.DPBooks.v1.Genres": {
+      "@UI.Identification": [
+        {
+          "Value": {
+            "=": "name",
+          },
+        },
+      ],
+      "@cds.autoexposed": true,
+      "@cds.odata.valuelist": true,
+      "@cds.persistence.skip": false,
+      "elements": {
+        "ID": {
+          "key": true,
+          "type": "cds.Integer",
+        },
+        "children": {
+          "cardinality": {
+            "max": "*",
+          },
+          "on": [
+            {
+              "ref": [
+                "children",
+                "parent_ID",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "ID",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Genres",
+          "type": "cds.Composition",
+        },
+        "descr": {
+          "@EndUserText.label": "{i18n>Description}",
+          "length": 1000,
+          "type": "cds.String",
+        },
+        "localized": {
+          "on": [
+            {
+              "ref": [
+                "localized",
+                "ID",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "ID",
+              ],
+            },
+            "and",
+            {
+              "ref": [
+                "localized",
+                "locale",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "$user",
+                "locale",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Genres.texts",
+          "type": "cds.Association",
+        },
+        "name": {
+          "@EndUserText.label": "{i18n>Name}",
+          "length": 255,
+          "type": "cds.String",
+        },
+        "parent": {
+          "on": [
+            {
+              "ref": [
+                "parent",
+                "ID",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "parent_ID",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Genres",
+          "type": "cds.Association",
+        },
+        "parent_ID": {
+          "type": "cds.Integer",
+        },
+        "texts": {
+          "cardinality": {
+            "max": "*",
+          },
+          "on": [
+            {
+              "ref": [
+                "texts",
+                "ID",
+              ],
+            },
+            "=",
+            {
+              "ref": [
+                "ID",
+              ],
+            },
+          ],
+          "target": "sap.capdpprod.DPBooks.v1.Genres.texts",
+          "type": "cds.Composition",
+        },
+      },
+      "kind": "entity",
+    },
+    "sap.capdpprod.DPBooks.v1.Genres.texts": {
+      "@cds.autoexposed": true,
+      "@odata.draft.enabled": false,
+      "elements": {
+        "ID": {
+          "@odata.containment.ignore": true,
+          "key": true,
+          "type": "cds.Integer",
+        },
+        "descr": {
+          "@EndUserText.label": "{i18n>Description}",
+          "length": 1000,
+          "type": "cds.String",
+        },
+        "locale": {
+          "@EndUserText.label": "{i18n>LanguageCode}",
+          "key": true,
+          "length": 14,
+          "type": "cds.String",
+        },
+        "name": {
+          "@EndUserText.label": "{i18n>Name}",
+          "length": 255,
+          "type": "cds.String",
+        },
+      },
+      "kind": "entity",
+    },
+  },
+  "i18n": {
+    "ar": {
+      "ChangedAt": "تاريخ التغيير",
+      "ChangedBy": "تم التغيير بواسطة",
+      "CreatedAt": "تاريخ الإنشاء",
+      "CreatedBy": "تم الإنشاء بواسطة",
+      "Currency": "العملة",
+      "CurrencyCode": "رمز العملة",
+      "CurrencyCode.Description": "رمز العملة المحدد حسب ISO 4217",
+      "CurrencyMinorUnit": "كسور وحدات ثانوية للعملة",
+      "CurrencySymbol": "رمز العملة",
+      "Description": "الوصف",
+      "LanguageCode": "رمز اللغة",
+      "Name": "الاسم",
+      "UserID.Description": "معرف المستخدم الفريد",
+    },
+    "bg": {
+      "ChangedAt": "Дата на промяна",
+      "ChangedBy": "Променил",
+      "CreatedAt": "Създадено на",
+      "CreatedBy": "Създадено от",
+      "Currency": "Валута",
+      "CurrencyCode": "Код на валута",
+      "CurrencyCode.Description": "Код на валута съгласно ISO 4217",
+      "CurrencyMinorUnit": "Валута – Части от спомагателна единица",
+      "CurrencySymbol": "Символ на валута",
+      "Description": "Описание",
+      "LanguageCode": "Езиков код",
+      "Name": "Име",
+      "UserID.Description": "Еднозначен ИД на потребител",
+    },
+    "cs": {
+      "ChangedAt": "Změněno",
+      "ChangedBy": "Změnil",
+      "CreatedAt": "Vytvořeno",
+      "CreatedBy": "Vytvořil",
+      "Currency": "Měna",
+      "CurrencyCode": "Kód měny",
+      "CurrencyCode.Description": "Kód měny zadaný dle ISO 4217",
+      "CurrencyMinorUnit": "Zlomky pomocné jednotky měny",
+      "CurrencySymbol": "Symbol měny",
+      "Description": "Popis",
+      "LanguageCode": "Kód jazyka",
+      "Name": "Jméno",
+      "UserID.Description": "Jedinečné ID uživatele",
+    },
+    "da": {
+      "ChangedAt": "Ændret den",
+      "ChangedBy": "Ændret af",
+      "CreatedAt": "Oprettet den",
+      "CreatedBy": "Oprettet af",
+      "Currency": "Valuta",
+      "CurrencyCode": "Valutakode",
+      "CurrencyCode.Description": "Valutakode som angivet af ISO 4217",
+      "CurrencyMinorUnit": "Valutahjælpeenhedsandele",
+      "CurrencySymbol": "Valutasymbol",
+      "Description": "Beskrivelse",
+      "LanguageCode": "Sprogkode",
+      "Name": "Navn",
+      "UserID.Description": "Brugers entydige ID",
+    },
+    "de": {
+      "ChangedAt": "Geändert am",
+      "ChangedBy": "Geändert von",
+      "CreatedAt": "Angelegt am",
+      "CreatedBy": "Angelegt von",
+      "Currency": "Währung",
+      "CurrencyCode": "Währungscode",
+      "CurrencyCode.Description": "Währungscode gemäß ISO 4217",
+      "CurrencyMinorUnit": "Bruchteile Währungsuntereinheit",
+      "CurrencySymbol": "Währungssymbol",
+      "Description": "Beschreibung",
+      "LanguageCode": "Sprachencode",
+      "Name": "Name",
+      "UserID.Description": "Die eindeutige ID eines Benutzers",
+    },
+    "el": {
+      "ChangedAt": "Αλλαξε Στις",
+      "ChangedBy": "Άλλαξε Από",
+      "CreatedAt": "Δημιουργήθηκε Στις",
+      "CreatedBy": "Δημιουργήθηκε Από",
+      "Currency": "Νόμισμα",
+      "CurrencyCode": "Κωδικός Νομίσματος",
+      "CurrencyCode.Description": "Κωδικός νομίσματος όπως καθορίζεται από ISO 4217",
+      "CurrencyMinorUnit": "Κλάσματα Μικρής Μονάδας Νομίσματος",
+      "CurrencySymbol": "Σύμβολο Νομίσματος",
+      "Description": "Περιγραφή",
+      "LanguageCode": "Κωδικός Γλώσσας",
+      "Name": "Όνομα",
+      "UserID.Description": "Μοναδικό ID χρήστη",
+    },
+    "en": {
+      "ChangedAt": "Changed On",
+      "ChangedBy": "Changed By",
+      "CreatedAt": "Created On",
+      "CreatedBy": "Created By",
+      "Currency": "Currency",
+      "CurrencyCode": "Currency Code",
+      "CurrencyCode.Description": "Currency code as specified by ISO 4217",
+      "CurrencyMinorUnit": "Currency Minor Unit Fractions",
+      "CurrencySymbol": "Currency Symbol",
+      "Description": "Description",
+      "LanguageCode": "Language Code",
+      "Name": "Name",
+      "UserID.Description": "User's unique ID",
+    },
+    "en_US_saptrc": {
+      "ChangedAt": "8v5EfaWMYC2dmCGnaCSSUA_Changed On",
+      "ChangedBy": "y0d7F56RLGVZiTV7YHU7Iw_Changed By",
+      "CreatedAt": "CJxeZDpLHdREwzDQeluRuA_Created On",
+      "CreatedBy": "Bx7yxWg0AHyeOti1YDOOXw_Created By",
+      "Currency": "bNSEwGmQtXNxy/Qh310iSQ_Currency",
+      "CurrencyCode": "3cKgP4qz+IsDHtETO3InVQ_Currency Code",
+      "CurrencyCode.Description": "pPQIrs2UIayPnWseWvdbuA_Currency code as specified by ISO 4217",
+      "CurrencyMinorUnit": "0S6MF8n74OoGrKEYI1LO+Q_Currency Minor Unit Fractions",
+      "CurrencySymbol": "ICns/nlRq2+/URxMXV+T8g_Currency Symbol",
+      "Description": "VGpOoz5siT25o1W0WDiHGw_Description",
+      "LanguageCode": "NhI8Yd8pNFS7omWQsk5aJw_Language Code",
+      "Name": "xOqOj8rcOinN3ZBO0WdWjA_Name",
+      "UserID.Description": "yOjW1w1qaIvgZeYb0qAsig_User's unique ID",
+    },
+    "es": {
+      "ChangedAt": "Fecha de modificación",
+      "ChangedBy": "Autor de modificación",
+      "CreatedAt": "Fecha de creación",
+      "CreatedBy": "Autor",
+      "Currency": "Moneda",
+      "CurrencyCode": "Código de moneda",
+      "CurrencyCode.Description": "Código de moneda según especificado por ISO 4217",
+      "CurrencyMinorUnit": "Fracciones unidad secundaria de moneda",
+      "CurrencySymbol": "Símbolo de moneda",
+      "Description": "Descripción",
+      "LanguageCode": "Código de idioma",
+      "Name": "Nombre",
+      "UserID.Description": "ID único de usuario",
+    },
+    "es_MX": {
+      "ChangedAt": "Fecha de modificación",
+      "ChangedBy": "Autor de modificación",
+      "CreatedAt": "Fecha de creación",
+      "CreatedBy": "Autor",
+      "Currency": "Moneda",
+      "CurrencyCode": "Código de moneda",
+      "CurrencyCode.Description": "Código de moneda según especificado por ISO 4217",
+      "CurrencyMinorUnit": "Fracciones unidad secundaria de moneda",
+      "CurrencySymbol": "Símbolo de moneda",
+      "Description": "Descripción",
+      "LanguageCode": "Código de idioma",
+      "Name": "Nombre",
+      "UserID.Description": "ID único de usuario",
+    },
+    "fi": {
+      "ChangedAt": "Muutospäivämäärä",
+      "ChangedBy": "Muuttaja",
+      "CreatedAt": "Luontipäivämäärä",
+      "CreatedBy": "Tekijä",
+      "Currency": "Valuutta",
+      "CurrencyCode": "Valuuttakoodi",
+      "CurrencyCode.Description": "ISO 4217:n mukainen valuuttakoodi",
+      "CurrencyMinorUnit": "Valuutan pienen yksikön murto-osat",
+      "CurrencySymbol": "Valuuttatunnus",
+      "Description": "Kuvaus",
+      "LanguageCode": "Kielikoodi",
+      "Name": "Nimi",
+      "UserID.Description": "Käyttäjän yksiselitteinen tunnus",
+    },
+    "fr": {
+      "ChangedAt": "Date/Heure de modification",
+      "ChangedBy": "Auteur de la modification",
+      "CreatedAt": "Date/Heure de création",
+      "CreatedBy": "Auteur de la création",
+      "Currency": "Devise",
+      "CurrencyCode": "Code de devise",
+      "CurrencyCode.Description": "Code de devise tel qu'indiqué par ISO 4217",
+      "CurrencyMinorUnit": "Fractions de l'unité secondaire de la devise",
+      "CurrencySymbol": "Symbole de devise",
+      "Description": "Description",
+      "LanguageCode": "Code langue",
+      "Name": "Nom",
+      "UserID.Description": "ID unique de l'utilisateur",
+    },
+    "he": {
+      "ChangedAt": "שונה בתאריך",
+      "ChangedBy": "שונה על-ידי",
+      "CreatedAt": "נוצר בתאריך",
+      "CreatedBy": "נוצר על-ידי",
+      "Currency": "מטבע",
+      "CurrencyCode": "קוד מטבע",
+      "CurrencyCode.Description": "קוד מטבע כפי שצוין על-ידי ISO 4217",
+      "CurrencyMinorUnit": "חלקי יחידה משנית של מטבע",
+      "CurrencySymbol": "סמל מטבע",
+      "Description": "תיאור",
+      "LanguageCode": "קוד שפה",
+      "Name": "שם",
+      "UserID.Description": "זיהוי ייחודי של משתמש",
+    },
+    "hr": {
+      "ChangedAt": "Promijenjeno",
+      "ChangedBy": "Promijenio",
+      "CreatedAt": "Stvoreno",
+      "CreatedBy": "Stvorio",
+      "Currency": "Valuta",
+      "CurrencyCode": "Šifra valute",
+      "CurrencyCode.Description": "Šifra valute kako navodi ISO 4217",
+      "CurrencyMinorUnit": "Manji dijelovi valute",
+      "CurrencySymbol": "Simbol valute",
+      "Description": "Opis",
+      "LanguageCode": "Šifra jezika",
+      "Name": "Ime",
+      "UserID.Description": "Jedinstveni ID korisnika",
+    },
+    "hu": {
+      "ChangedAt": "Módosítás dátuma",
+      "ChangedBy": "Módosító",
+      "CreatedAt": "Létrehozás dátuma",
+      "CreatedBy": "Létrehozó:",
+      "Currency": "Pénznem",
+      "CurrencyCode": "Pénznem kódja",
+      "CurrencyCode.Description": "Pénznem kódja ISO 4217 szerint",
+      "CurrencyMinorUnit": "Pénznem segédegység-hányadok",
+      "CurrencySymbol": "Pénznem szimbóluma",
+      "Description": "Leírás",
+      "LanguageCode": "Nyelvkód",
+      "Name": "Név",
+      "UserID.Description": "Felhasználó egyedi azonosítója",
+    },
+    "it": {
+      "ChangedAt": "Data di modifica",
+      "ChangedBy": "Autore modifica",
+      "CreatedAt": "Data di creazione",
+      "CreatedBy": "Autore creazione",
+      "Currency": "Divisa",
+      "CurrencyCode": "Codice divisa",
+      "CurrencyCode.Description": "Codice divisa come indicato da ISO 4217",
+      "CurrencyMinorUnit": "Frazioni suddivisione unità monetaria",
+      "CurrencySymbol": "Simbolo divisa",
+      "Description": "Descrizione",
+      "LanguageCode": "Codice lingua",
+      "Name": "Nome",
+      "UserID.Description": "ID univoco utente",
+    },
+    "ja": {
+      "ChangedAt": "変更日付",
+      "ChangedBy": "変更者",
+      "CreatedAt": "作成時間",
+      "CreatedBy": "登録者",
+      "Currency": "通貨",
+      "CurrencyCode": "通貨コード",
+      "CurrencyCode.Description": "ISO 4217 で指定されている通貨コード",
+      "CurrencyMinorUnit": "通貨補助単位の分数",
+      "CurrencySymbol": "通貨シンボル",
+      "Description": "説明",
+      "LanguageCode": "言語コード",
+      "Name": "名前",
+      "UserID.Description": "ユーザの一意の ID",
+    },
+    "kk": {
+      "ChangedAt": "Өзгертілген күні",
+      "ChangedBy": "Өзгерткен",
+      "CreatedAt": "Жасалған күні",
+      "CreatedBy": "Жасаған",
+      "Currency": "Валюта",
+      "CurrencyCode": "Валюта коды",
+      "CurrencyCode.Description": "ISO 4217 стандарты бойынша валюта коды",
+      "CurrencyMinorUnit": "Валютаның шағын бірлік бөліктері",
+      "CurrencySymbol": "Валюта белгісі",
+      "Description": "Сипаттама",
+      "LanguageCode": "Тіл коды",
+      "Name": "Аты",
+      "UserID.Description": "Пайдаланушының бірегей ид.",
+    },
+    "ko": {
+      "ChangedAt": "변경일",
+      "ChangedBy": "변경자",
+      "CreatedAt": "생성일",
+      "CreatedBy": "생성자",
+      "Currency": "통화",
+      "CurrencyCode": "통화 코드",
+      "CurrencyCode.Description": "ISO 4217에서 지정한 통화 코드",
+      "CurrencyMinorUnit": "통화 보조 단위 소수 자리",
+      "CurrencySymbol": "통화 기호",
+      "Description": "내역",
+      "LanguageCode": "언어 코드",
+      "Name": "이름",
+      "UserID.Description": "사용자 고유 ID",
+    },
+    "ms": {
+      "ChangedAt": "Diubah pada",
+      "ChangedBy": "Diubah oleh",
+      "CreatedAt": "Dicipta pada",
+      "CreatedBy": "Dicipta oleh",
+      "Currency": "Mata Wang",
+      "CurrencyCode": "Kod Mata Wang",
+      "CurrencyCode.Description": "Kod mata wang seperti yang dinyatakan dalam ISO 4217",
+      "CurrencyMinorUnit": "Pecahan Unit Kecil Mata Wang",
+      "CurrencySymbol": "Simbol Mata Wang",
+      "Description": "Perihalan",
+      "LanguageCode": "Kod Bahasa",
+      "Name": "Nama",
+      "UserID.Description": "ID unik pengguna",
+    },
+    "nl": {
+      "ChangedAt": "Gewijzigd op",
+      "ChangedBy": "Gewijzigd door",
+      "CreatedAt": "Gecreëerd op",
+      "CreatedBy": "Gecreëerd door",
+      "Currency": "Valuta",
+      "CurrencyCode": "Valutacode",
+      "CurrencyCode.Description": "Valutacode zoals gespecificeerd door ISO 4217",
+      "CurrencyMinorUnit": "Breuken kleinste eenheid valuta",
+      "CurrencySymbol": "Valutasymbool",
+      "Description": "Omschrijving",
+      "LanguageCode": "Taalcode",
+      "Name": "Naam",
+      "UserID.Description": "Unieke ID van gebruiker",
+    },
+    "no": {
+      "ChangedAt": "Endret den",
+      "ChangedBy": "Endret av",
+      "CreatedAt": "Opprettet den",
+      "CreatedBy": "Opprettet av",
+      "Currency": "Valuta",
+      "CurrencyCode": "Valutakode",
+      "CurrencyCode.Description": "Valutakode som definert i ISO 4217",
+      "CurrencyMinorUnit": "Deler for valutaunderenhet",
+      "CurrencySymbol": "Valutasymbol",
+      "Description": "Beskrivelse",
+      "LanguageCode": "Språkkode",
+      "Name": "Navn",
+      "UserID.Description": "Brukerens unike ID",
+    },
+    "pl": {
+      "ChangedAt": "Data zmiany",
+      "ChangedBy": "Zmienione przez",
+      "CreatedAt": "Data utworzenia",
+      "CreatedBy": "Utworzone przez",
+      "Currency": "Waluta",
+      "CurrencyCode": "Kod waluty",
+      "CurrencyCode.Description": "Kod waluty określony zgodnie z normą ISO 4217",
+      "CurrencyMinorUnit": "Wartości ułamkowe jednostki pomocniczej waluty",
+      "CurrencySymbol": "Symbol waluty",
+      "Description": "Opis",
+      "LanguageCode": "Kod języka",
+      "Name": "Nazwa",
+      "UserID.Description": "Unikalny identyfikator użytkownika",
+    },
+    "pt": {
+      "ChangedAt": "Modificado em",
+      "ChangedBy": "Modificado por",
+      "CreatedAt": "Criado em",
+      "CreatedBy": "Criado por",
+      "Currency": "Moeda",
+      "CurrencyCode": "Código de moeda",
+      "CurrencyCode.Description": "Código de moeda como especificado pelo ISO 4217",
+      "CurrencyMinorUnit": "Frações de unidade auxiliar de moeda",
+      "CurrencySymbol": "Símbolo da moeda",
+      "Description": "Descrição",
+      "LanguageCode": "Código de idioma",
+      "Name": "Nome",
+      "UserID.Description": "ID exclusivo do usuário",
+    },
+    "ro": {
+      "ChangedAt": "Modificat pe",
+      "ChangedBy": "Modificat de",
+      "CreatedAt": "Creat pe",
+      "CreatedBy": "Creat de",
+      "Currency": "Monedă",
+      "CurrencyCode": "Cod monedă",
+      "CurrencyCode.Description": "Cod monedă așa cum este specificat de ISO 4217",
+      "CurrencyMinorUnit": "Fracții subunitate de monedă",
+      "CurrencySymbol": "Simbol monedă",
+      "Description": "Descriere",
+      "LanguageCode": "Cod de limbă",
+      "Name": "Nume",
+      "UserID.Description": "ID unic utilizator",
+    },
+    "ru": {
+      "ChangedAt": "Дата изменения",
+      "ChangedBy": "Автор изменения",
+      "CreatedAt": "Дата создания",
+      "CreatedBy": "Создал",
+      "Currency": "Валюта",
+      "CurrencyCode": "Код валюты",
+      "CurrencyCode.Description": "Код валюты в соответствии с ISO 4217",
+      "CurrencyMinorUnit": "Доли вспомогательной валютной единицы",
+      "CurrencySymbol": "Символ валюты",
+      "Description": "Описание",
+      "LanguageCode": "Код языка",
+      "Name": "Имя",
+      "UserID.Description": "Уникальный ид. пользователя",
+    },
+    "sh": {
+      "ChangedAt": "Promenjeno",
+      "ChangedBy": "Promenio",
+      "CreatedAt": "Kreirano",
+      "CreatedBy": "Kreirao",
+      "Currency": "Valuta",
+      "CurrencyCode": "Šifra valute",
+      "CurrencyCode.Description": "Šifra valute određena prema ISO 4217",
+      "CurrencyMinorUnit": "Manja jedinica valute",
+      "CurrencySymbol": "Simbol valute",
+      "Description": "Opis",
+      "LanguageCode": "Šifra jezika",
+      "Name": "Ime",
+      "UserID.Description": "Jedinstveni ID korisnika",
+    },
+    "sk": {
+      "ChangedAt": "Zmenené dňa",
+      "ChangedBy": "Zmenil",
+      "CreatedAt": "Vytvorené dňa",
+      "CreatedBy": "Vytvoril",
+      "Currency": "Mena",
+      "CurrencyCode": "Kód meny",
+      "CurrencyCode.Description": "Kód meny podľa normy ISO 4217",
+      "CurrencyMinorUnit": "Menové menšie jednotkové zlomky",
+      "CurrencySymbol": "Symbol meny",
+      "Description": "Popis",
+      "LanguageCode": "Kód jazyka",
+      "Name": "Názov",
+      "UserID.Description": "Jedinečné ID používateľa",
+    },
+    "sl": {
+      "ChangedAt": "Spremenjeno dne",
+      "ChangedBy": "Spremenil uporabnik",
+      "CreatedAt": "Ustvarjeno dne",
+      "CreatedBy": "Ustvaril uporabnik",
+      "Currency": "Valuta",
+      "CurrencyCode": "Koda valute",
+      "CurrencyCode.Description": "Koda valute, kot jo določa ISO 4217",
+      "CurrencyMinorUnit": "Deli manjše enote valute",
+      "CurrencySymbol": "Simbol valute",
+      "Description": "Opis",
+      "LanguageCode": "Koda jezika",
+      "Name": "Ime",
+      "UserID.Description": "Enoznačni ID uporabnika",
+    },
+    "sv": {
+      "ChangedAt": "Ändring den",
+      "ChangedBy": "Ändring av",
+      "CreatedAt": "Uppläggning den",
+      "CreatedBy": "Uppläggning av",
+      "Currency": "Valuta",
+      "CurrencyCode": "Valutakod",
+      "CurrencyCode.Description": "Valutakod enligt ISO 4217",
+      "CurrencyMinorUnit": "Antal mindre enheter för valuta",
+      "CurrencySymbol": "Valutasymbol",
+      "Description": "Beskrivning",
+      "LanguageCode": "Språkkod",
+      "Name": "Namn",
+      "UserID.Description": "Unik användar-ID",
+    },
+    "th": {
+      "ChangedAt": "เปลี่ยนแปลงเมื่อ",
+      "ChangedBy": "เปลี่ยนแปลงโดย",
+      "CreatedAt": "สร้างเมื่อ",
+      "CreatedBy": "สร้างโดย",
+      "Currency": "สกุลเงิน",
+      "CurrencyCode": "รหัสสกุลเงิน",
+      "CurrencyCode.Description": "รหัสสกุลเงินตามที่ระบุใน ISO 4217",
+      "CurrencyMinorUnit": "เศษส่วนหน่วยรองของสกุลเงิน",
+      "CurrencySymbol": "สัญลักษณ์สกุลเงิน",
+      "Description": "คำอธิบาย",
+      "LanguageCode": "รหัสภาษา",
+      "Name": "ชื่อ",
+      "UserID.Description": "ID ที่ไม่ซ้ำของผู้ใช้",
+    },
+    "tr": {
+      "ChangedAt": "Değişiklik tarihi",
+      "ChangedBy": "Değiştiren",
+      "CreatedAt": "Oluşturma tarihi",
+      "CreatedBy": "Oluşturan",
+      "Currency": "Para birimi",
+      "CurrencyCode": "Para birimi kodu",
+      "CurrencyCode.Description": "ISO 4217'ye göre belirtilen para birimi kodu",
+      "CurrencyMinorUnit": "Para biriminin küçük birim kesirleri",
+      "CurrencySymbol": "Para birimi sembolü",
+      "Description": "Tanım",
+      "LanguageCode": "Dil kodu",
+      "Name": "Ad",
+      "UserID.Description": "Kullanıcının benzersiz tanıtıcısı",
+    },
+    "uk": {
+      "ChangedAt": "Дата змінення",
+      "ChangedBy": "Автор зміни",
+      "CreatedAt": "Дата створення",
+      "CreatedBy": "Автор створення",
+      "Currency": "Валюта",
+      "CurrencyCode": "Код валюти",
+      "CurrencyCode.Description": "Код валюти, як вказано в ISO 4217",
+      "CurrencyMinorUnit": "Менші частки одиниці валюти",
+      "CurrencySymbol": "Символ валюти",
+      "Description": "Опис",
+      "LanguageCode": "Код мови",
+      "Name": "Ім’я",
+      "UserID.Description": "Унікальний ІД користувача",
+    },
+    "vi": {
+      "ChangedAt": "Thay đổi vào ngày",
+      "ChangedBy": "Thay đổi bởi",
+      "CreatedAt": "Tạo vào",
+      "CreatedBy": "Tạo bởi",
+      "Currency": "Tiền tệ",
+      "CurrencyCode": "Mã tiền tệ",
+      "CurrencyCode.Description": "Mã tiền tệ theo ISO 4217",
+      "CurrencyMinorUnit": "Phân số đơn vị tối thiểu của tiền tệ",
+      "CurrencySymbol": "Ký hiệu tiền tệ",
+      "Description": "Mô tả",
+      "LanguageCode": "Mã ngôn ngữ",
+      "Name": "Tên",
+      "UserID.Description": "ID duy nhất của người dùng",
+    },
+    "zh_CN": {
+      "ChangedAt": "更改日期",
+      "ChangedBy": "更改人",
+      "CreatedAt": "创建日期",
+      "CreatedBy": "创建人",
+      "Currency": "货币",
+      "CurrencyCode": "货币代码",
+      "CurrencyCode.Description": "ISO 4217 指定的货币代码",
+      "CurrencyMinorUnit": "货币次要单位部分",
+      "CurrencySymbol": "货币符号",
+      "Description": "描述",
+      "LanguageCode": "语言代码",
+      "Name": "名称",
+      "UserID.Description": "用户的唯一标识",
+    },
+    "zh_TW": {
+      "ChangedAt": "更改日期",
+      "ChangedBy": "更改者",
+      "CreatedAt": "建立日期",
+      "CreatedBy": "建立者",
+      "Currency": "幣別",
+      "CurrencyCode": "幣別代碼",
+      "CurrencyCode.Description": "已按 ISO 4217 指定公司代碼",
+      "CurrencyMinorUnit": "幣別次要單位分數",
+      "CurrencySymbol": "幣別符號",
+      "Description": "說明",
+      "LanguageCode": "語言代碼",
+      "Name": "名稱",
+      "UserID.Description": "使用者專屬 ID",
+    },
+  },
+  "meta": {
+    "__name": "DPBooks",
+    "__namespace": "sap.capdpprod",
+    "creator": "CDS Compiler v6.4.2",
+    "document": {
+      "version": "1.0.0",
+    },
+    "flavor": "effective",
+  },
 }
 `;
 
@@ -1913,6 +3278,53 @@ exports[`Tests for products and packages should not contain products property if
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for sap.capdpprod.DPBooks.v1",
+      "direction": "outbound",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "implementationStandard": "sap.dp:data-subscription-api:v1",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:sap.capdpprod.DPBooks",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "sap-csn-interop-effective-v1",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1/sap.capdpprod.DPBooks.v1.csn.json",
+        },
+      ],
+      "shortDescription": "Short description of sap.capdpprod.DPBooks.v1",
+      "title": "sap.capdpprod.DPBooks.v1",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -2007,6 +3419,11 @@ exports[`Tests for products and packages should not contain products property if
       "groupId": "sap.cds:service:customer.capirebookshopordsample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
+    },
+    {
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:sap.capdpprod.DPBooks.v1",
+      "groupTypeId": "sap.cds:service",
+      "title": "v1 Service",
     },
   ],
   "openResourceDiscovery": "1.9",
@@ -2131,6 +3548,53 @@ exports[`Tests for products and packages should raise error log when custom prod
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for sap.capdpprod.DPBooks.v1",
+      "direction": "outbound",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "implementationStandard": "sap.dp:data-subscription-api:v1",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:sap.capdpprod.DPBooks",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "sap-csn-interop-effective-v1",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1/sap.capdpprod.DPBooks.v1.csn.json",
+        },
+      ],
+      "shortDescription": "Short description of sap.capdpprod.DPBooks.v1",
+      "title": "sap.capdpprod.DPBooks.v1",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -2225,6 +3689,11 @@ exports[`Tests for products and packages should raise error log when custom prod
       "groupId": "sap.cds:service:customer.capirebookshopordsample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
+    },
+    {
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:sap.capdpprod.DPBooks.v1",
+      "groupTypeId": "sap.cds:service",
+      "title": "v1 Service",
     },
   ],
   "openResourceDiscovery": "1.9",
@@ -2357,6 +3826,53 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for sap.capdpprod.DPBooks.v1",
+      "direction": "outbound",
+      "entityTypeMappings": [
+        {
+          "entityTypeTargets": [
+            {
+              "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+            },
+          ],
+        },
+      ],
+      "entryPoints": [],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "implementationStandard": "sap.dp:data-subscription-api:v1",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capirebookshopordsample:sap.capdpprod.DPBooks",
+      ],
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "sap-csn-interop-effective-v1",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1/sap.capdpprod.DPBooks.v1.csn.json",
+        },
+      ],
+      "shortDescription": "Short description of sap.capdpprod.DPBooks.v1",
+      "title": "sap.capdpprod.DPBooks.v1",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -2451,6 +3967,11 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "groupId": "sap.cds:service:customer.capirebookshopordsample:CinemaService",
       "groupTypeId": "sap.cds:service",
       "title": "This is test Cinema Service title",
+    },
+    {
+      "groupId": "sap.cds:service:customer.capirebookshopordsample:sap.capdpprod.DPBooks.v1",
+      "groupTypeId": "sap.cds:service",
+      "title": "v1 Service",
     },
   ],
   "openResourceDiscovery": "1.9",

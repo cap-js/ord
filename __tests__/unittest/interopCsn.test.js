@@ -77,4 +77,41 @@ describe("interop-csn", () => {
         const csn = { definitions: {} };
         expect(interopCSN(csn)).toMatchSnapshot();
     });
+
+    it("should handle null i18n bundles", () => {
+        localize.bundles4.mockReturnValue(null);
+        const csn = { definitions: { TestService: { kind: "service" } } };
+        expect(interopCSN(csn)).toMatchSnapshot();
+    });
+
+    it("should handle empty locale in bundles", () => {
+        localize.bundles4.mockReturnValue([
+            ["", { test: "value" }],
+            ["en", { valid: "test" }],
+        ]);
+        const csn = { definitions: { TestService: { kind: "service" } } };
+        expect(interopCSN(csn)).toMatchSnapshot();
+    });
+
+    it("should handle malformed i18n pattern", () => {
+        localize.bundles4.mockReturnValue([]);
+        const csn = {
+            definitions: {
+                TestEntity: {
+                    "kind": "entity",
+                    "@title": "{i18n>", // malformed - missing closing brace
+                    "@description": "{i18n>valid.key}", // valid
+                },
+            },
+        };
+        expect(interopCSN(csn)).toMatchSnapshot();
+    });
+
+    it("should handle non-object CSN input", () => {
+        localize.bundles4.mockReturnValue([]);
+        expect(interopCSN("string")).toBe("string");
+        expect(interopCSN(123)).toBe(123);
+        expect(interopCSN(null)).toBe(null);
+        expect(interopCSN(undefined)).toBe(undefined);
+    });
 });

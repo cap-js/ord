@@ -266,7 +266,7 @@ describe("Tests for products and packages", () => {
 });
 
 describe("Tests for Data Product definition", () => {
-    let csn, ord;
+    let ord;
 
     beforeAll(async () => {
         process.env.DEBUG = "true";
@@ -289,29 +289,47 @@ describe("Tests for Data Product definition", () => {
         jest.resetAllMocks();
     });
 
-    it("Check interop CSN for Data Product", async () => {
-        csn = await cds.load(path.join(cds.root, "srv"));
-        const document = ord(csn);
-
-        // Check that ORD document is generated properly
-        expect(document).toBeDefined();
-        expect(document.apiResources).toBeDefined();
-        expect(document.packages).toBeDefined();
-
-        // If data products are present, check their structure
-        if (document.dataProducts && document.dataProducts.length > 0) {
-            const dataProduct = document.dataProducts[0];
-            expect(dataProduct.outputPorts).toBeDefined();
-            expect(dataProduct.outputPorts).toHaveLength(1);
-
-            const outputPort = dataProduct.outputPorts[0];
-            expect(outputPort.csnModel).toHaveProperty("csnInteropEffective", "1.0");
-            expect(outputPort.csnModel).toHaveProperty("meta.flavor", "effective");
-            expect(outputPort.csnModel).toHaveProperty("definitions");
-            expect(outputPort.csnModel).toHaveProperty("i18n");
-        }
+    it("Check interop CSN content", async () => {
+        const testModel = await cds.load(path.join(cds.root, "srv"));
+        const document = ord(testModel);
 
         expect(document).toMatchSnapshot();
+
+        const csnApiResource = document.apiResources?.find((api) =>
+            api.resourceDefinitions?.some((def) => def.type === "sap-csn-interop-effective-v1"),
+        );
+
+        if (!csnApiResource) {
+            console.warn("No CSN API resource found, skipping CSN content test");
+            return;
+        }
+
+        const csnResourceDef = csnApiResource.resourceDefinitions.find(
+            (def) => def.type === "sap-csn-interop-effective-v1",
+        );
+
+        expect(csnResourceDef).toBeDefined();
+        expect(csnResourceDef.url).toBeDefined();
+
+        const { getMetadata } = require("../lib/index");
+
+        const result = await getMetadata(csnResourceDef.url, testModel);
+        expect(result.contentType).toBe("application/json");
+
+        let interopCsn = result.response;
+        if (typeof interopCsn === "string") {
+            interopCsn = JSON.parse(interopCsn);
+        }
+
+        expect(interopCsn).toBeDefined();
+        expect(typeof interopCsn).toBe("object");
+        expect(interopCsn.csnInteropEffective).toBe("1.0");
+        expect(interopCsn.meta).toBeDefined();
+        expect(interopCsn.meta.flavor).toBe("effective");
+        expect(interopCsn.definitions).toBeDefined();
+        expect(interopCsn.i18n).toBeDefined();
+
+        expect(interopCsn).toMatchSnapshot();
     });
 
     it("Check interop CSN annotation mapping through ORD", async () => {

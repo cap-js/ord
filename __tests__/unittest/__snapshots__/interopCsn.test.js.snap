@@ -77,6 +77,61 @@ exports[`interop-csn should handle empty definitions 1`] = `
 }
 `;
 
+exports[`interop-csn should handle empty locale in bundles 1`] = `
+{
+  "csnInteropEffective": "1.0",
+  "definitions": {
+    "TestService": {
+      "kind": "service",
+    },
+  },
+  "i18n": {},
+  "meta": {
+    "__name": "TestService",
+    "document": {
+      "version": "1.0.0",
+    },
+    "flavor": "effective",
+  },
+}
+`;
+
+exports[`interop-csn should handle malformed i18n pattern 1`] = `
+{
+  "csnInteropEffective": "1.0",
+  "definitions": {
+    "TestEntity": {
+      "@EndUserText.label": "{i18n>",
+      "@EndUserText.quickInfo": "{i18n>valid.key}",
+      "kind": "entity",
+    },
+  },
+  "i18n": {},
+  "meta": {
+    "flavor": "effective",
+  },
+}
+`;
+
+exports[`interop-csn should handle null i18n bundles 1`] = `
+{
+  "csnInteropEffective": "1.0",
+  "definitions": {
+    "TestService": {
+      "kind": "service",
+    },
+  },
+  "i18n": {},
+  "meta": {
+    "__name": "TestService",
+    "document": {
+      "version": "1.0.0",
+    },
+    "flavor": "effective",
+  },
+}
+`;
+
 exports[`interop-csn should transform CSN with i18n and annotations 1`] = `
 {
   "csnInteropEffective": "1.0",
