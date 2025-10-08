@@ -326,8 +326,16 @@ describe("Tests for Data Product definition", () => {
         expect(interopCsn.csnInteropEffective).toBe("1.0");
         expect(interopCsn.meta).toBeDefined();
         expect(interopCsn.meta.flavor).toBe("effective");
+        expect(interopCsn.meta.__name).toBe("DPBooks");
+        expect(interopCsn.meta.__namespace).toBe("sap.capdpprod");
+        expect(interopCsn.meta.document).toBeDefined();
+        expect(interopCsn.meta.document.version).toBe("1.0.0");
         expect(interopCsn.definitions).toBeDefined();
         expect(interopCsn.i18n).toBeDefined();
+        expect(interopCsn.i18n.en).toBeDefined();
+        expect(interopCsn.i18n.en.Stock).toBe("Stock");
+        expect(interopCsn.i18n.de).toBeDefined();
+        expect(interopCsn.i18n.de.Stock).toBe("Bestand");
 
         expect(interopCsn).toMatchSnapshot();
     });
