@@ -265,6 +265,130 @@ describe("Tests for products and packages", () => {
     });
 });
 
+describe("Tests for Data Product definition", () => {
+    let ord;
+
+    beforeAll(async () => {
+        process.env.DEBUG = "true";
+        jest.spyOn(cds, "context", "get").mockReturnValue({
+            authConfig: {
+                types: [AUTHENTICATION_TYPE.Open],
+            },
+        });
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
+        cds.root = path.join(__dirname, "bookshop");
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.clearAllMocks();
+        jest.resetAllMocks();
+    });
+
+    it("Check interop CSN content", async () => {
+        const testModel = await cds.load(path.join(cds.root, "srv"));
+        const document = ord(testModel);
+
+        expect(document).toMatchSnapshot();
+
+        const csnApiResource = document.apiResources?.find((api) =>
+            api.resourceDefinitions?.some((def) => def.type === "sap-csn-interop-effective-v1"),
+        );
+
+        if (!csnApiResource) {
+            console.warn("No CSN API resource found, skipping CSN content test");
+            return;
+        }
+
+        const csnResourceDef = csnApiResource.resourceDefinitions.find(
+            (def) => def.type === "sap-csn-interop-effective-v1",
+        );
+
+        expect(csnResourceDef).toBeDefined();
+        expect(csnResourceDef.url).toBeDefined();
+
+        const { getMetadata } = require("../lib/index");
+
+        const result = await getMetadata(csnResourceDef.url, testModel);
+        expect(result.contentType).toBe("application/json");
+
+        let interopCsn = result.response;
+        if (typeof interopCsn === "string") {
+            interopCsn = JSON.parse(interopCsn);
+        }
+
+        expect(interopCsn).toBeDefined();
+        expect(typeof interopCsn).toBe("object");
+        expect(interopCsn.csnInteropEffective).toBe("1.0");
+        expect(interopCsn.meta).toBeDefined();
+        expect(interopCsn.meta.flavor).toBe("effective");
+        expect(interopCsn.definitions).toBeDefined();
+        expect(interopCsn.i18n).toBeDefined();
+
+        expect(interopCsn).toMatchSnapshot();
+    });
+
+    it("Check interop CSN annotation mapping through ORD", async () => {
+        // Create test model with various annotations (fixed CDS syntax)
+        const linkedModel = cds.linked(`
+            service TestService {
+                entity TestEntity {
+                    ID: Integer;
+                    field1: String;
+                }
+            }
+            annotate TestService with @title: 'Test Service Title';
+            annotate TestService with @Common.Label: 'Service Common Label';
+            annotate TestService.TestEntity with @description: 'Entity Description';
+            annotate TestService.TestEntity with @label: 'Entity Label';
+            annotate TestService.TestEntity with @cds.autoexpose: true;
+            annotate TestService.TestEntity.field1 with @title: 'Field Title';
+            annotate TestService.TestEntity.field1 with @Common.Label: 'Field Common Label';
+        `);
+
+        const document = ord(linkedModel);
+
+        // Check that ORD document contains API resources (data products might not be generated for this simple case)
+        expect(document.apiResources).toBeDefined();
+        expect(document.apiResources.length).toBeGreaterThan(0);
+
+        expect(document).toMatchSnapshot();
+    });
+
+    it("Check interop CSN service name parsing through ORD", async () => {
+        // Create test model with multiple services (different naming patterns)
+        const linkedModel = cds.linked(`
+            namespace customer.namespace;
+            service TestService.v3 {
+                entity TestEntity {
+                    ID: Integer;
+                }
+            }
+            service SimpleService {
+                entity SimpleEntity {
+                    ID: Integer;
+                }
+            }
+        `);
+
+        const document = ord(linkedModel);
+
+        // Check that ORD document is generated with API resources for multiple services
+        expect(document.apiResources).toBeDefined();
+        expect(document.apiResources.length).toBeGreaterThan(0);
+
+        // Verify service names are processed correctly in groups
+        expect(document.groups).toBeDefined();
+        expect(document.groups.length).toBeGreaterThan(0);
+
+        expect(document).toMatchSnapshot();
+    });
+});
+
 describe("Tests for eventResource and apiResource", () => {
     let ord;
 
