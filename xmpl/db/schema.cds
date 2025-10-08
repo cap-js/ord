@@ -27,7 +27,9 @@ entity Movie {
 @title                        : 'Show Details'
 entity Show {
     key id : UUID;
-    movie: Association to one Movie not null;
+    movie_id: UUID not null;
+    movie: Association to one Movie on movie.id = movie_id;
     specialEvent: Boolean;
-    location: Association to one Cinema not null;
+    location_id: UUID not null;
+    location: Association to one Cinema on location.id = location_id;
 }
