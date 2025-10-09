@@ -271,7 +271,6 @@ describe("Tests for Data Product definition", () => {
     let ord;
 
     beforeAll(async () => {
-        jest.resetAllMocks();
         process.env.DEBUG = "true";
         jest.spyOn(cds, "context", "get").mockReturnValue({
             authConfig: {
@@ -372,8 +371,14 @@ describe("Tests for Data Product definition", () => {
     });
 
     it("Check interop CSN service name parsing through ORD", async () => {
-        // Create test model with multiple services (different naming patterns)
-        const linkedModel = cds.linked(`
+        let document;
+        jest.isolateModules(() => {
+            delete global.cds;
+            const cdsLocal = require("@sap/cds");
+            const dateMod = require("../lib/date");
+            jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            const ordLocal = require("../lib/ord");
+            const linkedModel = cds.linked(`
             namespace customer.namespace;
             service TestService.v3 {
                 entity TestEntity {
@@ -386,8 +391,8 @@ describe("Tests for Data Product definition", () => {
                 }
             }
         `);
-
-        const document = ord(linkedModel);
+            document = ordLocal(linkedModel);
+        });
 
         // Check that ORD document is generated with API resources for multiple services
         expect(document.apiResources).toBeDefined();

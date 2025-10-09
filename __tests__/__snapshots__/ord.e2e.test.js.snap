@@ -2343,11 +2343,11 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
         "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:apiResource:customer.namespace.TestService.v3:v1",
+      "ordId": "customer.capjsord:apiResource:customer.namespace.TestService.v3:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:customer.namespace.TestService.v3",
+        "sap.cds:service:customer.capjsord:customer.namespace.TestService.v3",
       ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -2358,7 +2358,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:customer.namespace.TestService.v3:v1/customer.namespace.TestService.v3.oas3.json",
+          "url": "/ord/v1/customer.capjsord:apiResource:customer.namespace.TestService.v3:v1/customer.namespace.TestService.v3.oas3.json",
         },
         {
           "accessStrategies": [
@@ -2368,7 +2368,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:customer.namespace.TestService.v3:v1/customer.namespace.TestService.v3.edmx",
+          "url": "/ord/v1/customer.capjsord:apiResource:customer.namespace.TestService.v3:v1/customer.namespace.TestService.v3.edmx",
         },
       ],
       "shortDescription": "Short description of customer.namespace.TestService.v3",
@@ -2386,11 +2386,11 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
         "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:apiResource:customer.namespace.SimpleService:v1",
+      "ordId": "customer.capjsord:apiResource:customer.namespace.SimpleService:v1",
       "partOfGroups": [
-        "sap.cds:service:customer.capirebookshopordsample:customer.namespace.SimpleService",
+        "sap.cds:service:customer.capjsord:customer.namespace.SimpleService",
       ],
-      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -2401,7 +2401,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:customer.namespace.SimpleService:v1/customer.namespace.SimpleService.oas3.json",
+          "url": "/ord/v1/customer.capjsord:apiResource:customer.namespace.SimpleService:v1/customer.namespace.SimpleService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -2411,7 +2411,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:customer.namespace.SimpleService:v1/customer.namespace.SimpleService.edmx",
+          "url": "/ord/v1/customer.capjsord:apiResource:customer.namespace.SimpleService:v1/customer.namespace.SimpleService.edmx",
         },
       ],
       "shortDescription": "Short description of customer.namespace.SimpleService",
@@ -2424,7 +2424,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "capjsord:consumptionBundle:noAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -2433,12 +2433,12 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
   "description": "this is an application description",
   "groups": [
     {
-      "groupId": "sap.cds:service:customer.capirebookshopordsample:customer.namespace.TestService.v3",
+      "groupId": "sap.cds:service:customer.capjsord:customer.namespace.TestService.v3",
       "groupTypeId": "sap.cds:service",
       "title": "v3 Service",
     },
     {
-      "groupId": "sap.cds:service:customer.capirebookshopordsample:customer.namespace.SimpleService",
+      "groupId": "sap.cds:service:customer.capjsord:customer.namespace.SimpleService",
       "groupTypeId": "sap.cds:service",
       "title": "Simple Service",
     },
@@ -2446,13 +2446,13 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
   "openResourceDiscovery": "1.9",
   "packages": [
     {
-      "description": "This package contains public General for capire bookshop ord sample.",
-      "ordId": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "description": "This package contains public General for cap js ord.",
+      "ordId": "customer.capjsord:package:capjsord:v1",
       "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
+        "customer:product:cap.js.ord:",
       ],
       "shortDescription": "Package containing public General",
-      "title": "capire bookshop ord sample",
+      "title": "cap js ord",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
@@ -2462,9 +2462,9 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
   ],
   "products": [
     {
-      "ordId": "customer:product:capire.bookshop.ord.sample:",
-      "shortDescription": "Short description of capire bookshop ord sample",
-      "title": "capire bookshop ord sample",
+      "ordId": "customer:product:cap.js.ord:",
+      "shortDescription": "Short description of cap js ord",
+      "title": "cap js ord",
       "vendor": "customer:vendor:Customer:",
     },
   ],
