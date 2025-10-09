@@ -268,7 +268,7 @@ describe("Tests for products and packages", () => {
 });
 
 describe("Tests for Data Product definition", () => {
-    let ord;
+    let ord, csn;
 
     beforeAll(async () => {
         process.env.DEBUG = "true";
