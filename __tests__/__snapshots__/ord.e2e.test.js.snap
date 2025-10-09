@@ -1642,6 +1642,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
           "type": "cds.Decimal",
         },
         "stock": {
+          "@EndUserText.label": "{i18n>Stock}",
           "type": "cds.Integer",
         },
         "texts": {
@@ -1994,6 +1995,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "الوصف",
       "LanguageCode": "رمز اللغة",
       "Name": "الاسم",
+      "Stock": "Stock",
       "UserID.Description": "معرف المستخدم الفريد",
     },
     "bg": {
@@ -2009,6 +2011,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Описание",
       "LanguageCode": "Езиков код",
       "Name": "Име",
+      "Stock": "Stock",
       "UserID.Description": "Еднозначен ИД на потребител",
     },
     "cs": {
@@ -2024,6 +2027,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Popis",
       "LanguageCode": "Kód jazyka",
       "Name": "Jméno",
+      "Stock": "Stock",
       "UserID.Description": "Jedinečné ID uživatele",
     },
     "da": {
@@ -2039,6 +2043,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Beskrivelse",
       "LanguageCode": "Sprogkode",
       "Name": "Navn",
+      "Stock": "Stock",
       "UserID.Description": "Brugers entydige ID",
     },
     "de": {
@@ -2054,6 +2059,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Beschreibung",
       "LanguageCode": "Sprachencode",
       "Name": "Name",
+      "Stock": "Bestand",
       "UserID.Description": "Die eindeutige ID eines Benutzers",
     },
     "el": {
@@ -2069,6 +2075,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Περιγραφή",
       "LanguageCode": "Κωδικός Γλώσσας",
       "Name": "Όνομα",
+      "Stock": "Stock",
       "UserID.Description": "Μοναδικό ID χρήστη",
     },
     "en": {
@@ -2084,6 +2091,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Description",
       "LanguageCode": "Language Code",
       "Name": "Name",
+      "Stock": "Stock",
       "UserID.Description": "User's unique ID",
     },
     "en_US_saptrc": {
@@ -2099,6 +2107,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "VGpOoz5siT25o1W0WDiHGw_Description",
       "LanguageCode": "NhI8Yd8pNFS7omWQsk5aJw_Language Code",
       "Name": "xOqOj8rcOinN3ZBO0WdWjA_Name",
+      "Stock": "Stock",
       "UserID.Description": "yOjW1w1qaIvgZeYb0qAsig_User's unique ID",
     },
     "es": {
@@ -2114,6 +2123,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Descripción",
       "LanguageCode": "Código de idioma",
       "Name": "Nombre",
+      "Stock": "Stock",
       "UserID.Description": "ID único de usuario",
     },
     "es_MX": {
@@ -2129,6 +2139,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Descripción",
       "LanguageCode": "Código de idioma",
       "Name": "Nombre",
+      "Stock": "Stock",
       "UserID.Description": "ID único de usuario",
     },
     "fi": {
@@ -2144,6 +2155,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Kuvaus",
       "LanguageCode": "Kielikoodi",
       "Name": "Nimi",
+      "Stock": "Stock",
       "UserID.Description": "Käyttäjän yksiselitteinen tunnus",
     },
     "fr": {
@@ -2159,6 +2171,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Description",
       "LanguageCode": "Code langue",
       "Name": "Nom",
+      "Stock": "Stock",
       "UserID.Description": "ID unique de l'utilisateur",
     },
     "he": {
@@ -2174,6 +2187,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "תיאור",
       "LanguageCode": "קוד שפה",
       "Name": "שם",
+      "Stock": "Stock",
       "UserID.Description": "זיהוי ייחודי של משתמש",
     },
     "hr": {
@@ -2189,6 +2203,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Opis",
       "LanguageCode": "Šifra jezika",
       "Name": "Ime",
+      "Stock": "Stock",
       "UserID.Description": "Jedinstveni ID korisnika",
     },
     "hu": {
@@ -2204,6 +2219,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Leírás",
       "LanguageCode": "Nyelvkód",
       "Name": "Név",
+      "Stock": "Stock",
       "UserID.Description": "Felhasználó egyedi azonosítója",
     },
     "it": {
@@ -2219,6 +2235,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Descrizione",
       "LanguageCode": "Codice lingua",
       "Name": "Nome",
+      "Stock": "Stock",
       "UserID.Description": "ID univoco utente",
     },
     "ja": {
@@ -2234,6 +2251,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "説明",
       "LanguageCode": "言語コード",
       "Name": "名前",
+      "Stock": "Stock",
       "UserID.Description": "ユーザの一意の ID",
     },
     "kk": {
@@ -2249,6 +2267,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Сипаттама",
       "LanguageCode": "Тіл коды",
       "Name": "Аты",
+      "Stock": "Stock",
       "UserID.Description": "Пайдаланушының бірегей ид.",
     },
     "ko": {
@@ -2264,6 +2283,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "내역",
       "LanguageCode": "언어 코드",
       "Name": "이름",
+      "Stock": "Stock",
       "UserID.Description": "사용자 고유 ID",
     },
     "ms": {
@@ -2279,6 +2299,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Perihalan",
       "LanguageCode": "Kod Bahasa",
       "Name": "Nama",
+      "Stock": "Stock",
       "UserID.Description": "ID unik pengguna",
     },
     "nl": {
@@ -2294,6 +2315,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Omschrijving",
       "LanguageCode": "Taalcode",
       "Name": "Naam",
+      "Stock": "Stock",
       "UserID.Description": "Unieke ID van gebruiker",
     },
     "no": {
@@ -2309,6 +2331,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Beskrivelse",
       "LanguageCode": "Språkkode",
       "Name": "Navn",
+      "Stock": "Stock",
       "UserID.Description": "Brukerens unike ID",
     },
     "pl": {
@@ -2324,6 +2347,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Opis",
       "LanguageCode": "Kod języka",
       "Name": "Nazwa",
+      "Stock": "Stock",
       "UserID.Description": "Unikalny identyfikator użytkownika",
     },
     "pt": {
@@ -2339,6 +2363,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Descrição",
       "LanguageCode": "Código de idioma",
       "Name": "Nome",
+      "Stock": "Stock",
       "UserID.Description": "ID exclusivo do usuário",
     },
     "ro": {
@@ -2354,6 +2379,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Descriere",
       "LanguageCode": "Cod de limbă",
       "Name": "Nume",
+      "Stock": "Stock",
       "UserID.Description": "ID unic utilizator",
     },
     "ru": {
@@ -2369,6 +2395,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Описание",
       "LanguageCode": "Код языка",
       "Name": "Имя",
+      "Stock": "Stock",
       "UserID.Description": "Уникальный ид. пользователя",
     },
     "sh": {
@@ -2384,6 +2411,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Opis",
       "LanguageCode": "Šifra jezika",
       "Name": "Ime",
+      "Stock": "Stock",
       "UserID.Description": "Jedinstveni ID korisnika",
     },
     "sk": {
@@ -2399,6 +2427,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Popis",
       "LanguageCode": "Kód jazyka",
       "Name": "Názov",
+      "Stock": "Stock",
       "UserID.Description": "Jedinečné ID používateľa",
     },
     "sl": {
@@ -2414,6 +2443,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Opis",
       "LanguageCode": "Koda jezika",
       "Name": "Ime",
+      "Stock": "Stock",
       "UserID.Description": "Enoznačni ID uporabnika",
     },
     "sv": {
@@ -2429,6 +2459,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Beskrivning",
       "LanguageCode": "Språkkod",
       "Name": "Namn",
+      "Stock": "Stock",
       "UserID.Description": "Unik användar-ID",
     },
     "th": {
@@ -2444,6 +2475,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "คำอธิบาย",
       "LanguageCode": "รหัสภาษา",
       "Name": "ชื่อ",
+      "Stock": "Stock",
       "UserID.Description": "ID ที่ไม่ซ้ำของผู้ใช้",
     },
     "tr": {
@@ -2459,6 +2491,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Tanım",
       "LanguageCode": "Dil kodu",
       "Name": "Ad",
+      "Stock": "Stock",
       "UserID.Description": "Kullanıcının benzersiz tanıtıcısı",
     },
     "uk": {
@@ -2474,6 +2507,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Опис",
       "LanguageCode": "Код мови",
       "Name": "Ім’я",
+      "Stock": "Stock",
       "UserID.Description": "Унікальний ІД користувача",
     },
     "vi": {
@@ -2489,6 +2523,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "Mô tả",
       "LanguageCode": "Mã ngôn ngữ",
       "Name": "Tên",
+      "Stock": "Stock",
       "UserID.Description": "ID duy nhất của người dùng",
     },
     "zh_CN": {
@@ -2504,6 +2539,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "描述",
       "LanguageCode": "语言代码",
       "Name": "名称",
+      "Stock": "Stock",
       "UserID.Description": "用户的唯一标识",
     },
     "zh_TW": {
@@ -2519,6 +2555,7 @@ exports[`Tests for Data Product definition Check interop CSN content 2`] = `
       "Description": "說明",
       "LanguageCode": "語言代碼",
       "Name": "名稱",
+      "Stock": "Stock",
       "UserID.Description": "使用者專屬 ID",
     },
   },
