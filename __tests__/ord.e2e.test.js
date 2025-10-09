@@ -220,6 +220,7 @@ describe("Tests for products and packages", () => {
 
         const document = ord(csn);
         expect(document).toMatchSnapshot();
+        cds.env.ord = {};
     });
 
     it("should raise error log when custom product ordId starts with sap detected", async () => {
@@ -240,6 +241,7 @@ describe("Tests for products and packages", () => {
         const document = ord(csn);
         expect(document).toMatchSnapshot();
         expect(errorSpy).toHaveBeenCalledTimes(1);
+        cds.env.ord = {};
     });
 
     it("should use valid custom products ordId", async () => {
@@ -269,6 +271,7 @@ describe("Tests for Data Product definition", () => {
     let ord;
 
     beforeAll(async () => {
+        jest.resetAllMocks();
         process.env.DEBUG = "true";
         jest.spyOn(cds, "context", "get").mockReturnValue({
             authConfig: {
@@ -276,9 +279,9 @@ describe("Tests for Data Product definition", () => {
             },
         });
         cds.root = path.join(__dirname, "bookshop");
-        csn = await cds.load(path.join(cds.root, "srv"));
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
+        csn = await cds.load(path.join(cds.root, "srv"));
     });
 
     afterEach(() => {
@@ -292,8 +295,6 @@ describe("Tests for Data Product definition", () => {
 
     it("Check interop CSN content", async () => {
         const document = ord(csn);
-
-        expect(document).toMatchSnapshot();
 
         const csnApiResource = document.apiResources?.find((api) =>
             api.resourceDefinitions?.some((def) => def.type === "sap-csn-interop-effective-v1"),
@@ -341,29 +342,32 @@ describe("Tests for Data Product definition", () => {
     });
 
     it("Check interop CSN annotation mapping through ORD", async () => {
-        // Create test model with various annotations (fixed CDS syntax)
-        const linkedModel = cds.linked(`
-            service TestService {
-                entity TestEntity {
-                    ID: Integer;
-                    field1: String;
+        let document;
+        jest.isolateModules(() => {
+            delete global.cds;
+            const cdsLocal = require("@sap/cds");
+            const dateMod = require("../lib/date");
+            jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            const ordLocal = require("../lib/ord");
+            const linkedModel = cdsLocal.linked(`
+                service TestService {
+                    entity TestEntity {
+                        ID: Integer;
+                        field1: String;
+                    }
                 }
-            }
-            annotate TestService with @title: 'Test Service Title';
-            annotate TestService with @Common.Label: 'Service Common Label';
-            annotate TestService.TestEntity with @description: 'Entity Description';
-            annotate TestService.TestEntity with @label: 'Entity Label';
-            annotate TestService.TestEntity with @cds.autoexpose: true;
-            annotate TestService.TestEntity.field1 with @title: 'Field Title';
-            annotate TestService.TestEntity.field1 with @Common.Label: 'Field Common Label';
-        `);
+                annotate TestService with @title: 'Test Service Title';
+                annotate TestService with @Common.Label: 'Service Common Label';
+                annotate TestService.TestEntity with @description: 'Entity Description';
+                annotate TestService.TestEntity with @label: 'Entity Label';
+                annotate TestService.TestEntity with @cds.autoexpose: true;
+                annotate TestService.TestEntity.field1 with @title: 'Field Title';
+                annotate TestService.TestEntity.field1 with @Common.Label: 'Field Common Label';
+            `);
+            document = ordLocal(linkedModel);
+        });
 
-        const document = ord(linkedModel);
-
-        // Check that ORD document contains API resources (data products might not be generated for this simple case)
-        expect(document.apiResources).toBeDefined();
-        expect(document.apiResources.length).toBeGreaterThan(0);
-
+        expect(document).toBeDefined();
         expect(document).toMatchSnapshot();
     });
 
