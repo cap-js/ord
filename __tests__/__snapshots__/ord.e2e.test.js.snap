@@ -23,6 +23,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -111,6 +114,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
             {
               "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
             },
+            {
+              "ordId": "customer.foo:entityType:Authors:v1",
+            },
           ],
         },
       ],
@@ -118,6 +124,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -199,6 +208,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -358,6 +370,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -446,6 +461,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
             {
               "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
             },
+            {
+              "ordId": "customer.foo:entityType:Authors:v1",
+            },
           ],
         },
       ],
@@ -453,6 +471,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -534,6 +555,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -693,6 +717,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -781,6 +808,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
             {
               "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
             },
+            {
+              "ordId": "customer.foo:entityType:Authors:v1",
+            },
           ],
         },
       ],
@@ -788,6 +818,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -869,6 +902,9 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -1120,6 +1156,9 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -1211,6 +1250,9 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
             {
               "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
             },
+            {
+              "ordId": "customer.foo:entityType:Authors:v1",
+            },
           ],
         },
       ],
@@ -1218,6 +1260,9 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -1260,6 +1305,24 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
     },
   ],
   "description": "this is an application description",
+  "entityTypes": [
+    {
+      "description": "Description for Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Authors",
+      "ordId": "customer.foo:entityType:Authors:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Authors",
+      "title": "Authors",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -1273,6 +1336,9 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -3197,6 +3263,9 @@ exports[`Tests for products and packages should not contain products property if
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -3288,6 +3357,9 @@ exports[`Tests for products and packages should not contain products property if
             {
               "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
             },
+            {
+              "ordId": "customer.foo:entityType:Authors:v1",
+            },
           ],
         },
       ],
@@ -3295,6 +3367,9 @@ exports[`Tests for products and packages should not contain products property if
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -3337,6 +3412,24 @@ exports[`Tests for products and packages should not contain products property if
     },
   ],
   "description": "this is an application description",
+  "entityTypes": [
+    {
+      "description": "Description for Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Authors",
+      "ordId": "customer.foo:entityType:Authors:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Authors",
+      "title": "Authors",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -3350,6 +3443,9 @@ exports[`Tests for products and packages should not contain products property if
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -3467,6 +3563,9 @@ exports[`Tests for products and packages should raise error log when custom prod
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -3558,6 +3657,9 @@ exports[`Tests for products and packages should raise error log when custom prod
             {
               "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
             },
+            {
+              "ordId": "customer.foo:entityType:Authors:v1",
+            },
           ],
         },
       ],
@@ -3565,6 +3667,9 @@ exports[`Tests for products and packages should raise error log when custom prod
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -3607,6 +3712,24 @@ exports[`Tests for products and packages should raise error log when custom prod
     },
   ],
   "description": "this is an application description",
+  "entityTypes": [
+    {
+      "description": "Description for Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Authors",
+      "ordId": "customer.foo:entityType:Authors:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Authors",
+      "title": "Authors",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -3620,6 +3743,9 @@ exports[`Tests for products and packages should raise error log when custom prod
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -3745,6 +3871,9 @@ exports[`Tests for products and packages should use valid custom products ordId 
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
+        },
       ],
       "extensible": {
         "supported": "yes",
@@ -3836,6 +3965,9 @@ exports[`Tests for products and packages should use valid custom products ordId 
             {
               "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
             },
+            {
+              "ordId": "customer.foo:entityType:Authors:v1",
+            },
           ],
         },
       ],
@@ -3843,6 +3975,9 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
@@ -3885,6 +4020,24 @@ exports[`Tests for products and packages should use valid custom products ordId 
     },
   ],
   "description": "this is an application description",
+  "entityTypes": [
+    {
+      "description": "Description for Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Authors",
+      "ordId": "customer.foo:entityType:Authors:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Authors",
+      "title": "Authors",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -3898,6 +4051,9 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "exposedEntityTypes": [
         {
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+        },
+        {
+          "ordId": "customer.foo:entityType:Authors:v1",
         },
       ],
       "extensible": {
