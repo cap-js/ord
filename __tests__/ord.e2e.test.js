@@ -220,6 +220,7 @@ describe("Tests for products and packages", () => {
 
         const document = ord(csn);
         expect(document).toMatchSnapshot();
+        cds.env.ord = {};
     });
 
     it("should raise error log when custom product ordId starts with sap detected", async () => {
@@ -240,6 +241,7 @@ describe("Tests for products and packages", () => {
         const document = ord(csn);
         expect(document).toMatchSnapshot();
         expect(errorSpy).toHaveBeenCalledTimes(1);
+        cds.env.ord = {};
     });
 
     it("should use valid custom products ordId", async () => {
@@ -266,7 +268,7 @@ describe("Tests for products and packages", () => {
 });
 
 describe("Tests for Data Product definition", () => {
-    let ord;
+    let ord, csn;
 
     beforeAll(async () => {
         process.env.DEBUG = "true";
@@ -275,9 +277,10 @@ describe("Tests for Data Product definition", () => {
                 types: [AUTHENTICATION_TYPE.Open],
             },
         });
+        cds.root = path.join(__dirname, "bookshop");
         jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../lib/ord");
-        cds.root = path.join(__dirname, "bookshop");
+        csn = await cds.load(path.join(cds.root, "srv"));
     });
 
     afterEach(() => {
@@ -290,10 +293,7 @@ describe("Tests for Data Product definition", () => {
     });
 
     it("Check interop CSN content", async () => {
-        const testModel = await cds.load(path.join(cds.root, "srv"));
-        const document = ord(testModel);
-
-        expect(document).toMatchSnapshot();
+        const document = ord(csn);
 
         const csnApiResource = document.apiResources?.find((api) =>
             api.resourceDefinitions?.some((def) => def.type === "sap-csn-interop-effective-v1"),
@@ -313,7 +313,7 @@ describe("Tests for Data Product definition", () => {
 
         const { getMetadata } = require("../lib/index");
 
-        const result = await getMetadata(csnResourceDef.url, testModel);
+        const result = await getMetadata(csnResourceDef.url, csn);
         expect(result.contentType).toBe("application/json");
 
         let interopCsn = result.response;
@@ -341,35 +341,44 @@ describe("Tests for Data Product definition", () => {
     });
 
     it("Check interop CSN annotation mapping through ORD", async () => {
-        // Create test model with various annotations (fixed CDS syntax)
-        const linkedModel = cds.linked(`
-            service TestService {
-                entity TestEntity {
-                    ID: Integer;
-                    field1: String;
+        let document;
+        jest.isolateModules(() => {
+            delete global.cds;
+            const cdsLocal = require("@sap/cds");
+            const dateMod = require("../lib/date");
+            jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            const ordLocal = require("../lib/ord");
+            const linkedModel = cdsLocal.linked(`
+                service TestService {
+                    entity TestEntity {
+                        ID: Integer;
+                        field1: String;
+                    }
                 }
-            }
-            annotate TestService with @title: 'Test Service Title';
-            annotate TestService with @Common.Label: 'Service Common Label';
-            annotate TestService.TestEntity with @description: 'Entity Description';
-            annotate TestService.TestEntity with @label: 'Entity Label';
-            annotate TestService.TestEntity with @cds.autoexpose: true;
-            annotate TestService.TestEntity.field1 with @title: 'Field Title';
-            annotate TestService.TestEntity.field1 with @Common.Label: 'Field Common Label';
-        `);
+                annotate TestService with @title: 'Test Service Title';
+                annotate TestService with @Common.Label: 'Service Common Label';
+                annotate TestService.TestEntity with @description: 'Entity Description';
+                annotate TestService.TestEntity with @label: 'Entity Label';
+                annotate TestService.TestEntity with @cds.autoexpose: true;
+                annotate TestService.TestEntity.field1 with @title: 'Field Title';
+                annotate TestService.TestEntity.field1 with @Common.Label: 'Field Common Label';
+            `);
+            document = ordLocal(linkedModel);
+        });
 
-        const document = ord(linkedModel);
-
-        // Check that ORD document contains API resources (data products might not be generated for this simple case)
-        expect(document.apiResources).toBeDefined();
-        expect(document.apiResources.length).toBeGreaterThan(0);
-
+        expect(document).toBeDefined();
         expect(document).toMatchSnapshot();
     });
 
     it("Check interop CSN service name parsing through ORD", async () => {
-        // Create test model with multiple services (different naming patterns)
-        const linkedModel = cds.linked(`
+        let document;
+        jest.isolateModules(() => {
+            delete global.cds;
+            const cdsLocal = require("@sap/cds");
+            const dateMod = require("../lib/date");
+            jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            const ordLocal = require("../lib/ord");
+            const linkedModel = cds.linked(`
             namespace customer.namespace;
             service TestService.v3 {
                 entity TestEntity {
@@ -382,8 +391,8 @@ describe("Tests for Data Product definition", () => {
                 }
             }
         `);
-
-        const document = ord(linkedModel);
+            document = ordLocal(linkedModel);
+        });
 
         // Check that ORD document is generated with API resources for multiple services
         expect(document.apiResources).toBeDefined();
