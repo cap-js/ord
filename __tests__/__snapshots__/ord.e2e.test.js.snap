@@ -1852,7 +1852,7 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
       "Stock": "Stock",
       "UserID.Description": "User's unique ID",
     },
-    "en_US_saptrc": {
+    "en-US-saptrc": {
       "ChangedAt": "8v5EfaWMYC2dmCGnaCSSUA_Changed On",
       "ChangedBy": "y0d7F56RLGVZiTV7YHU7Iw_Changed By",
       "CreatedAt": "CJxeZDpLHdREwzDQeluRuA_Created On",
@@ -1884,7 +1884,7 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
       "Stock": "Stock",
       "UserID.Description": "ID único de usuario",
     },
-    "es_MX": {
+    "es-MX": {
       "ChangedAt": "Fecha de modificación",
       "ChangedBy": "Autor de modificación",
       "CreatedAt": "Fecha de creación",
@@ -2284,7 +2284,7 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
       "Stock": "Stock",
       "UserID.Description": "ID duy nhất của người dùng",
     },
-    "zh_CN": {
+    "zh-CN": {
       "ChangedAt": "更改日期",
       "ChangedBy": "更改人",
       "CreatedAt": "创建日期",
@@ -2300,7 +2300,7 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
       "Stock": "Stock",
       "UserID.Description": "用户的唯一标识",
     },
-    "zh_TW": {
+    "zh-TW": {
       "ChangedAt": "更改日期",
       "ChangedBy": "更改者",
       "CreatedAt": "建立日期",
