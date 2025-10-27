@@ -5,7 +5,7 @@ spring:
 cds:
     security:
         authentication:
-            enabled: false
+            authenticateMetadataEndpoints: false
         mock.users:
             admin:
                 password: admin
