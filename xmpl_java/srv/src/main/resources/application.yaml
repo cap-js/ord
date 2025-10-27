@@ -1,20 +1,22 @@
-
 ---
 spring:
-  config.activate.on-profile: default
-  sql.init.platform: h2
+    config.activate.on-profile: default
+    sql.init.platform: h2
 cds:
-  data-source.auto-config.enabled: false
-  security:
-    authentication:
-      mode: mock
-    mock:
-      enabled: true
-      users:
-        - name: ord-internal
-          password: ""
-          roles: []
-          internalUser: true
-        - name: user
-          password: password
-          roles: []
+    security:
+        authentication:
+            enabled: false
+        mock.users:
+            admin:
+                password: admin
+                roles:
+                    - admin
+                attributes:
+                    businessPartner:
+                        - "10401010"
+            user:
+                password: user
+logging:
+    level:
+        com.sap.cds: DEBUG
+        org.springframework.security: DEBUG
