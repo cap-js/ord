@@ -1,0 +1,87 @@
+name: Integration Tests
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+    workflow_dispatch:
+
+jobs:
+    integration-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v5
+
+            - name: Set up Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 22
+
+            - name: Install dependencies
+              run: |
+                  npm install -g @sap/cds-dk
+                  npm install
+
+            - name: Generate test certificates
+              run: |
+                  chmod +x scripts/generate-test-certs.sh
+                  ./scripts/generate-test-certs.sh
+
+            - name: Setup authentication configuration
+              run: |
+                  node scripts/setup-bookshop-auth.js
+
+            - name: Load certificate environment variables
+              run: |
+                  if [ -f cert-env.txt ]; then
+                      cat cert-env.txt >> $GITHUB_ENV
+                  fi
+
+            - name: Load authentication environment variables
+              run: |
+                  if [ -f auth-env.txt ]; then
+                      cat auth-env.txt >> $GITHUB_ENV
+                  fi
+
+            - name: Build ORD documents for bookshop
+              run: |
+                  cd __tests__/bookshop
+                  cds build --for ord
+
+            - name: Start bookshop application
+              run: |
+                  cd __tests__/bookshop
+                  npm install
+                  cds run &
+                  sleep 10
+              env:
+                  PORT: 4004
+
+            - name: Wait for application to be ready
+              run: |
+                  timeout 30s bash -c 'until curl -f http://localhost:4004/ || curl -f http://localhost:4004/.well-known/open-resource-discovery; do sleep 1; done'
+
+            - name: Run integration tests
+              run: |
+                  node __tests__/bookshop/test-mtls-integration.js
+              env:
+                  BASE_URL: http://localhost:4004
+
+            - name: Run unit tests
+              run: |
+                  npm test
+
+            - name: Upload test artifacts
+              uses: actions/upload-artifact@v4
+              if: always()
+              with:
+                  name: test-artifacts
+                  path: |
+                      test-config.json
+                      test-headers.json
+                      cert-env.txt
+                      auth-env.txt
+                  retention-days: 7

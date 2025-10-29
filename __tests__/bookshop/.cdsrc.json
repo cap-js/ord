@@ -2,9 +2,23 @@
     "ord": {
         "namespace": "sap.test.cdsrc.sample",
         "openResourceDiscovery": "1.10",
-        "description": "this is my custom description",
+        "description": "Bookshop ORD Integration Test Application",
         "policyLevels": ["sap:core:v1"],
         "customOrdContentFile": "./ord/custom.ord.json"
+    },
+    "authentication": {
+        "types": ["mtls", "basic"],
+        "basic": {
+            "credentials": {
+                "admin": "$2b$10$h0uDpdajQoQqi4xxEl2Lw.ALKsjqwhpd7czHpk7lmpZlh1krsHTwC"
+            }
+        },
+        "mtls": {
+            "mode": "sap:cmp-mtls",
+            "trustedIssuers": ["C=DE,O=SAP,OU=UCL,CN=UCL Certificate Authority"],
+            "trustedSubjects": ["C=DE,O=SAP,OU=UCL,CN=ucl-discovery-bot"],
+            "decodeBase64Headers": false
+        }
     },
     "DEBUG": false
 }

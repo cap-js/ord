@@ -4,3 +4,20 @@ coverage
 gen
 /.idea
 */mcp.json
+
+# Generated authentication files
+auth-env.txt
+test-config.json
+cert-env.txt
+test-headers.json
+
+# HTTP request files (VS Code REST Client)
+*.http
+*.rest
+
+# Temporary and log files
+*.tmp
+*.log
+*.bak
+*.orig
+.DS_Store

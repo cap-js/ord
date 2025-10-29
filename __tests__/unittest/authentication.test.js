@@ -131,7 +131,7 @@ describe("authentication", () => {
             });
         });
 
-        it("should return auth configuration containing credentials by using data from .cdsrc.json", () => {
+        it("should return auth configuration containing credentials by using data from .cdsrc.json (legacy flat structure)", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             cds.env.authentication.credentials = mockValidUser;
             const authConfig = createAuthConfig();
@@ -140,6 +140,37 @@ describe("authentication", () => {
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                 credentials: mockValidUser,
             });
+        });
+
+        it("should return auth configuration containing credentials by using new nested structure", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
+            cds.env.authentication.basic = { credentials: mockValidUser };
+            const authConfig = createAuthConfig();
+            expect(authConfig).toEqual({
+                types: [AUTHENTICATION_TYPE.Basic],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                credentials: mockValidUser,
+            });
+        });
+
+        it("should prefer new nested structure over legacy flat structure when both are present", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
+            const nestedCredentials = { admin: "$2a$05$kx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZX" };
+            cds.env.authentication.basic = { credentials: nestedCredentials };
+            cds.env.authentication.credentials = mockValidUser; // This should be ignored
+            const authConfig = createAuthConfig();
+            expect(authConfig).toEqual({
+                types: [AUTHENTICATION_TYPE.Basic],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                credentials: nestedCredentials,
+            });
+        });
+
+        it("should return error when basic authentication is configured but no credentials are found", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
+            // No credentials provided in any structure
+            const authConfig = createAuthConfig();
+            expect(authConfig.error).toEqual("Basic authentication requires credentials");
         });
         it("should return default configuration with error when credentials are not valid BCrypt hashes", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;

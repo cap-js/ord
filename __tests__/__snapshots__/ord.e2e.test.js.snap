@@ -194,7 +194,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "visibility": "public",
     },
   ],
-  "description": "this is my custom description",
+  "description": "Bookshop ORD Integration Test Application",
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -541,7 +541,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "visibility": "public",
     },
   ],
-  "description": "this is my custom description",
+  "description": "Bookshop ORD Integration Test Application",
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -888,7 +888,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "visibility": "public",
     },
   ],
-  "description": "this is my custom description",
+  "description": "Bookshop ORD Integration Test Application",
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
