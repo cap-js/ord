@@ -3,7 +3,6 @@ const {
     dnTokensMatch,
     parseDnString,
     extractCertificateFromHeader,
-    parseCertificateFromPem,
     formatPemCertificate,
     isBase64,
     isBase64Encoded,

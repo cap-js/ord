@@ -344,11 +344,11 @@ describe("Tests for Data Product definition", () => {
         let document;
         jest.isolateModules(() => {
             delete global.cds;
-            const cdsLocal = require("@sap/cds");
+            const cds = require("@sap/cds");
             const dateMod = require("../lib/date");
             jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             const ordLocal = require("../lib/ord");
-            const linkedModel = cdsLocal.linked(`
+            const linkedModel = cds.linked(`
                 service TestService {
                     entity TestEntity {
                         ID: Integer;
@@ -374,7 +374,7 @@ describe("Tests for Data Product definition", () => {
         let document;
         jest.isolateModules(() => {
             delete global.cds;
-            const cdsLocal = require("@sap/cds");
+            const cds = require("@sap/cds");
             const dateMod = require("../lib/date");
             jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             const ordLocal = require("../lib/ord");

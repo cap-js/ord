@@ -28,10 +28,6 @@ jest.mock("bcryptjs", () => ({
 describe("mTLS Authentication", () => {
     // The bcrypt hash for password: secret
     const mockValidUser = { admin: "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW" };
-    const defaultAuthConfig = {
-        types: [AUTHENTICATION_TYPE.Open],
-        accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
-    };
 
     beforeAll(() => {
         Logger.log = Logger.error = jest.fn();

@@ -1,5 +1,4 @@
 const { authenticate } = require('../lib/authentication.js');
-const express = require('express');
 
 console.log('=== Debug mTLS Middleware ===');
 
