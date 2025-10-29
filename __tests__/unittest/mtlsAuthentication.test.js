@@ -115,7 +115,9 @@ describe("mTLS Authentication", () => {
 
             const result = validateMtlsConfig(config);
             expect(result.isValid).toBe(false);
-            expect(result.errors).toContain("Unsupported mTLS mode: unsupported-mode. Only 'sap:cmp-mtls' is supported.");
+            expect(result.errors).toContain(
+                "Unsupported mTLS mode: unsupported-mode. Only 'sap:cmp-mtls' is supported.",
+            );
         });
 
         it("should require at least one configuration option", () => {

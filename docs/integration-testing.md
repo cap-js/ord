@@ -194,7 +194,7 @@ The setup scripts create several debug files:
 - `test-config.json`: Complete test configuration
 - `test-headers.json`: Sample mTLS headers
 - `cert-env.txt`: Certificate environment variables
-- `auth-env.txt`: Authentication environment variables
+- `auth-env.txt`: Authentication environment variables (GitHub Actions compatible format)
 
 ## Development Workflow
 

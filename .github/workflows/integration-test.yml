@@ -37,13 +37,19 @@ jobs:
             - name: Load certificate environment variables
               run: |
                   if [ -f cert-env.txt ]; then
-                      cat cert-env.txt >> $GITHUB_ENV
+                      echo "Loading certificate environment variables..."
+                      grep -v '^#' cert-env.txt | grep -v '^$' >> $GITHUB_ENV
+                  else
+                      echo "cert-env.txt not found, skipping certificate environment variables"
                   fi
 
             - name: Load authentication environment variables
               run: |
                   if [ -f auth-env.txt ]; then
-                      cat auth-env.txt >> $GITHUB_ENV
+                      echo "Loading authentication environment variables..."
+                      grep -v '^#' auth-env.txt | grep -v '^$' >> $GITHUB_ENV
+                  else
+                      echo "auth-env.txt not found, skipping authentication environment variables"
                   fi
 
             - name: Build ORD documents for bookshop

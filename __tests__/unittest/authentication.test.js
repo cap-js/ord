@@ -88,39 +88,26 @@ describe("authentication", () => {
         });
 
         it("should return configuration when Open authentication type is provided", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}"]`;
+            process.env.ORD_AUTH_TYPE = AUTHENTICATION_TYPE.Open;
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual(defaultAuthConfig);
         });
 
         it("should return default configuration with error when invalid authentication type is provided", () => {
-            process.env.ORD_AUTH_TYPE = '["InvalidType"]';
+            process.env.ORD_AUTH_TYPE = "InvalidType";
             const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual("Invalid authentication type");
         });
 
         it("should return default configuration with error when Open and Basic authentication types are combined", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}"]`;
+            process.env.ORD_AUTH_TYPE = `${AUTHENTICATION_TYPE.Open},${AUTHENTICATION_TYPE.Basic}`;
             const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual(
                 "Open authentication cannot be combined with any other authentication type",
             );
         });
 
-        it("should return default configuration with error when invalid JSON is provided", () => {
-            process.env.ORD_AUTH_TYPE = 'typo["Open"typo]';
-            const authConfig = createAuthConfig();
-            expect(authConfig.error).toEqual(expect.stringContaining("not valid JSON"));
-        });
-
-        it("should return default configuration with error when credentials are not valid JSON", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
-            process.env.BASIC_AUTH = "non-valid-json";
-            const authConfig = createAuthConfig();
-            expect(authConfig.error).toEqual(expect.stringContaining("not valid JSON"));
-        });
-
-        it("should return auth configuration containing credentials by using data from process.env.BASIC_AUTH", () => {
+        it("should return auth configuration containing credentials by using legacy JSON format", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             const authConfig = createAuthConfig();
@@ -131,8 +118,20 @@ describe("authentication", () => {
             });
         });
 
+        it("should return auth configuration containing credentials by using GitHub Actions compatible format", () => {
+            process.env.ORD_AUTH_TYPE = AUTHENTICATION_TYPE.Basic;
+            process.env.BASIC_AUTH_USERNAME = 'admin';
+            process.env.BASIC_AUTH_HASH = mockValidUser.admin;
+            const authConfig = createAuthConfig();
+            expect(authConfig).toEqual({
+                types: [AUTHENTICATION_TYPE.Basic],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                credentials: mockValidUser,
+            });
+        });
+
         it("should return auth configuration containing credentials by using data from .cdsrc.json (legacy flat structure)", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
+            process.env.ORD_AUTH_TYPE = AUTHENTICATION_TYPE.Basic;
             cds.env.authentication.credentials = mockValidUser;
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
@@ -143,7 +142,7 @@ describe("authentication", () => {
         });
 
         it("should return auth configuration containing credentials by using new nested structure", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
+            process.env.ORD_AUTH_TYPE = AUTHENTICATION_TYPE.Basic;
             cds.env.authentication.basic = { credentials: mockValidUser };
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
@@ -154,8 +153,8 @@ describe("authentication", () => {
         });
 
         it("should prefer new nested structure over legacy flat structure when both are present", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
-            const nestedCredentials = { admin: "$2a$05$kx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZX" };
+            process.env.ORD_AUTH_TYPE = AUTHENTICATION_TYPE.Basic;
+            const nestedCredentials = { admin: "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW" };
             cds.env.authentication.basic = { credentials: nestedCredentials };
             cds.env.authentication.credentials = mockValidUser; // This should be ignored
             const authConfig = createAuthConfig();
@@ -167,16 +166,19 @@ describe("authentication", () => {
         });
 
         it("should return error when basic authentication is configured but no credentials are found", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
-            // No credentials provided in any structure
+            process.env.ORD_AUTH_TYPE = AUTHENTICATION_TYPE.Basic;
+            // Clear all credential sources
+            delete process.env.BASIC_AUTH_USERNAME;
+            delete process.env.BASIC_AUTH_HASH;
+            cds.env.authentication = {}; // No credentials in CDS config
             const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual("Basic authentication requires credentials");
         });
+
         it("should return default configuration with error when credentials are not valid BCrypt hashes", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
-            process.env.BASIC_AUTH = JSON.stringify({
-                admin: "InvalidBCrypHash",
-            });
+            process.env.ORD_AUTH_TYPE = AUTHENTICATION_TYPE.Basic;
+            process.env.BASIC_AUTH_USERNAME = "admin";
+            process.env.BASIC_AUTH_HASH = "InvalidBCrypHash";
             const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual("All passwords must be bcrypt hashes");
         });

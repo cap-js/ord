@@ -112,14 +112,16 @@ async function setupAuthConfiguration() {
         error(`Failed to write .cdsrc.json: ${err.message}`);
     }
 
-    // Create environment variables file for CI/CD
+    // Create environment variables file for CI/CD (GitHub Actions compatible format)
     const envContent = [
         `# Authentication configuration for bookshop integration tests`,
         `# Generated on ${new Date().toISOString()}`,
+        `# GitHub Actions compatible format - no spaces around = and no complex JSON`,
         ``,
         `# Basic Authentication`,
-        `ORD_AUTH_TYPE=["mtls","basic"]`,
-        `BASIC_AUTH={"${username}":"${passwordHash}"}`,
+        `ORD_AUTH_TYPE=mtls,basic`,
+        `BASIC_AUTH_USERNAME=${username}`,
+        `BASIC_AUTH_HASH=${passwordHash}`,
         ``,
         `# Test credentials for verification`,
         `TEST_USERNAME=${username}`,
