@@ -15,7 +15,7 @@ cds.on("bootstrap", async (app) => {
         const logger = Logger.Logger;
         
         app.get('/.well-known/open-resource-discovery', authentication.authenticate, (_, res) => {
-            return res.status(200).send(defaults.baseTemplate);
+            return res.status(200).send(defaults.baseTemplate());
         });
 
         app.get('/ord/v1/documents/ord-document', authentication.authenticate, async (_, res) => {

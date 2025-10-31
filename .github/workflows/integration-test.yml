@@ -52,8 +52,6 @@ jobs:
               run: |
                   if [ -f auth-env.txt ]; then
                       echo "Loading authentication environment variables..."
-                      # DEBUG_CLEANUP: Remove debug output below
-                      echo "DEBUG: Authentication config loaded - ORD_AUTH_TYPE: $ORD_AUTH_TYPE, Username: $BASIC_AUTH_USERNAME"
                       grep -v '^#' auth-env.txt | grep -v '^$' >> $GITHUB_ENV
                   else
                       echo "auth-env.txt not found, skipping authentication environment variables"
@@ -66,13 +64,17 @@ jobs:
             - name: Start bookshop application
               run: |
                   cd __tests__/bookshop
-                  # DEBUG_CLEANUP: Remove debug logging below
-                  echo "DEBUG: Starting CDS server with auth config..."
-                  DEBUG=ord*,auth* cds run > ../bookshop.log 2>&1 &
+                  # Export environment variables to ensure they're available to CDS
+                  export ORD_AUTH_TYPE="${ORD_AUTH_TYPE:-mtls,basic}"
+                  export BASIC_AUTH_USERNAME="${BASIC_AUTH_USERNAME:-admin}"
+                  export BASIC_AUTH_HASH="${BASIC_AUTH_HASH}"
+                  export TRUSTED_ISSUER="${TRUSTED_ISSUER}"
+                  export TRUSTED_SUBJECT="${TRUSTED_SUBJECT}"
+                  
+                  echo "Starting CDS server with authentication: $ORD_AUTH_TYPE"
+                  cds run > ../bookshop.log 2>&1 &
                   CDS_PID=$!
-                  echo "DEBUG: CDS PID: $CDS_PID"
                   sleep 15
-                  # DEBUG_CLEANUP: Remove process check below
                   if ! kill -0 $CDS_PID 2>/dev/null; then
                       echo "ERROR: CDS process died, showing logs:"
                       cat ../bookshop.log
@@ -83,18 +85,15 @@ jobs:
 
             - name: Wait for application to be ready
               run: |
-                  # DEBUG_CLEANUP: Replace with original simple check
-                  echo "DEBUG: Testing application readiness..."
+                  echo "Waiting for application to be ready..."
                   for i in {1..30}; do
-                      HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:4004/.well-known/open-resource-discovery || echo "000")
-                      echo "DEBUG: Attempt $i - HTTP $HTTP_CODE"
-                      if [ "$HTTP_CODE" = "401" ] || [ "$HTTP_CODE" = "200" ]; then
-                          echo "DEBUG: Application ready (expected auth challenge)"
+                      if curl -s http://localhost:4004/.well-known/open-resource-discovery > /dev/null 2>&1; then
+                          echo "Application is ready"
                           break
                       fi
                       if [ $i -eq 30 ]; then
-                          echo "ERROR: App not ready. Last logs:"
-                          tail -20 __tests__/bookshop.log 2>/dev/null || echo "No logs"
+                          echo "ERROR: Application not ready after 30 attempts"
+                          tail -20 __tests__/bookshop.log 2>/dev/null || echo "No logs available"
                           exit 1
                       fi
                       sleep 1
@@ -102,11 +101,7 @@ jobs:
 
             - name: Run integration tests
               run: |
-                  # DEBUG_CLEANUP: Remove debug logging below
-                  echo "DEBUG: Running integration tests with config verification..."
-                  if [ -f test-config.json ]; then
-                      echo "DEBUG: Test config exists"
-                  else
+                  if [ ! -f test-config.json ]; then
                       echo "ERROR: Missing test-config.json"
                       exit 1
                   fi
@@ -117,18 +112,6 @@ jobs:
             - name: Run unit tests
               run: |
                   npm test
-
-            # DEBUG_CLEANUP: Remove debug step below
-            - name: Debug failure info
-              if: failure()
-              run: |
-                  echo "DEBUG: Failure diagnostics..."
-                  echo "Process status:"
-                  ps aux | grep -E "(cds|node)" | head -5
-                  echo "Port 4004 status:"
-                  netstat -tlnp | grep 4004 || echo "Port not bound"
-                  echo "Recent application logs:"
-                  tail -30 __tests__/bookshop.log 2>/dev/null || echo "No app logs"
 
             - name: Upload test artifacts
               uses: actions/upload-artifact@v4
