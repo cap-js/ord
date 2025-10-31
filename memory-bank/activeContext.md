@@ -15,6 +15,7 @@
 **Previous Major Feature (September 26, 2025)**:
 
 **Dual Annotation Support for Data Products**: Enhanced data product service exposure to support both `@DataIntegration.dataProduct.type: 'primary'` and the simpler `@data.product` annotation
+
 - Either annotation is now sufficient to create data product ORD resources with full feature parity
 - `@DataIntegration.dataProduct.type: 'primary'` takes precedence when both annotations are present
 - Services with `@data.product` (truthy values) get same ORD properties: `sap.dp:data-subscription-api:v1`, REST protocol, outbound direction, internal visibility

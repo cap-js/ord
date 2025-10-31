@@ -20,15 +20,38 @@ jobs:
               with:
                   node-version: 22
 
+            - name: Debug Environment
+              run: |
+                  echo "=== Environment Information ==="
+                  echo "Node.js version: $(node --version)"
+                  echo "NPM version: $(npm --version)"
+                  echo "Working directory: $(pwd)"
+                  echo "Available disk space: $(df -h . | tail -1)"
+                  echo "Memory info: $(free -h || echo 'free command not available')"
+
             - name: Install dependencies
               run: |
+                  echo "=== Installing Dependencies ==="
                   npm install -g @sap/cds-dk
                   npm install
+                  
+                  echo "=== Verifying Installations ==="
+                  echo "Global packages:"
+                  npm list -g --depth=0 | grep cds || echo "No global CDS packages found"
+                  echo "Local CDS packages:"
+                  npm list @sap/cds @sap/cds-dk || echo "Local CDS packages not found"
+                  
+                  echo "=== CDS Version Information ==="
+                  cds version || echo "cds version command failed"
 
             - name: Install bookshop dependencies
               run: |
+                  echo "=== Installing Bookshop Dependencies ==="
                   cd __tests__/bookshop
                   npm install
+                  
+                  echo "=== Bookshop Package Verification ==="
+                  npm list @sap/cds @cap-js/ord || echo "Bookshop dependencies verification failed"
 
             - name: Generate test certificates
               run: |
@@ -61,13 +84,40 @@ jobs:
               run: |
                   cds build __tests__/bookshop --for ord
 
-            - name: Start bookshop application
+            - name: Debug pre-startup
               run: |
+                  echo "=== Pre-startup Debug Information ==="
                   cd __tests__/bookshop
-                  cds run &
-                  sleep 10
+                  echo "Current directory: $(pwd)"
+                  echo "Package.json start script:"
+                  cat package.json | grep -A 2 -B 2 '"start"' || echo "No start script found"
+                  echo "Available CDS files:"
+                  find . -name "*.cds" -type f || echo "No CDS files found"
+                  echo "Node modules check:"
+                  ls -la node_modules/@sap/ | head -10 || echo "No @sap modules found"
+
+            - name: Start bookshop application  
+              run: |
+                  echo "=== Starting Bookshop Application ==="
+                  cd __tests__/bookshop
+                  echo "Using working directory: $(pwd)"
+                  echo "Starting with: cds run"
+                  echo "Environment variables:"
+                  env | grep -E "(CDS|NODE|PORT)" | sort || echo "No relevant env vars"
+                  
+                  # Start with more verbose logging
+                  DEBUG=* cds run &
+                  CDS_PID=$!
+                  echo "Started CDS with PID: $CDS_PID"
+                  
+                  echo "Waiting for application to start..."
+                  sleep 15
+                  
+                  echo "Checking if process is still running:"
+                  ps aux | grep cds | grep -v grep || echo "No CDS processes found"
               env:
                   PORT: 4004
+                  DEBUG: cds:*
 
             - name: Wait for application to be ready
               run: |
