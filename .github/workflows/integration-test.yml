@@ -54,8 +54,7 @@ jobs:
 
             - name: Build ORD documents for bookshop
               run: |
-                  cd __tests__/bookshop
-                  cds build --for ord
+                  cds build __tests__/bookshop --for ord
 
             - name: Start bookshop application
               run: |
