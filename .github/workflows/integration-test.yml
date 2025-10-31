@@ -25,6 +25,11 @@ jobs:
                   npm install -g @sap/cds-dk
                   npm install
 
+            - name: Install bookshop dependencies
+              run: |
+                  cd __tests__/bookshop
+                  npm install
+
             - name: Generate test certificates
               run: |
                   chmod +x scripts/generate-test-certs.sh
@@ -59,7 +64,6 @@ jobs:
             - name: Start bookshop application
               run: |
                   cd __tests__/bookshop
-                  npm install
                   cds run &
                   sleep 10
               env:
