@@ -13,10 +13,8 @@
             "mtls",
             "basic"
         ],
-        "basic": {
-            "credentials": {
-                "admin": "$2b$10$0Ah9XqiIdoCPbhPSc21cx.Syaplqm6xOQTuBxdjJ0OlzPPMI0CsZW"
-            }
+        "credentials": {
+            "admin": "$2b$10$0Ah9XqiIdoCPbhPSc21cx.Syaplqm6xOQTuBxdjJ0OlzPPMI0CsZW"
         },
         "mtls": {
             "mode": "sap:cmp-mtls",
