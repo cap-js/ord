@@ -4,3 +4,5 @@ coverage
 gen
 /.idea
 */mcp.json
+auth-env.txt
+test-config.json
