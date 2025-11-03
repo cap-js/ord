@@ -8,7 +8,8 @@
     "license": "Apache-2.0",
     "workspaces": [
         "xmpl",
-        "xmpl_java"
+        "xmpl_java",
+        "__tests__/bookshop"
     ],
     "main": "cds-plugin.js",
     "files": [
