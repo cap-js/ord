@@ -25,9 +25,9 @@ jobs:
                   npm install -g @sap/cds-dk
                   npm install
 
-            - name: Install bookshop dependencies
+            - name: Install integration-test-app dependencies
               run: |
-                  cd __tests__/bookshop
+                  cd __tests__/integration-test-app
                   npm install
 
             - name: Generate test certificates
@@ -73,18 +73,18 @@ jobs:
                   echo "TRUSTED_SUBJECT: ${TRUSTED_SUBJECT:-NOT_SET}"
                   echo "==========================================="
 
-            - name: Build ORD documents for bookshop
+            - name: Build ORD documents for integration-test-app
               run: |
                   echo "=== DEBUG: Building ORD documents ==="
-                  cds build __tests__/bookshop --for ord
+                  cds build __tests__/integration-test-app --for ord
                   echo "Build completed, checking generated files..."
-                  ls -la __tests__/bookshop/gen/ord/ || echo "No ORD files generated"
+                  ls -la __tests__/integration-test-app/gen/ord/ || echo "No ORD files generated"
                   echo "======================================="
 
-            - name: Start bookshop application
+            - name: Start integration-test-app application
               run: |
-                  cd __tests__/bookshop
-                  
+                  cd __tests__/integration-test-app
+
                   echo "=== DEBUG: Starting CDS Server ==="
                   echo "Current directory: $(pwd)"
                   echo "Checking .cdsrc.json configuration:"
@@ -95,14 +95,14 @@ jobs:
                   else
                       echo ".cdsrc.json not found!"
                   fi
-                  
+
                   # Export environment variables to ensure they're available to CDS
                   export ORD_AUTH_TYPE="${ORD_AUTH_TYPE:-mtls,basic}"
                   export BASIC_AUTH_USERNAME="${BASIC_AUTH_USERNAME:-admin}"
                   export BASIC_AUTH_HASH="${BASIC_AUTH_HASH}"
                   export TRUSTED_ISSUER="${TRUSTED_ISSUER}"
                   export TRUSTED_SUBJECT="${TRUSTED_SUBJECT}"
-                  
+
                   echo "Environment variables for CDS:"
                   echo "  ORD_AUTH_TYPE: $ORD_AUTH_TYPE"
                   echo "  BASIC_AUTH_USERNAME: $BASIC_AUTH_USERNAME"
@@ -110,21 +110,21 @@ jobs:
                   echo "  TRUSTED_ISSUER: $TRUSTED_ISSUER"
                   echo "  TRUSTED_SUBJECT: $TRUSTED_SUBJECT"
                   echo "  PORT: $PORT"
-                  
+
                   echo "Starting CDS server with authentication: $ORD_AUTH_TYPE"
                   echo "Command: cds run"
-                  cds run > ../bookshop.log 2>&1 &
+                  cds run > ../integration-test-app.log 2>&1 &
                   CDS_PID=$!
                   echo "CDS PID: $CDS_PID"
-                  
+
                   echo "Waiting 15 seconds for server startup..."
                   sleep 15
-                  
+
                   echo "Checking if CDS process is still running..."
                   if ! kill -0 $CDS_PID 2>/dev/null; then
                       echo "ERROR: CDS process died, showing logs:"
                       echo "=== CDS Server Logs ==="
-                      cat ../bookshop.log
+                      cat ../integration-test-app.log
                       echo "======================="
                       exit 1
                   fi
@@ -137,7 +137,7 @@ jobs:
               run: |
                   echo "=== DEBUG: Checking Application Readiness ==="
                   echo "Waiting for application to be ready..."
-                  
+
                   for i in {1..30}; do
                       echo "Attempt $i/30: Testing connection to http://localhost:4004"
                       
@@ -165,7 +165,7 @@ jobs:
                           echo "=== Final attempt details ==="
                           curl -v http://localhost:4004/.well-known/open-resource-discovery 2>&1 || echo "Curl failed"
                           echo "=== Latest server logs ==="
-                          tail -50 __tests__/bookshop.log 2>/dev/null || echo "No logs available"
+                          tail -50 __tests__/integration-test-app.log 2>/dev/null || echo "No logs available"
                           echo "=========================="
                           exit 1
                       fi
@@ -176,34 +176,34 @@ jobs:
             - name: Run integration tests
               run: |
                   echo "=== DEBUG: Running Integration Tests ==="
-                  
+
                   # Check test configuration
                   if [ ! -f test-config.json ]; then
                       echo "ERROR: Missing test-config.json"
                       exit 1
                   fi
-                  
+
                   echo "Test configuration found:"
                   echo "=== test-config.json content ==="
                   cat test-config.json
                   echo "==============================="
-                  
+
                   # Test different endpoints manually before running the test suite
                   echo ""
                   echo "=== Manual API Tests for Debugging ==="
-                  
+
                   echo "1. Testing well-known endpoint without auth:"
                   curl -s -w "Status: %{http_code}\n" http://localhost:4004/.well-known/open-resource-discovery | head -10
-                  
+
                   echo ""
                   echo "2. Testing with invalid basic auth:"
                   curl -s -w "Status: %{http_code}\n" -H "Authorization: Basic aW52YWxpZDppbnZhbGlk" http://localhost:4004/.well-known/open-resource-discovery | head -5
-                  
+
                   echo ""
                   echo "3. Testing with valid basic auth:"
                   BASIC_AUTH=$(echo -n "${BASIC_AUTH_USERNAME:-admin}:${TEST_PASSWORD:-test-secret-123}" | base64)
                   curl -s -w "Status: %{http_code}\n" -H "Authorization: Basic $BASIC_AUTH" http://localhost:4004/.well-known/open-resource-discovery | head -10
-                  
+
                   echo ""
                   echo "4. Testing with mTLS headers:"
                   curl -s -w "Status: %{http_code}\n" \
@@ -211,17 +211,17 @@ jobs:
                     -H "x-ssl-client-subject-dn: ${TRUSTED_SUBJECT:-C=DE,O=SAP,OU=UCL,CN=ucl-discovery-bot}" \
                     -H "x-ssl-client-issuer-dn: ${TRUSTED_ISSUER:-C=DE,O=SAP,OU=UCL,CN=UCL Certificate Authority}" \
                     http://localhost:4004/.well-known/open-resource-discovery | head -10
-                  
+
                   echo ""
                   echo "======================================"
                   echo ""
-                  
+
                   # Show current server logs before running tests  
                   echo "=== Current Server Logs (last 20 lines) ==="
-                  tail -20 __tests__/bookshop.log 2>/dev/null || echo "No logs available"
+                  tail -20 __tests__/integration-test-app.log 2>/dev/null || echo "No logs available"
                   echo "==========================================="
                   echo ""
-                  
+
                   # Run the actual test suite
                   echo "Starting integration test suite..."
                   node __tests__/bookshop/test-mtls-integration.js
@@ -231,10 +231,10 @@ jobs:
             - name: Capture server logs after integration tests
               run: |
                   echo "=== DEBUG: Server Logs After Integration Tests ==="
-                  if [ -f __tests__/bookshop.log ]; then
-                      echo "Server log file size: $(wc -l < __tests__/bookshop.log) lines"
+                  if [ -f __tests__/integration-test-app.log ]; then
+                      echo "Server log file size: $(wc -l < __tests__/integration-test-app.log) lines"
                       echo "=== Last 50 lines of server logs ==="
-                      tail -50 __tests__/bookshop.log
+                      tail -50 __tests__/integration-test-app.log
                       echo "===================================="
                   else
                       echo "No server log file found"
@@ -255,5 +255,5 @@ jobs:
                       test-headers.json
                       cert-env.txt
                       auth-env.txt
-                      __tests__/bookshop.log
+                      __tests__/integration-test-app.log
                   retention-days: 7

@@ -1,0 +1,16 @@
+{
+  "name": "integration-test-app",
+  "private": true,
+  "dependencies": {
+    "@sap/cds": "^8",
+    "express": "^4",
+    "@cap-js/ord": "file:../.."
+  },
+  "cds": {
+    "requires": {
+      "ord-auth": {
+        "kind": "ord-auth"
+      }
+    }
+  }
+}

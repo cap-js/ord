@@ -1,0 +1,19 @@
+{
+    "ord": {
+        "namespace": "ord.integration.test",
+        "openResourceDiscovery": "1.10",
+        "description": "Minimal Integration Test Application for mTLS"
+    },
+    "authentication": {
+        "types": ["mtls", "basic"],
+        "credentials": {
+            "admin": "$2b$10$0Ah9XqiIdoCPbhPSc21cx.Syaplqm6xOQTuBxdjJ0OlzPPMI0CsZW"
+        },
+        "mtls": {
+            "mode": "sap:cmp-mtls",
+            "trustedIssuers": ["C=DE,O=SAP,OU=UCL,CN=UCL Certificate Authority"],
+            "trustedSubjects": ["C=DE,O=SAP,OU=UCL,CN=ucl-discovery-bot"],
+            "decodeBase64Headers": false
+        }
+    }
+}

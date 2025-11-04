@@ -25,6 +25,11 @@
                 "C=DE,O=SAP,OU=UCL,CN=ucl-discovery-bot"
             ],
             "decodeBase64Headers": false
+        },
+        "basic": {
+            "credentials": {
+                "admin": "$2b$10$5/MmIamqcm81eHcSyej/Sua1GsB36vRGrnVqCv1J/7iL.LuCqGENC"
+            }
         }
     },
     "DEBUG": false

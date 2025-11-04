@@ -9,7 +9,7 @@
     "workspaces": [
         "xmpl",
         "xmpl_java",
-        "__tests__/bookshop"
+        "__tests__/integration-test-app"
     ],
     "main": "cds-plugin.js",
     "files": [
