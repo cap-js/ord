@@ -21,3 +21,4 @@ test-headers.json
 *.bak
 *.orig
 .DS_Store
+xmpl_java/srv/src/main/resources/ord/open-resource-discovery.json
