@@ -33,6 +33,15 @@
             "extensible": {
                 "supported": "yes"
             }
+        },
+        {
+            "ordId": "sap.test.cdsrc.sample:apiResource:mcp-server:v1",
+            "visibility": "internal",
+            "title": "Internal MCP Server for CAP Project",
+            "shortDescription": "Custom MCP server description",
+            "version": "2.1.0",
+            "entryPoints": ["/mcp-server"],
+            "releaseStatus": "beta"
         }
     ],
     "dataProducts": [
