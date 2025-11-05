@@ -367,7 +367,7 @@ describe("Tests for Data Product definition", () => {
         });
 
         expect(document).toBeDefined();
-        // Snapshot removed for stability; customization validated via explicit field assertions.
+        expect(document).toMatchSnapshot();
     });
 
     it("Check interop CSN service name parsing through ORD", async () => {

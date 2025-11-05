@@ -1041,6 +1041,100 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
 }
 `;
 
+exports[`Tests for Data Product definition Check interop CSN annotation mapping through ORD 1`] = `
+{
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
+  "apiResources": [
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for TestService",
+      "entryPoints": [
+        "/odata/v4/test",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capjsord:apiResource:TestService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capjsord:TestService",
+      ],
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capjsord:apiResource:TestService:v1/TestService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/customer.capjsord:apiResource:TestService:v1/TestService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of TestService",
+      "title": "Test Service Title",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "consumptionBundles": [
+    {
+      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "capjsord:consumptionBundle:noAuth:v1",
+      "shortDescription": "If we have another protected API then it will be another object",
+      "title": "Unprotected resources",
+      "version": "1.0.0",
+    },
+  ],
+  "description": "this is an application description",
+  "groups": [
+    {
+      "groupId": "sap.cds:service:customer.capjsord:TestService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Test Service",
+    },
+  ],
+  "openResourceDiscovery": "1.9",
+  "packages": [
+    {
+      "description": "This package contains public General for cap js ord.",
+      "ordId": "customer.capjsord:package:capjsord:v1",
+      "partOfProducts": [
+        "customer:product:cap.js.ord:",
+      ],
+      "shortDescription": "Package containing public General",
+      "title": "cap js ord",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+  ],
+  "policyLevels": [
+    "none",
+  ],
+  "products": [
+    {
+      "ordId": "customer:product:cap.js.ord:",
+      "shortDescription": "Short description of cap js ord",
+      "title": "cap js ord",
+      "vendor": "customer:vendor:Customer:",
+    },
+  ],
+}
+`;
+
 exports[`Tests for Data Product definition Check interop CSN content 1`] = `
 {
   "$version": "2.0",
