@@ -220,6 +220,7 @@ describe("Tests for products and packages", () => {
 
         const document = ord(csn);
         expect(document).toMatchSnapshot();
+        cds.env.ord = {};
     });
 
     it("should raise error log when custom product ordId starts with sap detected", async () => {
@@ -240,6 +241,7 @@ describe("Tests for products and packages", () => {
         const document = ord(csn);
         expect(document).toMatchSnapshot();
         expect(errorSpy).toHaveBeenCalledTimes(1);
+        cds.env.ord = {};
     });
 
     it("should use valid custom products ordId", async () => {
@@ -262,6 +264,145 @@ describe("Tests for products and packages", () => {
         expect(document).toMatchSnapshot();
         expect(errorSpy).toHaveBeenCalledTimes(0);
         cds.env.ord = {};
+    });
+});
+
+describe("Tests for Data Product definition", () => {
+    let ord, csn;
+
+    beforeAll(async () => {
+        process.env.DEBUG = "true";
+        jest.spyOn(cds, "context", "get").mockReturnValue({
+            authConfig: {
+                types: [AUTHENTICATION_TYPE.Open],
+            },
+        });
+        cds.root = path.join(__dirname, "bookshop");
+        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../lib/ord");
+        csn = await cds.load(path.join(cds.root, "srv"));
+    });
+
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    afterAll(() => {
+        jest.clearAllMocks();
+        jest.resetAllMocks();
+    });
+
+    it("Check interop CSN content", async () => {
+        const document = ord(csn);
+
+        const csnApiResource = document.apiResources?.find((api) =>
+            api.resourceDefinitions?.some((def) => def.type === "sap-csn-interop-effective-v1"),
+        );
+
+        if (!csnApiResource) {
+            console.warn("No CSN API resource found, skipping CSN content test");
+            return;
+        }
+
+        const csnResourceDef = csnApiResource.resourceDefinitions.find(
+            (def) => def.type === "sap-csn-interop-effective-v1",
+        );
+
+        expect(csnResourceDef).toBeDefined();
+        expect(csnResourceDef.url).toBeDefined();
+
+        const { getMetadata } = require("../lib/index");
+
+        const result = await getMetadata(csnResourceDef.url, csn);
+        expect(result.contentType).toBe("application/json");
+
+        let interopCsn = result.response;
+        if (typeof interopCsn === "string") {
+            interopCsn = JSON.parse(interopCsn);
+        }
+
+        expect(interopCsn).toBeDefined();
+        expect(typeof interopCsn).toBe("object");
+        expect(interopCsn.csnInteropEffective).toBe("1.0");
+        expect(interopCsn.meta).toBeDefined();
+        expect(interopCsn.meta.flavor).toBe("effective");
+        expect(interopCsn.meta.__name).toBe("DPBooks");
+        expect(interopCsn.meta.__namespace).toBe("sap.capdpprod");
+        expect(interopCsn.meta.document).toBeDefined();
+        expect(interopCsn.meta.document.version).toBe("1.0.0");
+        expect(interopCsn.definitions).toBeDefined();
+        expect(interopCsn.i18n).toBeDefined();
+        expect(interopCsn.i18n.en).toBeDefined();
+        expect(interopCsn.i18n.en.Stock).toBe("Stock");
+        expect(interopCsn.i18n.de).toBeDefined();
+        expect(interopCsn.i18n.de.Stock).toBe("Bestand");
+
+        expect(interopCsn).toMatchSnapshot();
+    });
+
+    it("Check interop CSN annotation mapping through ORD", async () => {
+        let document;
+        jest.isolateModules(() => {
+            delete global.cds;
+            const cdsLocal = require("@sap/cds");
+            const dateMod = require("../lib/date");
+            jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            const ordLocal = require("../lib/ord");
+            const linkedModel = cdsLocal.linked(`
+                service TestService {
+                    entity TestEntity {
+                        ID: Integer;
+                        field1: String;
+                    }
+                }
+                annotate TestService with @title: 'Test Service Title';
+                annotate TestService with @Common.Label: 'Service Common Label';
+                annotate TestService.TestEntity with @description: 'Entity Description';
+                annotate TestService.TestEntity with @label: 'Entity Label';
+                annotate TestService.TestEntity with @cds.autoexpose: true;
+                annotate TestService.TestEntity.field1 with @title: 'Field Title';
+                annotate TestService.TestEntity.field1 with @Common.Label: 'Field Common Label';
+            `);
+            document = ordLocal(linkedModel);
+        });
+
+        expect(document).toBeDefined();
+        expect(document).toMatchSnapshot();
+    });
+
+    it("Check interop CSN service name parsing through ORD", async () => {
+        let document;
+        jest.isolateModules(() => {
+            delete global.cds;
+            const cdsLocal = require("@sap/cds");
+            const dateMod = require("../lib/date");
+            jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            const ordLocal = require("../lib/ord");
+            const linkedModel = cds.linked(`
+            namespace customer.namespace;
+            service TestService.v3 {
+                entity TestEntity {
+                    ID: Integer;
+                }
+            }
+            service SimpleService {
+                entity SimpleEntity {
+                    ID: Integer;
+                }
+            }
+        `);
+            document = ordLocal(linkedModel);
+        });
+
+        // Check that ORD document is generated with API resources for multiple services
+        expect(document.apiResources).toBeDefined();
+        expect(document.apiResources.length).toBeGreaterThan(0);
+
+        // Verify service names are processed correctly in groups
+        expect(document.groups).toBeDefined();
+        expect(document.groups.length).toBeGreaterThan(0);
+
+        expect(document).toMatchSnapshot();
     });
 });
 

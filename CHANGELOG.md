@@ -4,6 +4,31 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.3.12 (2025-10-16)
+
+## What's Changed
+
+- chore(deps): update dependency org.jacoco:jacoco-maven-plugin to v0.8.14 by @renovate[bot] in https://github.com/cap-js/ord/pull/277
+- chore(deps): update actions/setup-node action to v6 by @renovate[bot] in https://github.com/cap-js/ord/pull/278
+- Fix: interop CSN i18n: use "-" as separator for language keys by @stewsk in https://github.com/cap-js/ord/pull/279
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.11...v1.3.12
+
+## 1.3.11 (2025-10-10)
+
+## What's Changed
+
+- Fix: java authentication issue by @zongqichen in https://github.com/cap-js/ord/pull/266
+- chore(deps): update dependency org.apache.maven.plugins:maven-enforcer-plugin to v3.6.2 by @renovate[bot] in https://github.com/cap-js/ord/pull/267
+- fix(deps): update cds.services.version to v4.3.2 by @renovate[bot] in https://github.com/cap-js/ord/pull/269
+- fix(deps): update cds.services.version to v4.4.0 by @renovate[bot] in https://github.com/cap-js/ord/pull/271
+- Produce interopCSN by @stewsk in https://github.com/cap-js/ord/pull/157
+- Addendum to CSN Interop tests by @stewsk in https://github.com/cap-js/ord/pull/273
+- Fix: Missing local entity exposure by @zongqichen in https://github.com/cap-js/ord/pull/274
+- fix(deps): update cds.services.version to v4.4.1 by @renovate[bot] in https://github.com/cap-js/ord/pull/275
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.10...v1.3.11
+
 ## 1.3.10 (2025-09-26)
 
 ## What's Changed

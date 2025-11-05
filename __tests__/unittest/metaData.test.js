@@ -152,4 +152,77 @@ describe("metaData", () => {
             expect(result).toBe(false);
         });
     });
+    test("getMetadata should handle invalid URL format", async () => {
+        const url = "/invalid/url/format";
+        try {
+            await getMetadata(url);
+        } catch (error) {
+            expect(error.message).toContain("Invalid URL format");
+        }
+    });
+
+    test("getMetadata should handle missing service name in URL", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource::v1/Service.oas3.json";
+        openapi.mockImplementation(() => "Mock content");
+
+        const result = await getMetadata(url);
+        expect(result).toEqual({
+            contentType: "application/json",
+            response: "Mock content",
+        });
+    });
+
+    test("getMetadata should handle unknown file extension", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:TestService:v1/TestService.unknown";
+        try {
+            await getMetadata(url);
+        } catch (error) {
+            expect(error.message).toContain("Unsupported format");
+        }
+    });
+
+    test("getMetadata should return correct content type for asyncapi", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:eventResource:TestService:v1/TestService.asyncapi2.json";
+        asyncapi.mockImplementation(() => ({ test: "asyncapi content" }));
+
+        const result = await getMetadata(url);
+
+        expect(result.contentType).toBe("application/json");
+        expect(result.response).toEqual({ test: "asyncapi content" });
+    });
+
+    test("getMetadata should handle edmx compilation with correct content type", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:TestService:v1/TestService.edmx";
+        jest.spyOn(cds, "compile").mockImplementation(() => ({
+            to: {
+                edmx: () => "<edmx>content</edmx>",
+            },
+        }));
+
+        const result = await getMetadata(url);
+
+        expect(result.contentType).toBe("application/xml");
+        expect(result.response).toBe("<edmx>content</edmx>");
+    });
+
+    test("getMetadata should handle complex service names with dots", async () => {
+        const url =
+            "/ord/v1/sap.test.cdsrc.sample:apiResource:my.complex.ServiceName:v1/my.complex.ServiceName.oas3.json";
+        openapi.mockImplementation(() => "Complex service content");
+
+        const result = await getMetadata(url);
+
+        expect(result.contentType).toBe("application/json");
+        expect(result.response).toBe("Complex service content");
+    });
+
+    test("getMetadata should handle version variations in URL", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:TestService:v2/TestService.csn.json";
+        jest.spyOn(cdsc.for, "effective").mockImplementation(() => "Version 2 CSN");
+
+        const result = await getMetadata(url, "input csn");
+
+        expect(result.contentType).toBe("application/json");
+        expect(result.response).toBe("Version 2 CSN");
+    });
 });

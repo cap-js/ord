@@ -238,6 +238,54 @@ describe("templates", () => {
                 createEntityTypeMappingsItemTemplate(linkedModel.definitions["customer.testNamespace123.Books"]),
             ).toBeUndefined();
         });
+
+        it("returns two mapping objects with odm flag", () => {
+            const model = cds.linked(`
+                    namespace customer.dual;
+                    @ODM.entityName: 'DualEntity'
+                    @EntityRelationship.entityType: 'customer.dual:DualEntity'
+                    entity DualEntity { key ID: UUID; name: String; }
+                `);
+            const entityDef = model.definitions["customer.dual.DualEntity"];
+            const mappings = createEntityTypeMappingsItemTemplate(entityDef);
+            expect(mappings).toHaveLength(2);
+            expect(mappings.map((m) => m.ordId)).toEqual(
+                expect.arrayContaining(["sap.odm:entityType:DualEntity:v1", "customer.dual:entityType:DualEntity:v1"]),
+            );
+            const odm = mappings.find((m) => m.isODMMapping);
+            const local = mappings.find((m) => !m.isODMMapping);
+            expect(odm && odm.ordId).toBe("sap.odm:entityType:DualEntity:v1");
+            expect(local && local.ordId).toBe("customer.dual:entityType:DualEntity:v1");
+        });
+
+        it("_getEntityTypeMappings collects both; only local becomes entityType", () => {
+            const model = cds.linked(`
+                    namespace customer.dualmapping;
+                    @ODM.entityName: 'DualAuthors'
+                    @EntityRelationship.entityType: 'customer.dualmapping:DualAuthors'
+                    entity DualAuthors { key ID: UUID; title: String; }
+                    service DualService { entity Authors as projection on DualAuthors; }
+                `);
+            const serviceDef = model.definitions["customer.dualmapping.DualService"];
+            const mappingsWrapper = _getEntityTypeMappings(serviceDef);
+            const targets = mappingsWrapper[0].entityTypeTargets.map((t) => t.ordId);
+            expect(targets).toEqual(
+                expect.arrayContaining([
+                    "sap.odm:entityType:DualAuthors:v1",
+                    "customer.dualmapping:entityType:DualAuthors:v1",
+                ]),
+            );
+
+            const mappingItems = createEntityTypeMappingsItemTemplate(
+                model.definitions["customer.dualmapping.DualAuthors"],
+            );
+            const arr = Array.isArray(mappingItems) ? mappingItems : [mappingItems];
+            const entityTypes = arr
+                .flatMap((e) => createEntityTypeTemplate(appConfig, ["customer.dualmapping:package:dual:v1"], e))
+                .filter(Boolean);
+            expect(entityTypes).toHaveLength(1);
+            expect(entityTypes[0].ordId).toBe("customer.dualmapping:entityType:DualAuthors:v1");
+        });
     });
 
     describe("createEntityTypeTemplate", () => {
