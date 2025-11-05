@@ -511,7 +511,10 @@ describe("Tests for eventResource and apiResource", () => {
         expect(mcpResource.entryPoints).toEqual(["/mcp-server"]);
         expect(mcpResource.releaseStatus).toBe("beta");
         expect(mcpResource.apiProtocol).toBe("mcp");
-        // Removed full document snapshot for stability; field assertions above ensure customization correctness.
+        // Snapshot restored: capture full ORD document including customized MCP resource for regression tracking.
+        expect(document).toMatchSnapshot();
+        // Targeted snapshot of MCP resource for focused diffing (less brittle than whole doc if counts change).
+        expect(mcpResource).toMatchSnapshot();
     });
 
     it("should generate apiResource if actions in service", async () => {

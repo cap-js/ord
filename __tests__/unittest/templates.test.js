@@ -460,6 +460,9 @@ describe("templates", () => {
 
             const result = createMCPAPIResourceTemplate(appConfig, packageIds, accessStrategies);
 
+            // Snapshot added for regression tracking of MCP template structure
+            expect(result).toMatchSnapshot();
+            // Keep explicit structural equality to fail fast on critical changes
             expect(result).toEqual({
                 ordId: "customer.testNamespace:apiResource:mcp-server:v1",
                 title: "MCP Server for testAppName",
