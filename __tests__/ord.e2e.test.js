@@ -472,6 +472,65 @@ describe("Tests for eventResource and apiResource", () => {
         expect(mcpResource).toMatchSnapshot();
     });
 
+    it("should allow MCP API resource customization via custom.ord.json", async () => {
+        let ordWithMCP;
+        jest.isolateModules(() => {
+            const originalJoin = path.join;
+            const pathSpy = jest.spyOn(path, "join");
+            pathSpy.mockImplementation((...args) => {
+                // Mock the path to custom ORD file
+                if (args.length === 2 && args[1] === "custom-mcp.ord.json") {
+                    return originalJoin(__dirname, "unittest", "utils", "testCustomORDContentFileWithMCPOverride.json");
+                }
+                // Use original implementation for other calls
+                return originalJoin(...args);
+            });
+
+            // Mock cds.root directly as a property
+            const cds = require("@sap/cds");
+            Object.defineProperty(cds, "root", {
+                get: () => __dirname,
+                configurable: true,
+            });
+
+            jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../lib/metaData"), "isMCPPluginAvailable").mockReturnValue(true);
+            jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
+                authConfig: { types: [AUTHENTICATION_TYPE.Open] },
+            });
+
+            // Set up CDS environment to use custom ORD file
+            cds.env.ord = {
+                customOrdContentFile: "custom-mcp.ord.json",
+            };
+
+            ordWithMCP = require("../lib/ord");
+        });
+
+        const linkedModel = cds.linked(`
+                service MyService {
+                    action add(x : Integer, to : Integer) returns Integer;
+                }
+            `);
+
+        const document = ordWithMCP(linkedModel);
+
+        expect(document.apiResources).toHaveLength(2);
+        const mcpResource = document.apiResources.find((resource) => resource.apiProtocol === "mcp");
+
+        // Verify that custom properties were applied
+        expect(mcpResource.ordId).toBe("customer.test:apiResource:mcp-server:v1");
+        expect(mcpResource.visibility).toBe("internal");
+        expect(mcpResource.title).toBe("Internal MCP Server for CAP Project");
+        expect(mcpResource.shortDescription).toBe("Custom MCP server description");
+        expect(mcpResource.version).toBe("2.1.0");
+        expect(mcpResource.entryPoints).toEqual(["/mcp-server"]);
+        expect(mcpResource.releaseStatus).toBe("beta");
+        expect(mcpResource.apiProtocol).toBe("mcp"); // Should remain unchanged
+
+        expect(mcpResource).toMatchSnapshot();
+    });
+
     it("should generate apiResource if actions in service", async () => {
         const linkedModel = cds.linked(`
                 service MyService {
