@@ -20,11 +20,11 @@ jobs:
             - name: Install dependencies and prepare documents
               run: |
                   npm install -g @sap/cds-dk
-                  npm install @sap/cds
 
             - name: Node.js Test
               run: |
                   npm i
+                  cds version
                   npm run test
 
             - name: Set up JDK 21
