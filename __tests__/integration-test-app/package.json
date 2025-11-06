@@ -2,7 +2,7 @@
   "name": "integration-test-app",
   "private": true,
   "dependencies": {
-    "@sap/cds": "^8",
+    "@sap/cds": "^9",
     "express": "^4",
     "@cap-js/ord": "file:../.."
   },

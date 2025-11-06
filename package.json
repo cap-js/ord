@@ -36,6 +36,7 @@
     "dependencies": {
         "@cap-js/asyncapi": "^1.0.3",
         "@cap-js/openapi": "^1.2.1",
+        "@sap/cds-compiler": "6.4.7",
         "bcryptjs": "3.0.3",
         "cli-progress": "^3.12.0",
         "lodash": "^4.17.21"
