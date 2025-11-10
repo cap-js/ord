@@ -8,7 +8,8 @@
     "license": "Apache-2.0",
     "workspaces": [
         "xmpl",
-        "xmpl_java"
+        "xmpl_java",
+        "__tests__/integration-test-app"
     ],
     "main": "cds-plugin.js",
     "files": [
@@ -29,12 +30,13 @@
         "prettier": "3.6.2"
     },
     "peerDependencies": {
-        "@sap/cds": ">=8.9.4",
-        "@sap/cds-dk": ">=8.9.5"
+        "@sap/cds": ">=9",
+        "@sap/cds-dk": ">=9"
     },
     "dependencies": {
         "@cap-js/asyncapi": "^1.0.3",
         "@cap-js/openapi": "^1.2.1",
+        "@sap/cds-compiler": "6.4.7",
         "bcryptjs": "3.0.3",
         "cli-progress": "^3.12.0",
         "lodash": "^4.17.21"

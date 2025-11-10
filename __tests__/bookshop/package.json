@@ -6,8 +6,9 @@
     "license": "UNLICENSED",
     "private": true,
     "dependencies": {
-        "@sap/cds": "^8",
-        "express": "^4"
+        "@sap/cds": "^9",
+        "express": "^4",
+        "@cap-js/ord": "file:../.."
     },
     "devDependencies": {
         "@cap-js/sqlite": "^1",

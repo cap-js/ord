@@ -29,9 +29,15 @@
         ]
     },
     "authentication": {
-        "types": ["basic"],
+        "types": ["mtls", "basic"],
         "credentials": {
             "admin": "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"
+        },
+        "mtls": {
+            "mode": "sap:cmp-mtls",
+            "trustedIssuers": ["C=DE,O=SAP,OU=UCL,CN=UCL Certificate Authority"],
+            "trustedSubjects": ["C=DE,O=SAP,OU=UCL,CN=ucl-discovery-bot"],
+            "decodeBase64Headers": false
         }
     }
 }
