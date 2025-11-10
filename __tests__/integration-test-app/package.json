@@ -1,0 +1,15 @@
+{
+    "name": "@capire/ord-integration-test",
+    "version": "1.0.0",
+    "description": "Minimal CAP application for ORD integration testing",
+    "private": true,
+    "dependencies": {
+        "@cap-js/ord": "file:"
+    },
+    "devDependencies": {
+        "@cap-js/sqlite": "^1"
+    },
+    "scripts": {
+        "start": "cds-serve"
+    }
+}
