@@ -1,4 +1,6 @@
 const request = require("supertest");
+const { spawn } = require("child_process");
+const path = require("path");
 
 const BASE_URL = "http://localhost:4004";
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
@@ -11,7 +13,87 @@ const INVALID_PASS_AUTH = "Basic YWRtaW46d3JvbmdwYXNzd29yZA=="; // admin:wrongpa
 const BEARER_TOKEN = "Bearer some-token-value";
 const MALFORMED_AUTH = "BasicYWRtaW46c2VjcmV0"; // Missing space
 
+let serverProcess;
+
+// Helper function to wait for server to be ready
+async function waitForServer(maxAttempts = 30, delayMs = 2000) {
+    for (let i = 0; i < maxAttempts; i++) {
+        try {
+            // Test config endpoint (should be accessible)
+            await request(BASE_URL).get(ORD_CONFIG_ENDPOINT);
+            
+            // Test document endpoint with auth (should require auth)
+            await request(BASE_URL)
+                .get(ORD_DOCUMENT_ENDPOINT)
+                .set("Authorization", VALID_AUTH);
+            
+            console.log("Server is ready");
+            return true;
+        } catch (error) {
+            console.log(`Waiting for server... (attempt ${i + 1}/${maxAttempts})`);
+            await new Promise((resolve) => setTimeout(resolve, delayMs));
+        }
+    }
+    throw new Error("Server failed to start within timeout period");
+}
+
 describe("ORD Integration Tests - Basic Authentication", () => {
+    beforeAll(async () => {
+        // Set authentication environment variables
+        process.env.ORD_AUTH_TYPE = '["basic"]';
+        process.env.BASIC_AUTH = '{"admin":"$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"}';
+
+        // Start the CDS server
+        const appPath = path.join(__dirname, "integration-test-app");
+        
+        console.log("Starting CDS server...");
+        serverProcess = spawn("npx", ["cds", "watch", "--port", "4004"], {
+            cwd: appPath,
+            env: { ...process.env },
+            stdio: ["ignore", "pipe", "pipe"],
+        });
+
+        // Log server output for debugging
+        serverProcess.stdout.on("data", (data) => {
+            console.log(`Server: ${data.toString().trim()}`);
+        });
+
+        serverProcess.stderr.on("data", (data) => {
+            console.error(`Server Error: ${data.toString().trim()}`);
+        });
+
+        // Wait for server to be ready
+        await waitForServer();
+    }, 60000); // 60 second timeout for server startup
+
+    afterAll(async () => {
+        // Stop the server
+        if (serverProcess) {
+            console.log("Stopping CDS server...");
+            
+            return new Promise((resolve) => {
+                serverProcess.on("exit", () => {
+                    console.log("Server stopped");
+                    resolve();
+                });
+                
+                // Try graceful shutdown first
+                serverProcess.kill("SIGTERM");
+                
+                // Force kill after timeout
+                setTimeout(() => {
+                    if (!serverProcess.killed) {
+                        serverProcess.kill("SIGKILL");
+                    }
+                }, 3000);
+            });
+        }
+        
+        // Clean up environment variables
+        delete process.env.ORD_AUTH_TYPE;
+        delete process.env.BASIC_AUTH;
+    });
+
     describe("ORD Config Endpoint Tests", () => {
         test("should return ORD config with valid basic auth (lowercase header)", async () => {
             const response = await request(BASE_URL)

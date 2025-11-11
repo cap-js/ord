@@ -23,34 +23,5 @@ jobs:
                   npm install
                   cd __tests__/integration-test-app && npm install
 
-            - name: Set authentication environment for basic auth
-              run: |
-                  echo "ORD_AUTH_TYPE=[\"basic\"]" >> $GITHUB_ENV
-                  echo "BASIC_AUTH={\"admin\":\"\$2a\$05\$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW\"}" >> $GITHUB_ENV
-
-            - name: Start test server
-              run: |
-                  cd __tests__/integration-test-app
-                  cds watch --port 4004 &
-                  
-                  # Wait for server readiness and test both endpoints
-                  for i in {1..30}; do
-                    # Test config endpoint (should be accessible)
-                    if curl -s http://localhost:4004/.well-known/open-resource-discovery > /dev/null; then
-                      echo "Config endpoint ready"
-                      # Test document endpoint with auth (should require auth)
-                      if curl -s -u admin:secret http://localhost:4004/ord/v1/documents/ord-document > /dev/null; then
-                        echo "Document endpoint ready with authentication"
-                        break
-                      fi
-                    fi
-                    echo "Waiting for server... (attempt $i/30)"
-                    sleep 2
-                  done
-
             - name: Run integration tests
               run: npm run test:integration
-
-            - name: Stop server
-              if: always()
-              run: pkill -f "cds watch" || true

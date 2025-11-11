@@ -21,7 +21,7 @@
     "scripts": {
         "lint": "npx eslint .",
         "test": "jest --ci --collectCoverage",
-        "test:integration": "jest __tests__/integration.test.js --testTimeout=30000",
+        "test:integration": "jest __tests__/integration.test.js --testTimeout=30000 --testPathIgnorePatterns=/node_modules/ --forceExit",
         "update-snapshot": "jest --ci --updateSnapshot",
         "cds:version": "cds v -i"
     },
