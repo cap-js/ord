@@ -29,7 +29,7 @@ async function waitForServer(maxAttempts = 30, delayMs = 2000) {
             
             console.log("Server is ready");
             return true;
-        } catch (error) {
+        } catch {
             console.log(`Waiting for server... (attempt ${i + 1}/${maxAttempts})`);
             await new Promise((resolve) => setTimeout(resolve, delayMs));
         }
