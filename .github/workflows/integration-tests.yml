@@ -24,4 +24,4 @@ jobs:
                   cd __tests__/integration-test-app && npm install
 
             - name: Run integration tests
-              run: npm run test:integration
+              run: npm run test:integration -- --verbose
