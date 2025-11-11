@@ -19,7 +19,7 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  npm install -g @sap/cds-dk
+                  npm install -g @sap/cds-dk@latest
                   npm install
                   cd __tests__/integration-test-app && npm install
 
