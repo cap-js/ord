@@ -4,7 +4,7 @@
     "description": "Minimal CAP application for ORD integration testing",
     "private": true,
     "dependencies": {
-        "@cap-js/ord": "file:"
+        "@cap-js/ord": "file:../../"
     },
     "devDependencies": {
         "@cap-js/sqlite": "^1"
