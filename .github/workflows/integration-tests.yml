@@ -1,0 +1,27 @@
+name: Integration Tests
+
+on:
+    push:
+        branches: [main]
+    pull_request:
+        branches: [main]
+
+jobs:
+    integration-tests:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v5
+
+            - uses: actions/setup-node@v6
+              with:
+                  node-version: 22
+
+            - name: Install dependencies
+              run: |
+                  npm install -g @sap/cds-dk@latest
+                  npm install
+                  cd __tests__/integration-test-app && npm install
+
+            - name: Run integration tests
+              run: npm run test:integration -- --verbose
