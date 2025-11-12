@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.3.13 (2025-11-12)
+
+## What's Changed
+
+- Fix: set authenticateMetadataEndpoints to false by @zongqichen in https://github.com/cap-js/ord/pull/282
+- Fix: only support to node verions 22 by @zongqichen in https://github.com/cap-js/ord/pull/288
+- Feat: switch accessStrategy to basic-auth by @zongqichen in https://github.com/cap-js/ord/pull/289
+- Auth Test file by @swennemers in https://github.com/cap-js/ord/pull/292
+- Feat: update openResourceDiscovery version to 1.12 by @zongqichen in https://github.com/cap-js/ord/pull/294
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.12...v1.3.13
+
 ## 1.3.12 (2025-10-16)
 
 ## What's Changed
