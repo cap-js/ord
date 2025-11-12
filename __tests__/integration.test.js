@@ -21,12 +21,10 @@ async function waitForServer(maxAttempts = 30, delayMs = 2000) {
         try {
             // Test config endpoint (should be accessible)
             await request(BASE_URL).get(ORD_CONFIG_ENDPOINT);
-            
+
             // Test document endpoint with auth (should require auth)
-            await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT)
-                .set("Authorization", VALID_AUTH);
-            
+            await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set("Authorization", VALID_AUTH);
+
             console.log("Server is ready");
             return true;
         } catch {
@@ -45,7 +43,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
 
         // Start the CDS server
         const appPath = path.join(__dirname, "integration-test-app");
-        
+
         console.log("Starting CDS server...");
         serverProcess = spawn("npx", ["cds", "watch", "--port", "4004"], {
             cwd: appPath,
@@ -70,16 +68,16 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         // Stop the server
         if (serverProcess) {
             console.log("Stopping CDS server...");
-            
+
             return new Promise((resolve) => {
                 serverProcess.on("exit", () => {
                     console.log("Server stopped");
                     resolve();
                 });
-                
+
                 // Try graceful shutdown first
                 serverProcess.kill("SIGTERM");
-                
+
                 // Force kill after timeout
                 setTimeout(() => {
                     if (!serverProcess.killed) {
@@ -88,7 +86,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 }, 3000);
             });
         }
-        
+
         // Clean up environment variables
         delete process.env.ORD_AUTH_TYPE;
         delete process.env.BASIC_AUTH;
@@ -115,9 +113,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should return ORD config without authentication", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_CONFIG_ENDPOINT)
-                .expect(200);
+            const response = await request(BASE_URL).get(ORD_CONFIG_ENDPOINT).expect(200);
 
             expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(response.body).toHaveProperty("openResourceDiscoveryV1");
@@ -132,7 +128,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 .expect(200);
 
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.9");
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
         });
 
         test("should return ORD document with standard Authorization header", async () => {
@@ -141,7 +137,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 .set("Authorization", VALID_AUTH) // standard case
                 .expect(200);
 
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.9");
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
         });
 
         test("should reject invalid password", async () => {
@@ -202,7 +198,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.9");
+            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.12");
             expect(ordDocument).toHaveProperty("description");
             expect(Array.isArray(ordDocument.apiResources)).toBe(true);
             expect(Array.isArray(ordDocument.eventResources)).toBe(true);
