@@ -141,7 +141,15 @@
 
 ## What's Left to Build
 
-### Recently Completed (September 26, 2025) ✅
+### Recently Completed (September 18, 2025) ✅
+
+**MCP API exposure**:
+
+- ✅ **MCP API exposure**: Implemented conditional MCP API resource generation based on internal CAP MCP plugin availability
+- ✅ **Comprehensive MCP Testing**: Added thorough MCP integration tests covering both plugin available/unavailable scenarios
+- ✅ **Backward Compatibility**: Maintained all existing functionality and preserved test coverage (96%+)
+
+### Previously Completed (September 26, 2025) ✅
 
 **Data Product APIs - Dual Annotation Support**:
 
@@ -180,10 +188,13 @@
 
 ### Immediate Development (Next Release)
 
-**MCP API exposure** 🔄:
+**MCP API exposure** ✅ → 🔄:
 
-- Support the exposure of MCP APIs through ORD as API Resources with API protocol `mcp` in addition to being regular API Resources for OData
-- Ensure proper documentation and testing of exposed APIs
+- ✅ Implemented conditional MCP API resource generation based on plugin availability
+- ✅ Added proper MCP protocol support in ORD document structure
+- ✅ Created comprehensive test coverage for MCP integration scenarios
+- 🔄 Continue refinement based on production usage feedback
+- 🔄 Ensure proper documentation and testing of exposed APIs
 
 ### Medium-term Development
 
