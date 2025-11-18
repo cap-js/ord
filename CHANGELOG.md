@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.3.14 (2025-11-18)
+
+## What's Changed
+
+- chore(deps): update dependency supertest to v7 by @renovate[bot] in https://github.com/cap-js/ord/pull/293
+- chore: prepare for trusted publishing, enable provenance by @chgeo in https://github.com/cap-js/ord/pull/296
+- Remove association "localized" from interop CSN by @stewsk in https://github.com/cap-js/ord/pull/297
+
+## New Contributors
+
+- @chgeo made their first contribution in https://github.com/cap-js/ord/pull/296
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.13...v1.3.14
+
 ## 1.3.13 (2025-11-12)
 
 ## What's Changed
