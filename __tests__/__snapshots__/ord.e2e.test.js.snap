@@ -1334,38 +1334,6 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
         "genre_ID": {
           "type": "cds.Integer",
         },
-        "localized": {
-          "on": [
-            {
-              "ref": [
-                "localized",
-                "ID",
-              ],
-            },
-            "=",
-            {
-              "ref": [
-                "ID",
-              ],
-            },
-            "and",
-            {
-              "ref": [
-                "localized",
-                "locale",
-              ],
-            },
-            "=",
-            {
-              "ref": [
-                "$user",
-                "locale",
-              ],
-            },
-          ],
-          "target": "sap.capdpprod.DPBooks.v1.Books.texts",
-          "type": "cds.Association",
-        },
         "modifiedAt": {
           "@EndUserText.label": "{i18n>ChangedAt}",
           "@UI.ExcludeFromNavigationContext": true,
@@ -1483,38 +1451,6 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
           "length": 1000,
           "type": "cds.String",
         },
-        "localized": {
-          "on": [
-            {
-              "ref": [
-                "localized",
-                "code",
-              ],
-            },
-            "=",
-            {
-              "ref": [
-                "code",
-              ],
-            },
-            "and",
-            {
-              "ref": [
-                "localized",
-                "locale",
-              ],
-            },
-            "=",
-            {
-              "ref": [
-                "$user",
-                "locale",
-              ],
-            },
-          ],
-          "target": "sap.capdpprod.DPBooks.v1.Currencies.texts",
-          "type": "cds.Association",
-        },
         "minorUnit": {
           "@EndUserText.label": "{i18n>CurrencyMinorUnit}",
           "type": "cds.Int16",
@@ -1627,38 +1563,6 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
           "@EndUserText.label": "{i18n>Description}",
           "length": 1000,
           "type": "cds.String",
-        },
-        "localized": {
-          "on": [
-            {
-              "ref": [
-                "localized",
-                "ID",
-              ],
-            },
-            "=",
-            {
-              "ref": [
-                "ID",
-              ],
-            },
-            "and",
-            {
-              "ref": [
-                "localized",
-                "locale",
-              ],
-            },
-            "=",
-            {
-              "ref": [
-                "$user",
-                "locale",
-              ],
-            },
-          ],
-          "target": "sap.capdpprod.DPBooks.v1.Genres.texts",
-          "type": "cds.Association",
         },
         "name": {
           "@EndUserText.label": "{i18n>Name}",
