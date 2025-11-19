@@ -275,7 +275,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "title": "This is test Cinema Service title",
     },
   ],
-  "openResourceDiscovery": "1.9",
+  "openResourceDiscovery": "1.12",
   "packages": [
     {
       "description": "This package contains public General for capire bookshop ord sample.",
@@ -400,7 +400,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
       "title": "EbMtEmitter Service",
     },
   ],
-  "openResourceDiscovery": "1.9",
+  "openResourceDiscovery": "1.12",
   "packages": [
     {
       "description": "This package contains public General for capire bookshop ord sample.",

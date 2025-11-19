@@ -1,0 +1,196 @@
+###
+# ORD Configuration Endpoint HTTP Tests
+# This file contains manual HTTP requests to test the ORD configuration endpoint
+# with different authentication scenarios.
+#
+# You need to have the server running with appropriate environment variables set
+# to test the different authentication methods.
+# E.g. run cd xmpl && cds watch with the necessary ORD_AUTH_TYPE and BASIC_AUTH variables.
+#
+# Usage:
+# - Use VS Code REST Client extension to execute these requests
+# - Or use the curl commands provided in comments
+###
+
+### Variables
+@baseUrl = http://localhost:4004
+@ordConfigEndpoint = {{baseUrl}}/.well-known/open-resource-discovery
+@ordDocumentEndpoint = {{baseUrl}}/ord/v1/documents/ord-document
+@username = admin
+@password = secret
+# Bcrypt hash for "secret": $2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW
+
+###### ORD Config Endpoint Tests
+
+###
+# Test 1: Open Authentication (Default)
+# Expected: 200 OK with ORD document
+# This should work when ORD_AUTH_TYPE is not set or set to ["open"]
+#
+# curl equivalent:
+# curl -v http://localhost:4004/.well-known/open-resource-discovery
+
+GET {{ordConfigEndpoint}} HTTP/1.1
+Host: localhost:4004
+###
+# Test 2: Basic Authentication - Valid Credentials (lowercase "authorization")
+# Expected: 200 OK with ORD document
+# Requires: ORD_AUTH_TYPE=["basic"] and BASIC_AUTH={"admin":"$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"}
+#
+# curl equivalent:
+# curl -v -u admin:secret http://localhost:4004/.well-known/open-resource-discovery
+
+GET {{ordConfigEndpoint}} HTTP/1.1
+Host: localhost:4004
+authorization: Basic YWRtaW46c2VjcmV0
+
+###
+# Test 3: Basic Authentication - Valid Credentials (standard "Authorization")
+# Expected: 200 OK with ORD document (if Express normalizes headers)
+# Testing case sensitivity of the authorization header
+
+GET {{ordConfigEndpoint}} HTTP/1.1
+Host: localhost:4004
+Authorization: Basic YWRtaW46c2VjcmV0
+
+
+
+###### ORD Document Endpoint Tests
+
+###
+# Test 1: Open Authentication (Default)
+# Expected: 200 OK with ORD document
+# This should work when ORD_AUTH_TYPE is not set or set to ["open"]
+#
+# curl equivalent:
+# curl -v http://localhost:4004/ord/v1/documents/ord-document
+
+GET {{ordDocumentEndpoint}} HTTP/1.1
+Host: localhost:4004
+
+
+###
+# Test 2: Basic Authentication - Valid Credentials (lowercase "authorization")
+# Expected: 200 OK with ORD document
+# Requires: ORD_AUTH_TYPE=["basic"] and BASIC_AUTH={"admin":"$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"}
+#
+# curl equivalent:
+# curl -v -u admin:secret http://localhost:4004/ord/v1/documents/ord-document
+
+GET {{ordDocumentEndpoint}} HTTP/1.1
+Host: localhost:4004
+authorization: Basic YWRtaW46c2VjcmV0
+
+
+###
+# Test 3: Basic Authentication - Valid Credentials (standard "Authorization")
+# Expected: 200 OK with ORD document (if Express normalizes headers)
+# Testing case sensitivity of the authorization header
+#
+# curl equivalent (curl automatically uses lowercase):
+# curl -v -u admin:secret http://localhost:4004/ord/v1/documents/ord-document
+
+GET {{ordDocumentEndpoint}} HTTP/1.1
+Host: localhost:4004
+Authorization: Basic YWRtaW46c2VjcmV0
+
+
+###
+# Test 4: Basic Authentication - Invalid Credentials
+# Expected: 401 Unauthorized with "Invalid credentials"
+#
+# curl equivalent:
+# curl -v -u admin:wrongpassword http://localhost:4004/ord/v1/documents/ord-document
+
+GET {{ordDocumentEndpoint}} HTTP/1.1
+Host: localhost:4004
+Authorization: Basic YWRtaW46d3JvbmdwYXNzd29yZA==
+
+
+###
+# Test 5: Basic Authentication - Invalid Username
+# Expected: 401 Unauthorized with "Invalid credentials"
+#
+# curl equivalent:
+# curl -v -u wronguser:secret http://localhost:4004/ord/v1/documents/ord-document
+
+GET {{ordDocumentEndpoint}} HTTP/1.1
+Host: localhost:4004
+Authorization: Basic d3JvbmdfdXNlcjpzZWNyZXQ=
+
+
+###
+# Test 6: Basic Authentication - Missing Credentials
+# Expected: 401 Unauthorized with "Authentication required." and WWW-Authenticate header
+#
+# curl equivalent:
+# curl -v http://localhost:4004/ord/v1/documents/ord-document
+
+GET {{ordDocumentEndpoint}} HTTP/1.1
+Host: localhost:4004
+
+
+###
+# Test 7: Basic Authentication - Invalid Auth Type (Bearer instead of Basic)
+# Expected: 401 Unauthorized with "Invalid authentication type"
+#
+# curl equivalent:
+# curl -v -H "Authorization: Bearer some-token" http://localhost:4004/ord/v1/documents/ord-document
+
+GET {{ordDocumentEndpoint}} HTTP/1.1
+Host: localhost:4004
+Authorization: Bearer some-token-value
+
+
+###
+# Test 8: Basic Authentication - Malformed Authorization Header
+# Expected: 401 Unauthorized
+#
+# curl equivalent:
+# curl -v -H "Authorization: BasicYWRtaW46c2VjcmV0" http://localhost:4004/ord/v1/documents/ord-document
+
+GET {{ordDocumentEndpoint}} HTTP/1.1
+Host: localhost:4004
+Authorization: BasicYWRtaW46c2VjcmV0
+
+
+###
+# Test 9: Basic Authentication - Empty Authorization Header
+# Expected: 401 Unauthorized with "Authentication required."
+#
+# curl equivalent:
+# curl -v -H "Authorization: " http://localhost:4004/ord/v1/documents/ord-document
+
+GET {{ordDocumentEndpoint}} HTTP/1.1
+Host: localhost:4004
+Authorization:
+
+
+###
+# Additional Test: Check base ORD endpoint (no auth required)
+# Expected: 200 OK with base template
+#
+# curl equivalent:
+# curl -v http://localhost:4004/.well-known/open-resource-discovery
+
+GET {{baseUrl}}/.well-known/open-resource-discovery HTTP/1.1
+Host: localhost:4004
+
+
+###
+# Setup Instructions:
+#
+# For Open Authentication (default):
+# No environment variables needed, or set:
+# export ORD_AUTH_TYPE='["open"]'
+#
+# For Basic Authentication:
+# export ORD_AUTH_TYPE='["basic"]'
+# export BASIC_AUTH='{"admin":"$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"}'
+#
+# Start the server:
+# cd xmpl && cds watch
+#
+# Or in the project root:
+# cds watch xmpl
+###
