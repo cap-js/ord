@@ -5,7 +5,8 @@
     "dependencies": {
         "@cap-js/ord": "file:../../ord",
         "@cap-js/sqlite": ">=2",
-        "@sap/cds-mtxs": "^3"
+        "@sap/cds-mtxs": "^3",
+        "@btp-ai/mcp-plugin": "^0.1.23-test"
     },
     "private": true,
     "cds": {
@@ -14,6 +15,14 @@
             "[development]": {
                 "multitenancy": true
             }
+        },
+        "ord": {
+            "title": "MCP Server for the Bookshop Sample",
+            "shortDescription": "This is the MCP server to interact with the the Bookshop Sample",
+            "description": "This is the MCP server to interact with the the Bookshop Sample",
+            "version": "1.0.0",
+            "visibility": "public",
+            "entryPoints": "/rest/mcp/streaming"
         }
     }
 }
