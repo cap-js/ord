@@ -285,4 +285,255 @@ describe("authentication", () => {
             await authCheck(req, 401, "Invalid credentials");
         });
     });
+
+    describe("UCL mTLS authentication", () => {
+        const mockExpectedSubjects = ["CN=aggregator, O=SAP SE, C=DE", "CN=backup, O=SAP SE, C=US"];
+
+        beforeEach(() => {
+            delete process.env.ORD_AUTH_TYPE;
+            delete process.env.ORD_UCL_MTLS_SUBJECT_HEADER;
+            delete process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS;
+            cds.env.authentication = {};
+            cds.env.ord = {};
+            cds.env.security = {};
+            cds.context = {};
+        });
+
+        afterEach(() => {
+            delete process.env.ORD_AUTH_TYPE;
+            delete process.env.ORD_UCL_MTLS_SUBJECT_HEADER;
+            delete process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS;
+            cds.env.authentication = {};
+            cds.env.ord = {};
+            cds.env.security = {};
+            cds.context = {};
+        });
+
+        it("should return default configuration with error when UCL mTLS is configured without expectedSubjects", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+            const authConfig = createAuthConfig();
+            expect(authConfig.error).toEqual("UCL mTLS requires expectedSubjects configuration");
+        });
+
+        it("should create auth configuration with UCL mTLS using environment variables", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
+
+            const authConfig = createAuthConfig();
+            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.UclMtls]);
+            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.UclMtls }]);
+            expect(authConfig.uclMtlsValidator).toBeDefined();
+            expect(typeof authConfig.uclMtlsValidator).toBe("function");
+            expect(authConfig.uclMtlsHeaderName).toBe("x-forwarded-client-cert");
+        });
+
+        it("should create auth configuration with UCL mTLS using cds.env", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+            cds.env.ord = {
+                uclMtls: {
+                    expectedSubjects: mockExpectedSubjects,
+                },
+            };
+
+            const authConfig = createAuthConfig();
+            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.UclMtls]);
+            expect(authConfig.uclMtlsValidator).toBeDefined();
+        });
+
+        it("should use custom header name from environment variable", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+            process.env.ORD_UCL_MTLS_SUBJECT_HEADER = "x-custom-cert";
+            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
+
+            const authConfig = createAuthConfig();
+            expect(authConfig.uclMtlsHeaderName).toBe("x-custom-cert");
+        });
+
+        it("should use header name from cds.env.security.authentication.clientCertificateHeader", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+            cds.env.security = {
+                authentication: {
+                    clientCertificateHeader: "x-ssl-cert",
+                },
+            };
+            cds.env.ord = {
+                uclMtls: {
+                    expectedSubjects: mockExpectedSubjects,
+                },
+            };
+
+            const authConfig = createAuthConfig();
+            expect(authConfig.uclMtlsHeaderName).toBe("x-ssl-cert");
+        });
+
+        it("should authenticate with valid certificate subject", async () => {
+            cds.context.authConfig = {
+                types: [AUTHENTICATION_TYPE.UclMtls],
+                uclMtlsValidator: (req) => ({ ok: true, subject: "CN=aggregator, O=SAP SE, C=DE" }),
+            };
+
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "CN=aggregator, O=SAP SE, C=DE",
+                },
+            };
+
+            await authCheck(req, 200);
+            expect(req.uclMtlsSubject).toBe("CN=aggregator, O=SAP SE, C=DE");
+        });
+
+        it("should not authenticate with missing certificate header", async () => {
+            cds.context.authConfig = {
+                types: [AUTHENTICATION_TYPE.UclMtls],
+                uclMtlsValidator: (req) => ({ ok: false, reason: "HEADER_MISSING" }),
+            };
+
+            const req = {
+                headers: {},
+            };
+
+            await authCheck(req, 401, "Client certificate authentication required");
+        });
+
+        it("should not authenticate with missing subject in certificate", async () => {
+            cds.context.authConfig = {
+                types: [AUTHENTICATION_TYPE.UclMtls],
+                uclMtlsValidator: (req) => ({ ok: false, reason: "SUBJECT_MISSING" }),
+            };
+
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "Hash=abc123",
+                },
+            };
+
+            await authCheck(req, 401, "Client certificate authentication required");
+        });
+
+        it("should return 403 forbidden for subject mismatch", async () => {
+            cds.context.authConfig = {
+                types: [AUTHENTICATION_TYPE.UclMtls],
+                uclMtlsValidator: (req) => ({ ok: false, reason: "SUBJECT_MISMATCH", subject: "CN=intruder, O=Evil, C=XX" }),
+            };
+
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "CN=intruder, O=Evil, C=XX",
+                },
+            };
+
+            await authCheck(req, 403, "Forbidden: Invalid client certificate");
+        });
+
+        it("should work with full integration using real validator", async () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
+
+            const authConfig = createAuthConfig();
+            cds.context = { authConfig };
+
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "CN=aggregator, O=SAP SE, C=DE",
+                },
+            };
+
+            await authCheck(req, 200);
+            expect(req.uclMtlsSubject).toBe("CN=aggregator, O=SAP SE, C=DE");
+        });
+
+        it("should work with XFCC-style header format", async () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
+
+            const authConfig = createAuthConfig();
+            cds.context = { authConfig };
+
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert":
+                        'Hash=abc123,Subject="CN=backup, O=SAP SE, C=US",URI=spiffe://test,Issuer="CN=CA"',
+                },
+            };
+
+            await authCheck(req, 200);
+            expect(req.uclMtlsSubject).toBe("CN=backup, O=SAP SE, C=US");
+        });
+
+        it("should handle subject with different token ordering", async () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
+
+            const authConfig = createAuthConfig();
+            cds.context = { authConfig };
+
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "C=DE, O=SAP SE, CN=aggregator",
+                },
+            };
+
+            await authCheck(req, 200);
+        });
+
+        it("should reject certificate with partial match", async () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
+
+            const authConfig = createAuthConfig();
+            cds.context = { authConfig };
+
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "CN=aggregator, O=SAP SE",
+                },
+            };
+
+            await authCheck(req, 403, "Forbidden: Invalid client certificate");
+        });
+
+        it("should support combination with Basic auth", async () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}", "${AUTHENTICATION_TYPE.UclMtls}"]`;
+            process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
+            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
+
+            const authConfig = createAuthConfig();
+            expect(authConfig.types).toContain(AUTHENTICATION_TYPE.Basic);
+            expect(authConfig.types).toContain(AUTHENTICATION_TYPE.UclMtls);
+            expect(authConfig.credentials).toBeDefined();
+            expect(authConfig.uclMtlsValidator).toBeDefined();
+        });
+
+        it("should handle Basic auth when both Basic and UCL mTLS are configured", async () => {
+            cds.context.authConfig = {
+                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.UclMtls],
+                credentials: mockValidUser,
+                uclMtlsValidator: (req) => ({ ok: true, subject: "CN=aggregator, O=SAP SE, C=DE" }),
+            };
+
+            const req = {
+                headers: {
+                    authorization: "Basic " + Buffer.from("admin:secret").toString("base64"),
+                },
+            };
+
+            await authCheck(req, 200);
+        });
+
+        it("should handle UCL mTLS when both Basic and UCL mTLS are configured but no Basic header", async () => {
+            cds.context.authConfig = {
+                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.UclMtls],
+                credentials: mockValidUser,
+                uclMtlsValidator: (req) => ({ ok: true, subject: "CN=aggregator, O=SAP SE, C=DE" }),
+            };
+
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "CN=aggregator, O=SAP SE, C=DE",
+                },
+            };
+
+            await authCheck(req, 200);
+        });
+    });
 });
