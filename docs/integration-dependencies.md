@@ -12,6 +12,7 @@ Integration Dependencies are ORD resources that describe dependencies on externa
 - The `app.yaml` must contain a valid Application Foundation configuration
 - The `commercial.application-namespace` field must be defined
 - Data products consumption must be configured under `overrides.dataProducts.consumption`
+- add `"@cap-js/ord": "github:cap-js/ord#extend_integration"` into package.json
 
 ## Usage
 
@@ -31,24 +32,24 @@ The build process will **automatically detect** the `app.yaml` file and generate
 
 ```yaml
 metadata:
-  name: my-application
-  description: "My Application Description"
-  version: "1.0.0"
+    name: my-application
+    description: "My Application Description"
+    version: "1.0.0"
 
 commercial:
-  application-namespace: "com.example.myapp"  # REQUIRED for Integration Dependencies
+    application-namespace: "com.example.myapp" # REQUIRED for Integration Dependencies
 
 overrides:
-  dataProducts:
-    consumption:
-      # Each key is an ORD ID of a consumed data product/API resource
-      "sap.s4com:apiResource:PurchaseOrder:v1":
-        minimumVersion: "1.2.3"      # REQUIRED: Minimum version of the consumed resource
-        mandatory: true              # OPTIONAL: Whether this dependency is mandatory (default: false)
-        consumptionType: "replication"  # OPTIONAL: Type of consumption (replication, federation, cached)
-        ordId: "xyz"                 # OPTIONAL: Custom ORD ID reference
-        capConsumption:
-          model: "sap-s4com-purchaseorder-v1"  # OPTIONAL: CAP model name
+    dataProducts:
+        consumption:
+            # Each key is an ORD ID of a consumed data product/API resource
+            "sap.s4com:apiResource:PurchaseOrder:v1":
+                minimumVersion: "1.2.3" # REQUIRED: Minimum version of the consumed resource
+                mandatory: true # OPTIONAL: Whether this dependency is mandatory (default: false)
+                consumptionType: "replication" # OPTIONAL: Type of consumption (replication, federation, cached)
+                ordId: "xyz" # OPTIONAL: Custom ORD ID reference
+                capConsumption:
+                    model: "sap-s4com-purchaseorder-v1" # OPTIONAL: CAP model name
 ```
 
 ### Example Configuration
@@ -57,29 +58,29 @@ overrides:
 apiVersion: composer.yaml/v1
 kind: Application
 metadata:
-  name: intelligent-supply-chain-app
-  description: "Intelligent Supply Chain Application"
-  version: "1.0.0"
+    name: intelligent-supply-chain-app
+    description: "Intelligent Supply Chain Application"
+    version: "1.0.0"
 
 commercial:
-  application-namespace: "com.sap.intelligent.supplychain"
+    application-namespace: "com.sap.intelligent.supplychain"
 
 overrides:
-  dataProducts:
-    consumption:
-      # Mandatory Purchase Order integration
-      "sap.s4com:apiResource:PurchaseOrder:v1":
-        minimumVersion: "1.2.3"
-        mandatory: true
-        consumptionType: "replication"
-        capConsumption:
-          model: "sap-s4com-purchaseorder-v1"
-      
-      # Optional Supplier integration
-      "sap.ariba:apiResource:Supplier:v2":
-        minimumVersion: "2.0.0"
-        mandatory: false
-        consumptionType: "federation"
+    dataProducts:
+        consumption:
+            # Mandatory Purchase Order integration
+            "sap.s4com:apiResource:PurchaseOrder:v1":
+                minimumVersion: "1.2.3"
+                mandatory: true
+                consumptionType: "replication"
+                capConsumption:
+                    model: "sap-s4com-purchaseorder-v1"
+
+            # Optional Supplier integration
+            "sap.ariba:apiResource:Supplier:v2":
+                minimumVersion: "2.0.0"
+                mandatory: false
+                consumptionType: "federation"
 ```
 
 ## Generated Integration Dependency Structure
@@ -88,28 +89,28 @@ For each consumed data product, an Integration Dependency will be generated with
 
 ```json
 {
-  "ordId": "sap.intelligentsupplychain:integrationDependency:S4comPurchaseOrder:v1",
-  "title": "S/4HANA Commerce Purchase Order Integration",
-  "description": "Integration with sap.s4com for accessing Purchase Order data. Integration pattern: replication. Consumed resource: sap.s4com:apiResource:PurchaseOrder:v1 (resource type: apiResource, minimum version: 1.2.3). CAP model: sap-s4com-purchaseorder-v1. This is a mandatory dependency required for core functionality. Enables data access and integration with sap.s4com for enhanced analytics and business process support.",
-  "partOfPackage": "sap.intelligentsupplychain:package:default:v1",
-  "version": "1.2.3",
-  "releaseStatus": "active",
-  "visibility": "public",
-  "mandatory": true,
-  "aspects": [
-    {
-      "title": "PurchaseOrder Data Access",
-      "description": "Replication of purchaseorder data",
-      "mandatory": true,
-      "supportMultipleProviders": false,
-      "apiResources": [
+    "ordId": "sap.intelligentsupplychain:integrationDependency:S4comPurchaseOrder:v1",
+    "title": "S/4HANA Commerce Purchase Order Integration",
+    "description": "Integration with sap.s4com for accessing Purchase Order data. Integration pattern: replication. Consumed resource: sap.s4com:apiResource:PurchaseOrder:v1 (resource type: apiResource, minimum version: 1.2.3). CAP model: sap-s4com-purchaseorder-v1. This is a mandatory dependency required for core functionality. Enables data access and integration with sap.s4com for enhanced analytics and business process support.",
+    "partOfPackage": "sap.intelligentsupplychain:package:default:v1",
+    "version": "1.2.3",
+    "releaseStatus": "active",
+    "visibility": "public",
+    "mandatory": true,
+    "aspects": [
         {
-          "ordId": "sap.s4com:apiResource:PurchaseOrder:v1",
-          "minVersion": "1.2.3"
+            "title": "PurchaseOrder Data Access",
+            "description": "Replication of purchaseorder data",
+            "mandatory": true,
+            "supportMultipleProviders": false,
+            "apiResources": [
+                {
+                    "ordId": "sap.s4com:apiResource:PurchaseOrder:v1",
+                    "minVersion": "1.2.3"
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
 ```
 
@@ -118,6 +119,7 @@ For each consumed data product, an Integration Dependency will be generated with
 Integration Dependency ORD IDs are automatically generated using the following algorithm:
 
 ### Format
+
 ```
 <namespace>:integrationDependency:<resourceName>:v<majorVersion>
 ```
@@ -125,25 +127,25 @@ Integration Dependency ORD IDs are automatically generated using the following a
 ### Components
 
 1. **Namespace**: Converted from `commercial.application-namespace`
-   - Example: `com.sap.intelligent.supplychain` → `sap.intelligentsupplychain`
-   - Follows ORD namespace conventions (vendor.system format)
+    - Example: `com.sap.intelligent.supplychain` → `sap.intelligentsupplychain`
+    - Follows ORD namespace conventions (vendor.system format)
 
 2. **Concept**: Always `integrationDependency`
 
 3. **Resource Name**: Derived from consumed ORD ID
-   - Example: `sap.s4com:apiResource:PurchaseOrder:v1` → `S4comPurchaseOrder`
-   - Combines source system identifier with resource name
-   - **Note**: Consumption type (replication, federation) is NOT included in the name
+    - Example: `sap.s4com:apiResource:PurchaseOrder:v1` → `S4comPurchaseOrder`
+    - Combines source system identifier with resource name
+    - **Note**: Consumption type (replication, federation) is NOT included in the name
 
 4. **Major Version**: Extracted from `minimumVersion`
-   - Example: `1.2.3` → `v1`
+    - Example: `1.2.3` → `v1`
 
 ### Examples
 
-| Consumed ORD ID | App Namespace | Generated Integration Dependency ORD ID |
-|-----------------|---------------|----------------------------------------|
+| Consumed ORD ID                          | App Namespace                     | Generated Integration Dependency ORD ID                                  |
+| ---------------------------------------- | --------------------------------- | ------------------------------------------------------------------------ |
 | `sap.s4com:apiResource:PurchaseOrder:v1` | `com.sap.intelligent.supplychain` | `sap.intelligentsupplychain:integrationDependency:S4comPurchaseOrder:v1` |
-| `sap.ariba:apiResource:Supplier:v2` | `com.example.procurement` | `example.procurement:integrationDependency:AribaSupplier:v2` |
+| `sap.ariba:apiResource:Supplier:v2`      | `com.example.procurement`         | `example.procurement:integrationDependency:AribaSupplier:v2`             |
 
 ## Package Assignment
 
@@ -155,13 +157,13 @@ Integration Dependencies are automatically assigned to packages:
 
 ## Field Mapping
 
-| app.yaml Field | Integration Dependency Field | Notes |
-|----------------|----------------------------|-------|
-| Key (ORD ID) | `aspects[].apiResources[].ordId` | The consumed resource ORD ID |
-| `minimumVersion` | `version`, `aspects[].apiResources[].minVersion` | Used for version and aspect |
-| `mandatory` | `mandatory`, `aspects[].mandatory` | Defaults to `false` if not specified |
-| `consumptionType` | Description, labels | Included in description and labels, not in ORD ID |
-| `capConsumption.model` | Description | Included in markdown description |
+| app.yaml Field         | Integration Dependency Field                     | Notes                                             |
+| ---------------------- | ------------------------------------------------ | ------------------------------------------------- |
+| Key (ORD ID)           | `aspects[].apiResources[].ordId`                 | The consumed resource ORD ID                      |
+| `minimumVersion`       | `version`, `aspects[].apiResources[].minVersion` | Used for version and aspect                       |
+| `mandatory`            | `mandatory`, `aspects[].mandatory`               | Defaults to `false` if not specified              |
+| `consumptionType`      | Description, labels                              | Included in description and labels, not in ORD ID |
+| `capConsumption.model` | Description                                      | Included in markdown description                  |
 
 ## Error Handling
 
@@ -195,6 +197,7 @@ The generated Integration Dependencies follow ORD specification requirements:
 ### No Integration Dependencies Generated
 
 **Check:**
+
 - `app.yaml` exists in project root
 - `commercial.application-namespace` is defined
 - `overrides.dataProducts.consumption` contains valid entries
@@ -203,6 +206,7 @@ The generated Integration Dependencies follow ORD specification requirements:
 ### Invalid ORD ID Generated
 
 **Verify:**
+
 - `commercial.application-namespace` follows proper format
 - Consumed ORD IDs are valid (format: `namespace:concept:resource:version`)
 - `minimumVersion` is a valid semantic version
@@ -210,6 +214,7 @@ The generated Integration Dependencies follow ORD specification requirements:
 ### Missing Dependencies
 
 **Ensure:**
+
 - All consumed data products are listed in `app.yaml`
 - Each entry has required fields (`minimumVersion`)
 - ORD IDs are correct and complete
@@ -219,18 +224,18 @@ The generated Integration Dependencies follow ORD specification requirements:
 The feature consists of three main components:
 
 1. **`lib/integrationDependency.js`**: Core generation logic
-   - Namespace conversion
-   - ORD ID generation
-   - Integration Dependency structure creation
+    - Namespace conversion
+    - ORD ID generation
+    - Integration Dependency structure creation
 
 2. **`lib/build.js`**: Build integration
-   - Loads and parses `app.yaml`
-   - Passes configuration to ORD generation
+    - Loads and parses `app.yaml`
+    - Passes configuration to ORD generation
 
 3. **`lib/ord.js`**: ORD document integration
-   - Calls Integration Dependency generation
-   - Includes Integration Dependencies in ORD document
-   - Updates package filtering
+    - Calls Integration Dependency generation
+    - Includes Integration Dependencies in ORD document
+    - Updates package filtering
 
 ## See Also
 
