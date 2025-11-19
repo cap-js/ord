@@ -1,0 +1,131 @@
+apiVersion: composer.yaml/v1
+kind: Application
+metadata:
+  name: intelligent-supply-chain-app
+  description: "Intelligent Supply Chain Application with SAP Managed Services"
+  version: "1.0.0"
+
+type:
+  base: intelligent-application
+  traits:
+    - sap-managed
+    - data-product-consumption
+    - mcp-support
+
+# Global overrides that apply to the entire application with sap-managed trait
+overrides:
+  # Delivery configuration - shows all required settings
+  delivery:
+    dwc: "enabled"  # Developer must specify - no default
+    hana:
+      enabled: "auto-provisioned"
+      sizingHint: "large"  # large for production workloads
+  
+  # Provisioning configuration - mandatory section
+  provisioning:
+    tenantBusinessTypes: 
+      - "enterprise"
+      - "premium" 
+      - "standard"
+      - "trial"
+  
+  # Commercial configuration - all mandatory fields
+  commercial:
+    suiteSKU: "SAP_INTELLIGENT_SUPPLY_CHAIN_SUITE"
+    application-namespace: "com.sap.intelligent.supplychain"
+    sap4me:
+      labels:
+        - key: "domain"
+          value: "supply-chain"
+        - key: "intelligence"
+          value: "ai-powered"
+        - key: "tier"
+          value: "enterprise"
+        - key: "category"
+          value: "analytics"
+      descriptions:
+        - key: "short"
+          value: "Intelligent Supply Chain Analytics"
+        - key: "long"
+          value: "AI-powered supply chain analytics and optimization platform with predictive insights"
+        - key: "marketing"
+          value: "Transform your supply chain with intelligent analytics and real-time insights"
+      icons:
+        small: "https://assets.sap.com/icons/supply-chain-analytics-16.png"
+        medium: "https://assets.sap.com/icons/supply-chain-analytics-32.png"
+        large: "https://assets.sap.com/icons/supply-chain-analytics-64.png"
+        splash: "https://assets.sap.com/icons/supply-chain-analytics-256.png"
+  
+  # Integration configuration - all mandatory fields with defaults overridden
+  integration:
+    ord:
+      endpoint: "/api/v2/.well-known/open_resource_discovery"
+    ias:
+      integrationFormationType: "intelligent-supply-chain-formation"
+    bdc:
+      formationType: "advanced-supply-chain-catalog"
+    applicationType: "intelligent-analytics-application"
+    systemRole: "analytics-hub"
+    suiteTenantProductType: "s4hana-intelligent-enterprise"
+
+  # Data Products configuration - corrected schema format
+  dataProducts:
+    consumption:
+      # Using ORD IDs as keys (object format) instead of array format
+      "sap.s4com:apiResource:PurchaseOrder:v1":
+        minimumVersion: "1.2.3"                              # Semantic version of the data product
+        mandatory: true                                      # default: false 
+        consumptionType: "replication"                       # default: replication / also possible: federation, cached
+        ordId: "xyz"                                         # equal to parent node name, can be adjusted in case multiple dps are imported
+        capConsumption:
+          model: "sap-s4com-purchaseorder-v1"                # default: serialization of ORD id
+
+    production:
+      - dataProductORDid: "sap.appabc:dataProduct:MyApplicationsDataProduct1:v1"
+        version: "1.0.0"
+        definitionFile: "myDPdef.interop"                    # one file -> archive needs to be build  
+        managedBy: 
+          capProduction: "myServiceABC"                    # indicates that the definition file is generated from the cap service definition
+      - dataProductORDid: "sap.appdef:dataProduct:MyApplicationsDataProduct2:v1"
+        version: "1.0.0"
+        definitionFile: "myDPgjh.interop"
+        managedBy: 
+          rapProduction: "myABAPSQLService"                # example service created in ABAP
+
+  # MCP (Multi-Cloud Platform) configuration
+  mcp:
+    exposure: auto
+    apis:
+      - capService: "myService"
+      - oData:
+          ordID: "sap.xyz:apiResource:myService:v1"
+      - openAPI: "url://testspec"
+
+assets:
+  - id: supply-chain-analytics
+    kind: cap-asset
+    metadata:
+      name: "Supply Chain Analytics Service"
+      description: "Intelligent analytics service for supply chain optimization"
+    overrides:
+      # Asset-specific overrides can still be applied here
+      # These will be merged with the global sap-managed configuration
+      delivery:
+        hana:
+          sizingHint: "large"  # Override for this specific asset
+
+  - id: demand-forecasting
+    kind: cap-asset
+    metadata:
+      name: "Demand Forecasting Service"
+      description: "AI-powered demand forecasting microservice"
+    overrides:
+      # Different delivery configuration for microservice
+      delivery:
+        dwc: "none"  # This service doesn't need DWC
+        hana:
+          enabled: "enabled"
+          sizingHint: "medium"
+
+# Global configuration that applies to all assets
+
