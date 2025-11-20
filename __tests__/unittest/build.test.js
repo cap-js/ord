@@ -29,9 +29,9 @@ jest.mock("@sap/cds-dk", () => {
     };
 });
 
-jest.mock("../../lib/index", () => {
+jest.mock("../../lib/generateOrd", () => {
     return {
-        ord: jest.fn(() => {
+        generateOrd: jest.fn(() => {
             return {
                 apiResources: [
                     {
@@ -61,6 +61,11 @@ jest.mock("../../lib/index", () => {
                 ],
             };
         }),
+    };
+});
+
+jest.mock("../../lib/index", () => {
+    return {
         getMetadata: jest.fn((url) => {
             return new Promise((resolve) => {
                 resolve({
@@ -152,7 +157,8 @@ describe("Build", () => {
                 },
             ],
         };
-        jest.spyOn(index, "ord").mockReturnValue(mockOrdDocument);
+        const { generateOrd } = require("../../lib/generateOrd");
+        jest.spyOn({ generateOrd }, "generateOrd").mockReturnValue(mockOrdDocument);
 
         const plugin = new OrdBuildPlugin();
         plugin.model = jest.fn().mockResolvedValue(mockModel);

@@ -10,17 +10,18 @@ cds.on("bootstrap", async () => {
     getAuthConfig();
 });
 
-function _lazyRegisterCompileTarget() {
-    const ord = require("./lib/index").ord;
-    Object.defineProperty(this, "ord", { ord });
-    return ord;
-}
-
-const registerORDCompileTarget = () => {
-    Object.defineProperty(cds.compile.to, "ord", {
-        get: _lazyRegisterCompileTarget,
-        configurable: true,
-    });
-};
-
-registerORDCompileTarget();
+// Lazy-load the compile target to avoid loading generateOrd module at startup
+Object.defineProperty(cds.compile.to, "ord", {
+    get() {
+        const { generateOrd } = require("./lib/generateOrd");
+        const ordFunction = (csn) => generateOrd(csn, { mode: "compile" });
+        // Replace the getter with the actual function for subsequent access
+        Object.defineProperty(cds.compile.to, "ord", {
+            value: ordFunction,
+            configurable: true,
+            writable: true,
+        });
+        return ordFunction;
+    },
+    configurable: true,
+});
