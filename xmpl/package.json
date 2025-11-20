@@ -6,7 +6,7 @@
         "@cap-js/ord": "file:../../ord",
         "@cap-js/sqlite": ">=2",
         "@sap/cds-mtxs": "^3",
-        "@btp-ai/mcp-plugin": "^0.1.23-test"
+        "@btp-ai/mcp-plugin": "^0.2.0"
     },
     "private": true,
     "cds": {
