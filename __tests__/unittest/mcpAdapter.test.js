@@ -82,22 +82,6 @@ describe("mcpAdapter", () => {
             expect(result.info).toBeDefined();
         });
 
-        test("should throw error when plugin is not available", async () => {
-            // Test the error path by checking what happens when getMcpPlugin returns null
-            // We can't easily mock this in the current test since the module is already loaded
-            // So we'll test that the logic is correct by verifying the function exists
-            // and documenting that in production, isMCPPluginAvailable will return false
-            // when the plugin isn't installed, causing getMcpPlugin to return null
-            const mockServices = [];
-            
-            // This test verifies the contract: when plugin is unavailable, an error should be thrown
-            // The actual isolation happens through the module mock at the top of the file
-            // In production without the plugin, isMCPPluginAvailable returns false
-            expect(typeof buildMcpServerDefinition).toBe("function");
-            expect(typeof isMCPPluginAvailable).toBe("function");
-            expect(typeof getMcpPlugin).toBe("function");
-        });
-
         test("should propagate errors from plugin", async () => {
             const mockServices = [];
 
@@ -142,11 +126,7 @@ describe("mcpAdapter", () => {
                     title: "Multi Service Server",
                     version: "1.0.0",
                 },
-                methods: [
-                    { name: "method1" },
-                    { name: "method2" },
-                    { name: "method3" },
-                ],
+                methods: [{ name: "method1" }, { name: "method2" }, { name: "method3" }],
             });
 
             const result = await buildMcpServerDefinition(mockServices);
