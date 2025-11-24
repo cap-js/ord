@@ -7,3 +7,4 @@ gen
 auth-env.txt
 test-config.json
 xmpl_java/srv/
+.npmrc

@@ -157,6 +157,32 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/mcp-server",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:mcp-server:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "beta",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "Custom MCP server description",
+      "title": "Internal MCP Server for CAP Project",
+      "version": "2.1.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -502,6 +528,32 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "shortDescription": "Short description of sap.capdpprod.DPBooks.v1",
       "title": "sap.capdpprod.DPBooks.v1",
       "version": "1.0.0",
+      "visibility": "internal",
+    },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/mcp-server",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:mcp-server:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "beta",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "Custom MCP server description",
+      "title": "Internal MCP Server for CAP Project",
+      "version": "2.1.0",
       "visibility": "internal",
     },
   ],
@@ -851,6 +903,32 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/mcp-server",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "sap.test.cdsrc.sample:apiResource:mcp-server:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "releaseStatus": "beta",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "Custom MCP server description",
+      "title": "Internal MCP Server for CAP Project",
+      "version": "2.1.0",
+      "visibility": "internal",
+    },
   ],
   "consumptionBundles": [
     {
@@ -1086,6 +1164,36 @@ exports[`Tests for Data Product definition Check interop CSN annotation mapping 
       "shortDescription": "Short description of TestService",
       "title": "Test Service Title",
       "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/rest/mcp/streaming",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capjsord:apiResource:mcp-server:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/customer.capjsord:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+      "title": "MCP Server for @cap-js/ord",
+      "version": "1.3.14",
       "visibility": "public",
     },
   ],
@@ -2322,6 +2430,36 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
       "version": "1.0.0",
       "visibility": "public",
     },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/rest/mcp/streaming",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capjsord:apiResource:mcp-server:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/customer.capjsord:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+      "title": "MCP Server for @cap-js/ord",
+      "version": "1.3.14",
+      "visibility": "public",
+    },
   ],
   "consumptionBundles": [
     {
@@ -2533,7 +2671,7 @@ exports[`Tests for eventResource and apiResource should allow MCP API resource c
     },
     {
       "apiProtocol": "mcp",
-      "description": "This is the MCP server to interact with the capire-bookshop-ord-sample",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
       "entryPoints": [
         "/mcp-server",
       ],
@@ -2750,7 +2888,7 @@ exports[`Tests for eventResource and apiResource should allow MCP API resource c
 exports[`Tests for eventResource and apiResource should allow MCP API resource customization via custom.ord.json 2`] = `
 {
   "apiProtocol": "mcp",
-  "description": "This is the MCP server to interact with the capire-bookshop-ord-sample",
+  "description": "This is the MCP server to interact with the @cap-js/ord",
   "entryPoints": [
     "/mcp-server",
   ],
@@ -2822,6 +2960,32 @@ exports[`Tests for eventResource and apiResource should block MTXServices when m
       "title": "cds.xt.MyService",
       "version": "1.0.0",
       "visibility": "internal",
+    },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/rest/mcp/streaming",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:mcp-server:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+      "title": "MCP Server for @cap-js/ord",
+      "version": "1.3.14",
+      "visibility": "public",
     },
   ],
   "consumptionBundles": [
@@ -2948,6 +3112,32 @@ exports[`Tests for eventResource and apiResource should block OpenResourceDiscov
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/rest/mcp/streaming",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:mcp-server:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+      "title": "MCP Server for @cap-js/ord",
+      "version": "1.3.14",
+      "visibility": "public",
+    },
   ],
   "consumptionBundles": [
     {
@@ -3072,6 +3262,32 @@ exports[`Tests for eventResource and apiResource should exclude external service
       "title": "MyService",
       "version": "1.0.0",
       "visibility": "internal",
+    },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/rest/mcp/streaming",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:mcp-server:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+      "title": "MCP Server for @cap-js/ord",
+      "version": "1.3.14",
+      "visibility": "public",
     },
   ],
   "consumptionBundles": [
@@ -3198,6 +3414,32 @@ exports[`Tests for eventResource and apiResource should exclude service when it 
       "version": "1.0.0",
       "visibility": "internal",
     },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/rest/mcp/streaming",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:mcp-server:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+      "title": "MCP Server for @cap-js/ord",
+      "version": "1.3.14",
+      "visibility": "public",
+    },
   ],
   "consumptionBundles": [
     {
@@ -3279,8 +3521,10 @@ exports[`Tests for eventResource and apiResource should exclude service when it 
 exports[`Tests for eventResource and apiResource should generate mcp apiResource mcp plugin is available 1`] = `
 {
   "apiProtocol": "mcp",
-  "description": "This is the MCP server to interact with the cap-js-ord",
-  "entryPoints": [],
+  "description": "This is the MCP server to interact with the @cap-js/ord",
+  "entryPoints": [
+    "/rest/mcp/streaming",
+  ],
   "extensible": {
     "supported": "no",
   },
@@ -3296,9 +3540,9 @@ exports[`Tests for eventResource and apiResource should generate mcp apiResource
       "url": "/ord/v1/customer.capjsord:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
     },
   ],
-  "shortDescription": "This is the MCP server to interact with the cap-js-ord",
-  "title": "MCP Server for cap-js-ord",
-  "version": "1.0.0",
+  "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+  "title": "MCP Server for @cap-js/ord",
+  "version": "1.3.14",
   "visibility": "public",
 }
 `;
@@ -3460,6 +3704,32 @@ exports[`Tests for products and packages should not contain products property if
       "title": "sap.capdpprod.DPBooks.v1",
       "version": "1.0.0",
       "visibility": "internal",
+    },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/rest/mcp/streaming",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:mcp-server:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+      "title": "MCP Server for @cap-js/ord",
+      "version": "1.3.14",
+      "visibility": "public",
     },
   ],
   "consumptionBundles": [
@@ -3760,6 +4030,32 @@ exports[`Tests for products and packages should raise error log when custom prod
       "title": "sap.capdpprod.DPBooks.v1",
       "version": "1.0.0",
       "visibility": "internal",
+    },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/rest/mcp/streaming",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:mcp-server:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+      "title": "MCP Server for @cap-js/ord",
+      "version": "1.3.14",
+      "visibility": "public",
     },
   ],
   "consumptionBundles": [
@@ -4068,6 +4364,32 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "title": "sap.capdpprod.DPBooks.v1",
       "version": "1.0.0",
       "visibility": "internal",
+    },
+    {
+      "apiProtocol": "mcp",
+      "description": "This is the MCP server to interact with the @cap-js/ord",
+      "entryPoints": [
+        "/rest/mcp/streaming",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "ordId": "customer.capirebookshopordsample:apiResource:mcp-server:v1",
+      "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": undefined,
+          "mediaType": "application/json",
+          "type": "custom",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+        },
+      ],
+      "shortDescription": "This is the MCP server to interact with the @cap-js/ord",
+      "title": "MCP Server for @cap-js/ord",
+      "version": "1.3.14",
+      "visibility": "public",
     },
   ],
   "consumptionBundles": [

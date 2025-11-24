@@ -158,7 +158,9 @@ exports[`templates createMCPAPIResourceTemplate should create MCP API resource t
 {
   "apiProtocol": "mcp",
   "description": "This is the MCP server to interact with the testAppName",
-  "entryPoints": [],
+  "entryPoints": [
+    "/rest/mcp/streaming",
+  ],
   "extensible": {
     "supported": "no",
   },

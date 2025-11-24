@@ -455,6 +455,11 @@ describe("templates", () => {
 
     describe("createMCPAPIResourceTemplate", () => {
         it("should create MCP API resource template correctly", () => {
+            // Mock MCP plugin to return null metadata (test default values)
+            jest.mock("@btp-ai/mcp-plugin/lib/utils/metadata", () => ({
+                generateORDMetadata: jest.fn(() => null),
+            }), { virtual: true });
+            
             const packageIds = ["customer.testNamespace:package:api:v1"];
             const accessStrategies = [{ type: "open" }];
 
@@ -482,7 +487,7 @@ describe("templates", () => {
                         accessStrategies: [{ type: "open" }],
                     },
                 ],
-                entryPoints: [],
+                entryPoints: ["/rest/mcp/streaming"],
                 extensible: { supported: "no" },
             });
         });

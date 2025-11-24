@@ -529,7 +529,9 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResource = document.apiResources.find((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResource).toBeDefined();
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
     });
@@ -548,7 +550,9 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResource = document.apiResources.find((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResource).toBeDefined();
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
     });
@@ -573,7 +577,10 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        // Expect at least 1 service API resource (MyService); MCP resource may also be present if plugin available
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResources = document.apiResources.filter((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
@@ -598,7 +605,10 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        // Expect at least 1 service API resource (MyService); MCP resource may also be present if plugin available
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResources = document.apiResources.filter((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
@@ -629,7 +639,10 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        // Expect at least 1 service API resource (MyService); MCP resource may also be present if plugin available
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResources = document.apiResources.filter((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
@@ -662,7 +675,10 @@ describe("Tests for eventResource and apiResource", () => {
             model: "external-model",
         };
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        // Expect at least 1 service API resource (MyService); MCP resource may also be present if plugin available
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResources = document.apiResources.filter((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();

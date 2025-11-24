@@ -14,14 +14,6 @@
             "[development]": {
                 "multitenancy": true
             }
-        },
-        "ord": {
-            "title": "MCP Server for the Bookshop Sample",
-            "shortDescription": "This is the MCP server to interact with the the Bookshop Sample",
-            "description": "This is the MCP server to interact with the the Bookshop Sample",
-            "version": "1.0.0",
-            "visibility": "public",
-            "entryPoints": "/rest/mcp/streaming"
         }
     }
 }
