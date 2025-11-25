@@ -286,106 +286,111 @@ describe("authentication", () => {
         });
     });
 
-    describe("UCL mTLS authentication", () => {
-        const mockExpectedSubjects = ["CN=aggregator, O=SAP SE, C=DE", "CN=backup, O=SAP SE, C=US"];
+    describe("CF mTLS authentication", () => {
+        const mockTrustedCertPairs = [
+            {
+                issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                subject: "CN=aggregator, O=SAP SE, C=DE",
+            },
+            {
+                issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                subject: "CN=backup-service, O=SAP SE, C=US",
+            },
+        ];
+
+        const mockTrustedRootCaDns = ["CN=SAP Global Root CA, O=SAP SE, C=DE"];
 
         beforeEach(() => {
             delete process.env.ORD_AUTH_TYPE;
-            delete process.env.ORD_UCL_MTLS_SUBJECT_HEADER;
-            delete process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS;
+            delete process.env.CF_MTLS_TRUSTED_CERT_PAIRS;
+            delete process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS;
             cds.env.authentication = {};
             cds.env.ord = {};
-            cds.env.security = {};
             cds.context = {};
         });
 
         afterEach(() => {
             delete process.env.ORD_AUTH_TYPE;
-            delete process.env.ORD_UCL_MTLS_SUBJECT_HEADER;
-            delete process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS;
+            delete process.env.CF_MTLS_TRUSTED_CERT_PAIRS;
+            delete process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS;
             cds.env.authentication = {};
             cds.env.ord = {};
-            cds.env.security = {};
             cds.context = {};
         });
 
-        it("should return default configuration with error when UCL mTLS is configured without expectedSubjects", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+        it("should return default configuration with error when CF mTLS is configured without trustedCertPairs", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
+            process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS = JSON.stringify(mockTrustedRootCaDns);
             const authConfig = createAuthConfig();
-            expect(authConfig.error).toEqual("UCL mTLS requires expectedSubjects configuration");
+            expect(authConfig.error).toEqual("CF mTLS requires trustedCertPairs configuration");
         });
 
-        it("should create auth configuration with UCL mTLS using environment variables", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
-            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
-
+        it("should return default configuration with error when CF mTLS is configured without trustedRootCaDns", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
+            process.env.CF_MTLS_TRUSTED_CERT_PAIRS = JSON.stringify(mockTrustedCertPairs);
             const authConfig = createAuthConfig();
-            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.UclMtls]);
-            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.UclMtls }]);
-            expect(authConfig.uclMtlsValidator).toBeDefined();
-            expect(typeof authConfig.uclMtlsValidator).toBe("function");
-            expect(authConfig.uclMtlsHeaderName).toBe("x-forwarded-client-cert");
+            expect(authConfig.error).toEqual("CF mTLS requires trustedRootCaDns configuration");
         });
 
-        it("should create auth configuration with UCL mTLS using cds.env", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
+        it("should create auth configuration with CF mTLS using environment variables", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
+            process.env.CF_MTLS_TRUSTED_CERT_PAIRS = JSON.stringify(mockTrustedCertPairs);
+            process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS = JSON.stringify(mockTrustedRootCaDns);
+
+            const authConfig = createAuthConfig();
+            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
+            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
+            expect(authConfig.cfMtlsValidator).toBeDefined();
+            expect(typeof authConfig.cfMtlsValidator).toBe("function");
+        });
+
+        it("should create auth configuration with CF mTLS using cds.env", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
             cds.env.ord = {
-                uclMtls: {
-                    expectedSubjects: mockExpectedSubjects,
+                cfMtls: {
+                    trustedCertPairs: mockTrustedCertPairs,
+                    trustedRootCaDns: mockTrustedRootCaDns,
                 },
             };
 
             const authConfig = createAuthConfig();
-            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.UclMtls]);
-            expect(authConfig.uclMtlsValidator).toBeDefined();
+            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
+            expect(authConfig.cfMtlsValidator).toBeDefined();
         });
 
-        it("should use custom header name from environment variable", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
-            process.env.ORD_UCL_MTLS_SUBJECT_HEADER = "x-custom-cert";
-            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
-
-            const authConfig = createAuthConfig();
-            expect(authConfig.uclMtlsHeaderName).toBe("x-custom-cert");
-        });
-
-        it("should use header name from cds.env.security.authentication.clientCertificateHeader", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
-            cds.env.security = {
-                authentication: {
-                    clientCertificateHeader: "x-ssl-cert",
-                },
-            };
-            cds.env.ord = {
-                uclMtls: {
-                    expectedSubjects: mockExpectedSubjects,
-                },
-            };
-
-            const authConfig = createAuthConfig();
-            expect(authConfig.uclMtlsHeaderName).toBe("x-ssl-cert");
-        });
-
-        it("should authenticate with valid certificate subject", async () => {
+        it("should authenticate with valid certificate pair and root CA", async () => {
             cds.context.authConfig = {
-                types: [AUTHENTICATION_TYPE.UclMtls],
-                uclMtlsValidator: (req) => ({ ok: true, subject: "CN=aggregator, O=SAP SE, C=DE" }),
+                types: [AUTHENTICATION_TYPE.CfMtls],
+                cfMtlsValidator: (req) => ({
+                    ok: true,
+                    issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                    subject: "CN=aggregator, O=SAP SE, C=DE",
+                    rootCaDn: "CN=SAP Global Root CA, O=SAP SE, C=DE",
+                }),
             };
+
+            const issuerDn = "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE";
+            const subjectDn = "CN=aggregator, O=SAP SE, C=DE";
+            const rootCaDn = "CN=SAP Global Root CA, O=SAP SE, C=DE";
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert": "CN=aggregator, O=SAP SE, C=DE",
+                    "x-forwarded-client-cert-issuer-dn": Buffer.from(issuerDn).toString("base64"),
+                    "x-forwarded-client-cert-subject-dn": Buffer.from(subjectDn).toString("base64"),
+                    "x-forwarded-client-cert-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
                 },
             };
 
             await authCheck(req, 200);
-            expect(req.uclMtlsSubject).toBe("CN=aggregator, O=SAP SE, C=DE");
+            expect(req.cfMtlsIssuer).toBe(issuerDn);
+            expect(req.cfMtlsSubject).toBe(subjectDn);
+            expect(req.cfMtlsRootCaDn).toBe(rootCaDn);
         });
 
-        it("should not authenticate with missing certificate header", async () => {
+        it("should not authenticate with missing certificate headers", async () => {
             cds.context.authConfig = {
-                types: [AUTHENTICATION_TYPE.UclMtls],
-                uclMtlsValidator: (req) => ({ ok: false, reason: "HEADER_MISSING" }),
+                types: [AUTHENTICATION_TYPE.CfMtls],
+                cfMtlsValidator: (req) => ({ ok: false, reason: "HEADER_MISSING", missing: "x-forwarded-client-cert-issuer-dn" }),
             };
 
             const req = {
@@ -395,120 +400,87 @@ describe("authentication", () => {
             await authCheck(req, 401, "Client certificate authentication required");
         });
 
-        it("should not authenticate with missing subject in certificate", async () => {
+        it("should not authenticate with invalid base64 encoding", async () => {
             cds.context.authConfig = {
-                types: [AUTHENTICATION_TYPE.UclMtls],
-                uclMtlsValidator: (req) => ({ ok: false, reason: "SUBJECT_MISSING" }),
+                types: [AUTHENTICATION_TYPE.CfMtls],
+                cfMtlsValidator: (req) => ({ ok: false, reason: "INVALID_ENCODING" }),
             };
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert": "Hash=abc123",
+                    "x-forwarded-client-cert-issuer-dn": "not-valid-base64!!!",
                 },
             };
 
-            await authCheck(req, 401, "Client certificate authentication required");
+            await authCheck(req, 400, "Bad Request: Invalid certificate headers");
         });
 
-        it("should return 403 forbidden for subject mismatch", async () => {
+        it("should return 403 forbidden for certificate pair mismatch", async () => {
             cds.context.authConfig = {
-                types: [AUTHENTICATION_TYPE.UclMtls],
-                uclMtlsValidator: (req) => ({ ok: false, reason: "SUBJECT_MISMATCH", subject: "CN=intruder, O=Evil, C=XX" }),
+                types: [AUTHENTICATION_TYPE.CfMtls],
+                cfMtlsValidator: (req) => ({
+                    ok: false,
+                    reason: "CERT_PAIR_MISMATCH",
+                    issuer: "CN=Evil CA, O=Evil Corp, C=XX",
+                    subject: "CN=intruder, O=Evil, C=XX",
+                }),
             };
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert": "CN=intruder, O=Evil, C=XX",
+                    "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString("base64"),
+                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=intruder, O=Evil, C=XX").toString("base64"),
+                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString("base64"),
                 },
             };
 
             await authCheck(req, 403, "Forbidden: Invalid client certificate");
         });
 
-        it("should work with full integration using real validator", async () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
-            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
-
-            const authConfig = createAuthConfig();
-            cds.context = { authConfig };
+        it("should return 403 forbidden for root CA mismatch", async () => {
+            cds.context.authConfig = {
+                types: [AUTHENTICATION_TYPE.CfMtls],
+                cfMtlsValidator: (req) => ({
+                    ok: false,
+                    reason: "ROOT_CA_MISMATCH",
+                    rootCaDn: "CN=Evil Root CA, O=Evil Corp, C=XX",
+                }),
+            };
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert": "CN=aggregator, O=SAP SE, C=DE",
+                    "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString("base64"),
+                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
+                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString("base64"),
                 },
             };
 
-            await authCheck(req, 200);
-            expect(req.uclMtlsSubject).toBe("CN=aggregator, O=SAP SE, C=DE");
-        });
-
-        it("should work with XFCC-style header format", async () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
-            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
-
-            const authConfig = createAuthConfig();
-            cds.context = { authConfig };
-
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert":
-                        'Hash=abc123,Subject="CN=backup, O=SAP SE, C=US",URI=spiffe://test,Issuer="CN=CA"',
-                },
-            };
-
-            await authCheck(req, 200);
-            expect(req.uclMtlsSubject).toBe("CN=backup, O=SAP SE, C=US");
-        });
-
-        it("should handle subject with different token ordering", async () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
-            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
-
-            const authConfig = createAuthConfig();
-            cds.context = { authConfig };
-
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert": "C=DE, O=SAP SE, CN=aggregator",
-                },
-            };
-
-            await authCheck(req, 200);
-        });
-
-        it("should reject certificate with partial match", async () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.UclMtls}"]`;
-            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
-
-            const authConfig = createAuthConfig();
-            cds.context = { authConfig };
-
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert": "CN=aggregator, O=SAP SE",
-                },
-            };
-
-            await authCheck(req, 403, "Forbidden: Invalid client certificate");
+            await authCheck(req, 403, "Forbidden: Untrusted certificate authority");
         });
 
         it("should support combination with Basic auth", async () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}", "${AUTHENTICATION_TYPE.UclMtls}"]`;
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}", "${AUTHENTICATION_TYPE.CfMtls}"]`;
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
-            process.env.ORD_UCL_MTLS_EXPECTED_SUBJECTS = mockExpectedSubjects.join(",");
+            process.env.CF_MTLS_TRUSTED_CERT_PAIRS = JSON.stringify(mockTrustedCertPairs);
+            process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS = JSON.stringify(mockTrustedRootCaDns);
 
             const authConfig = createAuthConfig();
             expect(authConfig.types).toContain(AUTHENTICATION_TYPE.Basic);
-            expect(authConfig.types).toContain(AUTHENTICATION_TYPE.UclMtls);
+            expect(authConfig.types).toContain(AUTHENTICATION_TYPE.CfMtls);
             expect(authConfig.credentials).toBeDefined();
-            expect(authConfig.uclMtlsValidator).toBeDefined();
+            expect(authConfig.cfMtlsValidator).toBeDefined();
         });
 
-        it("should handle Basic auth when both Basic and UCL mTLS are configured", async () => {
+        it("should handle Basic auth when both Basic and CF mTLS are configured", async () => {
             cds.context.authConfig = {
-                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.UclMtls],
+                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
-                uclMtlsValidator: (req) => ({ ok: true, subject: "CN=aggregator, O=SAP SE, C=DE" }),
+                cfMtlsValidator: (req) => ({
+                    ok: true,
+                    issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                    subject: "CN=aggregator, O=SAP SE, C=DE",
+                    rootCaDn: "CN=SAP Global Root CA, O=SAP SE, C=DE",
+                }),
             };
 
             const req = {
@@ -520,16 +492,27 @@ describe("authentication", () => {
             await authCheck(req, 200);
         });
 
-        it("should handle UCL mTLS when both Basic and UCL mTLS are configured but no Basic header", async () => {
+        it("should handle CF mTLS when both Basic and CF mTLS are configured but no Basic header", async () => {
             cds.context.authConfig = {
-                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.UclMtls],
+                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
-                uclMtlsValidator: (req) => ({ ok: true, subject: "CN=aggregator, O=SAP SE, C=DE" }),
+                cfMtlsValidator: (req) => ({
+                    ok: true,
+                    issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                    subject: "CN=aggregator, O=SAP SE, C=DE",
+                    rootCaDn: "CN=SAP Global Root CA, O=SAP SE, C=DE",
+                }),
             };
+
+            const issuerDn = "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE";
+            const subjectDn = "CN=aggregator, O=SAP SE, C=DE";
+            const rootCaDn = "CN=SAP Global Root CA, O=SAP SE, C=DE";
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert": "CN=aggregator, O=SAP SE, C=DE",
+                    "x-forwarded-client-cert-issuer-dn": Buffer.from(issuerDn).toString("base64"),
+                    "x-forwarded-client-cert-subject-dn": Buffer.from(subjectDn).toString("base64"),
+                    "x-forwarded-client-cert-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
                 },
             };
 

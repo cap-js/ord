@@ -222,45 +222,63 @@ If not specified, the plugin uses its built-in default.
 
 The ORD plugin supports multiple authentication mechanisms to protect ORD endpoints and metadata.
 
-## UCL mTLS Authentication
+## CF mTLS Authentication
 
-UCL (Unified Customer Landscape) mTLS authentication enables secure machine-to-machine communication between ORD aggregators and ORD providers using client certificate validation.
+CF (Cloud Foundry) mTLS authentication provides secure machine-to-machine communication in SAP BTP Cloud Foundry environments using client certificate validation with enhanced security checks.
 
 ### Overview
 
-UCL mTLS authentication uses mutual TLS (mTLS) where:
+CF mTLS authentication uses mutual TLS (mTLS) with comprehensive certificate validation:
 
-1. **TLS Termination & Certificate Validation**: Handled by the front proxy (Cloud Foundry gorouter or API Gateway)
+1. **TLS Termination & Certificate Validation**: Handled by the CloudFoundry gorouter
    - Verifies the certificate chain
    - Validates the certificate issuer
    - Ensures the certificate is not expired or revoked
+   - Forwards certificate information via base64-encoded HTTP headers
 
-2. **Subject Validation**: Handled by this ORD plugin
-   - Validates the client certificate Subject (Distinguished Name) against a configured whitelist
-   - Uses order-insensitive comparison as per UCL specification
+2. **Certificate Information Validation**: Handled by this ORD plugin
+   - Validates Issuer DN (Distinguished Name)
+   - Validates Subject DN
+   - Validates Root CA DN
+   - Requires Issuer + Subject to match as a pair
    - Returns HTTP 401 (Unauthorized) for missing certificates
-   - Returns HTTP 403 (Forbidden) for invalid Subject values
+   - Returns HTTP 403 (Forbidden) for invalid certificate information
+   - Returns HTTP 400 (Bad Request) for malformed headers
 
-**Important**: This implementation assumes you're running in Cloud Foundry or a similar environment where the front proxy handles TLS termination and forwards certificate information via HTTP headers.
+**Important**: This implementation is designed for SAP BTP Cloud Foundry environments where the gorouter terminates TLS and forwards certificate information via three separate base64-encoded headers.
 
 ### Configuration
 
-UCL mTLS can be configured via `cdsrc.json` or environment variables.
+CF mTLS can be configured via `cdsrc.json` or environment variables.
 
 #### Via cdsrc.json
 
 ```json
 {
     "authentication": {
-        "types": ["ucl-mtls"],
-        "clientCertificateHeader": "x-forwarded-client-cert"
+        "types": ["cf-mtls"]
     },
     "ord": {
-        "uclMtls": {
-            "expectedSubjects": [
-                "CN=ord-aggregator, O=SAP SE, L=Walldorf, C=DE",
-                "CN=backup-aggregator, O=SAP SE, C=US"
-            ]
+        "cfMtls": {
+            "trustedCertPairs": [
+                {
+                    "issuer": "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                    "subject": "CN=ord-aggregator, O=SAP SE, C=DE"
+                },
+                {
+                    "issuer": "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                    "subject": "CN=backup-aggregator, O=SAP SE, C=US"
+                }
+            ],
+            "trustedRootCaDns": [
+                "CN=SAP Global Root CA, O=SAP SE, C=DE",
+                "CN=DigiCert Global Root CA, O=DigiCert Inc, C=US"
+            ],
+            "headerNames": {
+                "issuer": "x-forwarded-client-cert-issuer-dn",
+                "subject": "x-forwarded-client-cert-subject-dn",
+                "rootCa": "x-forwarded-client-cert-root-ca-dn"
+            }
         }
     }
 }
@@ -269,80 +287,112 @@ UCL mTLS can be configured via `cdsrc.json` or environment variables.
 #### Via Environment Variables
 
 ```bash
-# Set authentication type to UCL mTLS
-export ORD_AUTH_TYPE='["ucl-mtls"]'
+# Set authentication type to CF mTLS
+export ORD_AUTH_TYPE='["cf-mtls"]'
 
-# Configure expected certificate subjects (comma-separated)
-export ORD_UCL_MTLS_EXPECTED_SUBJECTS="CN=ord-aggregator, O=SAP SE, L=Walldorf, C=DE,CN=backup-aggregator, O=SAP SE, C=US"
+# Configure trusted certificate pairs (JSON format)
+export CF_MTLS_TRUSTED_CERT_PAIRS='[
+  {
+    "issuer": "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+    "subject": "CN=ord-aggregator, O=SAP SE, C=DE"
+  },
+  {
+    "issuer": "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+    "subject": "CN=backup-aggregator, O=SAP SE, C=US"
+  }
+]'
 
-# Optionally override the header name (defaults to x-forwarded-client-cert)
-export ORD_UCL_MTLS_SUBJECT_HEADER="x-forwarded-client-cert"
+# Configure trusted root CA DNs (JSON format)
+export CF_MTLS_TRUSTED_ROOT_CA_DNS='[
+  "CN=SAP Global Root CA, O=SAP SE, C=DE",
+  "CN=DigiCert Global Root CA, O=DigiCert Inc, C=US"
+]'
+
+# Optional: Override header names (defaults shown below)
+# export CF_MTLS_HEADER_ISSUER=x-forwarded-client-cert-issuer-dn
+# export CF_MTLS_HEADER_SUBJECT=x-forwarded-client-cert-subject-dn
+# export CF_MTLS_HEADER_ROOT_CA=x-forwarded-client-cert-root-ca-dn
 ```
 
 ### Configuration Parameters
 
 | Parameter | Environment Variable | cds.env Path | Default | Description |
 |-----------|---------------------|--------------|---------|-------------|
-| Authentication Type | `ORD_AUTH_TYPE` | `authentication.types` | - | Must include `"ucl-mtls"` |
-| Expected Subjects | `ORD_UCL_MTLS_EXPECTED_SUBJECTS` | `ord.uclMtls.expectedSubjects` | - | **Required**. Array or comma-separated list of allowed certificate subjects |
-| Header Name | `ORD_UCL_MTLS_SUBJECT_HEADER` | `security.authentication.clientCertificateHeader` | `x-forwarded-client-cert` | HTTP header containing certificate info |
+| Authentication Type | `ORD_AUTH_TYPE` | `authentication.types` | - | Must include `"cf-mtls"` |
+| Trusted Cert Pairs | `CF_MTLS_TRUSTED_CERT_PAIRS` | `ord.cfMtls.trustedCertPairs` | - | **Required**. Array of issuer/subject pairs |
+| Trusted Root CAs | `CF_MTLS_TRUSTED_ROOT_CA_DNS` | `ord.cfMtls.trustedRootCaDns` | - | **Required**. Array of trusted root CA DNs |
+| Issuer Header | `CF_MTLS_HEADER_ISSUER` | `ord.cfMtls.headerNames.issuer` | `x-forwarded-client-cert-issuer-dn` | Header containing issuer DN |
+| Subject Header | `CF_MTLS_HEADER_SUBJECT` | `ord.cfMtls.headerNames.subject` | `x-forwarded-client-cert-subject-dn` | Header containing subject DN |
+| Root CA Header | `CF_MTLS_HEADER_ROOT_CA` | `ord.cfMtls.headerNames.rootCa` | `x-forwarded-client-cert-root-ca-dn` | Header containing root CA DN |
 
-### Subject Validation Rules
+### Certificate Validation Rules
 
-The plugin validates certificate subjects according to the UCL mTLS specification (`sap:cmp-mtls:v1`):
+The plugin validates certificates according to the CF mTLS specification (`sap:cmp-mtls:v1`):
 
-1. **Order-Insensitive**: Token order in the Distinguished Name doesn't matter
+1. **Pair Validation**: Issuer and Subject must match together as a configured pair
+   - You cannot have valid issuer with wrong subject or vice versa
+   - Both must match one of the configured pairs
+
+2. **Root CA Validation**: Root CA DN must match one of the trusted root CAs
+   - Provides additional security layer
+   - Ensures certificate is from a trusted authority chain
+
+3. **Order-Insensitive DN Comparison**: Token order in Distinguished Names doesn't matter
    - `"CN=test, O=SAP SE, C=DE"` matches `"C=DE, O=SAP SE, CN=test"`
 
-2. **Whitespace Normalization**: Extra spaces are trimmed from each token
+4. **Whitespace Normalization**: Extra spaces are trimmed from each token
    - `"CN=test, O=SAP SE, C=DE"` matches `"CN=test,O=SAP SE,C=DE"`
 
-3. **Exact Token Match**: All tokens must match exactly (set equality)
+5. **Exact Token Match**: All tokens must match exactly (set equality)
    - `"CN=test, O=SAP SE"` does NOT match `"CN=test, O=SAP SE, C=DE"`
 
-4. **Multiple Subjects**: You can configure multiple allowed subjects
-   - Any matching subject grants access
+### Certificate Headers
 
-### Certificate Header Formats
+The CloudFoundry gorouter forwards certificate information via three separate base64-encoded headers:
 
-The plugin handles two common certificate header formats:
+| Header | Content | Encoding |
+|--------|---------|----------|
+| `x-forwarded-client-cert-issuer-dn` | Certificate Issuer DN | Base64 |
+| `x-forwarded-client-cert-subject-dn` | Certificate Subject DN | Base64 |
+| `x-forwarded-client-cert-root-ca-dn` | Root CA DN | Base64 |
 
-#### XFCC (X-Forwarded-Client-Cert) Format
-
-Cloud Foundry gorouter and many API gateways use this format:
-
-```
-Hash=abc123,Subject="CN=ord-aggregator, O=SAP SE, C=DE",URI=spiffe://example.com,Issuer="CN=Root CA"
-```
-
-The plugin automatically extracts the Subject field from XFCC headers.
-
-#### Raw DN Format
-
-Some environments forward just the Distinguished Name:
+**Example header values:**
 
 ```
-CN=ord-aggregator, O=SAP SE, L=Walldorf, C=DE
+x-forwarded-client-cert-issuer-dn: Q049U0FQIENsb3VkIFBsYXRmb3JtIENsaWVudCBDQSwgTz1TQVAgU0UsIEM9REU=
+x-forwarded-client-cert-subject-dn: Q049YWdncmVnYXRvciwgTz1TQVAgU0UsIEM9REU=
+x-forwarded-client-cert-root-ca-dn: Q049U0FQIEdsb2JhbCBSb290IENBLCBPPU5BUCBTRSwgQz1ERQ==
 ```
 
-The plugin handles both formats automatically.
+These decode to:
+```
+Issuer:  CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE
+Subject: CN=aggregator, O=SAP SE, C=DE
+Root CA: CN=SAP Global Root CA, O=SAP SE, C=DE
+```
 
 ### Combining with Other Authentication Methods
 
-UCL mTLS can be combined with Basic authentication to support multiple client types:
+CF mTLS can be combined with Basic authentication to support multiple client types:
 
 ```json
 {
     "authentication": {
-        "types": ["basic", "ucl-mtls"],
+        "types": ["basic", "cf-mtls"],
         "credentials": {
             "admin": "$2a$10$..."
         }
     },
     "ord": {
-        "uclMtls": {
-            "expectedSubjects": [
-                "CN=ord-aggregator, O=SAP SE, C=DE"
+        "cfMtls": {
+            "trustedCertPairs": [
+                {
+                    "issuer": "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                    "subject": "CN=ord-aggregator, O=SAP SE, C=DE"
+                }
+            ],
+            "trustedRootCaDns": [
+                "CN=SAP Global Root CA, O=SAP SE, C=DE"
             ]
         }
     }
@@ -355,49 +405,77 @@ UCL mTLS can be combined with Basic authentication to support multiple client ty
 
 | Status Code | Reason | Description |
 |-------------|--------|-------------|
-| 200 OK | Valid certificate | Subject matches one of the expected subjects |
-| 401 Unauthorized | Missing certificate or subject | Client certificate header is missing or doesn't contain a valid Subject |
-| 403 Forbidden | Invalid subject | Certificate is present but Subject doesn't match any expected value |
+| 200 OK | Valid certificate | Certificate pair and root CA match configuration |
+| 400 Bad Request | Invalid encoding | Certificate headers are not properly base64-encoded |
+| 401 Unauthorized | Missing headers | One or more required certificate headers are missing |
+| 403 Forbidden | Certificate pair mismatch | Issuer/Subject pair doesn't match any configured pair |
+| 403 Forbidden | Root CA mismatch | Root CA DN doesn't match any trusted root CA |
 
 ### Security Considerations
 
-1. **Header Trust**: This implementation trusts the certificate information forwarded in HTTP headers. Ensure your infrastructure prevents header spoofing (e.g., Cloud Foundry strips and overwrites these headers).
+1. **Header Trust**: This implementation trusts the certificate information forwarded in HTTP headers. SAP BTP Cloud Foundry gorouter ensures these headers are secure and cannot be spoofed.
 
-2. **TLS at the Edge**: Always terminate TLS at a trusted proxy/gateway that performs full certificate validation before forwarding to your application.
+2. **TLS at the Edge**: The CloudFoundry gorouter terminates TLS and performs full certificate validation before forwarding requests to your application.
 
-3. **Subject Whitelist**: Keep your expected subjects list minimal and up-to-date. Remove subjects for decommissioned aggregators.
+3. **Certificate Pair Whitelist**: Keep your certificate pairs list minimal and up-to-date. Remove pairs for decommissioned clients.
 
-4. **Logging**: Failed authentication attempts are logged with the received Subject (on mismatch) for security auditing.
+4. **Root CA Validation**: Always configure trusted root CAs to ensure certificates come from authorized certificate authorities.
+
+5. **Logging**: Failed authentication attempts are logged with certificate details for security auditing.
 
 ### Troubleshooting
 
-#### "UCL mTLS requires expectedSubjects configuration"
+#### "CF mTLS requires trustedCertPairs configuration"
 
-**Cause**: The `expectedSubjects` array is missing or empty.
+**Cause**: The `trustedCertPairs` array is missing or empty.
 
-**Solution**: Configure at least one expected subject via `cds.env.ord.uclMtls.expectedSubjects` or the `ORD_UCL_MTLS_EXPECTED_SUBJECTS` environment variable.
+**Solution**: Configure at least one certificate pair via `cds.env.ord.cfMtls.trustedCertPairs` or the `CF_MTLS_TRUSTED_CERT_PAIRS` environment variable.
+
+#### "CF mTLS requires trustedRootCaDns configuration"
+
+**Cause**: The `trustedRootCaDns` array is missing or empty.
+
+**Solution**: Configure at least one trusted root CA via `cds.env.ord.cfMtls.trustedRootCaDns` or the `CF_MTLS_TRUSTED_ROOT_CA_DNS` environment variable.
 
 #### "Client certificate authentication required" (401)
 
-**Cause**: The certificate header is missing from the request.
+**Cause**: One or more certificate headers are missing from the request.
 
 **Solution**: 
 - Verify the client is sending a valid certificate
-- Check that your proxy is forwarding certificate information
-- Verify the header name matches your configuration
+- Check that the CloudFoundry gorouter is forwarding certificate information
+- Verify the header names match your configuration
+
+#### "Bad Request: Invalid certificate headers" (400)
+
+**Cause**: Certificate headers are not properly base64-encoded.
+
+**Solution**:
+- Ensure headers are base64-encoded
+- Verify the CloudFoundry gorouter is configured correctly
+- Check for header corruption during transmission
 
 #### "Forbidden: Invalid client certificate" (403)
 
-**Cause**: The certificate Subject doesn't match any expected value.
+**Cause**: The certificate issuer/subject pair doesn't match any configured pair.
 
 **Solution**:
-- Check the application logs for the actual Subject received
-- Verify the Subject format matches your configuration exactly
+- Check the application logs for the actual Issuer and Subject received
+- Verify both issuer and subject are configured as a pair
 - Remember that all DN tokens must match (not just CN)
+
+#### "Forbidden: Untrusted certificate authority" (403)
+
+**Cause**: The root CA DN doesn't match any trusted root CA.
+
+**Solution**:
+- Check the application logs for the actual Root CA DN received
+- Add the root CA to your trusted list if legitimate
+- Verify the certificate chain is correct
 
 ### ORD Access Strategy
 
-When UCL mTLS is configured, the plugin automatically adds `"sap:cmp-mtls:v1"` to the `accessStrategies` in the generated ORD document, indicating that resources are protected by UCL mTLS authentication.
+When CF mTLS is configured, the plugin automatically adds `"sap:cmp-mtls:v1"` to the `accessStrategies` in the generated ORD document, indicating that resources are protected by CF mTLS authentication.
 
 ---
 
