@@ -361,7 +361,7 @@ describe("authentication", () => {
         it("should authenticate with valid certificate pair and root CA", async () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
-                cfMtlsValidator: (req) => ({
+                cfMtlsValidator: () => ({
                     ok: true,
                     issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                     subject: "CN=aggregator, O=SAP SE, C=DE",
@@ -390,7 +390,7 @@ describe("authentication", () => {
         it("should not authenticate with missing certificate headers", async () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
-                cfMtlsValidator: (req) => ({ ok: false, reason: "HEADER_MISSING", missing: "x-forwarded-client-cert-issuer-dn" }),
+                cfMtlsValidator: () => ({ ok: false, reason: "HEADER_MISSING", missing: "x-forwarded-client-cert-issuer-dn" }),
             };
 
             const req = {
@@ -403,7 +403,7 @@ describe("authentication", () => {
         it("should not authenticate with invalid base64 encoding", async () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
-                cfMtlsValidator: (req) => ({ ok: false, reason: "INVALID_ENCODING" }),
+                cfMtlsValidator: () => ({ ok: false, reason: "INVALID_ENCODING" }),
             };
 
             const req = {
@@ -418,7 +418,7 @@ describe("authentication", () => {
         it("should return 403 forbidden for certificate pair mismatch", async () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
-                cfMtlsValidator: (req) => ({
+                cfMtlsValidator: () => ({
                     ok: false,
                     reason: "CERT_PAIR_MISMATCH",
                     issuer: "CN=Evil CA, O=Evil Corp, C=XX",
@@ -440,7 +440,7 @@ describe("authentication", () => {
         it("should return 403 forbidden for root CA mismatch", async () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
-                cfMtlsValidator: (req) => ({
+                cfMtlsValidator: () => ({
                     ok: false,
                     reason: "ROOT_CA_MISMATCH",
                     rootCaDn: "CN=Evil Root CA, O=Evil Corp, C=XX",
@@ -475,7 +475,7 @@ describe("authentication", () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
-                cfMtlsValidator: (req) => ({
+                cfMtlsValidator: () => ({
                     ok: true,
                     issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                     subject: "CN=aggregator, O=SAP SE, C=DE",
@@ -496,7 +496,7 @@ describe("authentication", () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
-                cfMtlsValidator: (req) => ({
+                cfMtlsValidator: () => ({
                     ok: true,
                     issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                     subject: "CN=aggregator, O=SAP SE, C=DE",
