@@ -78,8 +78,8 @@ describe("authentication", () => {
             cds.env.authentication = {};
         });
 
-        it("should return default configuration when no authentication type is provided", async () => {
-            const authConfig = await createAuthConfig();
+        it("should return default configuration when no authentication type is provided", () => {
+            const authConfig = createAuthConfig();
             expect(authConfig).toEqual(defaultAuthConfig);
             expect(Logger.error).toHaveBeenCalledWith(
                 "createAuthConfig:",
@@ -87,43 +87,43 @@ describe("authentication", () => {
             );
         });
 
-        it("should return configuration when Open authentication type is provided", async () => {
+        it("should return configuration when Open authentication type is provided", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}"]`;
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig).toEqual(defaultAuthConfig);
         });
 
-        it("should return default configuration with error when invalid authentication type is provided", async () => {
+        it("should return default configuration with error when invalid authentication type is provided", () => {
             process.env.ORD_AUTH_TYPE = '["InvalidType"]';
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual("Invalid authentication type");
         });
 
-        it("should return default configuration with error when Open and Basic authentication types are combined", async () => {
+        it("should return default configuration with error when Open and Basic authentication types are combined", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}"]`;
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual(
                 "Open authentication cannot be combined with any other authentication type",
             );
         });
 
-        it("should return default configuration with error when invalid JSON is provided", async () => {
+        it("should return default configuration with error when invalid JSON is provided", () => {
             process.env.ORD_AUTH_TYPE = 'typo["Open"typo]';
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual(expect.stringContaining("not valid JSON"));
         });
 
-        it("should return default configuration with error when credentials are not valid JSON", async () => {
+        it("should return default configuration with error when credentials are not valid JSON", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = "non-valid-json";
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual(expect.stringContaining("not valid JSON"));
         });
 
-        it("should return auth configuration containing credentials by using data from process.env.BASIC_AUTH", async () => {
+        it("should return auth configuration containing credentials by using data from process.env.BASIC_AUTH", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
@@ -131,22 +131,23 @@ describe("authentication", () => {
             });
         });
 
-        it("should return auth configuration containing credentials by using data from .cdsrc.json", async () => {
+        it("should return auth configuration containing credentials by using data from .cdsrc.json", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             cds.env.authentication.credentials = mockValidUser;
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                 credentials: mockValidUser,
             });
         });
-        it("should return default configuration with error when credentials are not valid BCrypt hashes", async () => {
+
+        it("should return default configuration with error when credentials are not valid BCrypt hashes", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = JSON.stringify({
                 admin: "InvalidBCrypHash",
             });
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual("All passwords must be bcrypt hashes");
         });
     });
@@ -318,44 +319,34 @@ describe("authentication", () => {
             cds.context = {};
         });
 
-        it("should return default configuration with error when CF mTLS is configured without trustedCertPairs", async () => {
+        it("should mark CF mTLS for lazy initialization without immediate validation", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
-            process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS = JSON.stringify(mockTrustedRootCaDns);
-            const authConfig = await createAuthConfig();
-            expect(authConfig.error).toEqual("CF mTLS configuration required");
-        });
+            process.env.CF_MTLS_TRUSTED_CERTS = JSON.stringify({
+                certs: mockTrustedCertPairs,
+                rootCaDn: mockTrustedRootCaDns,
+            });
 
-        it("should return default configuration with error when CF mTLS is configured without trustedRootCaDns", async () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
-            process.env.CF_MTLS_TRUSTED_CERT_PAIRS = JSON.stringify(mockTrustedCertPairs);
-            const authConfig = await createAuthConfig();
-            expect(authConfig.error).toEqual("CF mTLS configuration required");
-        });
-
-        it("should create auth configuration with CF mTLS using environment variables", async () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
-            process.env.CF_MTLS_TRUSTED_CERT_PAIRS = JSON.stringify(mockTrustedCertPairs);
-            process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS = JSON.stringify(mockTrustedRootCaDns);
-
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
             expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
-            expect(authConfig.cfMtlsValidator).toBeDefined();
-            expect(typeof authConfig.cfMtlsValidator).toBe("function");
+            // Validator should be null (lazy loading)
+            expect(authConfig.cfMtlsValidator).toBeNull();
+            expect(authConfig._cfMtlsInitPromise).toBeNull();
         });
 
-        it("should create auth configuration with CF mTLS using cds.env", async () => {
+        it("should mark CF mTLS for lazy initialization using cds.env", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
             cds.env.ord = {
                 cfMtls: {
-                    trustedCertPairs: mockTrustedCertPairs,
-                    trustedRootCaDns: mockTrustedRootCaDns,
+                    certs: mockTrustedCertPairs,
+                    rootCaDn: mockTrustedRootCaDns,
                 },
             };
 
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
-            expect(authConfig.cfMtlsValidator).toBeDefined();
+            // Validator should be null (lazy loading)
+            expect(authConfig.cfMtlsValidator).toBeNull();
         });
 
         it("should authenticate with valid certificate pair and root CA", async () => {
@@ -390,7 +381,11 @@ describe("authentication", () => {
         it("should not authenticate with missing certificate headers", async () => {
             cds.context.authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
-                cfMtlsValidator: () => ({ ok: false, reason: "HEADER_MISSING", missing: "x-forwarded-client-cert-issuer-dn" }),
+                cfMtlsValidator: () => ({
+                    ok: false,
+                    reason: "HEADER_MISSING",
+                    missing: "x-forwarded-client-cert-issuer-dn",
+                }),
             };
 
             const req = {
@@ -428,9 +423,13 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString("base64"),
+                    "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString(
+                        "base64",
+                    ),
                     "x-forwarded-client-cert-subject-dn": Buffer.from("CN=intruder, O=Evil, C=XX").toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString("base64"),
+                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
+                        "base64",
+                    ),
                 },
             };
 
@@ -449,26 +448,35 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString("base64"),
-                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString("base64"),
+                    "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                    ).toString("base64"),
+                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                        "base64",
+                    ),
+                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString(
+                        "base64",
+                    ),
                 },
             };
 
             await authCheck(req, 403, "Forbidden: Untrusted certificate authority");
         });
 
-        it("should support combination with Basic auth", async () => {
+        it("should support combination with Basic auth", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}", "${AUTHENTICATION_TYPE.CfMtls}"]`;
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
-            process.env.CF_MTLS_TRUSTED_CERT_PAIRS = JSON.stringify(mockTrustedCertPairs);
-            process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS = JSON.stringify(mockTrustedRootCaDns);
+            process.env.CF_MTLS_TRUSTED_CERTS = JSON.stringify({
+                certs: mockTrustedCertPairs,
+                rootCaDn: mockTrustedRootCaDns,
+            });
 
-            const authConfig = await createAuthConfig();
+            const authConfig = createAuthConfig();
             expect(authConfig.types).toContain(AUTHENTICATION_TYPE.Basic);
             expect(authConfig.types).toContain(AUTHENTICATION_TYPE.CfMtls);
             expect(authConfig.credentials).toBeDefined();
-            expect(authConfig.cfMtlsValidator).toBeDefined();
+            // CF mTLS validator should be null (lazy loading)
+            expect(authConfig.cfMtlsValidator).toBeNull();
         });
 
         it("should handle Basic auth when both Basic and CF mTLS are configured", async () => {
