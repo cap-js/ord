@@ -37,9 +37,9 @@ async function waitForServer(maxAttempts = 30, delayMs = 2000) {
 
 describe("ORD Integration Tests - Basic Authentication", () => {
     beforeAll(async () => {
-        // Set authentication environment variables
-        process.env.ORD_AUTH_TYPE = '["basic"]';
-        process.env.BASIC_AUTH = '{"admin":"$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"}';
+        // Note: Authentication configuration is loaded from integration-test-app/.cdsrc.json
+        // This tests the standard CAP configuration approach where settings come from .cdsrc.json
+        // Environment variables can override these settings in production deployments
 
         // Start the CDS server
         const appPath = path.join(__dirname, "integration-test-app");
@@ -47,7 +47,6 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         console.log("Starting CDS server...");
         serverProcess = spawn("npx", ["cds", "watch", "--port", "4004"], {
             cwd: appPath,
-            env: { ...process.env },
             stdio: ["ignore", "pipe", "pipe"],
         });
 
@@ -86,10 +85,6 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 }, 3000);
             });
         }
-
-        // Clean up environment variables
-        delete process.env.ORD_AUTH_TYPE;
-        delete process.env.BASIC_AUTH;
     });
 
     describe("ORD Config Endpoint Tests", () => {
@@ -181,7 +176,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         test("should reject empty Authorization header", async () => {
             const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set("Authorization", "").expect(401);
 
-            expect(response.text).toContain("Not authorized");
+            expect(response.text).toContain("Authentication required");
         });
     });
 

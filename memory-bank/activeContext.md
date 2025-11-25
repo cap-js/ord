@@ -4,6 +4,15 @@
 
 ### Recent Development Activity
 
+**Latest Work (November 25, 2025)**:
+
+- **Integration Test Pipeline Configuration Fix**: Fixed integration test configuration inconsistency
+- Removed redundant environment variable setup from integration tests
+- Tests now properly rely on `.cdsrc.json` configuration as intended
+- Added auth config initialization in `ord-service.js` to ensure configuration is loaded on service startup
+- Clarified configuration priority in code comments: Environment variables > .cdsrc.json
+- All 14 integration tests now passing successfully
+
 **Latest Completed Feature (September 26, 2025)**:
 
 - **Dual Annotation Support for Data Products**: Enhanced data product service exposure to support both `@DataIntegration.dataProduct.type: 'primary'` and the simpler `@data.product` annotation
