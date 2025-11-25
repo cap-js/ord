@@ -1,4 +1,4 @@
-const { fetchMtlsTrustedCertsFromEndpoints, mergeTrustedCerts } = require("../../lib/mtls-endpoint-service");
+const { fetchMtlsTrustedCertsFromEndpoints, mergeTrustedCerts } = require("../../lib/auth/mtls-endpoint-service");
 
 // Mock fetch globally
 global.fetch = jest.fn();

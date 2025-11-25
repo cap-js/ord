@@ -1,4 +1,4 @@
-const { extractCertHeaders, tokenizeDn, dnTokensMatch, createCfMtlsValidator } = require("../../lib/cf-mtls");
+const { extractCertHeaders, tokenizeDn, dnTokensMatch, createCfMtlsValidator } = require("../../lib/auth/cf-mtls");
 
 describe("CF mTLS Validation", () => {
     const mockHeaderNames = {

@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
-const { authenticate, createAuthConfig, getAuthConfig } = require("../../lib/authentication");
+const { authenticate, createAuthConfig, getAuthConfig } = require("../../lib/auth/authentication");
 const { Logger } = require("../../lib/logger");
 
 describe("authentication", () => {
