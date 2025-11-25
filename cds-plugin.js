@@ -1,5 +1,5 @@
 const cds = require("@sap/cds");
-const { getAuthConfig } = require("./lib/authentication");
+const { getAuthConfig } = require("./lib/auth/authentication");
 
 if (cds.cli.command === "build") {
     cds.build?.register?.("ord", require("./lib/build"));
