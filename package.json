@@ -27,6 +27,7 @@
     },
     "devDependencies": {
         "eslint": "^9.2.0",
+        "express": "^5.1.0",
         "jest": "^30.0.0",
         "prettier": "3.6.2",
         "supertest": "^7.0.0"

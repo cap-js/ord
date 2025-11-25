@@ -1,8 +1,19 @@
 {
     "authentication": {
-        "types": ["basic"],
+        "types": ["basic", "cf-mtls"],
         "credentials": {
             "admin": "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"
+        }
+    },
+    "ord": {
+        "cfMtls": {
+            "certs": [
+                {
+                    "issuer": "CN=SAP PKI Certificate Service Client CA,OU=SAP BTP Clients,O=SAP SE,L=cf-us10-staging,C=DE",
+                    "subject": "CN=cmp-dev,OU=SAP Cloud Platform Clients,OU=Staging,OU=cmp-cf-us10-staging,O=SAP SE,L=Dev,C=DE"
+                }
+            ],
+            "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"]
         }
     }
 }
