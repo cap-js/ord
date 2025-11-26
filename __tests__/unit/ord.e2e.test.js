@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE, CDS_ELEMENT_KIND } = require("../lib/constants");
+const { AUTHENTICATION_TYPE, CDS_ELEMENT_KIND } = require("../../lib/constants");
 
 describe("End-to-end test for ORD document", () => {
     beforeAll(() => {
@@ -21,14 +21,14 @@ describe("End-to-end test for ORD document", () => {
         let csn, ord;
 
         beforeAll(async () => {
-            cds.root = path.join(__dirname, "bookshop");
+            cds.root = path.join(__dirname, "../bookshop");
             csn = await cds.load(path.join(cds.root, "srv"));
-            jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-            ord = require("../lib/ord");
+            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            ord = require("../../lib/ord");
         });
 
         afterEach(() => {
-            cds.root = path.join(__dirname, "bookshop");
+            cds.root = path.join(__dirname, "../bookshop");
             delete cds.env.export;
         });
 
@@ -113,9 +113,9 @@ describe("End-to-end test for ORD document", () => {
         let csn, ord;
 
         beforeAll(async () => {
-            cds.root = path.join(__dirname, "bookshop");
-            jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-            ord = require("../lib/ord");
+            cds.root = path.join(__dirname, "../bookshop");
+            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            ord = require("../../lib/ord");
             csn = await cds.load(path.join(cds.root, "srv"));
         });
 
@@ -197,9 +197,9 @@ describe("Tests for products and packages", () => {
                 types: [AUTHENTICATION_TYPE.Open],
             },
         });
-        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        ord = require("../lib/ord");
-        cds.root = path.join(__dirname, "bookshop");
+        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../../lib/ord");
+        cds.root = path.join(__dirname, "../bookshop");
         errorSpy = jest.spyOn(console, "error");
     });
 
@@ -225,9 +225,9 @@ describe("Tests for products and packages", () => {
 
     it("should raise error log when custom product ordId starts with sap detected", async () => {
         let csn, ord;
-        cds.root = path.join(__dirname, "bookshop");
-        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        ord = require("../lib/ord");
+        cds.root = path.join(__dirname, "../bookshop");
+        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../../lib/ord");
         cds.env.ord = {
             products: [
                 {
@@ -247,9 +247,9 @@ describe("Tests for products and packages", () => {
     it("should use valid custom products ordId", async () => {
         let csn, ord;
         cds.env.ord = {};
-        cds.root = path.join(__dirname, "bookshop");
-        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        ord = require("../lib/ord");
+        cds.root = path.join(__dirname, "../bookshop");
+        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../../lib/ord");
         cds.env.ord = {
             products: [
                 {
@@ -277,9 +277,9 @@ describe("Tests for Data Product definition", () => {
                 types: [AUTHENTICATION_TYPE.Open],
             },
         });
-        cds.root = path.join(__dirname, "bookshop");
-        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        ord = require("../lib/ord");
+        cds.root = path.join(__dirname, "../bookshop");
+        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../../lib/ord");
         csn = await cds.load(path.join(cds.root, "srv"));
     });
 
@@ -311,7 +311,7 @@ describe("Tests for Data Product definition", () => {
         expect(csnResourceDef).toBeDefined();
         expect(csnResourceDef.url).toBeDefined();
 
-        const { getMetadata } = require("../lib/index");
+        const { getMetadata } = require("../../lib/index");
 
         const result = await getMetadata(csnResourceDef.url, csn);
         expect(result.contentType).toBe("application/json");
@@ -344,9 +344,9 @@ describe("Tests for Data Product definition", () => {
         let document;
         jest.isolateModules(() => {
             delete global.cds;
-            const dateMod = require("../lib/date");
+            const dateMod = require("../../lib/date");
             jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-            const ordLocal = require("../lib/ord");
+            const ordLocal = require("../../lib/ord");
             const linkedModel = cds.linked(`
                 service TestService {
                     entity TestEntity {
@@ -373,9 +373,9 @@ describe("Tests for Data Product definition", () => {
         let document;
         jest.isolateModules(() => {
             delete global.cds;
-            const dateMod = require("../lib/date");
+            const dateMod = require("../../lib/date");
             jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-            const ordLocal = require("../lib/ord");
+            const ordLocal = require("../../lib/ord");
             const linkedModel = cds.linked(`
             namespace customer.namespace;
             service TestService.v3 {
@@ -414,9 +414,9 @@ describe("Tests for eventResource and apiResource", () => {
                 types: [AUTHENTICATION_TYPE.Open],
             },
         });
-        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        ord = require("../lib/ord");
-        cds.root = path.join(__dirname, "bookshop");
+        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../../lib/ord");
+        cds.root = path.join(__dirname, "../bookshop");
     });
 
     afterEach(() => {

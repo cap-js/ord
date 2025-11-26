@@ -22,5 +22,8 @@ jobs:
                   npm install -g @sap/cds-dk@latest
                   npm install
 
-            - name: Run integration tests
-              run: npm run test:integration -- --verbose
+            - name: Run basic auth integration tests
+              run: npm run test:integration:basic -- --verbose
+
+            - name: Run mTLS integration tests
+              run: npm run test:integration:mtls -- --verbose
