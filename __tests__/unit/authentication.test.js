@@ -99,12 +99,14 @@ describe("authentication", () => {
             expect(authConfig.error).toEqual("Invalid authentication type");
         });
 
-        it("should return default configuration with error when Open and Basic authentication types are combined", () => {
+        it("should automatically ignore Open when combined with Basic authentication", () => {
             process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}"]`;
+            process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             const authConfig = createAuthConfig();
-            expect(authConfig.error).toEqual(
-                "Open authentication cannot be combined with any other authentication type",
-            );
+            // Open should be filtered out, only Basic remains
+            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic]);
+            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }]);
+            expect(authConfig.credentials).toEqual(mockValidUser);
         });
 
         it("should return default configuration with error when invalid JSON is provided", () => {
@@ -265,11 +267,11 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    authorization: "Basic " + Buffer.from("admin:").toString("base64"),
+                    authorization: "Basic " + Buffer.from(`admin`).toString("base64"),
                 },
             };
 
-            await authCheck(req, 401, "Password and hashed password are required");
+            await authCheck(req, 401, "Invalid authentication format");
         });
 
         it("should not authenticate because of invalid credentials in the request", async () => {
@@ -392,7 +394,7 @@ describe("authentication", () => {
                 headers: {},
             };
 
-            await authCheck(req, 401, "Client certificate authentication required");
+            await authCheck(req, 401, "Authentication required.");
         });
 
         it("should not authenticate with invalid base64 encoding", async () => {
@@ -525,6 +527,54 @@ describe("authentication", () => {
             };
 
             await authCheck(req, 200);
+        });
+
+        it("should handle Basic auth when both Basic and CF mTLS are configured with Basic header", async () => {
+            cds.context.authConfig = {
+                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
+                credentials: mockValidUser,
+            };
+
+            const req = {
+                headers: {
+                    authorization: "Basic " + Buffer.from(`admin:secret`).toString("base64"),
+                },
+            };
+
+            await authCheck(req, 200);
+        });
+
+        it("should support multiple authentication strategies in ORD document", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}", "${AUTHENTICATION_TYPE.CfMtls}"]`;
+            process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
+            const authConfig = createAuthConfig();
+
+            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls]);
+            expect(authConfig.accessStrategies).toEqual([
+                { type: ORD_ACCESS_STRATEGY.Basic },
+                { type: ORD_ACCESS_STRATEGY.CfMtls },
+            ]);
+        });
+
+        it("should automatically filter out Open when combined with CF mTLS", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.CfMtls}"]`;
+            const authConfig = createAuthConfig();
+
+            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
+            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
+        });
+
+        it("should automatically filter out Open when all three auth types are combined", () => {
+            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}", "${AUTHENTICATION_TYPE.CfMtls}"]`;
+            process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
+            const authConfig = createAuthConfig();
+
+            // Open should be filtered out, Basic and CfMtls remain
+            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls]);
+            expect(authConfig.accessStrategies).toEqual([
+                { type: ORD_ACCESS_STRATEGY.Basic },
+                { type: ORD_ACCESS_STRATEGY.CfMtls },
+            ]);
         });
     });
 });

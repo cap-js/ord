@@ -29,9 +29,11 @@ To enforce authentication in the ORD Plugin, set the following environment varia
 - `ORD_AUTH_TYPE`: Specifies the authentication types.
 - `BASIC_AUTH`: Contains credentials for `basic` authentication.
 
-If `ORD_AUTH_TYPE` is not set, the application starts without authentication. This variable accepts `open` and `basic` (UCL-mTLS is also planned).
+If `ORD_AUTH_TYPE` is not set, the application starts without authentication. This variable accepts `open`, `basic`, and `cf-mtls`.
 
-> Note: `open` cannot be combined with `basic` or any other (future) authentication types.
+**Multiple Authentication Strategies**: You can configure multiple authentication methods simultaneously (e.g., both `basic` and `cf-mtls`). The plugin implements an Express-like middleware pattern that tries each configured strategy in order until one succeeds.
+
+> Note: When `open` is combined with any other authentication type (e.g., `basic` or `cf-mtls`), the `open` strategy is automatically ignored to ensure security. The ORD document will reflect all active (non-open) authentication strategies.
 
 #### Open
 
@@ -97,6 +99,41 @@ This will output something like `admin:$2y$05$...` - use only the hash part (sta
     ```
 
 </details>
+
+#### Multiple Authentication Strategies
+
+You can configure multiple authentication methods to support different client types:
+
+```bash
+# Environment variable configuration
+ORD_AUTH_TYPE='["basic", "cf-mtls"]'
+BASIC_AUTH='{"admin":"$2y$05$..."}'
+# CF mTLS configuration through CF environment
+```
+
+Or in `.cdsrc.json`:
+
+```json
+"authentication": {
+    "types": ["basic", "cf-mtls"],
+    "credentials": {
+        "admin": "$2y$05$..."
+    }
+}
+```
+
+**How it works:**
+
+- The plugin tries each configured authentication strategy in order
+- The first strategy that successfully authenticates the request is used
+- If a request includes Basic auth headers, Basic authentication is attempted
+- If a request includes mTLS certificate headers, CF mTLS authentication is attempted
+- The ORD document automatically includes all configured authentication methods in its `accessStrategies`
+
+**Example scenarios:**
+
+- **Basic + CF mTLS**: Supports both API clients using Basic auth and services using mTLS certificates
+- **Open + Basic**: When combined, `open` is automatically ignored and only `basic` is active (security first)
 
 ### Usage
 
