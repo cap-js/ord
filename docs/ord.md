@@ -426,9 +426,9 @@ Each endpoint should return JSON in this format:
 | Parameter | Environment Variable | cds.env Path | Default | Description |
 |-----------|---------------------|--------------|---------|-------------|
 | Authentication Type | `ORD_AUTH_TYPE` | `authentication.types` | - | Must include `"cf-mtls"` |
-| Trusted Certs | `CF_MTLS_TRUSTED_CERTS` | `ord.cfMtls.certs` | - | **Required**. Array of issuer/subject pairs |
+| Trusted Certs | `CF_MTLS_TRUSTED_CERTS` | `ord.cfMtls.certs` | `[]` | Optional (if `configEndpoints` provided). Array of issuer/subject pairs |
 | Trusted Root CAs | `CF_MTLS_TRUSTED_CERTS` | `ord.cfMtls.rootCaDn` | - | **Required**. Array of trusted root CA DNs |
-| Config Endpoints | `CF_MTLS_TRUSTED_CERTS` | `ord.cfMtls.configEndpoints` | - | Optional. URLs to fetch additional certificates |
+| Config Endpoints | `CF_MTLS_TRUSTED_CERTS` | `ord.cfMtls.configEndpoints` | `[]` | Optional. URLs to fetch certificates dynamically |
 
 **Note**: The new unified format uses a single `CF_MTLS_TRUSTED_CERTS` environment variable containing all configuration fields (`certs`, `rootCaDn`, `configEndpoints`).
 
@@ -566,9 +566,15 @@ CF mTLS can be combined with Basic authentication to support multiple client typ
 
 ##### "CF mTLS requires at least one certificate pair"
 
-**Cause**: The `certs` array is missing, empty, or all endpoints failed to load certificates.
+**Cause**: After merging static configuration and endpoint responses, no certificate pairs were available. This can happen when:
+- The `certs` array is empty or omitted
+- All `configEndpoints` failed to load certificates
+- No endpoints were configured and no static `certs` were provided
 
-**Solution**: Configure at least one certificate pair via `cds.env.ord.cfMtls.certs` or the `CF_MTLS_TRUSTED_CERTS` environment variable, or ensure at least one endpoint is reachable.
+**Solution**: 
+- Configure at least one certificate pair via `cds.env.ord.cfMtls.certs` or the `CF_MTLS_TRUSTED_CERTS` environment variable, OR
+- Ensure at least one `configEndpoint` is reachable and returns valid certificate information, OR
+- Use a combination of both static and dynamic configuration
 
 ##### "CF mTLS requires at least one root CA DN"
 

@@ -94,9 +94,15 @@ function stopMockConfigServer() {
 
 /**
  * Build mock mTLS headers as sent by CF gorouter
+ * Includes XFCC headers indicating proxy verification
  */
 function createMtlsHeaders(issuer, subject, rootCaDn) {
     return {
+        // XFCC headers indicating proxy has verified the certificate
+        "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
+        "x-ssl-client": "1",
+        "x-ssl-client-verify": "0",
+        // Certificate DN headers
         "x-forwarded-client-cert-issuer-dn": Buffer.from(issuer).toString("base64"),
         "x-forwarded-client-cert-subject-dn": Buffer.from(subject).toString("base64"),
         "x-forwarded-client-cert-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),

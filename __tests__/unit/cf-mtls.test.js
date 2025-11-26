@@ -1,4 +1,10 @@
-const { extractCertHeaders, tokenizeDn, dnTokensMatch, createCfMtlsValidator } = require("../../lib/auth/cf-mtls");
+const {
+    isXfccProxyVerified,
+    extractCertHeaders,
+    tokenizeDn,
+    dnTokensMatch,
+    createCfMtlsValidator,
+} = require("../../lib/auth/cf-mtls");
 
 describe("CF mTLS Validation", () => {
     const mockHeaderNames = {
@@ -6,6 +12,85 @@ describe("CF mTLS Validation", () => {
         subject: "x-forwarded-client-cert-subject-dn",
         rootCa: "x-forwarded-client-cert-root-ca-dn",
     };
+
+    // Valid XFCC headers for testing
+    const validXfccHeaders = {
+        "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
+        "x-ssl-client": "1",
+        "x-ssl-client-verify": "0",
+    };
+
+    describe("isXfccProxyVerified", () => {
+        it("should return true when all XFCC headers are valid", () => {
+            const req = {
+                headers: validXfccHeaders,
+            };
+            expect(isXfccProxyVerified(req)).toBe(true);
+        });
+
+        it("should return false when x-forwarded-client-cert header is missing", () => {
+            const req = {
+                headers: {
+                    "x-ssl-client": "1",
+                    "x-ssl-client-verify": "0",
+                },
+            };
+            expect(isXfccProxyVerified(req)).toBe(false);
+        });
+
+        it("should return false when x-ssl-client is not '1'", () => {
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
+                    "x-ssl-client": "0",
+                    "x-ssl-client-verify": "0",
+                },
+            };
+            expect(isXfccProxyVerified(req)).toBe(false);
+        });
+
+        it("should return false when x-ssl-client-verify is not '0'", () => {
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
+                    "x-ssl-client": "1",
+                    "x-ssl-client-verify": "1",
+                },
+            };
+            expect(isXfccProxyVerified(req)).toBe(false);
+        });
+
+        it("should return false when headers object is missing", () => {
+            const req = {};
+            expect(isXfccProxyVerified(req)).toBe(false);
+        });
+
+        it("should return false when req is null", () => {
+            expect(isXfccProxyVerified(null)).toBe(false);
+        });
+
+        it("should handle array header values by taking first element", () => {
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
+                    "x-ssl-client": ["1", "0"],
+                    "x-ssl-client-verify": ["0", "1"],
+                },
+            };
+            expect(isXfccProxyVerified(req)).toBe(true);
+        });
+
+        it("should return false when x-ssl-client array has wrong first value", () => {
+            const req = {
+                headers: {
+                    "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
+                    "x-ssl-client": ["0", "1"],
+                    "x-ssl-client-verify": "0",
+                },
+            };
+            expect(isXfccProxyVerified(req)).toBe(false);
+        });
+    });
 
     describe("extractCertHeaders", () => {
         it("should extract and decode base64-encoded headers", () => {
@@ -285,6 +370,7 @@ describe("CF mTLS Validation", () => {
             it("should return ok:true for matching certificate pair and root CA", () => {
                 const req = {
                     headers: {
+                        ...validXfccHeaders,
                         "x-forwarded-client-cert-issuer-dn": Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
@@ -306,6 +392,7 @@ describe("CF mTLS Validation", () => {
             it("should return ok:true for second certificate pair", () => {
                 const req = {
                     headers: {
+                        ...validXfccHeaders,
                         "x-forwarded-client-cert-issuer-dn": Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
@@ -324,6 +411,7 @@ describe("CF mTLS Validation", () => {
             it("should return ok:true with different token ordering", () => {
                 const req = {
                     headers: {
+                        ...validXfccHeaders,
                         "x-forwarded-client-cert-issuer-dn": Buffer.from(
                             "C=DE, O=SAP SE, CN=SAP Cloud Platform Client CA",
                         ).toString("base64"),
@@ -339,16 +427,77 @@ describe("CF mTLS Validation", () => {
                 expect(result.ok).toBe(true);
             });
 
-            it("should return ok:false with NO_HEADERS for missing headers object", () => {
+            it("should return ok:false with XFCC_VERIFICATION_FAILED when XFCC headers are missing", () => {
+                const req = {
+                    headers: {
+                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                            "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                        ).toString("base64"),
+                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                            "base64",
+                        ),
+                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
+                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
+                        ).toString("base64"),
+                        // Missing XFCC headers
+                    },
+                };
+                const result = validator(req);
+                expect(result.ok).toBe(false);
+                expect(result.reason).toBe("XFCC_VERIFICATION_FAILED");
+            });
+
+            it("should return ok:false with XFCC_VERIFICATION_FAILED when XFCC verification fails", () => {
+                const req = {
+                    headers: {
+                        ...validXfccHeaders,
+                        "x-ssl-client": "0", // Invalid value
+                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                            "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                        ).toString("base64"),
+                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                            "base64",
+                        ),
+                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
+                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
+                        ).toString("base64"),
+                    },
+                };
+                const result = validator(req);
+                expect(result.ok).toBe(false);
+                expect(result.reason).toBe("XFCC_VERIFICATION_FAILED");
+            });
+
+            it("should return ok:true when both XFCC and certificate headers are valid", () => {
+                const req = {
+                    headers: {
+                        ...validXfccHeaders,
+                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                            "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
+                        ).toString("base64"),
+                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                            "base64",
+                        ),
+                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
+                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
+                        ).toString("base64"),
+                    },
+                };
+                const result = validator(req);
+                expect(result.ok).toBe(true);
+            });
+
+            it("should return ok:false with XFCC_VERIFICATION_FAILED for missing headers object", () => {
                 const req = {};
                 const result = validator(req);
                 expect(result.ok).toBe(false);
-                expect(result.reason).toBe("NO_HEADERS");
+                expect(result.reason).toBe("XFCC_VERIFICATION_FAILED");
             });
 
             it("should return ok:false with HEADER_MISSING for missing issuer header", () => {
                 const req = {
                     headers: {
+                        ...validXfccHeaders,
                         "x-forwarded-client-cert-subject-dn": Buffer.from("CN=test").toString("base64"),
                         "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=root").toString("base64"),
                     },
@@ -361,6 +510,7 @@ describe("CF mTLS Validation", () => {
             it("should return ok:false with CERT_PAIR_MISMATCH for non-matching issuer", () => {
                 const req = {
                     headers: {
+                        ...validXfccHeaders,
                         "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString(
                             "base64",
                         ),
@@ -382,6 +532,7 @@ describe("CF mTLS Validation", () => {
             it("should return ok:false with CERT_PAIR_MISMATCH for non-matching subject", () => {
                 const req = {
                     headers: {
+                        ...validXfccHeaders,
                         "x-forwarded-client-cert-issuer-dn": Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
@@ -401,6 +552,7 @@ describe("CF mTLS Validation", () => {
             it("should return ok:false with ROOT_CA_MISMATCH for non-matching root CA", () => {
                 const req = {
                     headers: {
+                        ...validXfccHeaders,
                         "x-forwarded-client-cert-issuer-dn": Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
@@ -422,6 +574,7 @@ describe("CF mTLS Validation", () => {
                 // Valid issuer with wrong subject should fail
                 const req1 = {
                     headers: {
+                        ...validXfccHeaders,
                         "x-forwarded-client-cert-issuer-dn": Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
@@ -437,6 +590,7 @@ describe("CF mTLS Validation", () => {
                 // Valid subject with wrong issuer should fail
                 const req2 = {
                     headers: {
+                        ...validXfccHeaders,
                         "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=Unknown CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
