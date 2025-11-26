@@ -3,7 +3,7 @@
 ## Project Identity
 
 **Name:** `@cap-js/ord`
-**Version:** 1.3.9
+**Version:** 1.3.14
 **Type:** CAP Framework Plugin
 **Repository:** https://github.com/cap-js/ord
 **License:** Apache-2.0
@@ -45,15 +45,17 @@ This plugin adds support for the [Open Resource Discovery (ORD)](https://open-re
 
 **Out of Scope:**
 
-- Advanced authentication mechanisms (UCL-mTLS planned for future)
 - Non-CAP application support
 - ORD document validation beyond basic structure
 - Runtime modification of generated ORD documents
+- Support for Node.js versions outside the 18-22 range
 
 ## Key Constraints
 
-- Must comply with ORD specification requirements
+- Must comply with ORD specification v1.12 requirements
 - Must integrate with existing CAP framework patterns
 - Must maintain performance for large CAP applications
 - Must support both development and production environments
 - Must handle sensitive metadata appropriately
+- Must support Node.js versions 18-22
+- Must maintain backward compatibility across versions

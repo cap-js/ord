@@ -4,52 +4,52 @@
 
 ### Recent Development Activity
 
-**Latest Work (November 25, 2025)**:
+**Latest Release (v1.3.14 - November 18, 2025)**:
 
-- **Integration Test Pipeline Configuration Fix**: Fixed integration test configuration inconsistency
-- Removed redundant environment variable setup from integration tests
-- Tests now properly rely on `.cdsrc.json` configuration as intended
-- Added auth config initialization in `ord-service.js` to ensure configuration is loaded on service startup
-- Clarified configuration priority in code comments: Environment variables > .cdsrc.json
-- All 14 integration tests now passing successfully
+- **Interop CSN Enhancement**: Removed association "localized" from interop CSN generation to improve CSN compatibility
+- **Trusted Publishing Setup**: Prepared for trusted publishing and enabled provenance for better supply chain security
+- **Dependency Updates**: Updated supertest to v7 for improved testing capabilities
+- All tests passing with enhanced interop CSN generation
 
-**Latest Completed Feature (September 26, 2025)**:
+**Recent Release (v1.3.13 - November 12, 2025)**:
+
+- **Access Strategy Migration**: Switched access strategy to basic-auth for improved security posture
+- **Authentication Configuration**: Set `authenticateMetadataEndpoints` to false by default for better flexibility
+- **Node.js Version Support**: Limited support to Node.js version 22 only
+- **ORD Specification Update**: Updated openResourceDiscovery version to 1.12
+- **Enhanced Testing**: Added dedicated auth test files for better authentication coverage
+
+**Recent Release (v1.3.12 - October 16, 2025)**:
+
+- **Interop CSN i18n Fix**: Fixed internationalization handling in interop CSN by using "-" as separator for language keys instead of "_"
+- **Dependency Updates**: Updated jacoco-maven-plugin and actions/setup-node
+
+**Recent Release (v1.3.11 - October 10, 2025)**:
+
+- **Interop CSN Production**: Introduced comprehensive interop CSN generation for better CSN format compatibility
+- **Java Authentication Fix**: Resolved authentication issues in Java runtime
+- **Local Entity Exposure Fix**: Fixed missing local entity exposure in ORD documents
+- **Dependency Updates**: Updated CDS services to v4.4.1
+
+**Major Feature Release (v1.3.10 - September 26, 2025)**:
 
 - **Dual Annotation Support for Data Products**: Enhanced data product service exposure to support both `@DataIntegration.dataProduct.type: 'primary'` and the simpler `@data.product` annotation
-- Either annotation is now sufficient to create data product ORD resources with full feature parity
-- `@DataIntegration.dataProduct.type: 'primary'` takes precedence when both annotations are present
-- Services with `@data.product` (truthy values) get same ORD properties: `sap.dp:data-subscription-api:v1`, REST protocol, outbound direction, internal visibility
-- Enhanced `isPrimaryDataProductService` function to handle both annotation patterns
-- Added comprehensive test coverage (36 new tests across multiple test suites)
-- Full backward compatibility maintained - no breaking changes
+- **Version Suffix Handling**: Implemented clean ORD ID generation for data product services with version suffixes (e.g., `.v1`, `.v2`)
+- **Custom Build Destination**: Added support for custom build destination paths
+- **Vipe Coding Support**: Configured support for vipe coding workflow
+- **Dependency Modernization**: Major dependency updates including Node v22, Express v5, Jest v30, Spring Boot v3.5.6
+- **Renovate Integration**: Configured Renovate bot for automated dependency management
 
-**Previous Major Feature (September 5, 2025)**:
-
-- **Version Suffix Handling for Data Products**: Implemented new pattern for CAP framework data products where service names with `.v1` or `.v2` suffixes result in ORD IDs like `:apiResource::v1` or `:v2` instead of `:apiResource:.v1:v1`
-- Added comprehensive version extraction logic with strict validation
-- Fixed namespace processing for clean service names
-- Created extensive test coverage (14 test cases)
-- Maintained full backward compatibility
-
-**Previous Release (v1.3.9 - September 2, 2025)**:
-
-- Fixed visibility handling for private resources (no group creation)
-- Added support for loading additional package attributes
-- Improved package configuration flexibility
-
-**Recent Major Features (v1.3.8)**:
-
-- Java sample application setup
-- Java pipeline integration
-- CommonJS support improvements
 
 ### Current Development Priorities
 
-1. **Data Product Support**: Enhanced support for CAP data products with proper version handling
-2. **Java Runtime Support**: Expanding support for CAP Java applications
-3. **Visibility Management**: Refining resource visibility controls and group handling
-4. **Package Configuration**: Enhanced package attribute loading and customization
-5. **Authentication Evolution**: Preparing for UCL-mTLS authentication support
+1. **Interop CSN Stability**: Ensuring robust interop CSN generation across various CAP model patterns
+2. **Authentication Refinement**: Improving authentication configuration flexibility and security
+3. **Node.js Version Strategy**: Focusing on Node.js 22 support and future version planning
+4. **Supply Chain Security**: Maintaining trusted publishing and provenance capabilities
+5. **Dependency Management**: Keeping dependencies current through automated Renovate updates
+6. **Java Runtime Parity**: Continuing to expand and stabilize Java runtime support
+7. **CSN Format Compatibility**: Ensuring clean CSN generation for various integration scenarios
 
 ## Active Decisions and Considerations
 
@@ -63,7 +63,10 @@
 
 **Configuration Strategy**:
 
-- Prioritize environment variables for production deployments
+- Environment variables take precedence for runtime configuration
+- `.cdsrc.json` provides application-level defaults
+- `authenticateMetadataEndpoints` default set to false for flexibility
+- Access strategy standardized to basic-auth for consistent security
 - Enhance annotation-based customization capabilities
 - Improve custom ORD content integration workflows
 
@@ -77,9 +80,11 @@
 
 **ORD Specification Compliance**:
 
+- Currently supporting ORD specification v1.12
 - Stay current with ORD specification updates
 - Ensure generated documents pass ORD validation requirements
 - Maintain compatibility with ORD discovery tools and platforms
+- Interop CSN format aligns with latest standards
 
 **CAP Framework Evolution**:
 
@@ -101,9 +106,16 @@
 **Version Suffix Handling Pattern**:
 
 - Use strict regex validation (`/\.v(\d+)$/`) for version extraction
-- Only apply to primary data product services (`@DataIntegration.dataProduct.type: "primary"`)
+- Apply to primary data product services (both `@DataIntegration.dataProduct.type: "primary"` and `@data.product`)
 - Create temporary service definitions for proper namespace processing
 - Maintain backward compatibility for all non-matching patterns
+
+**Interop CSN Generation Pattern**:
+
+- Remove "localized" associations to improve compatibility
+- Use "-" as separator for language keys in i18n handling
+- Ensure CSN format aligns with CAP framework expectations
+- Support for local entity exposure in interop format
 
 **Configuration Hierarchy**:
 
@@ -115,8 +127,11 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 
 - Comprehensive snapshot testing for ORD document structure validation
 - Unit tests for individual functions and components
+- Dedicated authentication test files for security validation
+- Integration tests for basic-auth and mTLS scenarios
 - End-to-end tests for complete workflows
 - Mock data organization in `__tests__/__mocks__/`
+- Interop CSN generation testing
 
 ### Development Preferences
 
@@ -152,6 +167,14 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Entity relationships need proper mapping to ORD entity types
 - Event definitions require special handling for AsyncAPI integration
 
+**Interop CSN Generation**:
+
+- Interop CSN provides a standardized CSN format for better integration compatibility
+- Removed "localized" associations improve downstream tooling compatibility
+- Language key separators standardized to "-" for i18n consistency
+- Local entity exposure properly included in interop CSN output
+- CSN format aligns with both CAP framework and ORD requirements
+
 **Data Product Annotation Handling**:
 
 - Dual annotation support requires careful precedence logic to avoid conflicts
@@ -166,6 +189,13 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Namespace processing must be applied to clean service names to prevent duplication
 - Semantic versioning conversion (v1 → 1.0.0) provides consistent version format
 - Feature must be scoped only to primary data products to maintain backward compatibility
+
+**Authentication Configuration**:
+
+- `authenticateMetadataEndpoints: false` by default allows flexible deployment scenarios
+- Basic-auth access strategy provides consistent security baseline
+- Environment variables override configuration file settings for runtime flexibility
+- Java authentication issues resolved with proper initialization
 
 **Authentication Challenges**:
 
@@ -217,25 +247,35 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 
 ### Recently Completed
 
+- ✅ **Interop CSN Production**: Successfully implemented comprehensive interop CSN generation
+- ✅ **CSN i18n Handling**: Fixed language key separator issues in interop CSN
+- ✅ **Authentication Refinement**: Improved authentication configuration and Java support
+- ✅ **Access Strategy Standardization**: Migrated to basic-auth for consistent security
+- ✅ **ORD Specification Update**: Updated to v1.12 support
+- ✅ **Trusted Publishing**: Enabled provenance and prepared for trusted publishing
 - ✅ **Version Suffix Handling**: Successfully implemented version extraction for data product services
-- ✅ **Namespace Processing Fix**: Resolved ORD ID duplication issues
-- ✅ **Comprehensive Testing**: Added 14 test cases covering all scenarios
-- ✅ **Backward Compatibility**: Ensured no regressions in existing functionality
+- ✅ **Dual Annotation Support**: Implemented support for both data product annotation patterns
+- ✅ **Comprehensive Testing**: Enhanced test coverage including dedicated auth tests
 
 ### Immediate Priorities
 
-- Monitor version suffix handling feature in production usage
-- Gather feedback on data product ORD ID generation patterns
-- Consider extending version handling to other service types if needed
+- Monitor interop CSN generation in production usage
+- Gather feedback on authentication configuration improvements
+- Continue stabilizing Java runtime support
+- Track ORD specification v1.12 adoption
+- Consider Node.js version support beyond v22
 
 ## Current Challenges
 
 ### Technical Challenges
 
+- **Interop CSN Complexity**: Ensuring interop CSN works across all CAP model patterns
+- **Authentication Configuration**: Balancing security with deployment flexibility
+- **Node.js Version Strategy**: Managing support for evolving Node.js versions
 - **Complexity Management**: Balancing feature richness with maintainability
 - **Performance Scaling**: Handling very large CAP applications efficiently
-- **Cross-Platform Compatibility**: Ensuring consistent behavior across environments
-- **Dependency Management**: Managing OpenAPI/AsyncAPI plugin dependencies
+- **Cross-Platform Compatibility**: Ensuring consistent behavior across environments (Node.js & Java)
+- **Dependency Management**: Managing OpenAPI/AsyncAPI plugin dependencies and automated updates
 
 ### User Experience Challenges
 

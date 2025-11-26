@@ -20,7 +20,7 @@
 
 - **@cap-js/openapi**: OpenAPI specification generation (^1.2.1)
 - **@cap-js/asyncapi**: AsyncAPI specification generation (^1.0.3)
-- **bcryptjs**: Password hashing for authentication (3.0.2)
+- **bcryptjs**: Password hashing for authentication (3.0.3)
 - **lodash**: Utility library for data manipulation (^4.17.21)
 - **cli-progress**: Progress bars for build operations (^3.12.0)
 
@@ -28,20 +28,25 @@
 
 **Testing Framework**:
 
-- **Jest**: Testing framework (^29.7.0)
+- **Jest**: Testing framework (^30.0.0)
 - **Snapshot Testing**: For ORD document structure validation
+- **Supertest**: HTTP assertion library (^7.0.0)
 - **Coverage Collection**: Automated test coverage reporting
+- **Integration Tests**: Dedicated auth and mTLS test suites
 
 **Code Quality**:
 
 - **ESLint**: Code linting with recommended rules (^9.2.0)
-- **Prettier**: Code formatting (3.5.3)
+- **Prettier**: Code formatting (3.6.2)
 - **4-space indentation**: Consistent code style
+- **Renovate**: Automated dependency updates
 
 **Build & Development**:
 
-- **Workspaces**: Monorepo structure with `xmpl` and `xmpl_java` examples
+- **Workspaces**: Monorepo structure with `xmpl`, `xmpl_java`, and integration test apps
 - **npm scripts**: Standardized development commands
+- **Renovate**: Automated dependency management
+- **GitHub Actions**: CI/CD pipeline with integration tests
 
 ## Development Environment Setup
 
@@ -96,16 +101,19 @@ cds compile srv/ --to ord -o ./custom-output/
 ### CAP Framework Dependencies
 
 - **Minimum CAP Version**: 8.9.4 (peer dependency)
+- **Minimum CDS-DK Version**: 8.9.5 (peer dependency)
 - **CSN Compatibility**: Must handle all CAP CSN model structures
+- **Interop CSN**: Generate interop-compatible CSN format
 - **Plugin Architecture**: Must follow CAP plugin conventions
 - **Build Integration**: Must integrate with `cds build` system
 
 ### ORD Specification Compliance
 
-- **ORD Version**: Implements ORD specification v1
+- **ORD Version**: Implements ORD specification v1.12
 - **Document Structure**: Must generate valid ORD JSON documents
 - **Resource Types**: Support for APIs, Events, Entity Types, Integration Dependencies
-- **Authentication**: Must support ORD-compliant authentication mechanisms
+- **Authentication**: Must support ORD-compliant authentication mechanisms (basic-auth standard)
+- **Access Strategies**: Standardized to basic-auth for consistent security
 
 ### Performance Requirements
 
@@ -196,15 +204,23 @@ lib/
 
 **Unit Testing**:
 
-- Individual function testing in `__tests__/unittest/`
+- Individual function testing in `__tests__/unit/`
 - Mock data in `__tests__/__mocks__/`
 - Coverage for all major code paths
+- Interop CSN generation testing
 
-**End-to-End Testing**:
+**Integration Testing**:
 
 - Full ORD generation workflow testing
-- Authentication testing
+- Dedicated authentication test files (basic-auth.test.js, mtls-auth.test.js)
 - Build system integration testing
+- Separate integration test app in `__tests__/integration/integration-test-app/`
+
+**Test Execution**:
+
+- Automated via GitHub Actions CI/CD
+- Coverage reporting and tracking
+- Both Node.js and Java test suites
 
 ### Configuration Patterns
 
@@ -242,10 +258,17 @@ annotate ProcessorService with @ORD.Extensions: {
 
 ### Production Deployment
 
-- **Authentication**: Always configure authentication for production
-- **Performance**: Monitor ORD generation performance in production
+- **Authentication**: Always configure authentication for production (basic-auth standard)
+- **Configuration**: Set `authenticateMetadataEndpoints` appropriately for your environment
+- **Environment Variables**: Use for runtime configuration (overrides `.cdsrc.json`)
+- **Performance**: Monitor ORD generation and interop CSN performance in production
+- **Caching**: Consider caching strategies for frequently accessed ORD documents
+- **Configuration**: Set `authenticateMetadataEndpoints` appropriately for your environment
+- **Environment Variables**: Use for runtime configuration (overrides `.cdsrc.json`)
+- **Performance**: Monitor ORD generation and interop CSN performance in production
 - **Caching**: Consider caching strategies for frequently accessed ORD documents
 - **Monitoring**: Log ORD endpoint access and generation times
+- **Node.js Version**: Ensure Node.js 18-22 compatibility
 
 ### Development Deployment
 

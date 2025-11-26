@@ -208,14 +208,8 @@ describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
             expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
         });
 
-        test("should accept valid mTLS headers for ORD config endpoint (if protected)", async () => {
-            const mtlsHeaders = createMtlsHeaders(
-                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
-                MOCK_CERT_CONFIG_RESPONSE.certSubject,
-                MOCK_ROOT_CA_DN,
-            );
-
-            const response = await request(BASE_URL).get(ORD_CONFIG_ENDPOINT).set(mtlsHeaders).expect(200);
+        test("should return ORD config without authentication (endpoint is always open)", async () => {
+            const response = await request(BASE_URL).get(ORD_CONFIG_ENDPOINT).expect(200);
 
             expect(response.body).toHaveProperty("openResourceDiscoveryV1");
         });
