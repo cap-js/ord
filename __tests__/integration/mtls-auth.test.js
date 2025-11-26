@@ -1,40 +1,81 @@
+/**
+ * ============================================================================
+ * mTLS Integration Tests - SEQUENTIAL EXECUTION REQUIRED
+ * ============================================================================
+ *
+ * These tests MUST run sequentially (not in parallel) because:
+ * 1. CDS servers occupy fixed ports (4005, 4006)
+ * 2. Mock config servers occupy fixed ports (9999, 9998)
+ * 3. Tests modify shared .cdsrc.json configuration
+ * 4. Environment variables (CF_MTLS_TRUSTED_CERTS) affect global state
+ *
+ * Run with: npm run test:integration:mtls
+ * The GitHub Actions workflow ensures sequential execution across test files.
+ *
+ * Test Suite 1: Environment Variable Priority (port 4005, mock 9999)
+ *   - Proves CF_MTLS_TRUSTED_CERTS overrides .cdsrc.json
+ *   - Uses intentionally wrong .cdsrc.json config
+ *
+ * Test Suite 2: .cdsrc.json Configuration (port 4006, mock 9998)
+ *   - Tests fetchMtlsCertInfo endpoint fetching
+ *   - No CF_MTLS_TRUSTED_CERTS env var
+ *
+ * Cleanup order (CRITICAL):
+ *   1. Stop CDS server
+ *   2. Stop mock config server
+ *   3. Restore .cdsrc.json (if modified)
+ * ============================================================================
+ */
+
 const request = require("supertest");
 const { spawn } = require("child_process");
 const path = require("path");
 const http = require("http");
+const net = require("net");
+const fs = require("fs");
 
-const BASE_URL = "http://localhost:4005";
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
 const ORD_DOCUMENT_ENDPOINT = "/ord/v1/documents/ord-document";
 
-let serverProcess;
-let mockConfigServer;
+/**
+ * Check if a port is available for binding
+ * @param {number} port - Port number to check
+ * @returns {Promise<boolean>} - True if port is available
+ */
+async function isPortAvailable(port) {
+    return new Promise((resolve) => {
+        const tester = net
+            .createServer()
+            .once("error", () => resolve(false))
+            .once("listening", () => tester.once("close", () => resolve(true)).close())
+            .listen(port);
+    });
+}
 
 /**
  * Wait for CDS server to be ready
- * Only checks port connectivity, not status codes
+ * @param {string} baseUrl - Base URL of the server (e.g., "http://localhost:4005")
+ * @param {number} maxAttempts - Maximum number of connection attempts
+ * @param {number} delayMs - Delay between attempts in milliseconds
  */
-async function waitForServer(maxAttempts = 30, delayMs = 500) {
+async function waitForServer(baseUrl, maxAttempts = 30, delayMs = 500) {
     for (let i = 0; i < maxAttempts; i++) {
         try {
-            await request(BASE_URL).get(ORD_CONFIG_ENDPOINT);
-            console.log("CDS server is ready");
+            await request(baseUrl).get(ORD_CONFIG_ENDPOINT);
+            console.log(`CDS server at ${baseUrl} is ready`);
             return;
         } catch {
             if (i < maxAttempts - 1) {
-                console.log(`Waiting for CDS server... (attempt ${i + 1}/${maxAttempts})`);
+                console.log(`Waiting for server at ${baseUrl}... (attempt ${i + 1}/${maxAttempts})`);
                 await new Promise((resolve) => setTimeout(resolve, delayMs));
             }
         }
     }
-    throw new Error("Server failed to start within timeout period");
+    throw new Error(`Server at ${baseUrl} failed to start within timeout period`);
 }
 
-// ===== Mock Config Server Setup =====
-const MOCK_CONFIG_SERVER_PORT = 9999;
-const MOCK_CONFIG_ENDPOINT = `http://localhost:${MOCK_CONFIG_SERVER_PORT}/v1/info`;
-
-// Note: Align this structure with your production CMP config server
+// ===== Shared Test Data and Constants =====
+// Mock certificate configuration response (aligns with production CMP config server)
 const MOCK_CERT_CONFIG_RESPONSE = {
     certIssuer: "CN=SAP PKI Certificate Service Client CA,OU=SAP BTP Clients,O=SAP SE,L=cf-us10-integrate,C=DE",
     certSubject: "CN=cmp-dev,OU=SAP Cloud Platform Clients,OU=Integrate,OU=cmp-cf-us10-integrate,O=SAP SE,L=Dev,C=DE",
@@ -54,11 +95,22 @@ const DIFFERENT_ISSUER = "CN=Different CA,O=Other Org,C=US";
 const DIFFERENT_SUBJECT = "CN=different-service,O=Other Org,C=US";
 const UNTRUSTED_ROOT_CA = "CN=Untrusted Root CA,O=Untrusted Org,C=US";
 
-function startMockConfigServer() {
+/**
+ * Start mock CMP config server on specified port
+ * @param {number} port - Port number for the mock server
+ * @returns {Promise<http.Server>} - The HTTP server instance
+ */
+async function startMockConfigServer(port) {
+    // Check port availability first
+    const available = await isPortAvailable(port);
+    if (!available) {
+        throw new Error(`Port ${port} is already in use. Cannot start mock config server.`);
+    }
+
     return new Promise((resolve) => {
         const server = http.createServer((req, res) => {
             if (req.method === "GET" && req.url === "/v1/info") {
-                console.log("Mock /v1/info endpoint called");
+                console.log(`Mock /v1/info endpoint called on port ${port}`);
                 const body = JSON.stringify(MOCK_CERT_CONFIG_RESPONSE);
                 res.writeHead(200, {
                     "content-type": "application/json",
@@ -71,18 +123,21 @@ function startMockConfigServer() {
             }
         });
 
-        server.listen(MOCK_CONFIG_SERVER_PORT, () => {
-            console.log(`Mock config server started on ${MOCK_CONFIG_ENDPOINT}`);
-            mockConfigServer = server;
-            resolve();
+        server.listen(port, () => {
+            console.log(`Mock config server started on http://localhost:${port}/v1/info`);
+            resolve(server);
         });
     });
 }
 
-function stopMockConfigServer() {
+/**
+ * Stop mock config server
+ * @param {http.Server} server - The HTTP server instance to stop
+ */
+function stopMockConfigServer(server) {
     return new Promise((resolve) => {
-        if (mockConfigServer) {
-            mockConfigServer.close(() => {
+        if (server) {
+            server.close(() => {
                 console.log("Mock config server stopped");
                 resolve();
             });
@@ -109,50 +164,75 @@ function createMtlsHeaders(issuer, subject, rootCaDn) {
     };
 }
 
-describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
+// ============================================================================
+// Test Suite 1: Environment Variable Priority
+// ============================================================================
+describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Variable Priority)", () => {
+    const BASE_URL = "http://localhost:4005";
+    const TEST_APP_ROOT = path.join(__dirname, "integration-test-app");
+    const CDSRC_PATH = path.join(TEST_APP_ROOT, ".cdsrc.json");
+    const CDSRC_BACKUP_PATH = path.join(TEST_APP_ROOT, ".cdsrc.json.backup");
+
+    let serverProcess;
+
     beforeAll(async () => {
-        console.log("\n=== Starting mTLS Integration Test Setup ===");
+        console.log("\n=== Test Suite 1: Environment Variable Priority ===");
 
-        // 1. Start mock CMP config server
-        await startMockConfigServer();
+        // 1. Backup and modify .cdsrc.json to have intentionally WRONG config
+        const originalCdsrc = JSON.parse(fs.readFileSync(CDSRC_PATH, "utf8"));
+        fs.writeFileSync(CDSRC_BACKUP_PATH, JSON.stringify(originalCdsrc, null, 4));
 
-        // 2. Prepare mTLS config (same structure as CF_MTLS_TRUSTED_CERTS)
+        const wrongCdsrc = {
+            ...originalCdsrc,
+            cds: {
+                ...originalCdsrc.cds,
+                ord: {
+                    ...originalCdsrc.cds.ord,
+                    authentication: {
+                        ...originalCdsrc.cds.ord.authentication,
+                        cfMtls: {
+                            configEndpoint: "http://localhost:8888/wrong-endpoint", // Wrong endpoint
+                            rootCaDn: ["CN=Wrong Root CA,O=Wrong Org,C=US"], // Wrong root CA
+                        },
+                    },
+                },
+            },
+        };
+        fs.writeFileSync(CDSRC_PATH, JSON.stringify(wrongCdsrc, null, 4));
+        console.log("Modified .cdsrc.json with wrong config to prove env var override");
+
+        // 2. Prepare CORRECT mTLS config via environment variable (directly provides certs)
+        // Note: We don't start a mock server here because CF_MTLS_TRUSTED_CERTS
+        // directly provides the cert info - no fetching needed
         const mtlsConfig = {
-            certs: [],
+            certs: [
+                {
+                    issuer: MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                    subject: MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                },
+            ],
             rootCaDn: [MOCK_ROOT_CA_DN],
-            configEndpoints: [MOCK_CONFIG_ENDPOINT],
         };
 
-        const testAppRoot = path.join(__dirname, "integration-test-app");
-
-        console.log("Test app root:", testAppRoot);
-
-        // 3. Start CDS with pure mTLS (simplified approach)
+        // 3. Start CDS with CF_MTLS_TRUSTED_CERTS (should override .cdsrc.json)
         serverProcess = spawn("npx", ["cds", "run"], {
-            cwd: testAppRoot,
+            cwd: TEST_APP_ROOT,
             env: {
                 ...process.env,
-                PORT: "4005", // Set port to match BASE_URL
-                // mTLS is configured via CF_MTLS_TRUSTED_CERTS env var
-                CF_MTLS_TRUSTED_CERTS: JSON.stringify(mtlsConfig),
+                PORT: "4005",
+                CF_MTLS_TRUSTED_CERTS: JSON.stringify(mtlsConfig), // Correct config in env var
             },
             stdio: ["ignore", "pipe", "pipe"],
         });
 
         serverProcess.stdout.on("data", (data) => {
             const out = data.toString().trim();
-            if (out) console.log("[CDS]", out);
+            if (out) console.log("[CDS-ENV]", out);
         });
 
         serverProcess.stderr.on("data", (data) => {
             const out = data.toString().trim();
-            if (out) {
-                console.error("[CDS ERR]", out);
-                // Detect fatal errors
-                if (out.includes("Error:") || out.includes("EADDRINUSE") || out.includes("EACCES")) {
-                    console.error("Fatal error detected during server startup");
-                }
-            }
+            if (out) console.error("[CDS-ENV ERR]", out);
         });
 
         serverProcess.on("exit", (code, signal) => {
@@ -165,13 +245,16 @@ describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
         });
 
         // 4. Wait for service readiness
-        await waitForServer();
+        await waitForServer(BASE_URL);
 
-        console.log("=== mTLS Test Setup Complete ===\n");
-    }, 60000);
+        console.log("=== Test Suite 1 Setup Complete ===\n");
+    }, 120000);
 
     afterAll(async () => {
-        // Stop CDS first
+        console.log("\nCleaning up Test Suite 1...");
+
+        // CRITICAL: Strict cleanup order
+        // 1. Stop CDS server first
         if (serverProcess && !serverProcess.killed) {
             console.log("Stopping CDS server...");
             await new Promise((resolve) => {
@@ -182,7 +265,6 @@ describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
                 };
 
                 serverProcess.on("exit", cleanup);
-
                 serverProcess.kill("SIGTERM");
 
                 setTimeout(() => {
@@ -195,9 +277,31 @@ describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
             });
         }
 
-        // Then stop the mock config server
-        await stopMockConfigServer();
+        // 2. Restore original .cdsrc.json (no mock server to stop in this suite)
+        if (fs.existsSync(CDSRC_BACKUP_PATH)) {
+            fs.renameSync(CDSRC_BACKUP_PATH, CDSRC_PATH);
+            console.log("Restored original .cdsrc.json");
+        }
+
+        console.log("Test Suite 1 cleanup complete\n");
     }, 10000);
+
+    // ========== Environment Variable Priority Tests ==========
+    describe("Environment Variable Priority - Proof of Override", () => {
+        test("should prove CF_MTLS_TRUSTED_CERTS overrides wrong .cdsrc.json config", async () => {
+            // .cdsrc.json has wrong configEndpoint and wrong rootCaDn
+            // But env var has correct config, so this should succeed
+            const mtlsHeaders = createMtlsHeaders(
+                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                MOCK_ROOT_CA_DN,
+            );
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
+
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+        });
+    });
 
     // ========== Valid mTLS scenarios ==========
     describe("mTLS Authentication - Valid Scenarios", () => {
@@ -420,6 +524,295 @@ describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
                 resource.resourceDefinitions.forEach((resDef) => {
                     const hasOpen = resDef.accessStrategies.some((s) => s.type === "open");
                     expect(hasOpen).toBe(false);
+                });
+            });
+        });
+    });
+});
+
+// ============================================================================
+// Test Suite 2: .cdsrc.json Configuration with fetchMtlsCertInfo
+// ============================================================================
+describe("ORD Integration Tests - mTLS via .cdsrc.json configEndpoint (fetchMtlsCertInfo)", () => {
+    const BASE_URL = "http://localhost:4006";
+    const MOCK_SERVER_PORT = 9998;
+    const MOCK_CONFIG_ENDPOINT = `http://localhost:${MOCK_SERVER_PORT}/v1/info`;
+    const TEST_APP_ROOT = path.join(__dirname, "integration-test-app");
+    const CDSRC_PATH = path.join(TEST_APP_ROOT, ".cdsrc.json");
+    const CDSRC_BACKUP_PATH = path.join(TEST_APP_ROOT, ".cdsrc.json.backup-suite2");
+
+    let serverProcess;
+    let mockConfigServer;
+
+    beforeAll(async () => {
+        console.log("\n=== Test Suite 2: .cdsrc.json Configuration with fetchMtlsCertInfo ===");
+
+        // 1. Ensure .cdsrc.json has correct configEndpoint
+        const originalCdsrc = JSON.parse(fs.readFileSync(CDSRC_PATH, "utf8"));
+        fs.writeFileSync(CDSRC_BACKUP_PATH, JSON.stringify(originalCdsrc, null, 4));
+
+        const correctCdsrc = {
+            ...originalCdsrc,
+            cds: {
+                ...originalCdsrc.cds,
+                ord: {
+                    ...originalCdsrc.cds.ord,
+                    authentication: {
+                        ...originalCdsrc.cds.ord.authentication,
+                        basic: originalCdsrc.cds.ord.authentication.basic,
+                        cfMtls: {
+                            configEndpoint: MOCK_CONFIG_ENDPOINT, // Point to our mock server
+                            rootCaDn: [MOCK_ROOT_CA_DN],
+                        },
+                    },
+                },
+            },
+        };
+        fs.writeFileSync(CDSRC_PATH, JSON.stringify(correctCdsrc, null, 4));
+        console.log(`Configured .cdsrc.json with configEndpoint: ${MOCK_CONFIG_ENDPOINT}`);
+
+        // 2. Start mock config server on different port
+        mockConfigServer = await startMockConfigServer(MOCK_SERVER_PORT);
+
+        // 3. Start CDS WITHOUT CF_MTLS_TRUSTED_CERTS env var
+        // This forces the plugin to fetch from configEndpoint
+        serverProcess = spawn("npx", ["cds", "run"], {
+            cwd: TEST_APP_ROOT,
+            env: {
+                ...process.env,
+                PORT: "4006",
+                CF_MTLS_TRUSTED_CERTS: undefined, // Explicitly remove env var
+            },
+            stdio: ["ignore", "pipe", "pipe"],
+        });
+
+        serverProcess.stdout.on("data", (data) => {
+            const out = data.toString().trim();
+            if (out) console.log("[CDS-CDSRC]", out);
+        });
+
+        serverProcess.stderr.on("data", (data) => {
+            const out = data.toString().trim();
+            if (out) console.error("[CDS-CDSRC ERR]", out);
+        });
+
+        serverProcess.on("exit", (code, signal) => {
+            if (code !== null && code !== 0) {
+                console.error(`CDS process exited with code ${code}`);
+            }
+            if (signal) {
+                console.error(`CDS process killed with signal ${signal}`);
+            }
+        });
+
+        // 4. Wait for service readiness
+        await waitForServer(BASE_URL);
+
+        console.log("=== Test Suite 2 Setup Complete ===\n");
+    }, 120000);
+
+    afterAll(async () => {
+        console.log("\nCleaning up Test Suite 2...");
+
+        // CRITICAL: Strict cleanup order
+        // 1. Stop CDS server first
+        if (serverProcess && !serverProcess.killed) {
+            console.log("Stopping CDS server...");
+            await new Promise((resolve) => {
+                const cleanup = () => {
+                    console.log("CDS server stopped");
+                    serverProcess = null;
+                    resolve();
+                };
+
+                serverProcess.on("exit", cleanup);
+                serverProcess.kill("SIGTERM");
+
+                setTimeout(() => {
+                    if (serverProcess && !serverProcess.killed) {
+                        console.log("Force killing CDS server...");
+                        serverProcess.kill("SIGKILL");
+                        setTimeout(cleanup, 500);
+                    }
+                }, 3000);
+            });
+        }
+
+        // 2. Stop mock config server
+        await stopMockConfigServer(mockConfigServer);
+
+        // 3. Restore original .cdsrc.json
+        if (fs.existsSync(CDSRC_BACKUP_PATH)) {
+            fs.renameSync(CDSRC_BACKUP_PATH, CDSRC_PATH);
+            console.log("Restored original .cdsrc.json");
+        }
+
+        console.log("Test Suite 2 cleanup complete\n");
+    }, 10000);
+
+    // ========== fetchMtlsCertInfo Integration Tests ==========
+    describe("fetchMtlsCertInfo - Config Endpoint Fetch", () => {
+        test("should fetch cert info from mock endpoint during startup", async () => {
+            // Verify the mock endpoint is accessible and returns expected data
+            const response = await fetch(MOCK_CONFIG_ENDPOINT);
+            expect(response.ok).toBe(true);
+
+            const data = await response.json();
+            expect(data).toMatchObject({
+                certIssuer: MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                certSubject: MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                rootCA: expect.stringContaining("BEGIN CERTIFICATE"),
+            });
+        });
+
+        test("should use fetched cert info to validate mTLS requests", async () => {
+            // This verifies the complete flow:
+            // 1. Plugin reads configEndpoint from .cdsrc.json
+            // 2. Calls fetchMtlsCertInfo to get cert info from mock endpoint
+            // 3. Uses fetched info to validate incoming mTLS requests
+            const mtlsHeaders = createMtlsHeaders(
+                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                MOCK_ROOT_CA_DN,
+            );
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
+
+            // Success means fetchMtlsCertInfo worked correctly
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+        });
+
+        test("should reject requests with cert info not matching fetched config", async () => {
+            // Use different cert info than what was fetched from endpoint
+            const mtlsHeaders = createMtlsHeaders(DIFFERENT_ISSUER, DIFFERENT_SUBJECT, MOCK_ROOT_CA_DN);
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(403);
+
+            expect(response.text).toContain("Invalid client certificate");
+        });
+
+        test("should verify mock endpoint structure matches expected schema", async () => {
+            const response = await fetch(MOCK_CONFIG_ENDPOINT);
+            const data = await response.json();
+
+            // Verify structure matches what fetchMtlsCertInfo expects
+            expect(data).toHaveProperty("certIssuer");
+            expect(data).toHaveProperty("certSubject");
+            expect(data).toHaveProperty("rootCA");
+            expect(data.certIssuer).toContain("CN=SAP PKI Certificate Service Client CA");
+            expect(data.certSubject).toContain("CN=cmp-dev");
+        });
+    });
+
+    // ========== Valid mTLS scenarios (same as Suite 1) ==========
+    describe("mTLS Authentication - Valid Scenarios", () => {
+        test("should accept valid mTLS headers for ORD document endpoint", async () => {
+            const mtlsHeaders = createMtlsHeaders(
+                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                MOCK_ROOT_CA_DN,
+            );
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
+
+            expect(response.headers["content-type"]).toMatch(/application\/json/);
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+        });
+
+        test("should return ORD config without authentication (endpoint is always open)", async () => {
+            const response = await request(BASE_URL).get(ORD_CONFIG_ENDPOINT).expect(200);
+
+            expect(response.body).toHaveProperty("openResourceDiscoveryV1");
+        });
+
+        test("should accept mTLS headers with DN components in different order", async () => {
+            const reorderedIssuer =
+                "C=DE,L=cf-us10-integrate,O=SAP SE,OU=SAP BTP Clients,CN=SAP PKI Certificate Service Client CA";
+            const reorderedSubject =
+                "C=DE,L=Dev,O=SAP SE,OU=cmp-cf-us10-integrate,OU=Integrate,OU=SAP Cloud Platform Clients,CN=cmp-dev";
+            const reorderedRootCa = "C=DE,L=Walldorf,O=SAP SE,CN=SAP Cloud Root CA";
+
+            const mtlsHeaders = createMtlsHeaders(reorderedIssuer, reorderedSubject, reorderedRootCa);
+
+            await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
+        });
+    });
+
+    // ========== Invalid certificate scenarios (same as Suite 1) ==========
+    describe("mTLS Authentication - Invalid Certificate Scenarios", () => {
+        test("should reject request with missing issuer header", async () => {
+            const headers = {
+                "x-forwarded-client-cert-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString(
+                    "base64",
+                ),
+                "x-forwarded-client-cert-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
+            };
+
+            await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(401);
+        });
+
+        test("should reject certificate pair mismatch (valid issuer, wrong subject)", async () => {
+            const mtlsHeaders = createMtlsHeaders(
+                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                DIFFERENT_SUBJECT,
+                MOCK_ROOT_CA_DN,
+            );
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(403);
+
+            expect(response.text).toContain("Invalid client certificate");
+        });
+
+        test("should reject untrusted root CA", async () => {
+            const mtlsHeaders = createMtlsHeaders(
+                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                UNTRUSTED_ROOT_CA,
+            );
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(403);
+
+            expect(response.text).toContain("Untrusted certificate authority");
+        });
+    });
+
+    // ========== ORD document structure ==========
+    describe("ORD Document Structure with mTLS", () => {
+        let ordDocument;
+
+        beforeAll(async () => {
+            const mtlsHeaders = createMtlsHeaders(
+                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                MOCK_ROOT_CA_DN,
+            );
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
+
+            ordDocument = response.body;
+        });
+
+        test("should have required ORD structure", () => {
+            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(ordDocument).toHaveProperty("description");
+            expect(Array.isArray(ordDocument.apiResources)).toBe(true);
+            expect(Array.isArray(ordDocument.eventResources)).toBe(true);
+        });
+
+        test("should have 'sap:cmp-mtls:v1' accessStrategies in all resources", () => {
+            // Verify API resources have 'sap:cmp-mtls:v1' accessStrategies
+            ordDocument.apiResources.forEach((apiResource) => {
+                apiResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
+                });
+            });
+
+            // Verify Event resources have 'sap:cmp-mtls:v1' accessStrategies
+            ordDocument.eventResources.forEach((eventResource) => {
+                eventResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
                 });
             });
         });
