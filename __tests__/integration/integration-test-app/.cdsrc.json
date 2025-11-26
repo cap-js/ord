@@ -13,13 +13,9 @@
                     }
                 },
                 "cfMtls": {
-                    "certs": [
-                        {
-                            "issuer": "CN=SAP PKI Certificate Service Client CA,OU=SAP BTP Clients,O=SAP SE,L=cf-us10-integrate,C=DE",
-                            "subject": "CN=cmp-dev,OU=SAP Cloud Platform Clients,OU=Integrate,OU=cmp-cf-us10-integrate,O=SAP SE,L=Dev,C=DE"
-                        }
-                    ],
-                    "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"]
+                    "certs": [],
+                    "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"],
+                    "configEndpoint": "http://localhost:9999/v1/info"
                 }
             }
         }
