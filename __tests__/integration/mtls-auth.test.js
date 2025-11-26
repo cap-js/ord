@@ -20,7 +20,7 @@ async function waitForServer(maxAttempts = 30, delayMs = 500) {
             await request(BASE_URL).get(ORD_CONFIG_ENDPOINT);
             console.log("CDS server is ready");
             return;
-        } catch (err) {
+        } catch {
             if (i < maxAttempts - 1) {
                 console.log(`Waiting for CDS server... (attempt ${i + 1}/${maxAttempts})`);
                 await new Promise((resolve) => setTimeout(resolve, delayMs));
