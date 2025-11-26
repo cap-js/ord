@@ -154,6 +154,39 @@ exports[`templates createEventResourceTemplate should create event resource temp
 ]
 `;
 
+exports[`templates createMCPAPIResourceTemplate should create MCP API resource template correctly 1`] = `
+{
+  "apiProtocol": "mcp",
+  "description": "This is the MCP server to interact with the testAppName",
+  "entryPoints": [
+    "/rest/mcp/streaming",
+  ],
+  "extensible": {
+    "supported": "no",
+  },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "ordId": "customer.testNamespace:apiResource:mcp-server:v1",
+  "partOfPackage": "customer.testNamespace:package:api:v1",
+  "releaseStatus": "active",
+  "resourceDefinitions": [
+    {
+      "accessStrategies": [
+        {
+          "type": "open",
+        },
+      ],
+      "mediaType": "application/json",
+      "type": "custom",
+      "url": "/ord/v1/customer.testNamespace:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
+    },
+  ],
+  "shortDescription": "This is the MCP server to interact with the testAppName",
+  "title": "MCP Server for testAppName",
+  "version": "1.0.0",
+  "visibility": "public",
+}
+`;
+
 exports[`templates getEntityTypeMappings should clean up duplicates 1`] = `
 [
   {
