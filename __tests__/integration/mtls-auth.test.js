@@ -315,45 +315,44 @@ describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
         });
 
         test("should reject invalid base64 encoding in issuer header", async () => {
-            const headers = {
-                "x-forwarded-client-cert-issuer-dn": "not-valid-base64!@#$%",
-                "x-forwarded-client-cert-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString(
-                    "base64",
-                ),
-                "x-forwarded-client-cert-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
-            };
+            // Start from valid proxy-verified mTLS headers, then override issuer with invalid base64
+            const mtlsHeaders = createMtlsHeaders(
+                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                MOCK_ROOT_CA_DN,
+            );
 
-            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(400);
+            mtlsHeaders["x-forwarded-client-cert-issuer-dn"] = "not-valid-base64!@#$%";
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(400);
 
             expect(response.text).toContain("Invalid certificate headers");
         });
 
         test("should reject invalid base64 encoding in subject header", async () => {
-            const headers = {
-                "x-forwarded-client-cert-issuer-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString(
-                    "base64",
-                ),
-                "x-forwarded-client-cert-subject-dn": "invalid@base64#",
-                "x-forwarded-client-cert-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
-            };
+            const mtlsHeaders = createMtlsHeaders(
+                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                MOCK_ROOT_CA_DN,
+            );
 
-            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(400);
+            mtlsHeaders["x-forwarded-client-cert-subject-dn"] = "invalid@base64#";
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(400);
 
             expect(response.text).toContain("Invalid certificate headers");
         });
 
         test("should reject invalid base64 encoding in root CA header", async () => {
-            const headers = {
-                "x-forwarded-client-cert-issuer-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString(
-                    "base64",
-                ),
-                "x-forwarded-client-cert-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString(
-                    "base64",
-                ),
-                "x-forwarded-client-cert-root-ca-dn": "not-base64!!!",
-            };
+            const mtlsHeaders = createMtlsHeaders(
+                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                MOCK_ROOT_CA_DN,
+            );
 
-            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(400);
+            mtlsHeaders["x-forwarded-client-cert-root-ca-dn"] = "not-base64!!!";
+
+            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(400);
 
             expect(response.text).toContain("Invalid certificate headers");
         });
