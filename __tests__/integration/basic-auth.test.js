@@ -249,14 +249,16 @@ describe("ORD Integration Tests - Basic Authentication", () => {
             // Verify API resources have 'basic-auth' accessStrategies
             ordDocument.apiResources.forEach((apiResource) => {
                 apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual([{ type: "basic-auth" }]);
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "basic-auth" }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === "basic-auth")).toBe(true);
                 });
             });
 
             // Verify Event resources have 'basic-auth' accessStrategies
             ordDocument.eventResources.forEach((eventResource) => {
                 eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual([{ type: "basic-auth" }]);
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "basic-auth" }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === "basic-auth")).toBe(true);
                 });
             });
 

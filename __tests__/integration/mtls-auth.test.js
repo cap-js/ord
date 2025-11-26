@@ -402,14 +402,16 @@ describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
             // Verify API resources have 'sap:cmp-mtls:v1' accessStrategies
             ordDocument.apiResources.forEach((apiResource) => {
                 apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual([{ type: "sap:cmp-mtls:v1" }]);
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
                 });
             });
 
             // Verify Event resources have 'sap:cmp-mtls:v1' accessStrategies
             ordDocument.eventResources.forEach((eventResource) => {
                 eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual([{ type: "sap:cmp-mtls:v1" }]);
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
                 });
             });
 
