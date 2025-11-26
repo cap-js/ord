@@ -9,7 +9,7 @@ service TestService @(path: '/test') {
     action testAction(id: Integer, value: String) returns String;
 
     event TestEvent : {
-        ID    : Integer;
+        ID      : Integer;
         message : String;
     };
 }

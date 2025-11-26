@@ -41,12 +41,12 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         // This tests the standard CAP configuration approach where settings come from .cdsrc.json
         // Environment variables can override these settings in production deployments
 
-        // Start the CDS server
-        const appPath = path.join(__dirname, "integration-test-app");
+        // Start the CDS server from workspace root using the runner script
+        const runnerPath = path.join(__dirname, "run-ord-integration.js");
 
-        console.log("Starting CDS server...");
-        serverProcess = spawn("npx", ["cds", "watch", "--port", "4004"], {
-            cwd: appPath,
+        console.log("Starting CDS server from workspace root...");
+        serverProcess = spawn("node", [runnerPath], {
+            cwd: path.join(__dirname, ".."), // Run from workspace root
             stdio: ["ignore", "pipe", "pipe"],
         });
 

@@ -104,33 +104,53 @@ describe("ORD Integration Tests - CF mTLS Authentication", () => {
     }
 
     beforeAll(async () => {
+        console.log("\n=== Starting mTLS Integration Test Setup ===");
+        
         // Start mock config server first
+        console.log("Step 1: Starting mock config server on port", MOCK_CONFIG_SERVER_PORT);
         await startMockConfigServer();
+        console.log("✓ Mock config server ready at", MOCK_CONFIG_ENDPOINT);
 
         // Start CDS server with environment variable pointing to mock endpoint
         const appPath = path.join(__dirname, "integration-test-app");
 
-        console.log("Starting CDS server with mTLS endpoint configuration...");
+        console.log("\nStep 2: Preparing CDS server with mTLS configuration");
+        
+        // Create CF_MTLS_TRUSTED_CERTS environment variable with configEndpoints
+        const mtlsConfig = {
+            certs: [],
+            rootCaDn: ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"],
+            configEndpoints: [MOCK_CONFIG_ENDPOINT]
+        };
+        console.log("  - Config endpoints:", mtlsConfig.configEndpoints);
+        console.log("  - Trusted root CA DNs:", mtlsConfig.rootCaDn.length);
+        
+        console.log("\nStep 3: Starting CDS server on port 4004...");
         serverProcess = spawn("npx", ["cds", "watch", "--port", "4004"], {
             cwd: appPath,
             env: {
                 ...process.env,
-                CDS_ORD_CF_MTLS_ENDPOINTS: MOCK_CONFIG_ENDPOINT,
+                CF_MTLS_TRUSTED_CERTS: JSON.stringify(mtlsConfig),
             },
             stdio: ["ignore", "pipe", "pipe"],
         });
 
         // Log server output for debugging
         serverProcess.stdout.on("data", (data) => {
-            console.log(`Server: ${data.toString().trim()}`);
+            const output = data.toString().trim();
+            if (output) console.log(`  [CDS Server] ${output}`);
         });
 
         serverProcess.stderr.on("data", (data) => {
-            console.error(`Server Error: ${data.toString().trim()}`);
+            const output = data.toString().trim();
+            if (output) console.error(`  [CDS Error] ${output}`);
         });
 
         // Wait for server to be ready
+        console.log("\nStep 4: Waiting for CDS server to be ready...");
         await waitForServer();
+        console.log("✓ CDS server is ready and accepting requests");
+        console.log("\n=== Test Setup Complete ===\n");
     }, 60000); // 60 second timeout for server startup
 
     afterAll(async () => {
@@ -162,31 +182,40 @@ describe("ORD Integration Tests - CF mTLS Authentication", () => {
 
     describe("mTLS Authentication - Valid Scenarios", () => {
         test("should accept valid mTLS headers for ORD document endpoint", async () => {
+            console.log("\n[TEST] Testing valid mTLS headers for ORD document endpoint");
             const mtlsHeaders = createMtlsHeaders(
                 MOCK_CERT_CONFIG_RESPONSE.certIssuer,
                 MOCK_CERT_CONFIG_RESPONSE.certSubject,
                 MOCK_ROOT_CA_DN,
             );
 
+            console.log("  - Sending request with valid mTLS certificate headers");
             const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
 
+            console.log("  ✓ Request accepted (200 OK)");
             expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+            console.log("  ✓ Response contains valid ORD document");
         });
 
         test("should accept valid mTLS headers for ORD config endpoint", async () => {
+            console.log("\n[TEST] Testing valid mTLS headers for ORD config endpoint");
             const mtlsHeaders = createMtlsHeaders(
                 MOCK_CERT_CONFIG_RESPONSE.certIssuer,
                 MOCK_CERT_CONFIG_RESPONSE.certSubject,
                 MOCK_ROOT_CA_DN,
             );
 
+            console.log("  - Sending request with valid mTLS certificate headers");
             const response = await request(BASE_URL).get(ORD_CONFIG_ENDPOINT).set(mtlsHeaders).expect(200);
 
+            console.log("  ✓ Request accepted (200 OK)");
             expect(response.body).toHaveProperty("openResourceDiscoveryV1");
+            console.log("  ✓ Response contains ORD configuration");
         });
 
         test("should accept mTLS headers with DN components in different order", async () => {
+            console.log("\n[TEST] Testing DN order-insensitive matching");
             // DN tokenization should handle order-insensitive matching
             const reorderedIssuer =
                 "C=DE,L=cf-us10-integrate,O=SAP SE,OU=SAP BTP Clients,CN=SAP PKI Certificate Service Client CA";
@@ -194,9 +223,11 @@ describe("ORD Integration Tests - CF mTLS Authentication", () => {
                 "C=DE,L=Dev,O=SAP SE,OU=cmp-cf-us10-integrate,OU=Integrate,OU=SAP Cloud Platform Clients,CN=cmp-dev";
             const reorderedRootCa = "C=DE,L=Walldorf,O=SAP SE,CN=SAP Cloud Root CA";
 
+            console.log("  - Sending request with reordered DN components");
             const mtlsHeaders = createMtlsHeaders(reorderedIssuer, reorderedSubject, reorderedRootCa);
 
             await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
+            console.log("  ✓ Request accepted with reordered DNs (200 OK)");
         });
     });
 

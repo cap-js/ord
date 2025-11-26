@@ -21,7 +21,6 @@ jobs:
               run: |
                   npm install -g @sap/cds-dk@latest
                   npm install
-                  cd __tests__/integration-test-app && npm install
 
             - name: Run integration tests
               run: npm run test:integration -- --verbose

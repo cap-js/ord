@@ -21,16 +21,17 @@
     "scripts": {
         "lint": "npx eslint .",
         "test": "jest --ci --collectCoverage",
-        "test:integration": "jest __tests__/integration.test.js --testTimeout=30000 --testPathIgnorePatterns=/node_modules/ --forceExit",
+        "test:integration": "node __tests__/run-ord-integration.js",
         "update-snapshot": "jest --ci --updateSnapshot",
         "cds:version": "cds v -i"
     },
     "devDependencies": {
         "eslint": "^9.2.0",
-        "express": "^5.1.0",
+        "express": "^4",
         "jest": "^30.0.0",
         "prettier": "3.6.2",
-        "supertest": "^7.0.0"
+        "supertest": "^7.0.0",
+        "@cap-js/sqlite": "^2"
     },
     "peerDependencies": {
         "@sap/cds": ">=8.9.4",
