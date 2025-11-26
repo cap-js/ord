@@ -133,7 +133,7 @@ describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
             env: {
                 ...process.env,
                 PORT: "4005", // Set port to match BASE_URL
-                ORD_AUTH_TYPE: JSON.stringify(["cf-mtls"]), // Enable only mTLS
+                // mTLS is configured via CF_MTLS_TRUSTED_CERTS env var
                 CF_MTLS_TRUSTED_CERTS: JSON.stringify(mtlsConfig),
             },
             stdio: ["ignore", "pipe", "pipe"],

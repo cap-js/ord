@@ -53,8 +53,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
             cwd: testAppRoot,
             env: {
                 ...process.env,
-                // Only enable basic auth (config file has bcrypt hash for admin:secret)
-                ORD_AUTH_TYPE: '["basic"]',
+                // Basic auth is configured via .cdsrc.json (cds.ord.authentication.basic)
             },
             stdio: ["ignore", "pipe", "pipe"],
         });

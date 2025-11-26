@@ -18,7 +18,7 @@ describe("authentication", () => {
     };
 
     beforeAll(() => {
-        Logger.log = Logger.error = jest.fn();
+        Logger.log = Logger.error = Logger.info = jest.fn();
     });
 
     afterAll(() => {
@@ -67,63 +67,48 @@ describe("authentication", () => {
 
     describe("Initialization of authentication config data", () => {
         beforeAll(() => {
-            delete process.env.ORD_AUTH_TYPE;
             delete process.env.BASIC_AUTH;
-            cds.env.authentication = {};
+            cds.env.ord = { authentication: {} };
         });
 
         afterEach(() => {
-            delete process.env.ORD_AUTH_TYPE;
             delete process.env.BASIC_AUTH;
-            cds.env.authentication = {};
+            cds.env.ord = { authentication: {} };
         });
 
         it("should return default configuration when no authentication type is provided", () => {
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual(defaultAuthConfig);
-            expect(Logger.error).toHaveBeenCalledWith(
+            expect(Logger.info).toHaveBeenCalledWith(
                 "createAuthConfig:",
-                'No authorization type is provided. Defaulting to "Open" authentication',
+                'No authentication configured. Defaulting to "Open" authentication',
             );
         });
 
-        it("should return configuration when Open authentication type is provided", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}"]`;
+        it("should return default configuration with error when credentials are not valid BCrypt hashes", () => {
+            cds.env.ord.authentication.basic = {
+                credentials: { admin: "InvalidBCrypHash" },
+            };
             const authConfig = createAuthConfig();
-            expect(authConfig).toEqual(defaultAuthConfig);
-        });
-
-        it("should return default configuration with error when invalid authentication type is provided", () => {
-            process.env.ORD_AUTH_TYPE = '["InvalidType"]';
-            const authConfig = createAuthConfig();
-            expect(authConfig.error).toEqual("Invalid authentication type");
+            expect(authConfig.error).toEqual("All passwords must be bcrypt hashes");
         });
 
         it("should automatically ignore Open when combined with Basic authentication", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}"]`;
-            process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
+            cds.env.ord.authentication.basic = { credentials: mockValidUser };
             const authConfig = createAuthConfig();
-            // Open should be filtered out, only Basic remains
+            // Open should be filtered out automatically when Basic is present
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic]);
             expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }]);
             expect(authConfig.credentials).toEqual(mockValidUser);
         });
 
-        it("should return default configuration with error when invalid JSON is provided", () => {
-            process.env.ORD_AUTH_TYPE = 'typo["Open"typo]';
-            const authConfig = createAuthConfig();
-            expect(authConfig.error).toEqual(expect.stringContaining("not valid JSON"));
-        });
-
         it("should return default configuration with error when credentials are not valid JSON", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = "non-valid-json";
             const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual(expect.stringContaining("not valid JSON"));
         });
 
         it("should return auth configuration containing credentials by using data from process.env.BASIC_AUTH", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
@@ -134,8 +119,7 @@ describe("authentication", () => {
         });
 
         it("should return auth configuration containing credentials by using data from .cdsrc.json", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
-            cds.env.authentication.credentials = mockValidUser;
+            cds.env.ord.authentication.basic = { credentials: mockValidUser };
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
@@ -143,21 +127,12 @@ describe("authentication", () => {
                 credentials: mockValidUser,
             });
         });
-
-        it("should return default configuration with error when credentials are not valid BCrypt hashes", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}"]`;
-            process.env.BASIC_AUTH = JSON.stringify({
-                admin: "InvalidBCrypHash",
-            });
-            const authConfig = createAuthConfig();
-            expect(authConfig.error).toEqual("All passwords must be bcrypt hashes");
-        });
     });
 
     describe("Getting the authentication config data", () => {
         afterAll(() => {
-            delete process.env.ORD_AUTH_TYPE;
             cds.context = {};
+            cds.env.ord = {};
             jest.restoreAllMocks();
         });
 
@@ -188,19 +163,21 @@ describe("authentication", () => {
 
         it("should throw an error when auth configuration is not valid", async () => {
             cds.context = {};
-            process.env.ORD_AUTH_TYPE = '["InvalidType"]';
-            Logger.error = jest.fn();
+            cds.env.ord = { authentication: { basic: { credentials: { admin: "InvalidBCrypHash" } } } };
+            Logger.error.mockClear();
 
             await expect(getAuthConfig()).rejects.toThrow("Invalid authentication configuration");
-            expect(Logger.error).toHaveBeenCalledTimes(1);
+            expect(Logger.error).toHaveBeenCalledWith(
+                expect.stringContaining("createAuthConfig:"),
+                expect.stringContaining("bcrypt hash"),
+            );
         });
     });
 
     describe("Authentication middleware", () => {
         afterEach(() => {
-            delete process.env.ORD_AUTH_TYPE;
             delete process.env.BASIC_AUTH;
-            cds.env.authentication = {};
+            cds.env.ord = { authentication: {} };
             cds.context.authConfig = {};
         });
 
@@ -304,25 +281,24 @@ describe("authentication", () => {
         const mockTrustedRootCaDns = ["CN=SAP Global Root CA, O=SAP SE, C=DE"];
 
         beforeEach(() => {
-            delete process.env.ORD_AUTH_TYPE;
+            delete process.env.BASIC_AUTH;
+            delete process.env.CF_MTLS_TRUSTED_CERTS;
             delete process.env.CF_MTLS_TRUSTED_CERT_PAIRS;
             delete process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS;
-            cds.env.authentication = {};
-            cds.env.ord = {};
+            cds.env.ord = { authentication: {} };
             cds.context = {};
         });
 
         afterEach(() => {
-            delete process.env.ORD_AUTH_TYPE;
+            delete process.env.BASIC_AUTH;
+            delete process.env.CF_MTLS_TRUSTED_CERTS;
             delete process.env.CF_MTLS_TRUSTED_CERT_PAIRS;
             delete process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS;
-            cds.env.authentication = {};
-            cds.env.ord = {};
+            cds.env.ord = { authentication: {} };
             cds.context = {};
         });
 
         it("should mark CF mTLS for lazy initialization without immediate validation", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
             process.env.CF_MTLS_TRUSTED_CERTS = JSON.stringify({
                 certs: mockTrustedCertPairs,
                 rootCaDn: mockTrustedRootCaDns,
@@ -337,11 +313,12 @@ describe("authentication", () => {
         });
 
         it("should mark CF mTLS for lazy initialization using cds.env", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.CfMtls}"]`;
             cds.env.ord = {
-                cfMtls: {
-                    certs: mockTrustedCertPairs,
-                    rootCaDn: mockTrustedRootCaDns,
+                authentication: {
+                    cfMtls: {
+                        certs: mockTrustedCertPairs,
+                        rootCaDn: mockTrustedRootCaDns,
+                    },
                 },
             };
 
@@ -466,7 +443,6 @@ describe("authentication", () => {
         });
 
         it("should support combination with Basic auth", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}", "${AUTHENTICATION_TYPE.CfMtls}"]`;
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             process.env.CF_MTLS_TRUSTED_CERTS = JSON.stringify({
                 certs: mockTrustedCertPairs,
@@ -545,8 +521,13 @@ describe("authentication", () => {
         });
 
         it("should support multiple authentication strategies in ORD document", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Basic}", "${AUTHENTICATION_TYPE.CfMtls}"]`;
-            process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
+            cds.env.ord.authentication = {
+                basic: { credentials: mockValidUser },
+                cfMtls: {
+                    certs: mockTrustedCertPairs,
+                    rootCaDn: mockTrustedRootCaDns,
+                },
+            };
             const authConfig = createAuthConfig();
 
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls]);
@@ -557,7 +538,14 @@ describe("authentication", () => {
         });
 
         it("should automatically filter out Open when combined with CF mTLS", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.CfMtls}"]`;
+            cds.env.ord = {
+                authentication: {
+                    cfMtls: {
+                        certs: mockTrustedCertPairs,
+                        rootCaDn: mockTrustedRootCaDns,
+                    },
+                },
+            };
             const authConfig = createAuthConfig();
 
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
@@ -565,8 +553,13 @@ describe("authentication", () => {
         });
 
         it("should automatically filter out Open when all three auth types are combined", () => {
-            process.env.ORD_AUTH_TYPE = `["${AUTHENTICATION_TYPE.Open}", "${AUTHENTICATION_TYPE.Basic}", "${AUTHENTICATION_TYPE.CfMtls}"]`;
-            process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
+            cds.env.ord.authentication = {
+                basic: { credentials: mockValidUser },
+                cfMtls: {
+                    certs: mockTrustedCertPairs,
+                    rootCaDn: mockTrustedRootCaDns,
+                },
+            };
             const authConfig = createAuthConfig();
 
             // Open should be filtered out, Basic and CfMtls remain
