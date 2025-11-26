@@ -397,5 +397,29 @@ describe("ORD Integration Tests - CF mTLS Authentication (pure mTLS)", () => {
             expect(ordDocument.eventResources).toHaveLength(1);
             expect(ordDocument.packages).toHaveLength(1);
         });
+
+        test("should have 'sap:cmp-mtls:v1' accessStrategies in all resources", () => {
+            // Verify API resources have 'sap:cmp-mtls:v1' accessStrategies
+            ordDocument.apiResources.forEach((apiResource) => {
+                apiResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.accessStrategies).toEqual([{ type: "sap:cmp-mtls:v1" }]);
+                });
+            });
+
+            // Verify Event resources have 'sap:cmp-mtls:v1' accessStrategies
+            ordDocument.eventResources.forEach((eventResource) => {
+                eventResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.accessStrategies).toEqual([{ type: "sap:cmp-mtls:v1" }]);
+                });
+            });
+
+            // Verify no resource has 'open' accessStrategy
+            [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
+                resource.resourceDefinitions.forEach((resDef) => {
+                    const hasOpen = resDef.accessStrategies.some((s) => s.type === "open");
+                    expect(hasOpen).toBe(false);
+                });
+            });
+        });
     });
 });
