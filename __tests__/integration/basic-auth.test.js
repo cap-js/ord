@@ -28,11 +28,11 @@ async function waitForServer(maxAttempts = 30, delayMs = 500) {
             // Test document endpoint with auth (should require auth)
             await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set("Authorization", VALID_AUTH);
 
-            console.log("CDS server is ready");
+            console.log("CDS server ready");
             return true;
         } catch {
             if (i < maxAttempts - 1) {
-                console.log(`Waiting for CDS server... (attempt ${i + 1}/${maxAttempts})`);
+                console.log(`Waiting for CDS server (attempt ${i + 1}/${maxAttempts})`);
                 await new Promise((resolve) => setTimeout(resolve, delayMs));
             }
         }
@@ -42,11 +42,11 @@ async function waitForServer(maxAttempts = 30, delayMs = 500) {
 
 describe("ORD Integration Tests - Basic Authentication", () => {
     beforeAll(async () => {
-        console.log("\n=== Starting Basic Auth Integration Test Setup ===");
+        console.log("Starting basic-auth integration test setup");
 
         const testAppRoot = path.join(__dirname, "integration-test-app");
 
-        console.log("Test app root:", testAppRoot);
+        console.log(`Test app root: ${testAppRoot}`);
 
         // Start CDS server with Basic Authentication (uses .cdsrc.json config)
         serverProcess = spawn("npx", ["cds", "run"], {
@@ -61,37 +61,37 @@ describe("ORD Integration Tests - Basic Authentication", () => {
 
         serverProcess.stdout.on("data", (data) => {
             const out = data.toString().trim();
-            if (out) console.log("[CDS]", out);
+            if (out) console.log(`[CDS] ${out}`);
         });
 
         serverProcess.stderr.on("data", (data) => {
             const out = data.toString().trim();
             if (out) {
-                console.error("[CDS ERR]", out);
+                console.error(`[CDS ERR] ${out}`);
                 // Detect fatal errors
                 if (out.includes("Error:") || out.includes("EADDRINUSE") || out.includes("EACCES")) {
-                    console.error("⚠️  Fatal error detected during server startup");
+                    console.error("Fatal error detected during server startup");
                 }
             }
         });
 
         serverProcess.on("exit", (code, signal) => {
             if (code !== null && code !== 0) {
-                console.error(`⚠️  CDS process exited with code ${code}`);
+                console.error(`CDS process exited with code ${code}`);
             }
             if (signal) {
-                console.error(`⚠️  CDS process killed with signal ${signal}`);
+                console.error(`CDS process killed with signal ${signal}`);
             }
         });
 
         await waitForServer();
-        console.log("=== Basic Auth Test Setup Complete ===\n");
+        console.log("Basic-auth test setup complete");
     }, 60000); // 60 second timeout for server startup
 
     afterAll(async () => {
         // Stop the server
         if (serverProcess && !serverProcess.killed) {
-            console.log("Stopping CDS server...");
+            console.log("Stopping CDS server");
 
             return new Promise((resolve) => {
                 const cleanup = () => {
@@ -108,7 +108,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 // Force kill after timeout
                 setTimeout(() => {
                     if (serverProcess && !serverProcess.killed) {
-                        console.log("Force killing CDS server...");
+                        console.log("Force killing CDS server");
                         serverProcess.kill("SIGKILL");
                         setTimeout(cleanup, 500);
                     }
