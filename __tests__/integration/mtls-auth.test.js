@@ -191,7 +191,7 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
                     authentication: {
                         ...originalCdsrc.cds.ord.authentication,
                         cfMtls: {
-                            configEndpoint: "http://localhost:8888/wrong-endpoint", // Wrong endpoint
+                            configEndpoints: ["http://localhost:8888/wrong-endpoint"], // Wrong endpoint
                             rootCaDn: ["CN=Wrong Root CA,O=Wrong Org,C=US"], // Wrong root CA
                         },
                     },
@@ -561,7 +561,7 @@ describe("ORD Integration Tests - mTLS via .cdsrc.json configEndpoint (fetchMtls
                         ...originalCdsrc.cds.ord.authentication,
                         basic: originalCdsrc.cds.ord.authentication.basic,
                         cfMtls: {
-                            configEndpoint: MOCK_CONFIG_ENDPOINT, // Point to our mock server
+                            configEndpoints: [MOCK_CONFIG_ENDPOINT], // Point to our mock server (array)
                             rootCaDn: [MOCK_ROOT_CA_DN],
                         },
                     },

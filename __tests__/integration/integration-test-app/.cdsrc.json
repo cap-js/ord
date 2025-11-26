@@ -14,8 +14,8 @@
                 },
                 "cfMtls": {
                     "certs": [],
-                    "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"],
-                    "configEndpoint": "http://localhost:9999/v1/info"
+                    "configEndpoints": ["http://localhost:9999/v1/info"],
+                    "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"]
                 }
             }
         }
