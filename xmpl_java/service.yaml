@@ -1,25 +1,176 @@
-apiVersion: composer.yaml/v1
-kind: Application
-metadata:
-    name: intelligent-supply-chain-app
-    description: "Intelligent Supply Chain Application"
-    version: "1.0.0"
+apiVersion: solution.sap/v1
+kind: Service
 
-overrides:
-    commercial:
-        application-namespace: "com.sap.intelligent.supplychain"
+metadata:
+    name: incident-management-service
+    version: "1.0.0"
+    description: "Comprehensive incident management and escalation service for enterprise operations"
+    labels:
+        domain: operations
+        capability: incident-management
+        team: platform-reliability
+        visibility: public
+        compliance: soc2
+
+spec:
+    type:
+        base: cap-application
+        traits:
+            - data-product-production
+            - data-product-consumption
+
+    provides:
+        runtime: Java
+        framework: cap
+        capabilities:
+            - incident-creation
+            - incident-tracking
+            - escalation-management
+            - sla-monitoring
+            - notification-dispatch
+            - reporting-analytics
+        protocols:
+            - odata-v4
+            - rest
+            - webhooks
+
+    requires:
+        - name: destination
+          version: "^2.0.0"
+        - name: connectivity
+          version: "^2.0.0"
+        - name: notification
+          version: "^1.0.0"
+        - name: audit-log
+          version: "^3.0.0"
+
+    assets:
+        - id: incident-service
+          kind: service
+          type: cap-asset
+          sourceRoot: "srv"
+          provides:
+              service:
+                  protocol: odata-v4
+                  endpoints:
+                      - name: IncidentService
+                        path: /odata/v4/incident
+                        description: "Main incident management operations"
+                      - name: EscalationService
+                        path: /odata/v4/escalation
+                        description: "Escalation rules and management"
+                      - name: ReportingService
+                        path: /odata/v4/reporting
+                        description: "Incident analytics and reporting"
+          overrides:
+              authentication:
+                  required: true
+                  scopes:
+                      - incident.read
+                      - incident.write
+                      - incident.escalate
+                      - incident.admin
+
+        - id: incident-ui
+          kind: fiori-application
+          type: cap-asset
+          sourceRoot: "app"
+          provides:
+              ui:
+                  framework: fiori
+                  applications:
+                      - name: IncidentManagement
+                        path: /incident-management
+                        description: "Main incident management interface"
+                      - name: IncidentDashboard
+                        path: /incident-dashboard
+                        description: "Executive dashboard and analytics"
+          overrides:
+              deployment:
+                  cdn: enabled
+                  compression: enabled
+
+        - id: incident-api
+          kind: api
+          type: rest-api
+          sourceRoot: "api"
+          provides:
+              api:
+                  protocol: rest
+                  version: "v1"
+                  endpoints:
+                      - method: POST
+                        path: /api/v1/incidents
+                        description: "Create new incident"
+                      - method: GET
+                        path: /api/v1/incidents/{id}
+                        description: "Get incident details"
+                      - method: PUT
+                        path: /api/v1/incidents/{id}/escalate
+                        description: "Escalate incident"
+                      - method: POST
+                        path: /api/v1/incidents/{id}/resolve
+                        description: "Resolve incident"
+                      - method: GET
+                        path: /api/v1/incidents/{id}/timeline
+                        description: "Get incident timeline"
+          overrides:
+              rateLimit:
+                  enabled: true
+                  requests: 1000
+                  window: 3600 # per hour
+
+    integrations:
+        - name: sap-alert-notification
+          type: notification
+          required: true
+          configuration:
+              channels:
+                  - email
+                  - sms
+                  - slack
+                  - teams
+
+        - name: sap-audit-log
+          type: audit
+          required: true
+          configuration:
+              events:
+                  - incident.created
+                  - incident.updated
+                  - incident.escalated
+                  - incident.resolved
+
+        - name: monitoring-integration
+          type: monitoring
+          required: false
+          configuration:
+              metrics:
+                  - incident.count
+                  - incident.resolution.time
+                  - sla.breach.count
+              alerts:
+                  - sla.critical.breach
+                  - escalation.failed
+
     dataProducts:
         consumption:
-            # Mandatory Purchase Order integration
             "sap.s4com:apiResource:PurchaseOrder:v1":
-                minimumVersion: "1.2.3"
-                mandatory: true
+                minimumVersion: "5.2.3"
+                mandatory: false
                 consumptionType: "replication"
+                ordId: "xyz"
                 capConsumption:
                     model: "sap-s4com-purchaseorder-v1"
 
-            # Optional Supplier integration
-            "sap.ariba:apiResource:Supplier:v2":
-                minimumVersion: "2.0.0"
-                mandatory: false
-                consumptionType: "federation"
+        production:
+            - dataProductORDid: "sap.incident:dataProduct:IncidentManagementData:v1"
+              version: "1.0.0"
+              definitionFile: "incidentDPdef.interop"
+              managedBy:
+                  capProduction: "IncidentService"
+            - dataProductORDid: "sap.incident:dataProduct:EscalationAnalytics:v1"
+              version: "1.0.0"
+              definitionFile: "escalationDPdef.interop"
+              managedBy:
+                  capProduction: "EscalationService"
