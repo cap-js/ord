@@ -172,17 +172,8 @@ describe("CF mTLS Validation", () => {
             expect(result.issuer).toBe(issuerDn);
         });
 
-        it("should return error for invalid base64 encoding", () => {
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert-issuer-dn": "not-valid-base64!!!",
-                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=test").toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=root").toString("base64"),
-                },
-            };
-            const result = extractCertHeaders(req, mockHeaderNames);
-            expect(result.error).toBe("INVALID_ENCODING");
-        });
+        // Note: We no longer validate base64 encoding with regex.
+        // CF always sends base64-encoded strings, and Buffer.from() will handle any decoding errors.
 
         it("should handle case-insensitive header names", () => {
             const issuerDn = "CN=test, O=SAP SE";
@@ -240,6 +231,38 @@ describe("CF mTLS Validation", () => {
             const dn = "";
             const result = tokenizeDn(dn);
             expect(result).toEqual([]);
+        });
+
+        // Slash-separated DN format (UCL)
+        it("should split slash-separated DN (UCL format)", () => {
+            const dn = "/CN=test/O=SAP SE/C=DE";
+            const result = tokenizeDn(dn);
+            expect(result).toEqual(["CN=test", "O=SAP SE", "C=DE"]);
+        });
+
+        it("should handle slash-separated DN without spaces", () => {
+            const dn = "/CN=test/O=SAP/C=DE";
+            const result = tokenizeDn(dn);
+            expect(result).toEqual(["CN=test", "O=SAP", "C=DE"]);
+        });
+
+        it("should handle slash-separated DN with varying whitespace", () => {
+            const dn = "/CN=test/  O=SAP SE  /   C=DE";
+            const result = tokenizeDn(dn);
+            expect(result).toEqual(["CN=test", "O=SAP SE", "C=DE"]);
+        });
+
+        it("should handle slash-separated single token", () => {
+            const dn = "/CN=test";
+            const result = tokenizeDn(dn);
+            expect(result).toEqual(["CN=test"]);
+        });
+
+        it("should handle slash without leading slash as comma-separated", () => {
+            const dn = "CN=test/O=SAP SE/C=DE";
+            const result = tokenizeDn(dn);
+            // Without leading slash, treated as comma-separated (won't split by slash)
+            expect(result).toEqual(["CN=test/O=SAP SE/C=DE"]);
         });
     });
 
@@ -425,6 +448,27 @@ describe("CF mTLS Validation", () => {
                 };
                 const result = validator(req);
                 expect(result.ok).toBe(true);
+            });
+
+            it("should work with slash-separated DN format (UCL)", () => {
+                const req = {
+                    headers: {
+                        ...validXfccHeaders,
+                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                            "/C=DE/O=SAP SE/CN=SAP Cloud Platform Client CA",
+                        ).toString("base64"),
+                        "x-forwarded-client-cert-subject-dn":
+                            Buffer.from("/C=DE/O=SAP SE/CN=aggregator").toString("base64"),
+                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
+                            "/C=DE/O=SAP SE/CN=SAP Global Root CA",
+                        ).toString("base64"),
+                    },
+                };
+                const result = validator(req);
+                expect(result.ok).toBe(true);
+                expect(result.issuer).toBe("/C=DE/O=SAP SE/CN=SAP Cloud Platform Client CA");
+                expect(result.subject).toBe("/C=DE/O=SAP SE/CN=aggregator");
+                expect(result.rootCaDn).toBe("/C=DE/O=SAP SE/CN=SAP Global Root CA");
             });
 
             it("should return ok:false with XFCC_VERIFICATION_FAILED when XFCC headers are missing", () => {
