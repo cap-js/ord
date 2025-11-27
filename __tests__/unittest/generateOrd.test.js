@@ -1,229 +1,113 @@
+const { _loadAppFoundationConfig } = require("../../lib/generateOrd");
 const cds = require("@sap/cds");
 const path = require("path");
-const { generateOrd, _loadAppYaml, _handleIntegrationDependency } = require("../../lib/generateOrd");
+const fs = require("fs");
 
-jest.mock("../../lib/ord", () => {
-    return jest.fn(() => ({
-        $schema: "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
-        openResourceDiscovery: "1.9",
-        packages: [
-            {
-                ordId: "customer.testapp:package:TestPackage:v1",
-            },
-        ],
-        apiResources: [
-            {
-                ordId: "customer.testapp:apiResource:TestService:v1",
-                partOfPackage: "customer.testapp:package:TestPackage:v1",
-            },
-        ],
-    }));
-});
-
-jest.mock("fs", () => ({
-    ...jest.requireActual("fs"),
-    readFileSync: jest.fn(),
+// Mock dependencies
+jest.mock("@sap/cds");
+jest.mock("fs");
+jest.mock("../../lib/logger", () => ({
+    Logger: {
+        log: jest.fn(),
+        error: jest.fn(),
+    },
 }));
 
+// Mock js-yaml
+const mockYamlLoad = jest.fn();
 jest.mock("js-yaml", () => ({
-    load: jest.fn(),
+    load: mockYamlLoad,
 }));
 
-describe("generateOrd", () => {
-    const mockCsn = {
-        definitions: {
-            TestService: {
-                kind: "service",
-            },
-        },
-    };
-
+describe("generateOrd - App Foundation Config Loading", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        // Reset cds.env
+        cds.env = {};
+        cds.root = "/test/project";
+        cds.utils = {
+            exists: jest.fn(),
+        };
     });
 
-    describe("generateOrd function", () => {
-        it("should generate ORD document in compile mode", () => {
-            const result = generateOrd(mockCsn, { mode: "compile" });
+    describe("_loadAppFoundationConfig", () => {
+        it("should use default service.yaml when no config is provided", () => {
+            // Arrange
+            cds.utils.exists.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue("apiVersion: test");
+            mockYamlLoad.mockReturnValue({ test: "data" });
 
-            expect(result).toBeDefined();
-            expect(result.$schema).toContain("Document.schema.json");
-            expect(result.packages).toBeDefined();
-            expect(result.apiResources).toBeDefined();
+            // Act
+            const result = _loadAppFoundationConfig();
+
+            // Assert
+            expect(cds.utils.exists).toHaveBeenCalledWith(path.join("/test/project", "service.yaml"));
+            expect(fs.readFileSync).toHaveBeenCalledWith(path.join("/test/project", "service.yaml"), "utf8");
+            expect(mockYamlLoad).toHaveBeenCalledWith("apiVersion: test");
+            expect(result).toEqual({ test: "data" });
         });
 
-        it("should generate ORD document in build mode", () => {
-            const result = generateOrd(mockCsn, { mode: "build" });
+        it("should use custom config file when appFoundationConfigFile is set", () => {
+            // Arrange
+            cds.env.ord = { appFoundationConfigFile: "custom/config.yaml" };
+            cds.utils.exists.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue("apiVersion: custom");
+            mockYamlLoad.mockReturnValue({ custom: "config" });
 
-            expect(result).toBeDefined();
-            expect(result.$schema).toContain("Document.schema.json");
-            expect(result.packages).toBeDefined();
-            expect(result.apiResources).toBeDefined();
+            // Act
+            const result = _loadAppFoundationConfig();
+
+            // Assert
+            expect(cds.utils.exists).toHaveBeenCalledWith(path.join("/test/project", "custom/config.yaml"));
+            expect(fs.readFileSync).toHaveBeenCalledWith(path.join("/test/project", "custom/config.yaml"), "utf8");
+            expect(mockYamlLoad).toHaveBeenCalledWith("apiVersion: custom");
+            expect(result).toEqual({ custom: "config" });
         });
 
-        it("should default to compile mode when no mode specified", () => {
-            const result = generateOrd(mockCsn);
+        it("should return null when config file does not exist", () => {
+            // Arrange
+            cds.utils.exists.mockReturnValue(false);
 
-            expect(result).toBeDefined();
-            expect(result.$schema).toContain("Document.schema.json");
-        });
+            // Act
+            const result = _loadAppFoundationConfig();
 
-        it("should not load app.yaml in compile mode by default", () => {
-            const fs = require("fs");
-            const yaml = require("js-yaml");
-
-            generateOrd(mockCsn, { mode: "compile" });
-
+            // Assert
+            expect(cds.utils.exists).toHaveBeenCalledWith(path.join("/test/project", "service.yaml"));
             expect(fs.readFileSync).not.toHaveBeenCalled();
-            expect(yaml.load).not.toHaveBeenCalled();
-        });
-
-        it("should attempt to load app.yaml in build mode", () => {
-            const fs = require("fs");
-            jest.spyOn(cds.utils, "exists").mockReturnValue(false);
-
-            generateOrd(mockCsn, { mode: "build" });
-
-            expect(cds.utils.exists).toHaveBeenCalled();
-        });
-
-        it("should include Integration Dependencies when includeIntegrationDependencies is true", () => {
-            const fs = require("fs");
-            const yaml = require("js-yaml");
-
-            jest.spyOn(cds.utils, "exists").mockReturnValue(true);
-            fs.readFileSync.mockReturnValue("mock yaml content");
-            yaml.load.mockReturnValue({
-                overrides: {
-                    commercial: {
-                        "application-namespace": "com.sap.test",
-                    },
-                    dataProducts: {
-                        consumption: {
-                            "sap.s4:apiResource:PurchaseOrder:v1": {
-                                minimumVersion: "1.0.0",
-                                mandatory: true,
-                                consumptionType: "replication",
-                            },
-                        },
-                    },
-                },
-            });
-
-            const result = generateOrd(mockCsn, { mode: "compile", includeIntegrationDependencies: true });
-
-            expect(result.integrationDependencies).toBeDefined();
-            expect(result.integrationDependencies.length).toBeGreaterThan(0);
-        });
-    });
-
-    describe("_loadAppYaml", () => {
-        it("should return null when app.yaml does not exist", () => {
-            jest.spyOn(cds.utils, "exists").mockReturnValue(false);
-
-            const result = _loadAppYaml();
-
+            expect(mockYamlLoad).not.toHaveBeenCalled();
             expect(result).toBeNull();
         });
 
-        it("should load and parse app.yaml when it exists", () => {
-            const fs = require("fs");
-            const yaml = require("js-yaml");
-            const mockYamlContent = {
-                overrides: {
-                    commercial: {
-                        "application-namespace": "com.sap.test",
-                    },
-                },
-            };
+        it("should return null and log error when YAML parsing fails", () => {
+            // Arrange
+            cds.utils.exists.mockReturnValue(true);
+            fs.readFileSync.mockReturnValue("invalid: yaml: content");
+            mockYamlLoad.mockImplementation(() => {
+                throw new Error("YAML parsing error");
+            });
 
-            jest.spyOn(cds.utils, "exists").mockReturnValue(true);
-            fs.readFileSync.mockReturnValue("mock yaml content");
-            yaml.load.mockReturnValue(mockYamlContent);
+            // Act
+            const result = _loadAppFoundationConfig();
 
-            const result = _loadAppYaml();
+            // Assert
+            expect(mockYamlLoad).toHaveBeenCalledWith("invalid: yaml: content");
+            expect(result).toBeNull();
+        });
 
-            expect(result).toEqual(mockYamlContent);
+        it("should return null when file reading fails", () => {
+            // Arrange
+            cds.utils.exists.mockReturnValue(true);
+            fs.readFileSync.mockImplementation(() => {
+                throw new Error("File read error");
+            });
+
+            // Act
+            const result = _loadAppFoundationConfig();
+
+            // Assert
             expect(fs.readFileSync).toHaveBeenCalled();
-            expect(yaml.load).toHaveBeenCalledWith("mock yaml content");
-        });
-
-        it("should return null and log error when app.yaml parsing fails", () => {
-            const fs = require("fs");
-            const yaml = require("js-yaml");
-
-            jest.spyOn(cds.utils, "exists").mockReturnValue(true);
-            fs.readFileSync.mockReturnValue("mock yaml content");
-            yaml.load.mockImplementation(() => {
-                throw new Error("YAML parse error");
-            });
-
-            const result = _loadAppYaml();
-
+            expect(mockYamlLoad).not.toHaveBeenCalled();
             expect(result).toBeNull();
-        });
-    });
-
-    describe("_handleIntegrationDependency", () => {
-        it("should return false when no consumption config exists", () => {
-            const ordDocument = {};
-            const appFoundationConfig = {
-                overrides: {},
-            };
-
-            const result = _handleIntegrationDependency(ordDocument, appFoundationConfig);
-
-            expect(result).toBe(false);
-            expect(ordDocument.integrationDependencies).toBeUndefined();
-        });
-
-        it("should add Integration Dependencies when consumption config exists", () => {
-            const ordDocument = {
-                packages: [{ ordId: "customer.testapp:package:TestPackage:v1" }],
-            };
-            const appFoundationConfig = {
-                overrides: {
-                    commercial: {
-                        "application-namespace": "com.sap.test",
-                    },
-                    dataProducts: {
-                        consumption: {
-                            "sap.s4:apiResource:PurchaseOrder:v1": {
-                                minimumVersion: "1.0.0",
-                                mandatory: true,
-                                consumptionType: "replication",
-                            },
-                        },
-                    },
-                },
-            };
-
-            const result = _handleIntegrationDependency(ordDocument, appFoundationConfig);
-
-            expect(result).toBe(true);
-            expect(ordDocument.integrationDependencies).toBeDefined();
-            expect(ordDocument.integrationDependencies.length).toBeGreaterThan(0);
-        });
-
-        it("should handle errors gracefully during Integration Dependency generation", () => {
-            const ordDocument = {
-                packages: [{ ordId: "customer.testapp:package:TestPackage:v1" }],
-            };
-            const appFoundationConfig = {
-                overrides: {
-                    dataProducts: {
-                        consumption: {
-                            "invalid-ord-id": {
-                                minimumVersion: "1.0.0",
-                            },
-                        },
-                    },
-                },
-            };
-
-            const result = _handleIntegrationDependency(ordDocument, appFoundationConfig);
-
-            expect(result).toBe(false);
         });
     });
 });

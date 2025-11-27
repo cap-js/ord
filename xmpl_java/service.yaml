@@ -1,0 +1,25 @@
+apiVersion: composer.yaml/v1
+kind: Application
+metadata:
+    name: intelligent-supply-chain-app
+    description: "Intelligent Supply Chain Application"
+    version: "1.0.0"
+
+overrides:
+    commercial:
+        application-namespace: "com.sap.intelligent.supplychain"
+    dataProducts:
+        consumption:
+            # Mandatory Purchase Order integration
+            "sap.s4com:apiResource:PurchaseOrder:v1":
+                minimumVersion: "1.2.3"
+                mandatory: true
+                consumptionType: "replication"
+                capConsumption:
+                    model: "sap-s4com-purchaseorder-v1"
+
+            # Optional Supplier integration
+            "sap.ariba:apiResource:Supplier:v2":
+                minimumVersion: "2.0.0"
+                mandatory: false
+                consumptionType: "federation"
