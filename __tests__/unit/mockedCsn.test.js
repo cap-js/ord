@@ -1,19 +1,19 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE } = require("../lib/constants");
+const { AUTHENTICATION_TYPE } = require("../../lib/constants");
 
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;
 
     beforeAll(() => {
-        cds.root = path.join(__dirname, "bookshop");
+        cds.root = path.join(__dirname, "../bookshop");
         jest.spyOn(cds, "context", "get").mockReturnValue({
             authConfig: {
                 types: [AUTHENTICATION_TYPE.Open],
             },
         });
-        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        ord = require("../lib/ord");
+        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../../lib/ord");
     });
 
     beforeEach(() => {
@@ -33,7 +33,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     describe("Tests for ORD document when .cdsrc.json has no `ord` property", () => {
         test("Successfully create ORD Documents with no `ord` in .cdsrc.json", () => {
             cds.env = {};
-            const csn = require("./__mocks__/publicResourcesCsn.json");
+            const csn = require("../__mocks__/publicResourcesCsn.json");
             const document = ord(csn);
             expect(document).not.toBeUndefined();
             expect(document).toMatchSnapshot();
@@ -43,7 +43,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     describe("Tests for ORD document when there no events or entities in service definitions", () => {
         test("Successfully create ORD Document: no entityTypeMappings field in apiResource", () => {
             cds.env = {};
-            const csn = require("./__mocks__/noEntitiesInServiceDefinitionCsn.json");
+            const csn = require("../__mocks__/noEntitiesInServiceDefinitionCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -57,7 +57,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     describe("Tests for ORD document checking if entityTypes and entityTypeMappings are generated correctly", () => {
         test("Successfully create ORD Document: entityTypes with local entities and entityTypeMappings containing referenced entities", () => {
             cds.env.ord.policyLevels = ["none"];
-            const csn = require("./__mocks__/localAndNonODMReferencedEntitiesCsn.json");
+            const csn = require("../__mocks__/localAndNonODMReferencedEntitiesCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -78,7 +78,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     describe("Tests for ORD document when all the resources are private", () => {
         test("All services are private: Successfully create ORD Documents without packages, empty apiResources and eventResources lists", () => {
-            const csn = require("./__mocks__/privateResourcesCsn.json");
+            const csn = require("../__mocks__/privateResourcesCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -90,7 +90,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     describe("Tests for ORD document when all the resources are internal", () => {
         test("All services are internal: Successfully create ORD Documents with packages, apiResources and eventResources lists", () => {
-            const csn = require("./__mocks__/internalResourcesCsn.json");
+            const csn = require("../__mocks__/internalResourcesCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -102,7 +102,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     describe("Tests for ORD document when there no events or entities in service definitions", () => {
         test("Successfully create ORD Documents: no Catalog service in apiResource; no Admin service in eventResources", () => {
-            const csn = require("./__mocks__/noApisCsn.json");
+            const csn = require("../__mocks__/noApisCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -111,7 +111,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         });
 
         test("Successfully create ORD Documents: no eventResources", () => {
-            const csn = require("./__mocks__/csnWithoutEvents.json");
+            const csn = require("../__mocks__/csnWithoutEvents.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -121,7 +121,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         });
 
         test("Should generate eventResource if the service contains", () => {
-            const csn = require("./__mocks__/csnWithOneEvent.json");
+            const csn = require("../__mocks__/csnWithOneEvent.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -133,7 +133,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     describe("Tests for ORD document when service is annotated as a primary Data Product`", () => {
         test("Successfully create ORD Documents: ", () => {
-            const csn = require("./__mocks__/dataProductCsn.json");
+            const csn = require("../__mocks__/dataProductCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -150,7 +150,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         });
 
         test("Should not generate duplicate apiResources when the servie is annotated as primary data product ", () => {
-            const csn = require("./__mocks__/dataProductCsn.json");
+            const csn = require("../__mocks__/dataProductCsn.json");
             const document = ord(csn);
             expect(document.apiResources).toHaveLength(1);
         });
@@ -158,7 +158,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     describe("Tests for ORD document when service is annotated with @data.product", () => {
         test("Successfully create ORD Documents with @data.product annotation", () => {
-            const csn = require("./__mocks__/dataProductSimpleAnnotationCsn.json");
+            const csn = require("../__mocks__/dataProductSimpleAnnotationCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
@@ -178,13 +178,13 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         });
 
         test("Should not generate duplicate apiResources when the service is annotated with @data.product", () => {
-            const csn = require("./__mocks__/dataProductSimpleAnnotationCsn.json");
+            const csn = require("../__mocks__/dataProductSimpleAnnotationCsn.json");
             const document = ord(csn);
             expect(document.apiResources).toHaveLength(1);
         });
 
         test("Should create event resources for @data.product annotated services", () => {
-            const csn = require("./__mocks__/dataProductSimpleAnnotationCsn.json");
+            const csn = require("../__mocks__/dataProductSimpleAnnotationCsn.json");
             const document = ord(csn);
 
             expect(document).not.toBeUndefined();
