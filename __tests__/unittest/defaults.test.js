@@ -172,6 +172,7 @@ describe("defaults", () => {
     describe("consumptionBundles", () => {
         const testAppConfig = {
             appName: "sap.xref",
+            ordNamespace: "customer.sapxref",
             lastUpdate: "2024-06-20T14:04:01+01:00",
         };
         it("should return default value", () => {

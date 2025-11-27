@@ -121,6 +121,30 @@ describe("extendOrdWithCustom", () => {
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });
+
+        it("should merge groups using groupId and consumptionBundles using ordId", () => {
+            const ordContent = {
+                groups: [
+                    {
+                        groupId: "sap.cds:service:customer.sample:AdminService",
+                        groupTypeId: "sap.cds:service",
+                        title: "Original Admin Service",
+                        description: "Original description"
+                    }
+                ],
+                consumptionBundles: [
+                    {
+                        ordId: "customer.sample:consumptionBundle:sampleNoAuth:v1",
+                        version: "1.0.0",
+                        title: "Original Consumption Bundle",
+                        description: "Original description"
+                    }
+                ]
+            };
+            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithGroups.json");
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
+            expect(result).toMatchSnapshot();
+        });
     });
 });
 

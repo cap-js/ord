@@ -57,6 +57,33 @@ exports[`extendOrdWithCustom extendCustomORDContentIfExists should ignore and lo
 }
 `;
 
+exports[`extendOrdWithCustom extendCustomORDContentIfExists should merge groups using groupId and consumptionBundles using ordId 1`] = `
+{
+  "consumptionBundles": [
+    {
+      "description": "Custom description for consumption bundle",
+      "ordId": "customer.sample:consumptionBundle:sampleNoAuth:v1",
+      "title": "Custom Consumption Bundle Title",
+      "version": "1.0.0",
+    },
+  ],
+  "groups": [
+    {
+      "description": "Custom description for Admin Service group",
+      "groupId": "sap.cds:service:customer.sample:AdminService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Custom Admin Service Title",
+    },
+    {
+      "description": "A completely new service group from custom ORD",
+      "groupId": "sap.cds:service:customer.sample:NewCustomService",
+      "groupTypeId": "sap.cds:service",
+      "title": "New Custom Service",
+    },
+  ],
+}
+`;
+
 exports[`extendOrdWithCustom extendCustomORDContentIfExists should should patch the existing generated ord resources 1`] = `
 {
   "apiResources": [

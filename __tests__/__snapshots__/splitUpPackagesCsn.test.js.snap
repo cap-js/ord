@@ -302,7 +302,7 @@ exports[`ORD Generation for Business Accelerator Hub Tests for ORD document for 
   "consumptionBundles": [
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "sap.test.cdsrc.sample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",

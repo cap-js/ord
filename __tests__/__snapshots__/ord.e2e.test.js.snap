@@ -162,7 +162,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "sap.test.cdsrc.sample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -509,7 +509,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "sap.test.cdsrc.sample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -856,7 +856,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "sap.test.cdsrc.sample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -1093,7 +1093,7 @@ exports[`Tests for Data Product definition Check interop CSN annotation mapping 
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capjsord:consumptionBundle:noAuth:v1",
+      "ordId": "customer.capjsord:consumptionBundle:capjsordNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -2327,7 +2327,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capjsord:consumptionBundle:noAuth:v1",
+      "ordId": "customer.capjsord:consumptionBundle:capjsordNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -2426,7 +2426,7 @@ exports[`Tests for eventResource and apiResource should block MTXServices when m
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "customer.capirebookshopordsample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -2551,7 +2551,7 @@ exports[`Tests for eventResource and apiResource should block OpenResourceDiscov
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "customer.capirebookshopordsample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -2676,7 +2676,7 @@ exports[`Tests for eventResource and apiResource should exclude external service
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "customer.capirebookshopordsample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -2801,7 +2801,7 @@ exports[`Tests for eventResource and apiResource should exclude service when it 
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "customer.capirebookshopordsample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -3037,7 +3037,7 @@ exports[`Tests for products and packages should not contain products property if
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "customer.capirebookshopordsample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -3337,7 +3337,7 @@ exports[`Tests for products and packages should raise error log when custom prod
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "customer.capirebookshopordsample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
@@ -3645,7 +3645,7 @@ exports[`Tests for products and packages should use valid custom products ordId 
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "customer.capirebookshopordsample:consumptionBundle:capirebookshopordsampleNoAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
