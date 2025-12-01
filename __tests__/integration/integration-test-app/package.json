@@ -1,0 +1,18 @@
+{
+    "name": "@capire/ord-integration-test",
+    "private": true,
+    "scripts": {
+        "start": "cds-serve"
+    },
+    "cds": {
+        "requires": {
+            "db": {
+                "kind": "sqlite",
+                "model": [
+                    "srv",
+                    "db"
+                ]
+            }
+        }
+    }
+}

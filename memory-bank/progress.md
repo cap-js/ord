@@ -93,28 +93,52 @@
 
 ## Current Status
 
-### Recently Completed (v1.3.9) ✅
+### Recently Completed (v1.3.14 - November 18, 2025) ✅
 
-**Visibility Improvements**:
+**Interop CSN Enhancement**:
 
-- Fixed private resource visibility handling
-- Improved group creation logic for different visibility levels
-- Enhanced package attribute loading capabilities
+- Removed association "localized" from interop CSN generation
+- Improved CSN compatibility with downstream tools
+- Enhanced trusted publishing with provenance support
+- Updated supertest dependency to v7
 
-**Configuration Enhancements**:
+### Recently Completed (v1.3.13 - November 12, 2025) ✅
 
-- Better support for additional package attributes
-- Improved custom ORD content integration
-- Enhanced configuration validation
+**Authentication & Security**:
 
-### Recently Completed (v1.3.8) ✅
+- Switched access strategy to basic-auth for consistent security
+- Set `authenticateMetadataEndpoints` to false by default
+- Limited support to Node.js version 22 only
+- Updated ORD specification support to v1.12
+- Added dedicated authentication test files
 
-**Java Support Foundation**:
+### Recently Completed (v1.3.12 - October 16, 2025) ✅
 
-- Java sample application setup
-- Java pipeline integration
-- CommonJS compatibility improvements
-- Cross-platform build support
+**Interop CSN i18n**:
+
+- Fixed language key separator in interop CSN (now uses "-" instead of "\_")
+- Improved i18n handling for better compatibility
+- Updated dependencies (jacoco-maven-plugin, actions/setup-node)
+
+### Recently Completed (v1.3.11 - October 10, 2025) ✅
+
+**Interop CSN Production**:
+
+- Introduced comprehensive interop CSN generation
+- Fixed Java authentication issues
+- Fixed missing local entity exposure
+- Updated CDS services to v4.4.1
+
+### Recently Completed (v1.3.10 - September 26, 2025) ✅
+
+**Major Feature Release**:
+
+- Dual annotation support for data products (`@data.product` and `@DataIntegration.dataProduct.type`)
+- Version suffix handling for clean ORD ID generation
+- Custom build destination support
+- Vipe coding workflow support
+- Major dependency updates (Node v22, Express v5, Jest v30)
+- Renovate bot integration for automated dependency management
 
 ### Stable Features ✅
 
@@ -151,61 +175,82 @@
 
 ### Previously Completed (September 26, 2025) ✅
 
-**Data Product APIs - Dual Annotation Support**:
+### Completed Features Summary ✅
 
-- ✅ Implemented support for `@data.product` annotation alongside existing `@DataIntegration.dataProduct.type: 'primary'`
-- ✅ Either annotation is now sufficient to create data product ORD resources with full feature parity
-- ✅ Added precedence logic: `@DataIntegration.dataProduct.type: 'primary'` takes priority when both annotations are present
-- ✅ Services with `@data.product` (truthy values) get all data product ORD properties:
-    - `implementationStandard: "sap.dp:data-subscription-api:v1"`
-    - `apiProtocol: "rest"`
-    - `direction: "outbound"`
-    - `visibility: "internal"` (default)
-    - CSN resource definitions instead of OpenAPI/EDMX
-    - Version suffix extraction support
-- ✅ Enhanced `isPrimaryDataProductService` function with proper boolean return values
-- ✅ Added new constant `DATA_PRODUCT_SIMPLE_ANNOTATION = "@data.product"` to constants.js
-- ✅ Created comprehensive test coverage (36 new tests):
-    - New mock CSN data (`dataProductSimpleAnnotationCsn.json`)
-    - Updated mockedCsn.test.js with `@data.product` test cases
-    - Added dedicated unit tests in templates.test.js for `isPrimaryDataProductService`
-    - Enhanced version suffix extraction tests with dual annotation scenarios
-- ✅ Full backward compatibility maintained - no breaking changes
-- ✅ All tests passing (180 total tests, 14 test suites, 97.43% code coverage)
+**Interop CSN (v1.3.11-v1.3.14)**:
 
-### Previously Completed (September 5, 2025) ✅
+- ✅ Comprehensive interop CSN generation for better format compatibility
+- ✅ Removed "localized" associations from interop CSN
+- ✅ Fixed i18n language key separators (now uses "-")
+- ✅ Local entity exposure properly included
+- ✅ All tests passing with enhanced interop CSN testing
 
-**Data Product APIs - Version Suffix Handling**:
+**Authentication & Security (v1.3.13)**:
 
-- ✅ Implemented new pattern for CAP data product services with version suffixes
-- ✅ Service names with `.v1` or `.v2` suffixes now generate clean ORD IDs (`:apiResource:ServiceName:v1` instead of `:apiResource:ServiceName.v1:v1`)
-- ✅ Added strict regex validation (`/\.v(\d+)$/`) for version extraction
-- ✅ Fixed namespace processing to prevent ORD ID duplication
-- ✅ Scoped feature to primary data products only (`@DataIntegration.dataProduct.type: "primary"`)
-- ✅ Maintained full backward compatibility for all existing services
-- ✅ Created comprehensive test suite with 14 test cases covering all scenarios
-- ✅ All tests passing (163 total tests, 14 test suites)
+- ✅ Standardized access strategy to basic-auth
+- ✅ `authenticateMetadataEndpoints` default set to false
+- ✅ Java authentication issues resolved
+- ✅ Dedicated auth test files added
+- ✅ Environment variable configuration priority maintained
 
-### Immediate Development (Next Release)
+**Data Product APIs (v1.3.10)**:
 
+- ✅ Dual annotation support (`@data.product` and `@DataIntegration.dataProduct.type: 'primary'`)
+- ✅ Version suffix handling for clean ORD IDs (`.v1`, `.v2`)
+- ✅ Enhanced `isPrimaryDataProductService` function
+- ✅ Full feature parity between both annotation types
+- ✅ Comprehensive test coverage (36+ new tests)
+- ✅ All tests passing with 97%+ code coverage
+
+<<<<<<< HEAD
 **MCP API exposure** ✅ → 🔄:
 
 - ✅ Implemented conditional MCP API resource generation based on plugin availability
 - ✅ Added proper MCP protocol support in ORD document structure
 - ✅ Created comprehensive test coverage for MCP integration scenarios
 - 🔄 Continue refinement based on production usage feedback
-- 🔄 Ensure proper documentation and testing of exposed APIs
+- # 🔄 Ensure proper documentation and testing of exposed APIs
+
+    **Dependency Management (v1.3.10+)**:
+
+- ✅ Renovate bot integration for automated updates
+- ✅ Node.js v22 support
+- ✅ Express v5 upgrade
+- ✅ Jest v30 upgrade
+- ✅ Spring Boot v3.5.6 (Java)
+- ✅ Trusted publishing with provenance
+
+### Immediate Development (Next Release - v1.4.0)
+
+**Node.js Version Support** 📋:
+
+- Evaluate Node.js version support strategy beyond v22
+- Consider LTS version support timeline
+- Plan migration path for users on older Node.js versions
+
+**Interop CSN Enhancements** 🔄:
+
+- Monitor production usage and gather feedback
+- Address edge cases in interop CSN generation
+- Improve error handling for CSN conversion issues
+
+**MCP API Exposure** 📋:
+
+- Support the exposure of MCP APIs through ORD as API Resources with API protocol `mcp`
+- In addition to being regular API Resources for OData
+- Ensure proper documentation and testing of exposed APIs
+    > > > > > > > origin/main
 
 ### Medium-term Development
 
 **Java Runtime Parity** 🔄:
 
 - Complete Java implementation feature parity with Node.js version
-- Ensure differentiation of ORD properties and defaults (like the path of an API resource) between CAP Java/Spring environment parameters and defaults from CAP Node.js environments
-- Keep ORD properties that come from the CAP CDS/CSN model the same across the CAP Java and CAP Node.js implementation
-- It is not clear, if the CAP Java support will be implemented in this repository
-- Java build integration improvements
-- Java authentication middleware
+- Ensure differentiation of ORD properties and defaults (like API resource paths) between CAP Java/Spring and CAP Node.js environments
+- Keep ORD properties from CAP CDS/CSN model consistent across both runtimes
+- Continue improving Java authentication middleware
+- Enhanced Java build integration
+- Note: Java support location (this repository vs. separate) still under consideration
 
 **Error Handling Enhancement** 📋:
 
@@ -229,9 +274,10 @@
 
 **Advanced Authentication** 📋:
 
-- UCL-mTLS authentication implementation
-- Certificate-based authentication
-- Support UCL-mTLS authentication next to base authentication in parallel, to support different integration requirements.
+- UCL-mTLS authentication implementation (planned)
+- Certificate-based authentication support
+- Parallel support for UCL-mTLS and basic-auth for different integration requirements
+- Enhanced authentication configuration flexibility
 
 ### Long-term Vision
 
@@ -241,15 +287,18 @@
 
 **Performance Constraints** ⚠️:
 
-- Large CAP applications may experience slower build times
+- Large CAP applications may experience slower build times (ongoing optimization)
 - Memory usage can be high for complex models
+- Interop CSN generation adds processing time
 - No caching for repeated ORD generation operations
 
 **Configuration Complexity** ⚠️:
 
+- Authentication configuration requires careful setup
 - Advanced configuration scenarios can be complex
 - Error messages for configuration issues could be clearer
 - Migration between plugin versions may require manual updates
+- Node.js version constraints may impact some users
 
 **Platform Compatibility** ⚠️:
 
@@ -267,9 +316,10 @@
 
 **Testing Coverage** 🔧:
 
-- Some edge cases in configuration hierarchy need more tests
-- Cross-platform testing could be more comprehensive
+- Some edge cases in interop CSN generation need more tests
+- Cross-platform testing could be more comprehensive (Node.js & Java)
 - Performance testing infrastructure needs improvement
+- Authentication test coverage significantly improved
 
 **Documentation** 🔧:
 
@@ -299,12 +349,16 @@
 - Cross-platform compatibility improvements
 - Enhanced build system integration
 
-**Current State (v1.3.9)**:
+**Current State (v1.3.14)**:
 
 - Mature dual entry point architecture
 - Comprehensive customization framework
-- Robust authentication system
-- Strong testing infrastructure
+- Robust authentication system with basic-auth standardization
+- Strong testing infrastructure including dedicated auth tests
+- Production-ready interop CSN generation
+- ORD specification v1.12 support
+- Trusted publishing with provenance
+- Automated dependency management via Renovate
 
 ### Configuration Strategy Evolution
 
@@ -314,10 +368,12 @@
 - Limited customization options
 - Basic annotation support
 
-**Current Approach**:
+**Current Approach (v1.3.13+)**:
 
 - Multi-source configuration hierarchy
-- Environment variable prioritization
+- Environment variable prioritization over `.cdsrc.json`
+- `authenticateMetadataEndpoints: false` by default
+- Basic-auth as standard access strategy
 - Comprehensive annotation system
 - Custom ORD content file integration
 
@@ -328,12 +384,15 @@
 - Basic unit tests
 - Limited coverage
 
-**Current Testing**:
+**Current Testing (v1.3.13+)**:
 
 - Comprehensive snapshot testing
-- Full test coverage
-- Multiple test categories
+- Dedicated authentication test files
+- Integration tests for basic-auth and mTLS
+- Interop CSN generation testing
+- Full test coverage across multiple categories
 - Mock data for various scenarios
+- Automated test execution in CI/CD
 
 ## Success Metrics
 
@@ -360,19 +419,22 @@
 
 ## Next Milestone Targets
 
-### Version 1.4.0 Goals
+### Version 1.4.0 Goals (In Planning)
 
-1. **Complete Java Parity**: Full feature parity between Node.js and Java implementations
-2. **Performance Optimization**: Significant improvements in build time and memory usage
-3. **Enhanced Error Handling**: Better error messages and diagnostics
-4. **Documentation Updates**: Comprehensive documentation refresh
+1. **Node.js Version Strategy**: Define clear support strategy for Node.js versions beyond v22
+2. **Interop CSN Stability**: Address edge cases and improve production reliability
+3. **Complete Java Parity**: Continue progress toward full feature parity between Node.js and Java
+4. **Performance Optimization**: Improvements in build time and memory usage, especially for interop CSN
+5. **Enhanced Error Handling**: Better error messages and diagnostics
+6. **Documentation Updates**: Comprehensive documentation refresh including interop CSN and auth
 
-### Version 1.5.0 Goals
+### Version 1.5.0 Goals (Future)
 
-1. **UCL-mTLS Authentication**: Advanced authentication implementation
-2. **Enhanced Customization**: Improved custom ORD content workflows
-3. **Monitoring Capabilities**: Basic metrics and observability features
-4. **Platform Integration**: Better enterprise service catalog integration
+1. **UCL-mTLS Authentication**: Advanced authentication implementation with parallel basic-auth support
+2. **MCP API Exposure**: Support for MCP protocol APIs in ORD
+3. **Enhanced Customization**: Improved custom ORD content workflows
+4. **Monitoring Capabilities**: Basic metrics and observability features
+5. **Platform Integration**: Better enterprise service catalog integration
 
 ### Long-term Goals (v2.0.0)
 

@@ -24,34 +24,48 @@ npm install @cap-js/ord
 
 ### Authentication
 
-To enforce authentication in the ORD Plugin, set the following environment variables:
+The ORD Plugin supports multiple authentication strategies that can be configured through environment variables or `.cdsrc.json`. Authentication types are automatically detected based on the presence of their configuration - no explicit `types` array is needed.
 
-- `ORD_AUTH_TYPE`: Specifies the authentication types.
-- `BASIC_AUTH`: Contains credentials for `basic` authentication.
+**Supported Authentication Methods:**
 
-If `ORD_AUTH_TYPE` is not set, the application starts without authentication. This variable accepts `open` and `basic` (UCL-mTLS is also planned).
+- **Open**: No authentication (default when no other auth is configured)
+- **Basic**: HTTP Basic Authentication with bcrypt-hashed passwords
+- **CF mTLS**: Cloud Foundry mutual TLS authentication
 
-> Note: `open` cannot be combined with `basic` or any other (future) authentication types.
+**Multiple Authentication Strategies**: You can configure multiple authentication methods simultaneously (e.g., both `basic` and `cf-mtls`). The plugin implements an Express-like middleware pattern that tries each configured strategy in order until one succeeds.
+
+> Note: When any secure authentication method is configured, open authentication is automatically disabled to ensure security. The ORD document will reflect all active authentication strategies.
 
 #### Open
 
-The `open` authentication type bypasses authentication checks.
+The `open` authentication type is the default and bypasses authentication checks. It is automatically used when no other authentication is configured.
 
 #### Basic Authentication
 
-The server supports Basic Authentication through an environment variable that contains a JSON string mapping usernames to bcrypt-hashed passwords:
+Configure Basic Authentication using environment variables or `.cdsrc.json`:
+
+**Option 1: Environment Variable**
 
 ```bash
-BASIC_AUTH='{"admin":"***"}'
+BASIC_AUTH='{"admin":"$2y$05$..."}'
 ```
 
-Alternatively, configure authentication in `.cdsrc.json`:
+**Option 2: Configuration File**
+
+Add to your `.cdsrc.json`:
 
 ```json
-"authentication": {
-    "types": ["basic"],
-    "credentials": {
-        "admin": "***"
+{
+    "cds": {
+        "ord": {
+            "authentication": {
+                "basic": {
+                    "credentials": {
+                        "admin": "$2y$05$..."
+                    }
+                }
+            }
+        }
     }
 }
 ```
@@ -97,6 +111,77 @@ This will output something like `admin:$2y$05$...` - use only the hash part (sta
     ```
 
 </details>
+
+#### CF mTLS Authentication
+
+Configure Cloud Foundry mutual TLS authentication in `.cdsrc.json`:
+
+```json
+{
+    "cds": {
+        "ord": {
+            "authentication": {
+                "cfMtls": {
+                    "certs": [
+                        {
+                            "issuer": "CN=SAP PKI Certificate Service Client CA,OU=SAP BTP Clients,O=SAP SE,C=DE",
+                            "subject": "CN=my-service,OU=SAP Cloud Platform Clients,O=SAP SE,C=DE"
+                        }
+                    ],
+                    "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,C=DE"]
+                }
+            }
+        }
+    }
+}
+```
+
+Or use the environment variable:
+
+```bash
+CF_MTLS_TRUSTED_CERTS='{"certs":[...],"rootCaDn":[...]}'
+```
+
+#### Multiple Authentication Strategies
+
+You can configure multiple authentication methods simultaneously to support different client types. Authentication types are detected automatically based on configuration presence:
+
+**Configuration in `.cdsrc.json`:**
+
+```json
+{
+  "cds": {
+    "ord": {
+      "authentication": {
+        "basic": {
+          "credentials": {
+            "admin": "$2y$05$..."
+          }
+        },
+        "cfMtls": {
+          "certs": [...],
+          "rootCaDn": [...]
+        }
+      }
+    }
+  }
+}
+```
+
+**How it works:**
+
+- Authentication types are detected based on what you configure (no `types` array needed)
+- The plugin tries each configured authentication strategy in order
+- The first strategy that successfully authenticates the request is used
+- If a request includes Basic auth headers, Basic authentication is attempted
+- If a request includes mTLS certificate headers, CF mTLS authentication is attempted
+- The ORD document automatically includes all configured authentication methods in its `accessStrategies`
+
+**Example scenarios:**
+
+- **Basic + CF mTLS**: Supports both API clients using Basic auth and services using mTLS certificates
+- **Basic only**: Only clients with valid Basic auth credentials can access
+- **CF mTLS only**: Only clients with trusted certificates can access
 
 ### Usage
 
