@@ -5,7 +5,7 @@ const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY, CDS_ELEMENT_KIND } = require("
 describe("End-to-end test for ORD document", () => {
     beforeAll(() => {
         process.env.DEBUG = "true";
-        jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         jest.spyOn(cds, "context", "get").mockReturnValue({
             authConfig: {
                 types: [AUTHENTICATION_TYPE.Open],
@@ -464,12 +464,12 @@ describe("Tests for eventResource and apiResource", () => {
     it("should generate mcp apiResource mcp plugin is available", async () => {
         let ordWithMCP;
         jest.isolateModules(() => {
-            jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-            jest.spyOn(require("../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(true);
+            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(true);
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
                 authConfig: { types: [AUTHENTICATION_TYPE.Open] },
             });
-            ordWithMCP = require("../lib/ord");
+            ordWithMCP = require("../../lib/ord");
         });
 
         const linkedModel = cds.linked(`
@@ -492,22 +492,22 @@ describe("Tests for eventResource and apiResource", () => {
         jest.isolateModules(() => {
             const fs = require("fs");
             const pathMod = require("path");
-            const bookshopRoot = pathMod.join(__dirname, "bookshop");
+            const bookshopRoot = pathMod.join(__dirname, "../bookshop");
             const cdsrcPath = pathMod.join(bookshopRoot, ".cdsrc.json");
             if (fs.existsSync(cdsrcPath)) {
                 const config = require(cdsrcPath);
                 require("@sap/cds").env.ord = config.ord; // allow customOrdContentFile merge
                 require("@sap/cds").root = bookshopRoot; // ensure relative custom.ord.json resolution
             }
-            jest.spyOn(require("../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-            jest.spyOn(require("../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(true);
+            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(true);
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
                 authConfig: { types: [AUTHENTICATION_TYPE.Open] },
             });
-            ordWithMCP = require("../lib/ord");
+            ordWithMCP = require("../../lib/ord");
         });
         // load after isolate so cds.root & env are set
-        csn = await cds.load(path.join(__dirname, "bookshop", "srv"));
+        csn = await cds.load(path.join(__dirname, "../bookshop", "srv"));
 
         const document = ordWithMCP(csn);
 

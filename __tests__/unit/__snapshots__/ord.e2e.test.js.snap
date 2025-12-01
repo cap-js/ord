@@ -172,7 +172,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "releaseStatus": "beta",
       "resourceDefinitions": [
         {
-          "accessStrategies": undefined,
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
           "mediaType": "application/json",
           "type": "custom",
           "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
@@ -545,7 +549,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "releaseStatus": "beta",
       "resourceDefinitions": [
         {
-          "accessStrategies": undefined,
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
           "mediaType": "application/json",
           "type": "custom",
           "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
@@ -918,7 +926,11 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "releaseStatus": "beta",
       "resourceDefinitions": [
         {
-          "accessStrategies": undefined,
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
           "mediaType": "application/json",
           "type": "custom",
           "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
@@ -3720,7 +3732,11 @@ exports[`Tests for products and packages should not contain products property if
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": undefined,
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
           "mediaType": "application/json",
           "type": "custom",
           "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
@@ -4046,7 +4062,11 @@ exports[`Tests for products and packages should raise error log when custom prod
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": undefined,
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
           "mediaType": "application/json",
           "type": "custom",
           "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
@@ -4380,7 +4400,11 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
-          "accessStrategies": undefined,
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
           "mediaType": "application/json",
           "type": "custom",
           "url": "/ord/v1/customer.capirebookshopordsample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
