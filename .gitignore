@@ -6,5 +6,5 @@ gen
 */mcp.json
 auth-env.txt
 test-config.json
-xmpl_java/srv/
+xmpl_java/srv/src/main/resources/ord/
 .npmrc
