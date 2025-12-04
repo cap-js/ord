@@ -518,8 +518,8 @@ describe("Tests for eventResource and apiResource", () => {
         // Verify that custom properties were applied via custom.ord.json merge
         expect(mcpResource.ordId).toBe("sap.test.cdsrc.sample:apiResource:mcp-server:v1");
         expect(mcpResource.visibility).toBe("internal");
-        expect(mcpResource.title).toBe("Internal MCP Server for CAP Project");
-        expect(mcpResource.shortDescription).toBe("Custom MCP server description");
+        expect(mcpResource.title).toBe("Internal MCP Server for testing custom functionality");
+        expect(mcpResource.shortDescription).toBe("Custom MCP server or testing custom functionality");
         expect(mcpResource.version).toBe("2.1.0");
         expect(mcpResource.entryPoints).toEqual(["/mcp-server"]);
         expect(mcpResource.releaseStatus).toBe("beta");

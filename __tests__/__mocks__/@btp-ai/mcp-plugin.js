@@ -9,7 +9,7 @@ const mockMcpServerDefinition = {
     description: "This is a mock MCP server for testing purposes",
     version: "1.0.0",
     visibility: "public",
-    entryPoints: ["/rest/mcp/streaming"]
+    entryPoints: ["/rest/mcp/streaming"],
 };
 
 const exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(mockMcpServerDefinition);
