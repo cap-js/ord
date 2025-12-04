@@ -24,11 +24,11 @@ const mockMcpServerDefinition = {
     ],
 };
 
-const buildMcpServerDefinitionByService = jest.fn().mockResolvedValue(mockMcpServerDefinition);
+const exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(mockMcpServerDefinition);
 
 // Main module export
 const mockPlugin = {
-    buildMcpServerDefinitionByService,
+    exposeMcpServerDefinitionForOrd,
 };
 
 module.exports = mockPlugin;
