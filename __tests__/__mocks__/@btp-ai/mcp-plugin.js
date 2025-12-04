@@ -4,24 +4,12 @@
  */
 
 const mockMcpServerDefinition = {
-    openrpc: "1.0.0",
-    info: {
-        title: "Mock MCP Server",
-        version: "1.0.0",
-    },
-    methods: [
-        {
-            name: "test_method",
-            description: "Mock test method",
-            params: [],
-            result: {
-                name: "result",
-                schema: {
-                    type: "object",
-                },
-            },
-        },
-    ],
+    title: "Mock MCP Server",
+    shortDescription: "This is a mock MCP server for testing",
+    description: "This is a mock MCP server for testing purposes",
+    version: "1.0.0",
+    visibility: "public",
+    entryPoints: ["/rest/mcp/streaming"]
 };
 
 const exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(mockMcpServerDefinition);

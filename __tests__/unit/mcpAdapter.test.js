@@ -3,6 +3,34 @@ const { isMCPPluginAvailable, getMcpPlugin, buildMcpServerDefinition } = require
 // Mock the MCP plugin before requiring it
 jest.mock("@btp-ai/mcp-plugin/lib/utils/metadata");
 
+// Common mock data following OrdMetadata interface
+const MOCK_ORD_METADATA = {
+    title: "MCP Server for TestService",
+    shortDescription: "This is the MCP server to interact with the TestService",
+    description: "This is the MCP server to interact with the TestService",
+    version: "1.0.0",
+    visibility: "public",
+    entryPoints: ["/rest/mcp/streaming"]
+};
+
+const MOCK_ORD_METADATA_EMPTY = {
+    title: "MCP Server for Empty Project",
+    shortDescription: "This is the MCP server to interact with the Empty Project",
+    description: "This is the MCP server to interact with the Empty Project",
+    version: "1.0.0",
+    visibility: "public",
+    entryPoints: ["/rest/mcp/streaming"]
+};
+
+const MOCK_ORD_METADATA_MULTI = {
+    title: "MCP Server for Multi Service Project",
+    shortDescription: "This is the MCP server to interact with the Multi Service Project",
+    description: "This is the MCP server to interact with the Multi Service Project",
+    version: "1.0.0",
+    visibility: "public",
+    entryPoints: ["/rest/mcp/streaming"]
+};
+
 describe("mcpAdapter", () => {
     beforeEach(() => {
         jest.clearAllMocks();
@@ -66,20 +94,15 @@ describe("mcpAdapter", () => {
             ];
 
             const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
-            mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue({
-                openrpc: "1.0.0",
-                info: {
-                    title: "Test MCP Server",
-                    version: "1.0.0",
-                },
-                methods: [],
-            });
+            mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(MOCK_ORD_METADATA);
 
             const result = await buildMcpServerDefinition(mockServices);
 
             expect(result).toBeDefined();
-            expect(result.openrpc).toBe("1.0.0");
-            expect(result.info).toBeDefined();
+            expect(result.title).toBe("MCP Server for TestService");
+            expect(result.version).toBe("1.0.0");
+            expect(result.visibility).toBe("public");
+            expect(result.entryPoints).toEqual(["/rest/mcp/streaming"]);
         });
 
         test("should propagate errors from plugin", async () => {
@@ -97,19 +120,13 @@ describe("mcpAdapter", () => {
             const mockServices = [];
 
             const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
-            mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue({
-                openrpc: "1.0.0",
-                info: {
-                    title: "Empty Server",
-                    version: "1.0.0",
-                },
-                methods: [],
-            });
+            mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(MOCK_ORD_METADATA_EMPTY);
 
             const result = await buildMcpServerDefinition(mockServices);
 
             expect(result).toBeDefined();
-            expect(result.methods).toEqual([]);
+            expect(result.title).toBe("MCP Server for Empty Project");
+            expect(result.entryPoints).toEqual(["/rest/mcp/streaming"]);
         });
 
         test("should handle multiple services", async () => {
@@ -120,19 +137,13 @@ describe("mcpAdapter", () => {
             ];
 
             const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
-            mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue({
-                openrpc: "1.0.0",
-                info: {
-                    title: "Multi Service Server",
-                    version: "1.0.0",
-                },
-                methods: [{ name: "method1" }, { name: "method2" }, { name: "method3" }],
-            });
+            mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(MOCK_ORD_METADATA_MULTI);
 
             const result = await buildMcpServerDefinition(mockServices);
 
             expect(result).toBeDefined();
-            expect(result.methods).toHaveLength(3);
+            expect(result.title).toBe("MCP Server for Multi Service Project");
+            expect(result.entryPoints).toEqual(["/rest/mcp/streaming"]);
             expect(mockMetadata.exposeMcpServerDefinitionForOrd).toHaveBeenCalledWith(mockServices);
         });
     });
@@ -147,14 +158,11 @@ describe("mcpAdapter", () => {
             if (isAvailable) {
                 const mockServices = [{ name: "TestService" }];
                 const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
-                mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue({
-                    openrpc: "1.0.0",
-                    info: { title: "Test", version: "1.0.0" },
-                    methods: [],
-                });
+                mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(MOCK_ORD_METADATA);
 
                 const result = await buildMcpServerDefinition(mockServices);
                 expect(result).toBeDefined();
+                expect(result.title).toBe("MCP Server for TestService");
             }
         });
 
