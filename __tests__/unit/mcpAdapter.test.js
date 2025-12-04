@@ -3,29 +3,11 @@ const { isMCPPluginAvailable, getMcpPlugin, buildMcpServerDefinition } = require
 // Mock the MCP plugin before requiring it
 jest.mock("@btp-ai/mcp-plugin/lib/utils/metadata");
 
-// Common mock data following OrdMetadata interface
+// Mock data for MCP server definition
 const MOCK_ORD_METADATA = {
     title: "MCP Server for TestService",
     shortDescription: "This is the MCP server to interact with the TestService",
     description: "This is the MCP server to interact with the TestService",
-    version: "1.0.0",
-    visibility: "public",
-    entryPoints: ["/rest/mcp/streaming"]
-};
-
-const MOCK_ORD_METADATA_EMPTY = {
-    title: "MCP Server for Empty Project",
-    shortDescription: "This is the MCP server to interact with the Empty Project",
-    description: "This is the MCP server to interact with the Empty Project",
-    version: "1.0.0",
-    visibility: "public",
-    entryPoints: ["/rest/mcp/streaming"]
-};
-
-const MOCK_ORD_METADATA_MULTI = {
-    title: "MCP Server for Multi Service Project",
-    shortDescription: "This is the MCP server to interact with the Multi Service Project",
-    description: "This is the MCP server to interact with the Multi Service Project",
     version: "1.0.0",
     visibility: "public",
     entryPoints: ["/rest/mcp/streaming"]
@@ -84,67 +66,26 @@ describe("mcpAdapter", () => {
 
     describe("buildMcpServerDefinition", () => {
         test("should build MCP server definition when plugin is available", async () => {
-            const mockServices = [
-                {
-                    name: "TestService",
-                    actions: {
-                        testAction: {},
-                    },
-                },
-            ];
-
             const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
             mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(MOCK_ORD_METADATA);
 
-            const result = await buildMcpServerDefinition(mockServices);
+            const result = await buildMcpServerDefinition();
 
             expect(result).toBeDefined();
             expect(result.title).toBe("MCP Server for TestService");
             expect(result.version).toBe("1.0.0");
             expect(result.visibility).toBe("public");
             expect(result.entryPoints).toEqual(["/rest/mcp/streaming"]);
+            expect(mockMetadata.exposeMcpServerDefinitionForOrd).toHaveBeenCalledWith();
         });
 
         test("should propagate errors from plugin", async () => {
-            const mockServices = [];
-
             const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
             mockMetadata.exposeMcpServerDefinitionForOrd = jest
                 .fn()
                 .mockRejectedValue(new Error("Plugin build failed"));
 
-            await expect(buildMcpServerDefinition(mockServices)).rejects.toThrow("Plugin build failed");
-        });
-
-        test("should handle empty services array", async () => {
-            const mockServices = [];
-
-            const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
-            mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(MOCK_ORD_METADATA_EMPTY);
-
-            const result = await buildMcpServerDefinition(mockServices);
-
-            expect(result).toBeDefined();
-            expect(result.title).toBe("MCP Server for Empty Project");
-            expect(result.entryPoints).toEqual(["/rest/mcp/streaming"]);
-        });
-
-        test("should handle multiple services", async () => {
-            const mockServices = [
-                { name: "Service1", actions: {} },
-                { name: "Service2", actions: {} },
-                { name: "Service3", actions: {} },
-            ];
-
-            const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
-            mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(MOCK_ORD_METADATA_MULTI);
-
-            const result = await buildMcpServerDefinition(mockServices);
-
-            expect(result).toBeDefined();
-            expect(result.title).toBe("MCP Server for Multi Service Project");
-            expect(result.entryPoints).toEqual(["/rest/mcp/streaming"]);
-            expect(mockMetadata.exposeMcpServerDefinitionForOrd).toHaveBeenCalledWith(mockServices);
+            await expect(buildMcpServerDefinition()).rejects.toThrow("Plugin build failed");
         });
     });
 
@@ -156,11 +97,10 @@ describe("mcpAdapter", () => {
             expect(isAvailable).toBe(true);
 
             if (isAvailable) {
-                const mockServices = [{ name: "TestService" }];
                 const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
                 mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(MOCK_ORD_METADATA);
 
-                const result = await buildMcpServerDefinition(mockServices);
+                const result = await buildMcpServerDefinition();
                 expect(result).toBeDefined();
                 expect(result.title).toBe("MCP Server for TestService");
             }
