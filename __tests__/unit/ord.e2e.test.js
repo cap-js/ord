@@ -466,6 +466,7 @@ describe("Tests for eventResource and apiResource", () => {
         jest.isolateModules(() => {
             jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(true);
+            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginInPackageJson").mockReturnValue(true);
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
                 authConfig: { types: [AUTHENTICATION_TYPE.Open] },
             });
@@ -501,6 +502,7 @@ describe("Tests for eventResource and apiResource", () => {
             }
             jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(true);
+            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginInPackageJson").mockReturnValue(true);
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
                 authConfig: { types: [AUTHENTICATION_TYPE.Open] },
             });

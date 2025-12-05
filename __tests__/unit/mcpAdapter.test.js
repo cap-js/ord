@@ -1,7 +1,13 @@
-const { isMCPPluginAvailable, getMcpPlugin, buildMcpServerDefinition } = require("../../lib/mcpAdapter");
+const {
+    isMCPPluginAvailable,
+    isMCPPluginInPackageJson,
+    getMcpPlugin,
+    buildMcpServerDefinition,
+} = require("../../lib/mcpAdapter");
 
 // Mock the MCP plugin before requiring it
 jest.mock("@btp-ai/mcp-plugin/lib/utils/metadata");
+
 
 // Mock data for MCP server definition
 const MOCK_ORD_METADATA = {
@@ -10,7 +16,7 @@ const MOCK_ORD_METADATA = {
     description: "This is the MCP server to interact with the TestService",
     version: "1.0.0",
     visibility: "public",
-    entryPoints: ["/rest/mcp/streaming"]
+    entryPoints: ["/rest/mcp/streaming"],
 };
 
 describe("mcpAdapter", () => {
@@ -20,6 +26,72 @@ describe("mcpAdapter", () => {
 
     afterEach(() => {
         jest.restoreAllMocks();
+    });
+
+    describe("isMCPPluginInPackageJson", () => {
+        test("should return true when MCP plugin is in dependencies", () => {
+            // Use dependency injection to provide mock package.json
+            const mockPackageJson = {
+                name: "test-project",
+                dependencies: {
+                    "@btp-ai/mcp-plugin": "^0.2.5"
+                }
+            };
+            
+            const mockLoadPackageJson = () => mockPackageJson;
+            const result = isMCPPluginInPackageJson(mockLoadPackageJson);
+            expect(result).toBe(true);
+        });
+
+        test("should return true when MCP plugin is in devDependencies", () => {
+            // Use dependency injection to provide mock package.json
+            const mockPackageJson = {
+                name: "test-project",
+                devDependencies: {
+                    "@btp-ai/mcp-plugin": "^0.2.5"
+                }
+            };
+            
+            const mockLoadPackageJson = () => mockPackageJson;
+            const result = isMCPPluginInPackageJson(mockLoadPackageJson);
+            expect(result).toBe(true);
+        });
+
+        test("should return false when MCP plugin is not in dependencies", () => {
+            // Use dependency injection to provide mock package.json
+            const mockPackageJson = {
+                name: "test-project",
+                dependencies: {
+                    "@sap/cds": "^8.0.0"
+                }
+            };
+            
+            const mockLoadPackageJson = () => mockPackageJson;
+            const result = isMCPPluginInPackageJson(mockLoadPackageJson);
+            expect(result).toBe(false);
+        });
+
+        test("should return false when package.json loading fails", () => {
+            // Use dependency injection to provide failing function
+            const mockLoadPackageJson = () => {
+                throw new Error("package.json not found");
+            };
+            
+            const result = isMCPPluginInPackageJson(mockLoadPackageJson);
+            expect(result).toBe(false);
+        });
+
+        test("should handle missing dependencies and devDependencies", () => {
+            // Use dependency injection to provide package.json without dependencies
+            const mockPackageJson = {
+                name: "test-project"
+                // No dependencies or devDependencies
+            };
+            
+            const mockLoadPackageJson = () => mockPackageJson;
+            const result = isMCPPluginInPackageJson(mockLoadPackageJson);
+            expect(result).toBe(false);
+        });
     });
 
     describe("isMCPPluginAvailable", () => {
@@ -69,14 +141,15 @@ describe("mcpAdapter", () => {
             const mockMetadata = require("@btp-ai/mcp-plugin/lib/utils/metadata");
             mockMetadata.exposeMcpServerDefinitionForOrd = jest.fn().mockResolvedValue(MOCK_ORD_METADATA);
 
-            const result = await buildMcpServerDefinition();
+            const mockServices = [{ name: "TestService" }];
+            const result = await buildMcpServerDefinition(mockServices);
 
             expect(result).toBeDefined();
             expect(result.title).toBe("MCP Server for TestService");
             expect(result.version).toBe("1.0.0");
             expect(result.visibility).toBe("public");
             expect(result.entryPoints).toEqual(["/rest/mcp/streaming"]);
-            expect(mockMetadata.exposeMcpServerDefinitionForOrd).toHaveBeenCalledWith();
+            expect(mockMetadata.exposeMcpServerDefinitionForOrd).toHaveBeenCalledWith(mockServices);
         });
 
         test("should propagate errors from plugin", async () => {
