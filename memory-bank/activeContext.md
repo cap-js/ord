@@ -21,7 +21,7 @@
 
 **Recent Release (v1.3.12 - October 16, 2025)**:
 
-- **Interop CSN i18n Fix**: Fixed internationalization handling in interop CSN by using "-" as separator for language keys instead of "_"
+- **Interop CSN i18n Fix**: Fixed internationalization handling in interop CSN by using "-" as separator for language keys instead of "\_"
 - **Dependency Updates**: Updated jacoco-maven-plugin and actions/setup-node
 
 **Recent Release (v1.3.11 - October 10, 2025)**:
@@ -40,6 +40,33 @@
 - **Dependency Modernization**: Major dependency updates including Node v22, Express v5, Jest v30, Spring Boot v3.5.6
 - **Renovate Integration**: Configured Renovate bot for automated dependency management
 
+<<<<<<< HEAD
+**Recently Completed (September 18, 2025)**:
+
+- **MCP Integration Enhancement**: Enhanced MCP integration to work even when no regular API resources exist
+- Added comprehensive MCP integration tests that verify both plugin available/unavailable scenarios
+- Maintained backward compatibility and preserved all existing functionality
+
+**Previously Completed (September 5, 2025)**:
+
+- **Version Suffix Handling for Data Products**: Implemented new pattern for CAP framework data products where service names with `.v1` or `.v2` suffixes result in ORD IDs like `:apiResource::v1` or `:v2` instead of `:apiResource:.v1:v1`
+- Added comprehensive version extraction logic with strict validation
+- Fixed namespace processing for clean service names
+- Created extensive test coverage (14 test cases)
+- Maintained full backward compatibility
+
+**Previous Release (v1.3.9 - September 2, 2025)**:
+
+- Fixed visibility handling for private resources (no group creation)
+- Added support for loading additional package attributes
+- Improved package configuration flexibility
+
+**Recent Major Features (v1.3.8)**:
+
+- Java sample application setup
+- Java pipeline integration
+- # CommonJS support improvements
+    > > > > > > > origin/main
 
 ### Current Development Priorities
 
@@ -156,16 +183,9 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Minimal memory footprint during generation
 - Progress reporting for long-running build operations
 
-## Learnings and Project Insights
+## Key Learnings
 
-### Key Technical Insights
-
-**CSN Processing Complexity**:
-
-- CAP CSN models can be highly complex with nested relationships
-- Service definitions require careful analysis to extract ORD-relevant information
-- Entity relationships need proper mapping to ORD entity types
-- Event definitions require special handling for AsyncAPI integration
+### Current Implementation Insights
 
 **Interop CSN Generation**:
 
@@ -179,18 +199,22 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 
 - Dual annotation support requires careful precedence logic to avoid conflicts
 - `@DataIntegration.dataProduct.type: 'primary'` takes precedence over `@data.product` when both are present
-- Boolean coercion (using `!!`) is essential for consistent true/false returns from detection functions
-- Version suffix extraction applies to both annotation types seamlessly
 - Both annotations trigger identical ORD resource properties for consistency
 
-**Data Product Version Handling**:
+**Version Suffix Processing**:
 
-- Version suffix extraction requires strict pattern validation to avoid false positives
+- Version suffix extraction requires strict pattern validation (`/\.v(\d+)$/`)
 - Namespace processing must be applied to clean service names to prevent duplication
-- Semantic versioning conversion (v1 → 1.0.0) provides consistent version format
-- Feature must be scoped only to primary data products to maintain backward compatibility
+- Feature scoped only to primary data products to maintain backward compatibility
 
-**Authentication Configuration**:
+<<<<<<< HEAD
+**MCP Integration**:
+
+- Conditional API resource generation based on plugin availability
+- Comprehensive test coverage essential for optional feature scenarios
+- # Backward compatibility maintained across integration scenarios
+
+    **Authentication Configuration**:
 
 - `authenticateMetadataEndpoints: false` by default allows flexible deployment scenarios
 - Basic-auth access strategy provides consistent security baseline
@@ -242,6 +266,7 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Visibility controls are essential for internal/external resource separation
 - Custom ORD content enables integration with enterprise catalogs
 - Performance at scale requires ongoing optimization
+    > > > > > > > origin/main
 
 ## Next Steps and Considerations
 

@@ -116,7 +116,7 @@
 
 **Interop CSN i18n**:
 
-- Fixed language key separator in interop CSN (now uses "-" instead of "_")
+- Fixed language key separator in interop CSN (now uses "-" instead of "\_")
 - Improved i18n handling for better compatibility
 - Updated dependencies (jacoco-maven-plugin, actions/setup-node)
 
@@ -165,6 +165,16 @@
 
 ## What's Left to Build
 
+### Recently Completed (September 18, 2025) ✅
+
+**MCP API exposure**:
+
+- ✅ **MCP API exposure**: Implemented conditional MCP API resource generation based on internal CAP MCP plugin availability
+- ✅ **Comprehensive MCP Testing**: Added thorough MCP integration tests covering both plugin available/unavailable scenarios
+- ✅ **Backward Compatibility**: Maintained all existing functionality and preserved test coverage (96%+)
+
+### Previously Completed (September 26, 2025) ✅
+
 ### Completed Features Summary ✅
 
 **Interop CSN (v1.3.11-v1.3.14)**:
@@ -192,7 +202,16 @@
 - ✅ Comprehensive test coverage (36+ new tests)
 - ✅ All tests passing with 97%+ code coverage
 
-**Dependency Management (v1.3.10+)**:
+<<<<<<< HEAD
+**MCP API exposure** ✅ → 🔄:
+
+- ✅ Implemented conditional MCP API resource generation based on plugin availability
+- ✅ Added proper MCP protocol support in ORD document structure
+- ✅ Created comprehensive test coverage for MCP integration scenarios
+- 🔄 Continue refinement based on production usage feedback
+- # 🔄 Ensure proper documentation and testing of exposed APIs
+
+    **Dependency Management (v1.3.10+)**:
 
 - ✅ Renovate bot integration for automated updates
 - ✅ Node.js v22 support
@@ -220,6 +239,7 @@
 - Support the exposure of MCP APIs through ORD as API Resources with API protocol `mcp`
 - In addition to being regular API Resources for OData
 - Ensure proper documentation and testing of exposed APIs
+    > > > > > > > origin/main
 
 ### Medium-term Development
 

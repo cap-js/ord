@@ -12,7 +12,10 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
                 types: [AUTHENTICATION_TYPE.Open],
             },
         });
+
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        // Mock MCP plugin availability to false for these tests
+        jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(false);
         ord = require("../../lib/ord");
     });
 

@@ -1,51 +1,75 @@
-# Copilot Instructions for AI Coding Agents
+﻿# Copilot Instructions (ORD CAP Plugin)
 
-## Project Overview
+Concise, actionable guidance for AI coding agents working on this repository. Focus on THESE project patterns—not generic advice.
 
-- This is a CDS plugin for the [Open Resource Discovery (ORD)](https://open-resource-discovery.github.io/specification/) protocol, designed for CAP-based applications.
-- The plugin exposes a single entry point for discovering and gathering machine-readable metadata about the application, supporting both static cataloging and runtime inspection.
-- Security: By default, metadata is public. To secure, configure authentication via environment variables or `.cdsrc.json` (see below).
+## 1. Big Picture
 
-## Architecture & Key Components
+This is a CAP (@sap/cds) plugin that generates and serves Open Resource Discovery (ORD) metadata. Two execution paths:
 
-- Main logic is in `lib/` (e.g., `ord.js`, `ord-service.js`, `metaData.js`, etc.).
-- Test suites are in `unittest/` and `__tests__/` (unit and integration/e2e tests).
-- Example and reference projects are in `xmpl/` and `xmpl_java/`.
-- Memory bank for project context is in `memory-bank/` (see `.clinerules/memory-bank.md`).
+1. Static build: `cds build --for ord` / `cds.compile.to.ord(csn)` writes `gen/ord/*` (document + resource artifacts).
+2. Runtime API: `OpenResourceDiscoveryService` (defined in `lib/ord-service.cds` + implemented in `ord-service.js`) serves live ORD JSON + referenced specs.
 
-## Developer Workflows
+Core composition (read these first when changing generation logic):
+`lib/ord.js` (orchestrator) -> `templates.js` (resource templates + visibility + version extraction) -> `defaults.js` (baseline values) -> `extendOrdWithCustom.js` (merge custom overrides) -> `authentication.js` (access strategies) -> `interopCsn.js` (CSN interop export) -> `build.js` (build target wiring).
 
-- **Install dependencies:** `npm install`
-- **Run tests:** `npm test` (unit and e2e tests)
-- **Lint:** Use the provided `eslint.config.mjs` for linting.
-- **Authentication:**
-    - Set `ORD_AUTH_TYPE` and `BASIC_AUTH` env vars, or configure `.cdsrc.json` for authentication.
-    - Example: `BASIC_AUTH='{"admin":"<bcrypt-hash>"}'`
-- **CDS Model Changes:**
-    - Always use the `cds-mcp` tool to search for CDS definitions and CAP docs before modifying models or using CAP APIs.
-    - Only read `.cds` files directly if `cds-mcp` is unavailable.
+## 2. Generation Flow (critical mental model)
 
-## Project Conventions & Patterns
+CSN in → `_triageCsnDefinitions()` classifies services/entities/events → template builders create API/Event/EntityType resources → custom merge (if `env.ord.customOrdContentFile`) overlays by `ordId` → unused packages trimmed → final ORD document returned/served.
+Blocked / skipped cases: service marked `@protocol:'none'`, external services (`cds.requires.*`), blocked names (`MTXServices`, `OpenResourceDiscoveryService`), services with only events (no entities/actions/functions) => no API resource.
 
-- Follow the memory bank workflow: always read and update `memory-bank/` files at the start/end of significant tasks.
-- Keep code changes focused and small; favor enhancing existing functions over introducing new ones.
-- Use linters and run all tests after significant changes.
-- Commit messages should be clear and concise.
-- Example authentication config is in the main `README.md`.
+## 3. Customization Hierarchy (highest wins)
 
-## Integration & External Dependencies
+Env vars > `.cdsrc.json` `ord` section > `custom.ord.json` (structural merge by `ordId`) > `@ORD.Extensions.*` annotations > defaults. MCP resource customization: match `*:apiResource:mcp-server:v1` in `custom.ord.json`—merge preserves `apiProtocol` & generated `resourceDefinitions`.
 
-- Depends on `@cap-js/openapi`, and `@cap-js/asyncapi` (installed locally, not globally).
-- Uses CAP framework conventions for service and entity definitions.
-- Authentication can be configured via environment or `.cdsrc.json`.
+## 4. MCP Resource
 
-## References
+Inserted conditionally if `isMCPPluginAvailable()` returns true (tests mock it). Template in `templates.js#createMCPAPIResourceTemplate`. When customizing: ensure bookshop test model sets `cds.root` AND `env.ord` before requiring `lib/ord`. Do NOT rely on inline `cds.linked()` for customization tests—load actual model with `cds.load(<srv path>)` to activate merge.
 
-- Main documentation: `README.md`
-- Code quality and CAP usage rules: `.clinerules/code-quality.md`
-- Memory bank and project context: `.clinerules/memory-bank.md`, `memory-bank/`
-- Example usage: `xmpl/`, `xmpl_java/`
+## 5. Visibility & Packaging
+
+`_handleVisibility()` cascades: explicit @ORD.Extensions.visibility > implementation standard defaults > configured `defaultVisibility` > fallback public. Private resources are filtered out. Package selection uses `_getPackageID()` with visibility-specific suffix (`-internal`, `-private`). After merge, `_filterUnusedPackages()` prunes unreferenced package entries.
+
+## 6. Version & Data Product Services
+
+Data product services may carry a suffixed name `.vN`; `_extractVersionFromServiceName()` maps `vN` → semantic `N.0.0`, adjusts ordId & groups. Primary data product services (annotations) force `apiProtocol: rest`, add `implementationStandard: sap.dp:data-subscription-api:v1`, and replace OpenAPI/EDMX with CSN interop resource definition.
+
+## 7. Entity Type Mapping
+
+ODM or relationship annotations (`@ODM.entityName`, `@EntityRelationship.entityType`) generate entityTypeMappings/exposedEntityTypes. ODM mappings flagged `isODMMapping` are NOT emitted as entityTypes (only referenced). SAP policy levels (e.g. `sap:core:v1`) suppress entity type emission (central registry expectation).
+
+## 8. Authentication Layer
+
+`authentication.js` builds `accessStrategies` array (currently open/basic). Environment precedence: `ORD_AUTH_TYPE` then `.cdsrc.json`. Basic auth expects bcrypt hashes (see README). When adding new strategy, propagate through `getAuthConfig()` and templates (each resourceDefinition includes `accessStrategies`).
+
+## 9. Testing Conventions
+
+Test types:
+`__tests__/ord.e2e.test.js` (integration / feature)—favor field assertions over brittle full-document snapshots for dynamic/custom merges (especially MCP). Snapshot tests still exist elsewhere; update with caution (`npm test -- -u`). Unit/behavior tests in `unittest/` & fine-grained mocks in `__tests__/__mocks__`.
+When altering merge or template logic: add/adjust a focused assertion in e2e rather than broad snapshot regeneration unless structure fundamentally changes.
+
+## 10. Safe Change Checklist (always)
+
+1. Read memory bank (`memory-bank/*.md`) for active context & architectural constraints.
+2. If modifying model-related logic: inspect relevant template/helper in `templates.js` & invocation in `ord.js`.
+3. Run `npm test` (do not skip; many conditions are covered indirectly).
+4. Avoid introducing duplicate logic—extend existing template helpers instead.
+5. Preserve `apiProtocol` when merging custom overrides; never silently drop `resourceDefinitions`.
+
+## 11. Common Pitfalls
+
+- Forgetting to set `cds.root` before loading CSN in tests → custom file merge fails.
+- Adding snapshot assertions for mutable counts (API/Event resources can grow with model) → flaky CI.
+- Overwriting MCP ordId without preserving protocol/definitions (merge helper now safeguards—maintain it when refactoring).
+- Emitting private resources or unused packages—ensure filtering stays intact after changes.
+
+## 12. Useful File Map
+
+`lib/ord.js` (entry orchestration) | `lib/templates.js` (all generation rules) | `lib/extendOrdWithCustom.js` (merge by ordId + null cleanup) | `lib/defaults.js` (package/product defaults) | `lib/authentication.js` (access strategies) | `lib/interopCsn.js` (interop export) | `cds-plugin.js` (registration) | `__tests__/ord.e2e.test.js` (integration patterns) | `docs/ord.md` (user customization guide).
+
+## 13. When Unsure
+
+Compare behavior using a local `npm test` run; prefer adding a minimal assertion over expanding snapshots; document any new rule in `systemPatterns.md` + update this file if it changes core flow or precedence.
 
 ---
 
-> For any non-obvious workflow, pattern, or integration, check the memory bank and code quality rules before proceeding. If in doubt, prefer explicit documentation and update the memory bank as needed.
+Maintain brevity in changes; update Memory Bank artifacts if you introduce or alter architectural decisions, resource precedence, or customization rules.
