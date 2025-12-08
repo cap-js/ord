@@ -165,16 +165,6 @@
 
 ## What's Left to Build
 
-### Recently Completed (September 18, 2025) ✅
-
-**MCP API exposure**:
-
-- ✅ **MCP API exposure**: Implemented conditional MCP API resource generation based on internal CAP MCP plugin availability
-- ✅ **Comprehensive MCP Testing**: Added thorough MCP integration tests covering both plugin available/unavailable scenarios
-- ✅ **Backward Compatibility**: Maintained all existing functionality and preserved test coverage (96%+)
-
-### Previously Completed (September 26, 2025) ✅
-
 ### Completed Features Summary ✅
 
 **Interop CSN (v1.3.11-v1.3.14)**:
@@ -202,16 +192,14 @@
 - ✅ Comprehensive test coverage (36+ new tests)
 - ✅ All tests passing with 97%+ code coverage
 
-<<<<<<< HEAD
-**MCP API exposure** ✅ → 🔄:
+**MCP Integration (v1.3.x)**:
 
 - ✅ Implemented conditional MCP API resource generation based on plugin availability
 - ✅ Added proper MCP protocol support in ORD document structure
 - ✅ Created comprehensive test coverage for MCP integration scenarios
-- 🔄 Continue refinement based on production usage feedback
-- # 🔄 Ensure proper documentation and testing of exposed APIs
+- ✅ Maintained backward compatibility across integration scenarios
 
-    **Dependency Management (v1.3.10+)**:
+**Dependency Management (v1.3.10+)**:
 
 - ✅ Renovate bot integration for automated updates
 - ✅ Node.js v22 support
@@ -220,26 +208,31 @@
 - ✅ Spring Boot v3.5.6 (Java)
 - ✅ Trusted publishing with provenance
 
-### Immediate Development (Next Release - v1.4.0)
+### Current Development Focus (December 2025)
 
-**Node.js Version Support** 📋:
+**Production Stabilization** 🔄:
 
-- Evaluate Node.js version support strategy beyond v22
-- Consider LTS version support timeline
-- Plan migration path for users on older Node.js versions
+- Monitor interop CSN generation in production environments
+- Gather feedback on authentication configuration improvements
+- Address any edge cases discovered in recent releases
 
-**Interop CSN Enhancements** 🔄:
+**Java Runtime Maturation** 🔄:
 
-- Monitor production usage and gather feedback
-- Address edge cases in interop CSN generation
-- Improve error handling for CSN conversion issues
+- Continue progress toward full feature parity with Node.js implementation
+- Improve Java-specific authentication and configuration handling
+- Enhance Java build integration and testing
 
-**MCP API Exposure** 📋:
+**Performance & Scalability** 📋:
 
-- Support the exposure of MCP APIs through ORD as API Resources with API protocol `mcp`
-- In addition to being regular API Resources for OData
-- Ensure proper documentation and testing of exposed APIs
-    > > > > > > > origin/main
+- Address build-time performance for large CAP applications
+- Optimize memory usage during ORD document generation
+- Implement caching strategies for repeated operations
+
+**Next Generation Features** 📋:
+
+- Enhanced MCP API exposure with protocol-specific handling
+- Advanced authentication mechanisms (UCL-mTLS planning)
+- Improved error diagnostics and user experience
 
 ### Medium-term Development
 

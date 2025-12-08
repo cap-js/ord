@@ -40,43 +40,16 @@
 - **Dependency Modernization**: Major dependency updates including Node v22, Express v5, Jest v30, Spring Boot v3.5.6
 - **Renovate Integration**: Configured Renovate bot for automated dependency management
 
-<<<<<<< HEAD
-**Recently Completed (September 18, 2025)**:
 
-- **MCP Integration Enhancement**: Enhanced MCP integration to work even when no regular API resources exist
-- Added comprehensive MCP integration tests that verify both plugin available/unavailable scenarios
-- Maintained backward compatibility and preserved all existing functionality
+### Current Development Priorities (December 2025)
 
-**Previously Completed (September 5, 2025)**:
-
-- **Version Suffix Handling for Data Products**: Implemented new pattern for CAP framework data products where service names with `.v1` or `.v2` suffixes result in ORD IDs like `:apiResource::v1` or `:v2` instead of `:apiResource:.v1:v1`
-- Added comprehensive version extraction logic with strict validation
-- Fixed namespace processing for clean service names
-- Created extensive test coverage (14 test cases)
-- Maintained full backward compatibility
-
-**Previous Release (v1.3.9 - September 2, 2025)**:
-
-- Fixed visibility handling for private resources (no group creation)
-- Added support for loading additional package attributes
-- Improved package configuration flexibility
-
-**Recent Major Features (v1.3.8)**:
-
-- Java sample application setup
-- Java pipeline integration
-- # CommonJS support improvements
-    > > > > > > > origin/main
-
-### Current Development Priorities
-
-1. **Interop CSN Stability**: Ensuring robust interop CSN generation across various CAP model patterns
-2. **Authentication Refinement**: Improving authentication configuration flexibility and security
-3. **Node.js Version Strategy**: Focusing on Node.js 22 support and future version planning
-4. **Supply Chain Security**: Maintaining trusted publishing and provenance capabilities
-5. **Dependency Management**: Keeping dependencies current through automated Renovate updates
-6. **Java Runtime Parity**: Continuing to expand and stabilize Java runtime support
-7. **CSN Format Compatibility**: Ensuring clean CSN generation for various integration scenarios
+1. **Production Stability**: Monitoring and stabilizing recent features (interop CSN, authentication improvements) in production environments
+2. **Java Runtime Maturation**: Achieving full feature parity between Node.js and Java implementations
+3. **Node.js Version Strategy**: Planning support strategy for Node.js versions beyond v22 as ecosystem evolves
+4. **Performance Optimization**: Addressing build-time and memory usage concerns for large CAP applications
+5. **MCP Protocol Integration**: Exploring enhanced MCP API exposure capabilities
+6. **Documentation Modernization**: Updating documentation to reflect current architecture and best practices
+7. **Community Feedback Integration**: Incorporating user feedback from v1.3.x releases into future development
 
 ## Active Decisions and Considerations
 
@@ -207,14 +180,13 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Namespace processing must be applied to clean service names to prevent duplication
 - Feature scoped only to primary data products to maintain backward compatibility
 
-<<<<<<< HEAD
 **MCP Integration**:
 
 - Conditional API resource generation based on plugin availability
 - Comprehensive test coverage essential for optional feature scenarios
-- # Backward compatibility maintained across integration scenarios
+- Backward compatibility maintained across integration scenarios
 
-    **Authentication Configuration**:
+**Authentication Configuration**:
 
 - `authenticateMetadataEndpoints: false` by default allows flexible deployment scenarios
 - Basic-auth access strategy provides consistent security baseline
@@ -266,7 +238,6 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Visibility controls are essential for internal/external resource separation
 - Custom ORD content enables integration with enterprise catalogs
 - Performance at scale requires ongoing optimization
-    > > > > > > > origin/main
 
 ## Next Steps and Considerations
 
