@@ -2,8 +2,7 @@ const cds = require("@sap/cds");
 const { compile: openapi } = require("@cap-js/openapi");
 const { compile: asyncapi } = require("@cap-js/asyncapi");
 const { getMetadata } = require("../../lib/index");
-const metaData = require("../../lib/metaData");
-const { isMCPPluginAvailable, buildMcpServerDefinition } = require("../../lib/mcpAdapter");
+const { isMCPPluginAvailable } = require("../../lib/mcpAdapter");
 const cdsc = require("@sap/cds-compiler/lib/main");
 
 jest.mock("@cap-js/openapi", () => ({

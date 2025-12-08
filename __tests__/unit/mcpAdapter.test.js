@@ -1,13 +1,13 @@
 const {
     isMCPPluginAvailable,
     isMCPPluginInPackageJson,
+    isMCPPluginReady,
     getMcpPlugin,
     buildMcpServerDefinition,
 } = require("../../lib/mcpAdapter");
 
 // Mock the MCP plugin before requiring it
 jest.mock("@btp-ai/mcp-plugin/lib/utils/metadata");
-
 
 // Mock data for MCP server definition
 const MOCK_ORD_METADATA = {
@@ -34,10 +34,10 @@ describe("mcpAdapter", () => {
             const mockPackageJson = {
                 name: "test-project",
                 dependencies: {
-                    "@btp-ai/mcp-plugin": "^0.2.5"
-                }
+                    "@btp-ai/mcp-plugin": "^0.2.5",
+                },
             };
-            
+
             const mockLoadPackageJson = () => mockPackageJson;
             const result = isMCPPluginInPackageJson(mockLoadPackageJson);
             expect(result).toBe(true);
@@ -48,10 +48,10 @@ describe("mcpAdapter", () => {
             const mockPackageJson = {
                 name: "test-project",
                 devDependencies: {
-                    "@btp-ai/mcp-plugin": "^0.2.5"
-                }
+                    "@btp-ai/mcp-plugin": "^0.2.5",
+                },
             };
-            
+
             const mockLoadPackageJson = () => mockPackageJson;
             const result = isMCPPluginInPackageJson(mockLoadPackageJson);
             expect(result).toBe(true);
@@ -62,10 +62,10 @@ describe("mcpAdapter", () => {
             const mockPackageJson = {
                 name: "test-project",
                 dependencies: {
-                    "@sap/cds": "^8.0.0"
-                }
+                    "@sap/cds": "^8.0.0",
+                },
             };
-            
+
             const mockLoadPackageJson = () => mockPackageJson;
             const result = isMCPPluginInPackageJson(mockLoadPackageJson);
             expect(result).toBe(false);
@@ -76,7 +76,7 @@ describe("mcpAdapter", () => {
             const mockLoadPackageJson = () => {
                 throw new Error("package.json not found");
             };
-            
+
             const result = isMCPPluginInPackageJson(mockLoadPackageJson);
             expect(result).toBe(false);
         });
@@ -84,10 +84,10 @@ describe("mcpAdapter", () => {
         test("should handle missing dependencies and devDependencies", () => {
             // Use dependency injection to provide package.json without dependencies
             const mockPackageJson = {
-                name: "test-project"
+                name: "test-project",
                 // No dependencies or devDependencies
             };
-            
+
             const mockLoadPackageJson = () => mockPackageJson;
             const result = isMCPPluginInPackageJson(mockLoadPackageJson);
             expect(result).toBe(false);
@@ -159,6 +159,102 @@ describe("mcpAdapter", () => {
                 .mockRejectedValue(new Error("Plugin build failed"));
 
             await expect(buildMcpServerDefinition()).rejects.toThrow("Plugin build failed");
+        });
+    });
+
+    describe("isMCPPluginReady", () => {
+        test("should return true when plugin is both in package.json and available at runtime", () => {
+            const mockResolve = jest.fn(() => "/path/to/plugin");
+            const mockLoadPackageJson = jest.fn(() => ({
+                name: "test-project",
+                dependencies: { "@btp-ai/mcp-plugin": "^0.2.5" },
+            }));
+
+            const result = isMCPPluginReady({
+                resolveFunction: mockResolve,
+                loadPackageJsonFn: mockLoadPackageJson,
+            });
+
+            expect(result).toBe(true);
+            expect(mockResolve).toHaveBeenCalledWith("@btp-ai/mcp-plugin");
+            expect(mockLoadPackageJson).toHaveBeenCalled();
+        });
+
+        test("should return false when plugin is in package.json but not available at runtime", () => {
+            const mockResolve = jest.fn(() => {
+                throw new Error("Cannot find module");
+            });
+            const mockLoadPackageJson = jest.fn(() => ({
+                name: "test-project",
+                dependencies: { "@btp-ai/mcp-plugin": "^0.2.5" },
+            }));
+
+            const result = isMCPPluginReady({
+                resolveFunction: mockResolve,
+                loadPackageJsonFn: mockLoadPackageJson,
+            });
+
+            expect(result).toBe(false);
+            expect(mockResolve).toHaveBeenCalledWith("@btp-ai/mcp-plugin");
+            expect(mockLoadPackageJson).toHaveBeenCalled();
+        });
+
+        test("should return false when plugin is available at runtime but not in package.json", () => {
+            const mockResolve = jest.fn(() => "/path/to/plugin");
+            const mockLoadPackageJson = jest.fn(() => ({
+                name: "test-project",
+                dependencies: { "@sap/cds": "^8.0.0" },
+            }));
+
+            const result = isMCPPluginReady({
+                resolveFunction: mockResolve,
+                loadPackageJsonFn: mockLoadPackageJson,
+            });
+
+            expect(result).toBe(false);
+            // Due to AND short-circuiting, if package.json check fails first, resolve won't be called
+            expect(mockLoadPackageJson).toHaveBeenCalled();
+        });
+
+        test("should return false when plugin is neither in package.json nor available at runtime", () => {
+            const mockResolve = jest.fn(() => {
+                throw new Error("Cannot find module");
+            });
+            const mockLoadPackageJson = jest.fn(() => ({
+                name: "test-project",
+                dependencies: { "@sap/cds": "^8.0.0" },
+            }));
+
+            const result = isMCPPluginReady({
+                resolveFunction: mockResolve,
+                loadPackageJsonFn: mockLoadPackageJson,
+            });
+
+            expect(result).toBe(false);
+            // Due to AND short-circuiting, if package.json check fails first, resolve won't be called
+            expect(mockLoadPackageJson).toHaveBeenCalled();
+        });
+
+        test("should work with default parameters", () => {
+            // Test with no options provided - should use defaults
+            const result = isMCPPluginReady();
+            expect(typeof result).toBe("boolean");
+        });
+
+        test("should handle package.json loading errors gracefully", () => {
+            const mockResolve = jest.fn(() => "/path/to/plugin");
+            const mockLoadPackageJson = jest.fn(() => {
+                throw new Error("package.json not found");
+            });
+
+            const result = isMCPPluginReady({
+                resolveFunction: mockResolve,
+                loadPackageJsonFn: mockLoadPackageJson,
+            });
+
+            expect(result).toBe(false);
+            // Due to AND short-circuiting, if package.json check fails first, resolve won't be called
+            expect(mockLoadPackageJson).toHaveBeenCalled();
         });
     });
 

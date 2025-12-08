@@ -190,7 +190,7 @@ describe("End-to-end test for ORD document", () => {
 });
 
 describe("Tests for products and packages", () => {
-    let csn, ord, errorSpy;
+    let csn, ord;
 
     beforeAll(async () => {
         process.env.DEBUG = "true";
@@ -203,7 +203,6 @@ describe("Tests for products and packages", () => {
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../../lib/ord");
         cds.root = path.join(__dirname, "../bookshop");
-        errorSpy = jest.spyOn(console, "error");
     });
 
     afterEach(() => {
@@ -465,8 +464,8 @@ describe("Tests for eventResource and apiResource", () => {
         let ordWithMCP;
         jest.isolateModules(() => {
             jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(true);
-            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginInPackageJson").mockReturnValue(true);
+            // Mock the new consolidated function to return true
+            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginReady").mockReturnValue(true);
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
                 authConfig: { types: [AUTHENTICATION_TYPE.Open] },
             });
@@ -501,8 +500,8 @@ describe("Tests for eventResource and apiResource", () => {
                 require("@sap/cds").root = bookshopRoot; // ensure relative custom.ord.json resolution
             }
             jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(true);
-            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginInPackageJson").mockReturnValue(true);
+            // Mock the new consolidated function to return true
+            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginReady").mockReturnValue(true);
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
                 authConfig: { types: [AUTHENTICATION_TYPE.Open] },
             });
