@@ -298,7 +298,7 @@ describe("authentication", () => {
             cds.context = {};
         });
 
-        it("should mark CF mTLS for lazy initialization without immediate validation", () => {
+        it("should configure CF mTLS for immediate initialization", () => {
             process.env.CF_MTLS_TRUSTED_CERTS = JSON.stringify({
                 certs: mockTrustedCertPairs,
                 rootCaDn: mockTrustedRootCaDns,
@@ -307,12 +307,12 @@ describe("authentication", () => {
             const authConfig = createAuthConfig();
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
             expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
-            // Validator should be null (lazy loading)
-            expect(authConfig.cfMtlsValidator).toBeNull();
-            expect(authConfig._cfMtlsInitPromise).toBeNull();
+            // Validator will be initialized immediately at startup (no lazy loading markers)
+            expect(authConfig.cfMtlsValidator).toBeUndefined();
+            expect(authConfig._cfMtlsInitPromise).toBeUndefined();
         });
 
-        it("should mark CF mTLS for lazy initialization using cds.env", () => {
+        it("should configure CF mTLS using cds.env for immediate initialization", () => {
             cds.env.ord = {
                 authentication: {
                     cfMtls: {
@@ -324,8 +324,8 @@ describe("authentication", () => {
 
             const authConfig = createAuthConfig();
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
-            // Validator should be null (lazy loading)
-            expect(authConfig.cfMtlsValidator).toBeNull();
+            // Validator will be initialized immediately at startup (no lazy loading markers)
+            expect(authConfig.cfMtlsValidator).toBeUndefined();
         });
 
         it("should authenticate with valid certificate pair and root CA", async () => {
@@ -453,8 +453,8 @@ describe("authentication", () => {
             expect(authConfig.types).toContain(AUTHENTICATION_TYPE.Basic);
             expect(authConfig.types).toContain(AUTHENTICATION_TYPE.CfMtls);
             expect(authConfig.credentials).toBeDefined();
-            // CF mTLS validator should be null (lazy loading)
-            expect(authConfig.cfMtlsValidator).toBeNull();
+            // CF mTLS validator will be initialized immediately at startup (no lazy loading markers)
+            expect(authConfig.cfMtlsValidator).toBeUndefined();
         });
 
         it("should handle Basic auth when both Basic and CF mTLS are configured", async () => {
