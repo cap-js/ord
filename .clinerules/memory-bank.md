@@ -15,26 +15,21 @@ PB --> TC[techContext.md]
     SP --> AC
     TC --> AC
 
-    AC --> P[progress.md]
-
 ### Core Files (Required)
 
 1. `projectbrief.md`
-
     - Foundation document that shapes all other files
     - Created at project start if it doesn't exist
     - Defines core requirements and goals
     - Source of truth for project scope
 
 2. `productContext.md`
-
     - Why this project exists
     - Problems it solves
     - How it should work
     - User experience goals
 
 3. `activeContext.md`
-
     - Current work focus
     - Recent changes
     - Next steps
@@ -43,7 +38,6 @@ PB --> TC[techContext.md]
     - Learnings and project insights
 
 4. `systemPatterns.md`
-
     - System architecture
     - Key technical decisions
     - Design patterns in use
@@ -51,19 +45,11 @@ PB --> TC[techContext.md]
     - Critical implementation paths
 
 5. `techContext.md`
-
     - Technologies used
     - Development setup
     - Technical constraints
     - Dependencies
     - Tool usage patterns
-
-6. `progress.md`
-    - What works
-    - What's left to build
-    - Current status
-    - Known issues
-    - Evolution of project decisions
 
 ### Additional Context
 
@@ -121,6 +107,6 @@ Start[Update Process]
 
     Start --> Process
 
-Note: When triggered by **update memory bank**, I MUST review every memory bank file, even if some don't require updates. Focus particularly on activeContext.md and progress.md as they track current state.
+Note: When triggered by **update memory bank**, I MUST review every memory bank file, even if some don't require updates. Focus particularly on activeContext.md as it tracks current state.
 
 REMEMBER: After every memory reset, I begin completely fresh. The Memory Bank is my only link to previous work. It must be maintained with precision and clarity, as my effectiveness depends entirely on its accuracy.

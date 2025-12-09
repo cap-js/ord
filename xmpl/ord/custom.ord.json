@@ -67,5 +67,25 @@
                 "supported": "no"
             }
         }
+    ],
+    "integrationDependencies": [
+        {
+            "ordId": "sap.s4:integrationDependency:subscriptionReplication:v2",
+            "version": "2.2.3",
+            "title": "Subscription Billing Replication",
+            "visibility": "internal",
+            "aspects": [
+                {
+                    "apiResources": [
+                        {
+                            "ordId": "sap.s4com:apiResource:PurchasingOrganization:v1",
+                            "minVersion": "1.0.0"
+                        }
+                    ],
+                    "mandatory": true,
+                    "supportMultipleProviders": true
+                }
+            ]
+        }
     ]
 }

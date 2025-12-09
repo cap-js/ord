@@ -2,6 +2,7 @@ const cds = require("@sap/cds");
 const { compile: openapi } = require("@cap-js/openapi");
 const { compile: asyncapi } = require("@cap-js/asyncapi");
 const { getMetadata } = require("../../lib/index");
+const { isMCPPluginAvailable } = require("../../lib/mcpAdapter");
 const cdsc = require("@sap/cds-compiler/lib/main");
 
 jest.mock("@cap-js/openapi", () => ({
@@ -133,6 +134,23 @@ describe("metaData", () => {
         }
     });
 
+    describe("isMCPPluginAvailable", () => {
+        test("should return true when MCP plugin is available", () => {
+            const result = isMCPPluginAvailable(() => {
+                return true;
+            });
+
+            expect(result).toBe(true);
+        });
+
+        test("should return false when MCP plugin is not available", () => {
+            const result = isMCPPluginAvailable(() => {
+                throw new Error("Cannot resolve module");
+            });
+
+            expect(result).toBe(false);
+        });
+    });
     test("getMetadata should handle invalid URL format", async () => {
         const url = "/invalid/url/format";
         try {
@@ -145,11 +163,11 @@ describe("metaData", () => {
     test("getMetadata should handle missing service name in URL", async () => {
         const url = "/ord/v1/sap.test.cdsrc.sample:apiResource::v1/Service.oas3.json";
         openapi.mockImplementation(() => "Mock content");
-        
+
         const result = await getMetadata(url);
         expect(result).toEqual({
             contentType: "application/json",
-            response: "Mock content"
+            response: "Mock content",
         });
     });
 
@@ -167,7 +185,7 @@ describe("metaData", () => {
         asyncapi.mockImplementation(() => ({ test: "asyncapi content" }));
 
         const result = await getMetadata(url);
-        
+
         expect(result.contentType).toBe("application/json");
         expect(result.response).toEqual({ test: "asyncapi content" });
     });
@@ -176,22 +194,23 @@ describe("metaData", () => {
         const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:TestService:v1/TestService.edmx";
         jest.spyOn(cds, "compile").mockImplementation(() => ({
             to: {
-                edmx: () => "<edmx>content</edmx>"
-            }
+                edmx: () => "<edmx>content</edmx>",
+            },
         }));
 
         const result = await getMetadata(url);
-        
+
         expect(result.contentType).toBe("application/xml");
         expect(result.response).toBe("<edmx>content</edmx>");
     });
 
     test("getMetadata should handle complex service names with dots", async () => {
-        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:my.complex.ServiceName:v1/my.complex.ServiceName.oas3.json";
+        const url =
+            "/ord/v1/sap.test.cdsrc.sample:apiResource:my.complex.ServiceName:v1/my.complex.ServiceName.oas3.json";
         openapi.mockImplementation(() => "Complex service content");
 
         const result = await getMetadata(url);
-        
+
         expect(result.contentType).toBe("application/json");
         expect(result.response).toBe("Complex service content");
     });
@@ -201,7 +220,7 @@ describe("metaData", () => {
         jest.spyOn(cdsc.for, "effective").mockImplementation(() => "Version 2 CSN");
 
         const result = await getMetadata(url, "input csn");
-        
+
         expect(result.contentType).toBe("application/json");
         expect(result.response).toBe("Version 2 CSN");
     });

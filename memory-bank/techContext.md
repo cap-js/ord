@@ -53,8 +53,8 @@
 ### Prerequisites
 
 ```bash
-# Node.js (LTS version recommended)
-node --version  # Should be >= 16.x
+# Node.js (version 22 currently supported)
+node --version  # Should be v22.x
 
 # CAP development kit
 npm install -g @sap/cds-dk
@@ -263,12 +263,8 @@ annotate ProcessorService with @ORD.Extensions: {
 - **Environment Variables**: Use for runtime configuration (overrides `.cdsrc.json`)
 - **Performance**: Monitor ORD generation and interop CSN performance in production
 - **Caching**: Consider caching strategies for frequently accessed ORD documents
-- **Configuration**: Set `authenticateMetadataEndpoints` appropriately for your environment
-- **Environment Variables**: Use for runtime configuration (overrides `.cdsrc.json`)
-- **Performance**: Monitor ORD generation and interop CSN performance in production
-- **Caching**: Consider caching strategies for frequently accessed ORD documents
 - **Monitoring**: Log ORD endpoint access and generation times
-- **Node.js Version**: Ensure Node.js 18-22 compatibility
+- **Node.js Version**: Ensure Node.js v22 compatibility
 
 ### Development Deployment
 
