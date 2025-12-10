@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
-const { Logger } = require("../../lib/logger");
+const Logger = require("../../lib/logger");
 
 // Mock the authentication module completely
 jest.mock("../../lib/auth/authentication");
@@ -116,7 +116,7 @@ authModule.authenticate = jest.fn(async (req, res, next) => {
     if (authConfig.types.includes(AUTHENTICATION_TYPE.Basic)) {
         res.setHeader("WWW-Authenticate", 'Basic realm="401"');
     }
-    
+
     return res.status(401).send("Authentication required.");
 });
 
@@ -141,7 +141,9 @@ describe("authentication", () => {
     };
 
     beforeAll(() => {
-        Logger.log = Logger.error = Logger.info = jest.fn();
+        jest.spyOn(Logger, "log").mockImplementation(() => {});
+        jest.spyOn(Logger, "error").mockImplementation(() => {});
+        jest.spyOn(Logger, "info").mockImplementation(() => {});
     });
 
     beforeEach(() => {

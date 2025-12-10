@@ -26,7 +26,7 @@ const {
     isPrimaryDataProductService,
 } = require("../../lib/templates");
 
-const { Logger } = require("../../lib/logger");
+const Logger = require("../../lib/logger");
 
 describe("visibility handling", () => {
     let loggerSpy;
