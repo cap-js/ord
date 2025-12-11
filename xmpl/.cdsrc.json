@@ -39,8 +39,10 @@
                 "configEndpoints": ["https://config.myorg.com/mtls-certs"]
             }
         },
-        "compilerOptions": {
-            "openapi:url": "https://api.example.com/${service-path}"
+        "compileOptions": {
+            "openapi": {
+                "openapi:url": "https://{host}.testhost/${service-path}"
+            }
         }
     }
 }
