@@ -227,7 +227,7 @@ describe("metaData", () => {
 
     test("getMetadata should pass compile options from cds.env", async () => {
         const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:TestService:v1/TestService.oas3.json";
-        const compileOptions = { "openapi:path": "my_path" };
+        const compileOptions = { "openapi": { "openapi:path": "my_path" } };
         cds.env["ord"] = { compileOptions };
 
         openapi.mockImplementation((csn, options) => {
