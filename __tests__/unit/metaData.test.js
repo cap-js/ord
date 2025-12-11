@@ -224,4 +224,20 @@ describe("metaData", () => {
         expect(result.contentType).toBe("application/json");
         expect(result.response).toBe("Version 2 CSN");
     });
+
+    test("getMetadata should pass compile options from cds.env", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:TestService:v1/TestService.oas3.json";
+        const compileOptions = { "openapi": { "openapi:path": "my_path" } };
+        cds.env["ord"] = { compileOptions };
+
+        openapi.mockImplementation((csn, options) => {
+            expect(options["openapi:path"]).toBe("my_path");
+            return "Content with compile options";
+        });
+
+        const result = await getMetadata(url);
+
+        expect(result.contentType).toBe("application/json");
+        expect(result.response).toBe("Content with compile options");
+    });
 });
