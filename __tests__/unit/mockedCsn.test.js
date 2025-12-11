@@ -1,17 +1,25 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE } = require("../../lib/constants");
+const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;
 
-    beforeAll(() => {
+    beforeAll(async () => {
         cds.root = path.join(__dirname, "../bookshop");
-        jest.spyOn(cds, "context", "get").mockReturnValue({
-            authConfig: {
-                types: [AUTHENTICATION_TYPE.Open],
-            },
+        
+        // Initialize authentication configuration for tests
+        const authentication = require("../../lib/auth/authentication");
+
+        // Mock the createAuthConfig to return a default open configuration
+        jest.spyOn(authentication, "createAuthConfig").mockResolvedValue({
+            types: [AUTHENTICATION_TYPE.Open],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         });
+
+        // Initialize the auth config
+        await authentication.getAuthConfig();
+        
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../../lib/ord");
     });
@@ -26,8 +34,8 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     });
 
     afterAll(() => {
-        jest.restoreAllMocks();
         jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     describe("Tests for ORD document when .cdsrc.json has no `ord` property", () => {

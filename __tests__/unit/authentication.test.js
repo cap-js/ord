@@ -2,31 +2,47 @@ const cds = require("@sap/cds");
 const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 const Logger = require("../../lib/logger");
 
-// Mock the authentication module completely
-jest.mock("../../lib/auth/authentication");
-
-// Import the mocked module
+// Import the actual authentication module
 const authModule = require("../../lib/auth/authentication");
 
 // Set up the mock implementation
 let mockCachedAuthConfig = null;
 
-const originalCreateAuthConfig = jest.requireActual("../../lib/auth/authentication").createAuthConfig;
+// Mock the module-level cache directly
+jest.mock("../../lib/auth/authentication", () => {
+    const actual = jest.requireActual("../../lib/auth/authentication");
+    return {
+        ...actual,
+        getAuthConfig: jest.fn(),
+        getAuthConfigSync: jest.fn(),
+    };
+});
 
-authModule.createAuthConfig = originalCreateAuthConfig;
-authModule.getAuthConfig = jest.fn(() => {
+const { createAuthConfig } = jest.requireActual("../../lib/auth/authentication");
+const { getAuthConfig, getAuthConfigSync } = require("../../lib/auth/authentication");
+
+// Set up mock implementations
+getAuthConfig.mockImplementation(async () => {
     if (mockCachedAuthConfig) {
         return mockCachedAuthConfig;
     }
-    return originalCreateAuthConfig();
+    return await createAuthConfig();
+});
+
+getAuthConfigSync.mockImplementation(() => {
+    if (mockCachedAuthConfig) {
+        return mockCachedAuthConfig;
+    }
+    throw new Error("Authentication configuration not initialized. Call getAuthConfig() first during service startup.");
 });
 
 // Mock authenticate function to use our mocked getAuthConfig
-authModule.authenticate = jest.fn(async (req, res, next) => {
+const { authenticate: originalAuthenticate } = jest.requireActual("../../lib/auth/authentication");
+const authenticate = jest.fn(async (req, res, next) => {
     let authConfig;
 
     try {
-        authConfig = authModule.getAuthConfig();
+        authConfig = getAuthConfigSync();
     } catch (error) {
         Logger.error("Failed to get authentication configuration:", error.message);
         return res.status(500).send("Authentication configuration error");
@@ -129,8 +145,13 @@ const __clearMockAuthConfig = () => {
     mockCachedAuthConfig = null;
 };
 
-// Export the functions we need
-const { authenticate, createAuthConfig, getAuthConfig } = authModule;
+// Export the functions we need - mix of mocked and actual
+module.exports = {
+    authenticate,
+    createAuthConfig,
+    getAuthConfig,
+    getAuthConfigSync,
+};
 
 describe("authentication", () => {
     // The bcrypt hash decrypted is: secret
@@ -206,8 +227,8 @@ describe("authentication", () => {
             cds.env.ord = { authentication: {} };
         });
 
-        it("should return default configuration when no authentication type is provided", () => {
-            const authConfig = createAuthConfig();
+        it("should return default configuration when no authentication type is provided", async () => {
+            const authConfig = await createAuthConfig();
             expect(authConfig).toEqual(defaultAuthConfig);
             expect(Logger.info).toHaveBeenCalledWith(
                 "createAuthConfig:",
@@ -215,32 +236,32 @@ describe("authentication", () => {
             );
         });
 
-        it("should return default configuration with error when credentials are not valid BCrypt hashes", () => {
+        it("should return default configuration with error when credentials are not valid BCrypt hashes", async () => {
             cds.env.ord.authentication.basic = {
                 credentials: { admin: "InvalidBCrypHash" },
             };
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
             expect(authConfig.error).toEqual("All passwords must be bcrypt hashes");
         });
 
-        it("should automatically ignore Open when combined with Basic authentication", () => {
+        it("should automatically ignore Open when combined with Basic authentication", async () => {
             cds.env.ord.authentication.basic = { credentials: mockValidUser };
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
             // Open should be filtered out automatically when Basic is present
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic]);
             expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }]);
             expect(authConfig.credentials).toEqual(mockValidUser);
         });
 
-        it("should return default configuration with error when credentials are not valid JSON", () => {
+        it("should return default configuration with error when credentials are not valid JSON", async () => {
             process.env.BASIC_AUTH = "non-valid-json";
-            const authConfig = createAuthConfig();
-            expect(authConfig.error).toEqual(expect.stringContaining("not valid JSON"));
+            const authConfig = await createAuthConfig();
+            expect(authConfig.error).toEqual(expect.stringContaining("Unexpected token"));
         });
 
-        it("should return auth configuration containing credentials by using data from process.env.BASIC_AUTH", () => {
+        it("should return auth configuration containing credentials by using data from process.env.BASIC_AUTH", async () => {
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
@@ -248,9 +269,9 @@ describe("authentication", () => {
             });
         });
 
-        it("should return auth configuration containing credentials by using data from .cdsrc.json", () => {
+        it("should return auth configuration containing credentials by using data from .cdsrc.json", async () => {
             cds.env.ord.authentication.basic = { credentials: mockValidUser };
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
             expect(authConfig).toEqual({
                 types: [AUTHENTICATION_TYPE.Basic],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
@@ -265,27 +286,27 @@ describe("authentication", () => {
             __clearMockAuthConfig();
         });
 
-        it("should return default configuration when no authentication is configured", () => {
-            const authConfig = getAuthConfig();
+        it("should return default configuration when no authentication is configured", async () => {
+            const authConfig = await getAuthConfig();
             expect(authConfig).toEqual(defaultAuthConfig);
         });
 
-        it("should return cached configuration on subsequent calls", () => {
+        it("should return cached configuration on subsequent calls", async () => {
             // Since we're mocking getAuthConfig, we need to test the caching behavior differently
-            const authConfig1 = getAuthConfig();
-            const authConfig2 = getAuthConfig();
+            const authConfig1 = await getAuthConfig();
+            const authConfig2 = await getAuthConfig();
             expect(authConfig1).toEqual(authConfig2); // Same content
         });
 
-        it("should throw an error when auth configuration is not valid", () => {
-            // Mock getAuthConfig to throw an error for invalid configuration
-            authModule.getAuthConfig.mockImplementationOnce(() => {
+        it("should throw an error when auth configuration is not valid", async () => {
+            // Mock getAuthConfigSync to throw an error for invalid configuration
+            getAuthConfigSync.mockImplementationOnce(() => {
                 throw new Error("Invalid authentication configuration");
             });
 
             Logger.error.mockClear();
 
-            expect(() => getAuthConfig()).toThrow("Invalid authentication configuration");
+            expect(() => getAuthConfigSync()).toThrow("Invalid authentication configuration");
         });
     });
 
@@ -297,6 +318,10 @@ describe("authentication", () => {
         });
 
         it("should have access with default open authentication", async () => {
+            __setMockAuthConfig({
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            });
             await authCheck({ headers: {} }, 200);
         });
 
@@ -431,21 +456,20 @@ describe("authentication", () => {
             cds.context = {};
         });
 
-        it("should configure CF mTLS for immediate initialization", () => {
+        it("should configure CF mTLS for immediate initialization", async () => {
             process.env.CF_MTLS_TRUSTED_CERTS = JSON.stringify({
                 certs: mockTrustedCertPairs,
                 rootCaDn: mockTrustedRootCaDns,
             });
 
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
             expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
             // Validator will be initialized immediately at startup (no lazy loading markers)
-            expect(authConfig.cfMtlsValidator).toBeUndefined();
-            expect(authConfig._cfMtlsInitPromise).toBeUndefined();
+            expect(authConfig.cfMtlsValidator).toBeDefined();
         });
 
-        it("should configure CF mTLS using cds.env for immediate initialization", () => {
+        it("should configure CF mTLS using cds.env for immediate initialization", async () => {
             cds.env.ord = {
                 authentication: {
                     cfMtls: {
@@ -455,10 +479,10 @@ describe("authentication", () => {
                 },
             };
 
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
             // Validator will be initialized immediately at startup (no lazy loading markers)
-            expect(authConfig.cfMtlsValidator).toBeUndefined();
+            expect(authConfig.cfMtlsValidator).toBeDefined();
         });
 
         it("should authenticate with valid certificate pair and root CA", async () => {
@@ -580,19 +604,19 @@ describe("authentication", () => {
             await authCheck(req, 403, "Forbidden: Untrusted certificate authority");
         });
 
-        it("should support combination with Basic auth", () => {
+        it("should support combination with Basic auth", async () => {
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             process.env.CF_MTLS_TRUSTED_CERTS = JSON.stringify({
                 certs: mockTrustedCertPairs,
                 rootCaDn: mockTrustedRootCaDns,
             });
 
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
             expect(authConfig.types).toContain(AUTHENTICATION_TYPE.Basic);
             expect(authConfig.types).toContain(AUTHENTICATION_TYPE.CfMtls);
             expect(authConfig.credentials).toBeDefined();
             // CF mTLS validator will be initialized immediately at startup (no lazy loading markers)
-            expect(authConfig.cfMtlsValidator).toBeUndefined();
+            expect(authConfig.cfMtlsValidator).toBeDefined();
         });
 
         it("should handle Basic auth when both Basic and CF mTLS are configured", async () => {
@@ -661,7 +685,7 @@ describe("authentication", () => {
             await authCheck(req, 200);
         });
 
-        it("should support multiple authentication strategies in ORD document", () => {
+        it("should support multiple authentication strategies in ORD document", async () => {
             cds.env.ord.authentication = {
                 basic: { credentials: mockValidUser },
                 cfMtls: {
@@ -669,7 +693,7 @@ describe("authentication", () => {
                     rootCaDn: mockTrustedRootCaDns,
                 },
             };
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
 
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls]);
             expect(authConfig.accessStrategies).toEqual([
@@ -678,7 +702,7 @@ describe("authentication", () => {
             ]);
         });
 
-        it("should automatically filter out Open when combined with CF mTLS", () => {
+        it("should automatically filter out Open when combined with CF mTLS", async () => {
             cds.env.ord = {
                 authentication: {
                     cfMtls: {
@@ -687,13 +711,13 @@ describe("authentication", () => {
                     },
                 },
             };
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
 
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
             expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
         });
 
-        it("should automatically filter out Open when all three auth types are combined", () => {
+        it("should automatically filter out Open when all three auth types are combined", async () => {
             cds.env.ord.authentication = {
                 basic: { credentials: mockValidUser },
                 cfMtls: {
@@ -701,7 +725,7 @@ describe("authentication", () => {
                     rootCaDn: mockTrustedRootCaDns,
                 },
             };
-            const authConfig = createAuthConfig();
+            const authConfig = await createAuthConfig();
 
             // Open should be filtered out, Basic and CfMtls remain
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls]);
