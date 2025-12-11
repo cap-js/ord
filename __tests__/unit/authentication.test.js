@@ -161,6 +161,8 @@ describe("authentication", () => {
     const mockValidUser = { admin: "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW" };
     const defaultAuthConfig = {
         accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+        hasBasic: false,
+        hasCfMtls: false,
     };
 
     beforeAll(() => {
@@ -231,9 +233,13 @@ describe("authentication", () => {
 
         it("should return default configuration when no authentication type is provided", async () => {
             const authConfig = await createAuthConfig();
-            expect(authConfig).toEqual(defaultAuthConfig);
+            expect(authConfig).toEqual({
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+                hasBasic: false,
+                hasCfMtls: false,
+            });
             expect(Logger.info).toHaveBeenCalledWith(
-                "createAuthConfig:",
+                "detectAuthConfig:",
                 'No authentication configured. Defaulting to "Open" authentication',
             );
         });
@@ -266,6 +272,8 @@ describe("authentication", () => {
             expect(authConfig).toEqual({
                 accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
                 credentials: mockValidUser,
+                hasBasic: true,
+                hasCfMtls: false,
             });
         });
 
@@ -275,6 +283,8 @@ describe("authentication", () => {
             expect(authConfig).toEqual({
                 accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
                 credentials: mockValidUser,
+                hasBasic: true,
+                hasCfMtls: false,
             });
         });
     });
