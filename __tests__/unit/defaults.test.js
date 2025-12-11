@@ -1,11 +1,13 @@
 const cds = require("@sap/cds");
 const { AUTHENTICATION_TYPE } = require("../../lib/constants");
-jest.spyOn(cds, "context", "get").mockReturnValue({
-    authConfig: {
-        types: [AUTHENTICATION_TYPE.Open],
-        accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
-    },
-});
+
+// Mock the authentication module instead of cds.context
+jest.mock("../../lib/auth/authentication", () => ({
+    getAuthConfigSync: jest.fn(() => ({
+        accessStrategies: [{ type: "open" }],
+    })),
+}));
+
 const defaults = require("../../lib/defaults");
 
 describe("defaults", () => {

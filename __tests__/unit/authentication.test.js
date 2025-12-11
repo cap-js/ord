@@ -49,19 +49,22 @@ const authenticate = jest.fn(async (req, res, next) => {
     }
 
     // Handle invalid configuration
-    if (!authConfig || !authConfig.types || !Array.isArray(authConfig.types)) {
+    if (!authConfig || !authConfig.accessStrategies || !Array.isArray(authConfig.accessStrategies)) {
         Logger.error("Invalid auth configuration:", authConfig);
         return res.status(401).send("Not authorized");
     }
 
+    // Extract authentication types from access strategies
+    const authTypes = authConfig.accessStrategies.map((strategy) => strategy.type);
+
     // If open authentication, allow immediately
-    if (authConfig.types.includes(AUTHENTICATION_TYPE.Open)) {
+    if (authTypes.includes(AUTHENTICATION_TYPE.Open)) {
         res.status(200);
         return next();
     }
 
     // Try Basic auth first if available
-    if (authConfig.types.includes(AUTHENTICATION_TYPE.Basic)) {
+    if (authTypes.includes(AUTHENTICATION_TYPE.Basic)) {
         const authHeader = req.headers.authorization;
 
         if (authHeader) {
@@ -100,7 +103,7 @@ const authenticate = jest.fn(async (req, res, next) => {
     }
 
     // Try CF mTLS if Basic auth not provided or not configured
-    if (authConfig.types.includes(AUTHENTICATION_TYPE.CfMtls)) {
+    if (authTypes.includes(AUTHENTICATION_TYPE.CfMtls)) {
         const hasMtlsHeaders =
             req.headers["x-forwarded-client-cert-issuer-dn"] ||
             req.headers["x-forwarded-client-cert-subject-dn"] ||
@@ -129,7 +132,7 @@ const authenticate = jest.fn(async (req, res, next) => {
 
     // If we reach here, no authentication method succeeded
     // Set WWW-Authenticate header if Basic auth is configured
-    if (authConfig.types.includes(AUTHENTICATION_TYPE.Basic)) {
+    if (authTypes.includes(AUTHENTICATION_TYPE.Basic)) {
         res.setHeader("WWW-Authenticate", 'Basic realm="401"');
     }
 
@@ -157,7 +160,6 @@ describe("authentication", () => {
     // The bcrypt hash decrypted is: secret
     const mockValidUser = { admin: "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW" };
     const defaultAuthConfig = {
-        types: [AUTHENTICATION_TYPE.Open],
         accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
     };
 
@@ -248,8 +250,7 @@ describe("authentication", () => {
             cds.env.ord.authentication.basic = { credentials: mockValidUser };
             const authConfig = await createAuthConfig();
             // Open should be filtered out automatically when Basic is present
-            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic]);
-            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }]);
+            expect(authConfig.accessStrategies).toEqual([{ type: AUTHENTICATION_TYPE.Basic }]);
             expect(authConfig.credentials).toEqual(mockValidUser);
         });
 
@@ -263,8 +264,7 @@ describe("authentication", () => {
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             const authConfig = await createAuthConfig();
             expect(authConfig).toEqual({
-                types: [AUTHENTICATION_TYPE.Basic],
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
                 credentials: mockValidUser,
             });
         });
@@ -273,8 +273,7 @@ describe("authentication", () => {
             cds.env.ord.authentication.basic = { credentials: mockValidUser };
             const authConfig = await createAuthConfig();
             expect(authConfig).toEqual({
-                types: [AUTHENTICATION_TYPE.Basic],
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
                 credentials: mockValidUser,
             });
         });
@@ -319,7 +318,6 @@ describe("authentication", () => {
 
         it("should have access with default open authentication", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Open],
                 accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
             });
             await authCheck({ headers: {} }, 200);
@@ -327,8 +325,7 @@ describe("authentication", () => {
 
         it("should not authenticate because of missing authorization header in case of any non-open authentication", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Basic],
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
             });
 
             const req = {
@@ -340,8 +337,7 @@ describe("authentication", () => {
 
         it("should not authenticate and set header 'WWW-Authenticate' because of missing authorization header", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Basic],
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
             });
 
             const req = {
@@ -353,7 +349,7 @@ describe("authentication", () => {
 
         it("should not authenticate because of wrongly configured unsupported authentication type", async () => {
             __setMockAuthConfig({
-                types: "UnsupportedAuthType",
+                accessStrategies: "UnsupportedAuthType",
             });
 
             const req = {
@@ -365,8 +361,7 @@ describe("authentication", () => {
 
         it("should not authenticate because of invalid name of authentication type in the request header", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Basic],
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
             });
 
             const req = {
@@ -379,9 +374,8 @@ describe("authentication", () => {
 
         it("should authenticate with valid credentials in the request", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Basic],
                 credentials: mockValidUser,
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
             });
 
             const req = {
@@ -394,9 +388,8 @@ describe("authentication", () => {
 
         it("should not authenticate because of missing password in the request", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Basic],
                 credentials: mockValidUser,
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
             });
 
             const req = {
@@ -410,9 +403,8 @@ describe("authentication", () => {
 
         it("should not authenticate because of invalid credentials in the request", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Basic],
                 credentials: mockValidUser,
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
             });
 
             const req = {
@@ -463,8 +455,7 @@ describe("authentication", () => {
             });
 
             const authConfig = await createAuthConfig();
-            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
-            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
+            expect(authConfig.accessStrategies).toEqual([{ type: AUTHENTICATION_TYPE.CfMtls }]);
             // Validator will be initialized immediately at startup (no lazy loading markers)
             expect(authConfig.cfMtlsValidator).toBeDefined();
         });
@@ -480,21 +471,20 @@ describe("authentication", () => {
             };
 
             const authConfig = await createAuthConfig();
-            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
+            expect(authConfig.accessStrategies).toEqual([{ type: AUTHENTICATION_TYPE.CfMtls }]);
             // Validator will be initialized immediately at startup (no lazy loading markers)
             expect(authConfig.cfMtlsValidator).toBeDefined();
         });
 
         it("should authenticate with valid certificate pair and root CA", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({
                     ok: true,
                     issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                     subject: "CN=aggregator, O=SAP SE, C=DE",
                     rootCaDn: "CN=SAP Global Root CA, O=SAP SE, C=DE",
                 }),
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.CfMtls }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.CfMtls }],
             });
 
             const issuerDn = "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE";
@@ -517,13 +507,12 @@ describe("authentication", () => {
 
         it("should not authenticate with missing certificate headers", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({
                     ok: false,
                     reason: "HEADER_MISSING",
                     missing: "x-forwarded-client-cert-issuer-dn",
                 }),
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.CfMtls }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.CfMtls }],
             });
 
             const req = {
@@ -535,9 +524,8 @@ describe("authentication", () => {
 
         it("should not authenticate with invalid base64 encoding", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({ ok: false, reason: "INVALID_ENCODING" }),
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.CfMtls }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.CfMtls }],
             });
 
             const req = {
@@ -551,14 +539,13 @@ describe("authentication", () => {
 
         it("should return 403 forbidden for certificate pair mismatch", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({
                     ok: false,
                     reason: "CERT_PAIR_MISMATCH",
                     issuer: "CN=Evil CA, O=Evil Corp, C=XX",
                     subject: "CN=intruder, O=Evil, C=XX",
                 }),
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.CfMtls }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.CfMtls }],
             });
 
             const req = {
@@ -578,13 +565,12 @@ describe("authentication", () => {
 
         it("should return 403 forbidden for root CA mismatch", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({
                     ok: false,
                     reason: "ROOT_CA_MISMATCH",
                     rootCaDn: "CN=Evil Root CA, O=Evil Corp, C=XX",
                 }),
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.CfMtls }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.CfMtls }],
             });
 
             const req = {
@@ -612,8 +598,10 @@ describe("authentication", () => {
             });
 
             const authConfig = await createAuthConfig();
-            expect(authConfig.types).toContain(AUTHENTICATION_TYPE.Basic);
-            expect(authConfig.types).toContain(AUTHENTICATION_TYPE.CfMtls);
+            expect(authConfig.accessStrategies).toEqual([
+                { type: AUTHENTICATION_TYPE.Basic },
+                { type: AUTHENTICATION_TYPE.CfMtls },
+            ]);
             expect(authConfig.credentials).toBeDefined();
             // CF mTLS validator will be initialized immediately at startup (no lazy loading markers)
             expect(authConfig.cfMtlsValidator).toBeDefined();
@@ -621,7 +609,6 @@ describe("authentication", () => {
 
         it("should handle Basic auth when both Basic and CF mTLS are configured", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
                 cfMtlsValidator: () => ({
                     ok: true,
@@ -629,7 +616,7 @@ describe("authentication", () => {
                     subject: "CN=aggregator, O=SAP SE, C=DE",
                     rootCaDn: "CN=SAP Global Root CA, O=SAP SE, C=DE",
                 }),
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }, { type: AUTHENTICATION_TYPE.CfMtls }],
             });
 
             const req = {
@@ -643,7 +630,6 @@ describe("authentication", () => {
 
         it("should handle CF mTLS when both Basic and CF mTLS are configured but no Basic header", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
                 cfMtlsValidator: () => ({
                     ok: true,
@@ -651,7 +637,7 @@ describe("authentication", () => {
                     subject: "CN=aggregator, O=SAP SE, C=DE",
                     rootCaDn: "CN=SAP Global Root CA, O=SAP SE, C=DE",
                 }),
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }, { type: AUTHENTICATION_TYPE.CfMtls }],
             });
 
             const issuerDn = "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE";
@@ -671,9 +657,8 @@ describe("authentication", () => {
 
         it("should handle Basic auth when both Basic and CF mTLS are configured with Basic header", async () => {
             __setMockAuthConfig({
-                types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }, { type: AUTHENTICATION_TYPE.CfMtls }],
             });
 
             const req = {
@@ -695,10 +680,9 @@ describe("authentication", () => {
             };
             const authConfig = await createAuthConfig();
 
-            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls]);
             expect(authConfig.accessStrategies).toEqual([
-                { type: ORD_ACCESS_STRATEGY.Basic },
-                { type: ORD_ACCESS_STRATEGY.CfMtls },
+                { type: AUTHENTICATION_TYPE.Basic },
+                { type: AUTHENTICATION_TYPE.CfMtls },
             ]);
         });
 
@@ -713,8 +697,7 @@ describe("authentication", () => {
             };
             const authConfig = await createAuthConfig();
 
-            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
-            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
+            expect(authConfig.accessStrategies).toEqual([{ type: AUTHENTICATION_TYPE.CfMtls }]);
         });
 
         it("should automatically filter out Open when all three auth types are combined", async () => {
@@ -728,10 +711,9 @@ describe("authentication", () => {
             const authConfig = await createAuthConfig();
 
             // Open should be filtered out, Basic and CfMtls remain
-            expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls]);
             expect(authConfig.accessStrategies).toEqual([
-                { type: ORD_ACCESS_STRATEGY.Basic },
-                { type: ORD_ACCESS_STRATEGY.CfMtls },
+                { type: AUTHENTICATION_TYPE.Basic },
+                { type: AUTHENTICATION_TYPE.CfMtls },
             ]);
         });
     });
