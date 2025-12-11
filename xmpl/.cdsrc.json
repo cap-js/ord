@@ -38,6 +38,9 @@
                 "rootCaDn": ["CN=MyOrg Root CA, C=DE"],
                 "configEndpoints": ["https://config.myorg.com/mtls-certs"]
             }
+        },
+        "compilerOptions": {
+            "openapi:url": "https://api.example.com/${service-path}"
         }
     }
 }
