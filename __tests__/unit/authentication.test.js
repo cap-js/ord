@@ -256,7 +256,7 @@ describe("authentication", () => {
             cds.env.ord.authentication.basic = { credentials: mockValidUser };
             const authConfig = await createAuthConfig();
             // Open should be filtered out automatically when Basic is present
-            expect(authConfig.accessStrategies).toEqual([{ type: AUTHENTICATION_TYPE.Basic }]);
+            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }]);
             expect(authConfig.credentials).toEqual(mockValidUser);
         });
 
@@ -270,7 +270,7 @@ describe("authentication", () => {
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             const authConfig = await createAuthConfig();
             expect(authConfig).toEqual({
-                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                 credentials: mockValidUser,
                 hasBasic: true,
                 hasCfMtls: false,
@@ -281,7 +281,7 @@ describe("authentication", () => {
             cds.env.ord.authentication.basic = { credentials: mockValidUser };
             const authConfig = await createAuthConfig();
             expect(authConfig).toEqual({
-                accessStrategies: [{ type: AUTHENTICATION_TYPE.Basic }],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                 credentials: mockValidUser,
                 hasBasic: true,
                 hasCfMtls: false,
@@ -465,7 +465,7 @@ describe("authentication", () => {
             });
 
             const authConfig = await createAuthConfig();
-            expect(authConfig.accessStrategies).toEqual([{ type: AUTHENTICATION_TYPE.CfMtls }]);
+            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
             // Validator will be initialized immediately at startup (no lazy loading markers)
             expect(authConfig.cfMtlsValidator).toBeDefined();
         });
@@ -481,7 +481,7 @@ describe("authentication", () => {
             };
 
             const authConfig = await createAuthConfig();
-            expect(authConfig.accessStrategies).toEqual([{ type: AUTHENTICATION_TYPE.CfMtls }]);
+            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
             // Validator will be initialized immediately at startup (no lazy loading markers)
             expect(authConfig.cfMtlsValidator).toBeDefined();
         });
@@ -609,8 +609,8 @@ describe("authentication", () => {
 
             const authConfig = await createAuthConfig();
             expect(authConfig.accessStrategies).toEqual([
-                { type: AUTHENTICATION_TYPE.Basic },
-                { type: AUTHENTICATION_TYPE.CfMtls },
+                { type: ORD_ACCESS_STRATEGY.Basic },
+                { type: ORD_ACCESS_STRATEGY.CfMtls },
             ]);
             expect(authConfig.credentials).toBeDefined();
             // CF mTLS validator will be initialized immediately at startup (no lazy loading markers)
@@ -691,8 +691,8 @@ describe("authentication", () => {
             const authConfig = await createAuthConfig();
 
             expect(authConfig.accessStrategies).toEqual([
-                { type: AUTHENTICATION_TYPE.Basic },
-                { type: AUTHENTICATION_TYPE.CfMtls },
+                { type: ORD_ACCESS_STRATEGY.Basic },
+                { type: ORD_ACCESS_STRATEGY.CfMtls },
             ]);
         });
 
@@ -707,7 +707,7 @@ describe("authentication", () => {
             };
             const authConfig = await createAuthConfig();
 
-            expect(authConfig.accessStrategies).toEqual([{ type: AUTHENTICATION_TYPE.CfMtls }]);
+            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
         });
 
         it("should automatically filter out Open when all three auth types are combined", async () => {
@@ -722,8 +722,8 @@ describe("authentication", () => {
 
             // Open should be filtered out, Basic and CfMtls remain
             expect(authConfig.accessStrategies).toEqual([
-                { type: AUTHENTICATION_TYPE.Basic },
-                { type: AUTHENTICATION_TYPE.CfMtls },
+                { type: ORD_ACCESS_STRATEGY.Basic },
+                { type: ORD_ACCESS_STRATEGY.CfMtls },
             ]);
         });
     });
