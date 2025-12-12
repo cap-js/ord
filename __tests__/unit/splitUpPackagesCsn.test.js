@@ -1,18 +1,25 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE } = require("../../lib/constants");
+const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 const bahCsn = require("../__mocks__/splitUpPackagesCsn.json");
 
 describe("ORD Generation for Business Accelerator Hub", () => {
     let ord;
 
-    beforeAll(() => {
+    beforeAll(async () => {
         cds.root = path.join(__dirname, "../bookshop");
-        jest.spyOn(cds, "context", "get").mockReturnValue({
-            authConfig: {
-                types: [AUTHENTICATION_TYPE.Open],
-            },
+
+        // Initialize authentication configuration for tests
+        const authentication = require("../../lib/auth/authentication");
+
+        // Mock the createAuthConfig to return a default open configuration
+        jest.spyOn(authentication, "createAuthConfig").mockResolvedValue({
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         });
+
+        // Initialize the auth config
+        await authentication.getAuthConfig();
+
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         // Mock MCP plugin availability to false for these tests
         jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(false);
@@ -30,8 +37,8 @@ describe("ORD Generation for Business Accelerator Hub", () => {
     });
 
     afterAll(() => {
-        jest.restoreAllMocks();
         jest.clearAllMocks();
+        jest.resetAllMocks();
     });
 
     describe("Tests for ORD document for Business Accelerator Hub", () => {

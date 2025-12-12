@@ -5,6 +5,12 @@ const { getMetadata } = require("../../lib/index");
 const { isMCPPluginAvailable } = require("../../lib/mcpAdapter");
 const cdsc = require("@sap/cds-compiler/lib/main");
 
+// Mock the Logger module
+jest.mock("../../lib/logger", () => ({
+    log: jest.fn(),
+    error: jest.fn(),
+}));
+
 jest.mock("@cap-js/openapi", () => ({
     compile: jest.fn(),
 }));
@@ -136,19 +142,21 @@ describe("metaData", () => {
 
     describe("isMCPPluginAvailable", () => {
         test("should return true when MCP plugin is available", () => {
-            const result = isMCPPluginAvailable(() => {
-                return true;
-            });
+            const mockResolve = jest.fn(() => "/path/to/plugin");
+            const result = isMCPPluginAvailable(mockResolve);
 
             expect(result).toBe(true);
+            expect(mockResolve).toHaveBeenCalledWith("@btp-ai/mcp-plugin");
         });
 
         test("should return false when MCP plugin is not available", () => {
-            const result = isMCPPluginAvailable(() => {
-                throw new Error("Cannot resolve module");
+            const mockResolve = jest.fn(() => {
+                throw new Error("Cannot find module");
             });
+            const result = isMCPPluginAvailable(mockResolve);
 
             expect(result).toBe(false);
+            expect(mockResolve).toHaveBeenCalledWith("@btp-ai/mcp-plugin");
         });
     });
     test("getMetadata should handle invalid URL format", async () => {
@@ -227,7 +235,7 @@ describe("metaData", () => {
 
     test("getMetadata should pass compile options from cds.env", async () => {
         const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:TestService:v1/TestService.oas3.json";
-        const compileOptions = { "openapi": { "openapi:path": "my_path" } };
+        const compileOptions = { openapi: { "openapi:path": "my_path" } };
         cds.env["ord"] = { compileOptions };
 
         openapi.mockImplementation((csn, options) => {

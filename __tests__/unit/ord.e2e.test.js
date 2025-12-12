@@ -3,15 +3,25 @@ const path = require("path");
 const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY, CDS_ELEMENT_KIND } = require("../../lib/constants");
 
 describe("End-to-end test for ORD document", () => {
-    beforeAll(() => {
+    beforeAll(async () => {
         process.env.DEBUG = "true";
-        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        jest.spyOn(cds, "context", "get").mockReturnValue({
-            authConfig: {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-            },
+
+        // Initialize authentication configuration for tests
+        const authentication = require("../../lib/auth/authentication");
+
+        // Mock the getAuthConfig and getAuthConfigSync functions
+        jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
+            types: [AUTHENTICATION_TYPE.Open],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         });
+
+        jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
+            types: [AUTHENTICATION_TYPE.Open],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        });
+
+        // Initialize the auth config
+        await authentication.getAuthConfig();
     });
 
     afterAll(() => {
@@ -24,6 +34,9 @@ describe("End-to-end test for ORD document", () => {
 
         beforeAll(async () => {
             cds.root = path.join(__dirname, "../bookshop");
+            // Load CDS environment configuration from .cdsrc.json
+            const config = cds.env.load(cds.root, ".cdsrc.json");
+            Object.assign(cds.env, config);
             csn = await cds.load(path.join(cds.root, "srv"));
             jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             ord = require("../../lib/ord");
@@ -194,12 +207,24 @@ describe("Tests for products and packages", () => {
 
     beforeAll(async () => {
         process.env.DEBUG = "true";
-        jest.spyOn(cds, "context", "get").mockReturnValue({
-            authConfig: {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-            },
+
+        // Initialize authentication configuration for tests
+        const authentication = require("../../lib/auth/authentication");
+
+        // Mock the getAuthConfig and getAuthConfigSync functions
+        jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
+            types: [AUTHENTICATION_TYPE.Open],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         });
+
+        jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
+            types: [AUTHENTICATION_TYPE.Open],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        });
+
+        // Initialize the auth config
+        await authentication.getAuthConfig();
+
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../../lib/ord");
         cds.root = path.join(__dirname, "../bookshop");
@@ -226,16 +251,6 @@ describe("Tests for products and packages", () => {
     });
 
     it("should raise error log when custom product ordId starts with sap detected", async () => {
-        let csn, ord;
-        cds.root = path.join(__dirname, "../bookshop");
-        jest.spyOn(cds, "context", "get").mockReturnValue({
-            authConfig: {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-            },
-        });
-        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        ord = require("../../lib/ord");
         cds.env.ord = {
             products: [
                 {
@@ -253,17 +268,6 @@ describe("Tests for products and packages", () => {
     });
 
     it("should use valid custom products ordId", async () => {
-        let csn, ord;
-        cds.env.ord = {};
-        cds.root = path.join(__dirname, "../bookshop");
-        jest.spyOn(cds, "context", "get").mockReturnValue({
-            authConfig: {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-            },
-        });
-        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        ord = require("../../lib/ord");
         cds.env.ord = {
             products: [
                 {
@@ -286,11 +290,24 @@ describe("Tests for Data Product definition", () => {
 
     beforeAll(async () => {
         process.env.DEBUG = "true";
-        jest.spyOn(cds, "context", "get").mockReturnValue({
-            authConfig: {
-                types: [AUTHENTICATION_TYPE.Open],
-            },
+
+        // Initialize authentication configuration for tests
+        const authentication = require("../../lib/auth/authentication");
+
+        // Mock the getAuthConfig and getAuthConfigSync functions
+        jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
+            types: [AUTHENTICATION_TYPE.Open],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         });
+
+        jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
+            types: [AUTHENTICATION_TYPE.Open],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        });
+
+        // Initialize the auth config
+        await authentication.getAuthConfig();
+
         cds.root = path.join(__dirname, "../bookshop");
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../../lib/ord");
@@ -356,8 +373,30 @@ describe("Tests for Data Product definition", () => {
 
     it("Check interop CSN annotation mapping through ORD", async () => {
         let document;
-        jest.isolateModules(() => {
+        await jest.isolateModules(async () => {
             delete global.cds;
+
+            // Re-require CDS in isolated context
+            const cds = require("@sap/cds");
+
+            // Set up proper test environment
+            cds.root = path.join(__dirname, "../bookshop");
+            // Load CDS environment configuration from .cdsrc.json
+            const config = cds.env.load(cds.root, ".cdsrc.json");
+            Object.assign(cds.env, config);
+
+            // Initialize authentication in isolated module context
+            const authentication = require("../../lib/auth/authentication");
+            jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            });
+            jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            });
+            await authentication.getAuthConfig();
+
             const dateMod = require("../../lib/date");
             jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             const ordLocal = require("../../lib/ord");
@@ -385,8 +424,30 @@ describe("Tests for Data Product definition", () => {
 
     it("Check interop CSN service name parsing through ORD", async () => {
         let document;
-        jest.isolateModules(() => {
+        await jest.isolateModules(async () => {
             delete global.cds;
+
+            // Re-require CDS in isolated context
+            const cds = require("@sap/cds");
+
+            // Set up proper test environment
+            cds.root = path.join(__dirname, "../bookshop");
+            // Load CDS environment configuration from .cdsrc.json
+            const config = cds.env.load(cds.root, ".cdsrc.json");
+            Object.assign(cds.env, config);
+
+            // Initialize authentication in isolated module context
+            const authentication = require("../../lib/auth/authentication");
+            jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            });
+            jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            });
+            await authentication.getAuthConfig();
+
             const dateMod = require("../../lib/date");
             jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             const ordLocal = require("../../lib/ord");
@@ -421,13 +482,26 @@ describe("Tests for Data Product definition", () => {
 describe("Tests for eventResource and apiResource", () => {
     let ord;
 
-    beforeAll(() => {
+    beforeAll(async () => {
         process.env.DEBUG = "true";
-        jest.spyOn(cds, "context", "get").mockReturnValue({
-            authConfig: {
-                types: [AUTHENTICATION_TYPE.Open],
-            },
+
+        // Initialize authentication configuration for tests
+        const authentication = require("../../lib/auth/authentication");
+
+        // Mock the getAuthConfig and getAuthConfigSync functions
+        jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
+            types: [AUTHENTICATION_TYPE.Open],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         });
+
+        jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
+            types: [AUTHENTICATION_TYPE.Open],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        });
+
+        // Initialize the auth config
+        await authentication.getAuthConfig();
+
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../../lib/ord");
         cds.root = path.join(__dirname, "../bookshop");

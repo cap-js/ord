@@ -157,10 +157,10 @@ function createMtlsHeaders(issuer, subject, rootCaDn) {
         "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
         "x-ssl-client": "1",
         "x-ssl-client-verify": "0",
-        // Certificate DN headers
-        "x-forwarded-client-cert-issuer-dn": Buffer.from(issuer).toString("base64"),
-        "x-forwarded-client-cert-subject-dn": Buffer.from(subject).toString("base64"),
-        "x-forwarded-client-cert-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
+        // Certificate DN headers (corrected to match actual gorouter headers)
+        "x-ssl-client-issuer-dn": Buffer.from(issuer).toString("base64"),
+        "x-ssl-client-subject-dn": Buffer.from(subject).toString("base64"),
+        "x-ssl-client-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
     };
 }
 
@@ -341,10 +341,10 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
     describe("mTLS Authentication - Invalid Certificate Scenarios", () => {
         test("should reject request with missing issuer header", async () => {
             const headers = {
-                "x-forwarded-client-cert-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString(
+                "x-ssl-client-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString(
                     "base64",
                 ),
-                "x-forwarded-client-cert-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
+                "x-ssl-client-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
             };
 
             await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(401);
@@ -352,10 +352,10 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
 
         test("should reject request with missing subject header", async () => {
             const headers = {
-                "x-forwarded-client-cert-issuer-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString(
+                "x-ssl-client-issuer-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString(
                     "base64",
                 ),
-                "x-forwarded-client-cert-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
+                "x-ssl-client-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
             };
 
             await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(401);
@@ -363,10 +363,10 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
 
         test("should reject request with missing root CA header", async () => {
             const headers = {
-                "x-forwarded-client-cert-issuer-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString(
+                "x-ssl-client-issuer-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString(
                     "base64",
                 ),
-                "x-forwarded-client-cert-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString(
+                "x-ssl-client-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString(
                     "base64",
                 ),
             };
@@ -699,10 +699,10 @@ describe("ORD Integration Tests - mTLS via .cdsrc.json configEndpoint (fetchMtls
     describe("mTLS Authentication - Invalid Certificate Scenarios", () => {
         test("should reject request with missing issuer header", async () => {
             const headers = {
-                "x-forwarded-client-cert-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString(
+                "x-ssl-client-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString(
                     "base64",
                 ),
-                "x-forwarded-client-cert-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
+                "x-ssl-client-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
             };
 
             await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(401);
