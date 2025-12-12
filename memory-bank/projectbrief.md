@@ -3,7 +3,7 @@
 ## Project Identity
 
 **Name:** `@cap-js/ord`
-**Version:** 1.3.14
+**Version:** 1.3.14+ (December 2025)
 **Type:** CAP Framework Plugin
 **Repository:** https://github.com/cap-js/ord
 **License:** Apache-2.0

@@ -121,6 +121,36 @@ describe("extendOrdWithCustom", () => {
             const result = extendCustomORDContentIfExists(appConfig, ordContent);
             expect(result).toMatchSnapshot();
         });
+
+        it("should patch MCP API resources via custom.ord.json", () => {
+            const ordContent = {
+                apiResources: [
+                    {
+                        ordId: "customer.test:apiResource:mcp-server:v1",
+                        title: "MCP Server for test-app",
+                        shortDescription: "This is the MCP server to interact with the test-app",
+                        version: "1.0.0",
+                        visibility: "public",
+                        releaseStatus: "active",
+                        entryPoints: [],
+                        apiProtocol: "mcp",
+                    },
+                ],
+            };
+            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithMCPOverride.json");
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
+
+            expect(result.apiResources).toHaveLength(1);
+            const mcpResource = result.apiResources[0];
+            expect(mcpResource.ordId).toBe("customer.test:apiResource:mcp-server:v1");
+            expect(mcpResource.visibility).toBe("internal");
+            expect(mcpResource.title).toBe("Internal MCP Server for CAP Project");
+            expect(mcpResource.shortDescription).toBe("Custom MCP server description");
+            expect(mcpResource.version).toBe("2.1.0");
+            expect(mcpResource.entryPoints).toEqual(["/mcp-server"]);
+            expect(mcpResource.releaseStatus).toBe("beta");
+            expect(mcpResource.apiProtocol).toBe("mcp"); // Should remain unchanged
+        });
     });
 });
 

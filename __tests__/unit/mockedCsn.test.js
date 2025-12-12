@@ -7,7 +7,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     beforeAll(async () => {
         cds.root = path.join(__dirname, "../bookshop");
-        
+
         // Initialize authentication configuration for tests
         const authentication = require("../../lib/auth/authentication");
 
@@ -19,8 +19,10 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
         // Initialize the auth config
         await authentication.getAuthConfig();
-        
+
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        // Mock MCP plugin availability to false for these tests
+        jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginAvailable").mockReturnValue(false);
         ord = require("../../lib/ord");
     });
 

@@ -60,17 +60,22 @@
 - **Dependency Modernization**: Major dependency updates including Node v22, Express v5, Jest v30, Spring Boot v3.5.6
 - **Renovate Integration**: Configured Renovate bot for automated dependency management
 
-### Current Development Priorities
+### Current Development Priorities (December 2025)
 
 1. **Authentication System Stability**: Successfully fixed all authentication test failures and validated the new architecture without `types` property
 2. **Test Suite Reliability**: All 325 tests now pass, including the previously problematic authentication tests
-3. **Interop CSN Stability**: Ensuring robust interop CSN generation across various CAP model patterns
-4. **Authentication Refinement**: Improving authentication configuration flexibility and security
-5. **Node.js Version Strategy**: Focusing on Node.js 22 support and future version planning
-6. **Supply Chain Security**: Maintaining trusted publishing and provenance capabilities
-7. **Dependency Management**: Keeping dependencies current through automated Renovate updates
-8. **Java Runtime Parity**: Continuing to expand and stabilize Java runtime support
-9. **CSN Format Compatibility**: Ensuring clean CSN generation for various integration scenarios
+3. **Production Stability**: Monitoring and stabilizing recent features (interop CSN, authentication improvements) in production environments
+4. **Java Runtime Maturation**: Achieving full feature parity between Node.js and Java implementations
+5. **Interop CSN Stability**: Ensuring robust interop CSN generation across various CAP model patterns
+6. **Authentication Refinement**: Improving authentication configuration flexibility and security
+7. **Node.js Version Strategy**: Planning support strategy for Node.js versions beyond v22 as ecosystem evolves
+8. **Performance Optimization**: Addressing build-time and memory usage concerns for large CAP applications
+9. **MCP Protocol Integration**: Exploring enhanced MCP API exposure capabilities
+10. **Supply Chain Security**: Maintaining trusted publishing and provenance capabilities
+11. **Dependency Management**: Keeping dependencies current through automated Renovate updates
+12. **Documentation Modernization**: Updating documentation to reflect current architecture and best practices
+13. **Community Feedback Integration**: Incorporating user feedback from v1.3.x releases into future development
+14. **CSN Format Compatibility**: Ensuring clean CSN generation for various integration scenarios
 
 ## Active Decisions and Considerations
 
@@ -209,7 +214,7 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Progress reporting for long-running build operations
 - Module-level caching to avoid repeated initialization
 
-## Learnings and Project Insights
+## Key Learnings
 
 ### Key Technical Insights
 
@@ -236,6 +241,8 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 - Entity relationships need proper mapping to ORD entity types
 - Event definitions require special handling for AsyncAPI integration
 
+### Current Implementation Insights
+
 **Interop CSN Generation**:
 
 - Interop CSN provides a standardized CSN format for better integration compatibility
@@ -248,16 +255,19 @@ Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations >
 
 - Dual annotation support requires careful precedence logic to avoid conflicts
 - `@DataIntegration.dataProduct.type: 'primary'` takes precedence over `@data.product` when both are present
-- Boolean coercion (using `!!`) is essential for consistent true/false returns from detection functions
-- Version suffix extraction applies to both annotation types seamlessly
 - Both annotations trigger identical ORD resource properties for consistency
 
-**Data Product Version Handling**:
+**Version Suffix Processing**:
 
-- Version suffix extraction requires strict pattern validation to avoid false positives
+- Version suffix extraction requires strict pattern validation (`/\.v(\d+)$/`)
 - Namespace processing must be applied to clean service names to prevent duplication
-- Semantic versioning conversion (v1 → 1.0.0) provides consistent version format
-- Feature must be scoped only to primary data products to maintain backward compatibility
+- Feature scoped only to primary data products to maintain backward compatibility
+
+**MCP Integration**:
+
+- Conditional API resource generation based on plugin availability
+- Comprehensive test coverage essential for optional feature scenarios
+- Backward compatibility maintained across integration scenarios
 
 **Authentication Configuration**:
 

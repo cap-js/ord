@@ -203,7 +203,7 @@ describe("End-to-end test for ORD document", () => {
 });
 
 describe("Tests for products and packages", () => {
-    let csn, ord, errorSpy;
+    let csn, ord;
 
     beforeAll(async () => {
         process.env.DEBUG = "true";
@@ -228,7 +228,6 @@ describe("Tests for products and packages", () => {
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         ord = require("../../lib/ord");
         cds.root = path.join(__dirname, "../bookshop");
-        errorSpy = jest.spyOn(console, "error");
     });
 
     afterEach(() => {
@@ -535,6 +534,77 @@ describe("Tests for eventResource and apiResource", () => {
         expect(document.groups[0].groupId).toEqual("sap.cds:service:customer.capirebookshopordsample:MyService");
     });
 
+    it("should generate mcp apiResource mcp plugin is available", async () => {
+        let ordWithMCP;
+        jest.isolateModules(() => {
+            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            // Mock the new consolidated function to return true
+            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginReady").mockReturnValue(true);
+            jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
+                authConfig: { types: [AUTHENTICATION_TYPE.Open] },
+            });
+            ordWithMCP = require("../../lib/ord");
+        });
+
+        const linkedModel = cds.linked(`
+                service MyService {
+                    action add(x : Integer, to : Integer) returns Integer;
+                }
+            `);
+
+        const document = ordWithMCP(linkedModel);
+
+        // At minimum we expect the generated service API resource + MCP resource; custom.ord.json may add more.
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(2);
+        const mcpResource = document.apiResources.find((resource) => resource.apiProtocol === "mcp");
+        expect(mcpResource).toMatchSnapshot();
+    });
+
+    it("should allow MCP API resource customization via custom.ord.json", async () => {
+        // Load actual bookshop model instead of constructing a linked model snippet
+        let ordWithMCP, csn;
+        jest.isolateModules(() => {
+            const fs = require("fs");
+            const pathMod = require("path");
+            const bookshopRoot = pathMod.join(__dirname, "../bookshop");
+            const cdsrcPath = pathMod.join(bookshopRoot, ".cdsrc.json");
+            if (fs.existsSync(cdsrcPath)) {
+                const config = require(cdsrcPath);
+                require("@sap/cds").env.ord = config.ord; // allow customOrdContentFile merge
+                require("@sap/cds").root = bookshopRoot; // ensure relative custom.ord.json resolution
+            }
+            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            // Mock the new consolidated function to return true
+            jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginReady").mockReturnValue(true);
+            jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
+                authConfig: { types: [AUTHENTICATION_TYPE.Open] },
+            });
+            ordWithMCP = require("../../lib/ord");
+        });
+        // load after isolate so cds.root & env are set
+        csn = await cds.load(path.join(__dirname, "../bookshop", "srv"));
+
+        const document = ordWithMCP(csn);
+
+        // Expect at least generated API resources + customized MCP; exact count can grow with model changes
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(2);
+        const mcpResource = document.apiResources.find((resource) => resource.apiProtocol === "mcp");
+
+        // Verify that custom properties were applied via custom.ord.json merge
+        expect(mcpResource.ordId).toBe("sap.test.cdsrc.sample:apiResource:mcp-server:v1");
+        expect(mcpResource.visibility).toBe("internal");
+        expect(mcpResource.title).toBe("Internal MCP Server for testing custom functionality");
+        expect(mcpResource.shortDescription).toBe("Custom MCP server or testing custom functionality");
+        expect(mcpResource.version).toBe("2.1.0");
+        expect(mcpResource.entryPoints).toEqual(["/mcp-server"]);
+        expect(mcpResource.releaseStatus).toBe("beta");
+        expect(mcpResource.apiProtocol).toBe("mcp");
+        // Snapshot restored: capture full ORD document including customized MCP resource for regression tracking.
+        expect(document).toMatchSnapshot();
+        // Targeted snapshot of MCP resource for focused diffing (less brittle than whole doc if counts change).
+        expect(mcpResource).toMatchSnapshot();
+    });
+
     it("should generate apiResource if actions in service", async () => {
         const linkedModel = cds.linked(`
                 service MyService {
@@ -549,7 +619,9 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResource = document.apiResources.find((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResource).toBeDefined();
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
     });
@@ -568,7 +640,9 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResource = document.apiResources.find((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResource).toBeDefined();
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
     });
@@ -593,7 +667,10 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        // Expect at least 1 service API resource (MyService); MCP resource may also be present if plugin available
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResources = document.apiResources.filter((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
@@ -618,7 +695,10 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        // Expect at least 1 service API resource (MyService); MCP resource may also be present if plugin available
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResources = document.apiResources.filter((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
@@ -649,7 +729,10 @@ describe("Tests for eventResource and apiResource", () => {
             `);
 
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        // Expect at least 1 service API resource (MyService); MCP resource may also be present if plugin available
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResources = document.apiResources.filter((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
@@ -682,7 +765,10 @@ describe("Tests for eventResource and apiResource", () => {
             model: "external-model",
         };
         const document = ord(linkedModel);
-        expect(document.apiResources).toHaveLength(1);
+        // Expect at least 1 service API resource (MyService); MCP resource may also be present if plugin available
+        expect(document.apiResources.length).toBeGreaterThanOrEqual(1);
+        const serviceApiResources = document.apiResources.filter((r) => r.apiProtocol !== "mcp");
+        expect(serviceApiResources).toHaveLength(1);
         expect(document.eventResources).toHaveLength(1);
         expect(document.groups).toHaveLength(1);
         expect(document).toMatchSnapshot();
