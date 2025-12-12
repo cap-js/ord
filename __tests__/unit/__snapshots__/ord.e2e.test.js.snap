@@ -2546,7 +2546,11 @@ exports[`Tests for eventResource and apiResource should allow MCP API resource c
       "releaseStatus": "beta",
       "resourceDefinitions": [
         {
-          "accessStrategies": undefined,
+          "accessStrategies": [
+            {
+              "type": "open",
+            },
+          ],
           "mediaType": "application/json",
           "type": "custom",
           "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
@@ -2763,7 +2767,11 @@ exports[`Tests for eventResource and apiResource should allow MCP API resource c
   "releaseStatus": "beta",
   "resourceDefinitions": [
     {
-      "accessStrategies": undefined,
+      "accessStrategies": [
+        {
+          "type": "open",
+        },
+      ],
       "mediaType": "application/json",
       "type": "custom",
       "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
@@ -3292,7 +3300,11 @@ exports[`Tests for eventResource and apiResource should generate mcp apiResource
   "releaseStatus": "active",
   "resourceDefinitions": [
     {
-      "accessStrategies": undefined,
+      "accessStrategies": [
+        {
+          "type": "open",
+        },
+      ],
       "mediaType": "application/json",
       "type": "custom",
       "url": "/ord/v1/customer.capjsord:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
