@@ -30,7 +30,7 @@
         "eslint": "^9.2.0",
         "express": "^4",
         "jest": "^30.0.0",
-        "prettier": "3.7.3",
+        "prettier": "3.7.4",
         "supertest": "^7.0.0",
         "@cap-js/sqlite": "^2"
     },
