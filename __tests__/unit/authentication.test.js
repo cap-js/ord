@@ -105,9 +105,9 @@ const authenticate = jest.fn(async (req, res, next) => {
     // Try CF mTLS if Basic auth not provided or not configured
     if (authTypes.includes(AUTHENTICATION_TYPE.CfMtls)) {
         const hasMtlsHeaders =
-            req.headers["x-forwarded-client-cert-issuer-dn"] ||
-            req.headers["x-forwarded-client-cert-subject-dn"] ||
-            req.headers["x-forwarded-client-cert-root-ca-dn"];
+            req.headers["x-ssl-client-issuer-dn"] ||
+            req.headers["x-ssl-client-subject-dn"] ||
+            req.headers["x-ssl-client-root-ca-dn"];
 
         if (hasMtlsHeaders && authConfig.cfMtlsValidator) {
             const result = authConfig.cfMtlsValidator(req.headers);
@@ -503,9 +503,9 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from(issuerDn).toString("base64"),
-                    "x-forwarded-client-cert-subject-dn": Buffer.from(subjectDn).toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
+                    "x-ssl-client-issuer-dn": Buffer.from(issuerDn).toString("base64"),
+                    "x-ssl-client-subject-dn": Buffer.from(subjectDn).toString("base64"),
+                    "x-ssl-client-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
                 },
             };
 
@@ -540,7 +540,7 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": "not-valid-base64!!!",
+                    "x-ssl-client-issuer-dn": "not-valid-base64!!!",
                 },
             };
 
@@ -560,11 +560,11 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString(
+                    "x-ssl-client-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString(
                         "base64",
                     ),
-                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=intruder, O=Evil, C=XX").toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
+                    "x-ssl-client-subject-dn": Buffer.from("CN=intruder, O=Evil, C=XX").toString("base64"),
+                    "x-ssl-client-root-ca-dn": Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
                         "base64",
                     ),
                 },
@@ -585,13 +585,13 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                    "x-ssl-client-issuer-dn": Buffer.from(
                         "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                     ).toString("base64"),
-                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                    "x-ssl-client-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
                         "base64",
                     ),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString(
+                    "x-ssl-client-root-ca-dn": Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString(
                         "base64",
                     ),
                 },
@@ -656,9 +656,9 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from(issuerDn).toString("base64"),
-                    "x-forwarded-client-cert-subject-dn": Buffer.from(subjectDn).toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
+                    "x-ssl-client-issuer-dn": Buffer.from(issuerDn).toString("base64"),
+                    "x-ssl-client-subject-dn": Buffer.from(subjectDn).toString("base64"),
+                    "x-ssl-client-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
                 },
             };
 
