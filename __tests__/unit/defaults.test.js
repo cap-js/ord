@@ -1,5 +1,3 @@
-const cds = require("@sap/cds");
-const { AUTHENTICATION_TYPE } = require("../../lib/constants");
 
 // Mock the authentication module instead of cds.context
 jest.mock("../../lib/auth/authentication", () => ({

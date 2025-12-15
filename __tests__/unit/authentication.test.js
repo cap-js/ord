@@ -2,9 +2,6 @@ const cds = require("@sap/cds");
 const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 const Logger = require("../../lib/logger");
 
-// Import the actual authentication module
-const authModule = require("../../lib/auth/authentication");
-
 // Set up the mock implementation
 let mockCachedAuthConfig = null;
 
@@ -37,7 +34,6 @@ getAuthConfigSync.mockImplementation(() => {
 });
 
 // Mock authenticate function to use our mocked getAuthConfig
-const { authenticate: originalAuthenticate } = jest.requireActual("../../lib/auth/authentication");
 const authenticate = jest.fn(async (req, res, next) => {
     let authConfig;
 
@@ -96,7 +92,7 @@ const authenticate = jest.fn(async (req, res, next) => {
                 } else {
                     return res.status(401).send("Invalid credentials");
                 }
-            } catch (error) {
+            } catch {
                 return res.status(401).send("Invalid authentication format");
             }
         }
@@ -200,9 +196,9 @@ describe("authentication", () => {
 
         try {
             await authenticate(req, res, next);
-        } catch (error) {
+        } catch (err) {
             if (message) {
-                expect(error.message).toBe(message);
+                expect(err.message).toBe(message);
             }
             return;
         }
@@ -560,13 +556,9 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    "x-ssl-client-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString(
-                        "base64",
-                    ),
+                    "x-ssl-client-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString("base64"),
                     "x-ssl-client-subject-dn": Buffer.from("CN=intruder, O=Evil, C=XX").toString("base64"),
-                    "x-ssl-client-root-ca-dn": Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
-                        "base64",
-                    ),
+                    "x-ssl-client-root-ca-dn": Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString("base64"),
                 },
             };
 
@@ -585,15 +577,11 @@ describe("authentication", () => {
 
             const req = {
                 headers: {
-                    "x-ssl-client-issuer-dn": Buffer.from(
-                        "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
-                    ).toString("base64"),
-                    "x-ssl-client-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                    "x-ssl-client-issuer-dn": Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString(
                         "base64",
                     ),
-                    "x-ssl-client-root-ca-dn": Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString(
-                        "base64",
-                    ),
+                    "x-ssl-client-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
+                    "x-ssl-client-root-ca-dn": Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString("base64"),
                 },
             };
 
