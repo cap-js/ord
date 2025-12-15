@@ -1,6 +1,5 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;

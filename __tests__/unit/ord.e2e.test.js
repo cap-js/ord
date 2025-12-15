@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY, CDS_ELEMENT_KIND } = require("../../lib/constants");
+const { ORD_ACCESS_STRATEGY, CDS_ELEMENT_KIND } = require("../../lib/constants");
 
 describe("End-to-end test for ORD document", () => {
     beforeAll(async () => {

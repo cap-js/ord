@@ -1,5 +1,4 @@
 const cds = require("@sap/cds");
-const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 const { mockCdsContext } = require("./utils/test-helpers");
 
 // Mock CDS context with open authentication
