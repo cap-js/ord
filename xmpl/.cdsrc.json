@@ -36,7 +36,7 @@
             "cfMtls": {
                 "certs": [],
                 "rootCaDn": ["CN=MyOrg Root CA, C=DE"],
-                "configEndpoints": ["https://config.myorg.com/mtls-certs"]
+                "configEndpoints": ["https://compass-gateway.mps.stage.kyma.cloud.sap/v1/info"]
             }
         },
         "compileOptions": {

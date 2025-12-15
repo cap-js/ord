@@ -214,13 +214,14 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
             rootCaDn: [MOCK_ROOT_CA_DN],
         };
 
-        // 3. Start CDS with CF_MTLS_TRUSTED_CERTS (should override .cdsrc.json)
+        // 3. Start CDS with CF_MTLS_TRUSTED_CERTS (should override .cdsrc.mtls.json)
         serverProcess = spawn("npx", ["cds", "run"], {
             cwd: TEST_APP_ROOT,
             env: {
                 ...process.env,
                 PORT: "4005",
                 CF_MTLS_TRUSTED_CERTS: JSON.stringify(mtlsConfig), // Correct config in env var
+                CDS_CONFIG: path.join(TEST_APP_ROOT, ".cdsrc.mtls.json"), // Use mTLS-only config
             },
             stdio: ["ignore", "pipe", "pipe"],
         });
@@ -539,6 +540,7 @@ describe("ORD Integration Tests - mTLS via .cdsrc.json configEndpoint (fetchMtls
                 ...process.env,
                 PORT: "4006",
                 CF_MTLS_TRUSTED_CERTS: undefined, // Explicitly remove env var
+                CDS_CONFIG: path.join(TEST_APP_ROOT, ".cdsrc.mtls.json"), // Use mTLS-only config
             },
             stdio: ["ignore", "pipe", "pipe"],
         });
