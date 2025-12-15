@@ -114,12 +114,13 @@ function _handleVisibility(ordExtensions, definition, defaultVisibility) {
 ```javascript
 async function authenticate(req, res, next) {
     const authConfig = getAuthConfig();
+    const authTypes = authConfig.accessStrategies.map(s => s.type);
 
-    if (authConfig.types.includes("open")) {
+    if (authTypes.includes("open")) {
         return next();
     }
 
-    if (authConfig.types.includes("basic")) {
+    if (authTypes.includes("basic")) {
         return await handleBasicAuth(req, res, next);
     }
 
@@ -132,6 +133,38 @@ async function authenticate(req, res, next) {
 - **Open**: No authentication required
 - **Basic**: Username/password with bcrypt hashing
 - **Future**: UCL-mTLS for enterprise scenarios
+
+### 6. Test Helper Pattern
+
+**Pattern**: Centralized test utility functions for consistent mocking
+**Implementation**: `__tests__/unit/utils/test-helpers.js`
+
+```javascript
+// Reusable authentication mock setup
+function setupAuthMocks(authType = 'open') {
+    const mockAuthConfig = mockCreateAuthConfig(authType);
+    mockAuthenticationService(mockAuthConfig);
+    mockCdsContext();
+    return mockAuthConfig;
+}
+
+// Configurable authentication configurations
+function mockCreateAuthConfig(type) {
+    const configs = {
+        open: { accessStrategies: [{ type: 'open' }] },
+        basic: { accessStrategies: [{ type: 'basic' }] },
+        mtls: { accessStrategies: [{ type: 'mtls' }] }
+    };
+    return configs[type] || configs.open;
+}
+```
+
+**Benefits**:
+
+- Eliminates code duplication across test files
+- Ensures consistent mock configurations
+- Simplifies test setup and maintenance
+- Provides reusable patterns for future tests
 
 ## Component Relationships
 

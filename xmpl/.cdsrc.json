@@ -32,11 +32,6 @@
                 "credentials": {
                     "admin": "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"
                 }
-            },
-            "cfMtls": {
-                "certs": [],
-                "rootCaDn": ["CN=MyOrg Root CA, C=DE"],
-                "configEndpoints": ["https://compass-gateway.mps.stage.kyma.cloud.sap/v1/info"]
             }
         },
         "compileOptions": {

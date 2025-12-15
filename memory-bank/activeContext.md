@@ -9,7 +9,7 @@
 - **Objective**: Eliminate duplicate authentication mock configurations across test files following Clean Code principles
 - **Problem Identified**: Multiple test files contained identical authentication mock configurations, violating DRY (Don't Repeat Yourself) principle
 - **Solution Implemented**:
-  - Created comprehensive test helper utility module (`__tests__/utils/test-helpers.js`)
+  - Created comprehensive test helper utility module (`__tests__/unit/utils/test-helpers.js`)
   - Implemented reusable helper functions: `mockCdsContext()`, `mockAuthenticationService()`, `mockCreateAuthConfig()`, `setupAuthMocks()`
   - Support for different authentication configurations: Open, Basic, CF mTLS, and Mixed
   - Refactored 5 test files to use helper functions: `templates.test.js`, `namespace.test.js`, `ordVisibilitySplit.test.js`, `mockedCsn.test.js`, `ord.e2e.test.js`
@@ -21,6 +21,7 @@
   - **Better Code Organization**: Clear separation between test logic and mock setup
 - **Test Results**: All 357 tests pass (356 passed, 1 skipped), maintaining 100% test reliability
 - **Code Coverage**: Maintained high coverage (82.44% overall) while improving code quality
+- **Architecture Impact**: Established new pattern for test helper utilities that can be extended for future testing needs
 
 **Authentication Test Fix (December 11, 2025)**:
 

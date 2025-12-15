@@ -53,8 +53,8 @@
 ### Prerequisites
 
 ```bash
-# Node.js (version 22 currently supported)
-node --version  # Should be v22.x
+# Node.js (versions 18-22 currently supported)
+node --version  # Should be v18.x, v20.x, or v22.x
 
 # CAP development kit
 npm install -g @sap/cds-dk
