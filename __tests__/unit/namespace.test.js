@@ -1,9 +1,11 @@
 const cds = require("@sap/cds");
-const { AUTHENTICATION_TYPE } = require("../../lib/constants");
+const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
     authConfig: {
-        types: [AUTHENTICATION_TYPE.Open],
+        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        hasBasic: false,
+        hasCfMtls: false,
     },
 });
 const { createAPIResourceTemplate, createEventResourceTemplate } = require("../../lib/templates");

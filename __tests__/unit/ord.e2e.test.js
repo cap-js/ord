@@ -11,13 +11,15 @@ describe("End-to-end test for ORD document", () => {
 
         // Mock the getAuthConfig and getAuthConfigSync functions
         jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
-            types: [AUTHENTICATION_TYPE.Open],
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            hasBasic: false,
+            hasCfMtls: false,
         });
 
         jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
-            types: [AUTHENTICATION_TYPE.Open],
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            hasBasic: false,
+            hasCfMtls: false,
         });
 
         // Initialize the auth config
@@ -213,13 +215,15 @@ describe("Tests for products and packages", () => {
 
         // Mock the getAuthConfig and getAuthConfigSync functions
         jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
-            types: [AUTHENTICATION_TYPE.Open],
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            hasBasic: false,
+            hasCfMtls: false,
         });
 
         jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
-            types: [AUTHENTICATION_TYPE.Open],
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            hasBasic: false,
+            hasCfMtls: false,
         });
 
         // Initialize the auth config
@@ -296,13 +300,15 @@ describe("Tests for Data Product definition", () => {
 
         // Mock the getAuthConfig and getAuthConfigSync functions
         jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
-            types: [AUTHENTICATION_TYPE.Open],
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            hasBasic: false,
+            hasCfMtls: false,
         });
 
         jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
-            types: [AUTHENTICATION_TYPE.Open],
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            hasBasic: false,
+            hasCfMtls: false,
         });
 
         // Initialize the auth config
@@ -388,12 +394,14 @@ describe("Tests for Data Product definition", () => {
             // Initialize authentication in isolated module context
             const authentication = require("../../lib/auth/authentication");
             jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
-                types: [AUTHENTICATION_TYPE.Open],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+                hasBasic: false,
+                hasCfMtls: false,
             });
             jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
-                types: [AUTHENTICATION_TYPE.Open],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+                hasBasic: false,
+                hasCfMtls: false,
             });
             await authentication.getAuthConfig();
 
@@ -439,12 +447,14 @@ describe("Tests for Data Product definition", () => {
             // Initialize authentication in isolated module context
             const authentication = require("../../lib/auth/authentication");
             jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
-                types: [AUTHENTICATION_TYPE.Open],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+                hasBasic: false,
+                hasCfMtls: false,
             });
             jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
-                types: [AUTHENTICATION_TYPE.Open],
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+                hasBasic: false,
+                hasCfMtls: false,
             });
             await authentication.getAuthConfig();
 
@@ -490,13 +500,15 @@ describe("Tests for eventResource and apiResource", () => {
 
         // Mock the getAuthConfig and getAuthConfigSync functions
         jest.spyOn(authentication, "getAuthConfig").mockResolvedValue({
-            types: [AUTHENTICATION_TYPE.Open],
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            hasBasic: false,
+            hasCfMtls: false,
         });
 
         jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue({
-            types: [AUTHENTICATION_TYPE.Open],
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            hasBasic: false,
+            hasCfMtls: false,
         });
 
         // Initialize the auth config
@@ -541,7 +553,11 @@ describe("Tests for eventResource and apiResource", () => {
             // Mock the new consolidated function to return true
             jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginReady").mockReturnValue(true);
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
-                authConfig: { types: [AUTHENTICATION_TYPE.Open] },
+                authConfig: { 
+                    accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+                    hasBasic: false,
+                    hasCfMtls: false,
+                },
             });
             ordWithMCP = require("../../lib/ord");
         });
@@ -577,7 +593,11 @@ describe("Tests for eventResource and apiResource", () => {
             // Mock the new consolidated function to return true
             jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginReady").mockReturnValue(true);
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
-                authConfig: { types: [AUTHENTICATION_TYPE.Open] },
+                authConfig: { 
+                    accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+                    hasBasic: false,
+                    hasCfMtls: false,
+                },
             });
             ordWithMCP = require("../../lib/ord");
         });

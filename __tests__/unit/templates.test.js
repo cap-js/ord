@@ -1,6 +1,7 @@
 const cds = require("@sap/cds");
 const {
     AUTHENTICATION_TYPE,
+    ORD_ACCESS_STRATEGY,
     ORD_ODM_ENTITY_NAME_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_EXTENSIONS_PREFIX,
@@ -10,7 +11,9 @@ const {
 
 jest.spyOn(cds, "context", "get").mockReturnValue({
     authConfig: {
-        types: [AUTHENTICATION_TYPE.Open],
+        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        hasBasic: false,
+        hasCfMtls: false,
     },
 });
 const {
