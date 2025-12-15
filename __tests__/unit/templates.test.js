@@ -8,14 +8,10 @@ const {
     RESOURCE_VISIBILITY,
     ALLOWED_VISIBILITY,
 } = require("../../lib/constants");
+const { mockCdsContext } = require("./utils/test-helpers");
 
-jest.spyOn(cds, "context", "get").mockReturnValue({
-    authConfig: {
-        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-        hasBasic: false,
-        hasCfMtls: false,
-    },
-});
+// Mock CDS context with open authentication
+mockCdsContext(cds);
 const {
     createEntityTypeTemplate,
     createEntityTypeMappingsItemTemplate,

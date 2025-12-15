@@ -1,13 +1,9 @@
 const cds = require("@sap/cds");
 const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
+const { mockCdsContext } = require("./utils/test-helpers");
 
-jest.spyOn(cds, "context", "get").mockReturnValue({
-    authConfig: {
-        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-        hasBasic: false,
-        hasCfMtls: false,
-    },
-});
+// Mock CDS context with open authentication
+mockCdsContext(cds);
 const {
     createEntityTypeTemplate,
     createAPIResourceTemplate,

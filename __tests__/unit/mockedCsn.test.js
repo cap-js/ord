@@ -10,13 +10,10 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
         // Initialize authentication configuration for tests
         const authentication = require("../../lib/auth/authentication");
+        const { mockCreateAuthConfig } = require("./utils/test-helpers");
 
         // Mock the createAuthConfig to return a default open configuration
-        jest.spyOn(authentication, "createAuthConfig").mockResolvedValue({
-            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-            hasBasic: false,
-            hasCfMtls: false,
-        });
+        mockCreateAuthConfig(authentication);
 
         // Initialize the auth config
         await authentication.getAuthConfig();
