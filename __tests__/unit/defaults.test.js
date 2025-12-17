@@ -180,7 +180,11 @@ describe("defaults", () => {
     });
     describe("baseTemplate", () => {
         it("should return default value", () => {
-            expect(defaults.baseTemplate).toMatchSnapshot();
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            expect(defaults.baseTemplate(authConfig)).toMatchSnapshot();
         });
     });
 });

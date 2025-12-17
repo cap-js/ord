@@ -11,12 +11,6 @@ describe("authentication", () => {
         accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
     };
 
-    cds.context = {
-        authConfig: {
-            types: [AUTHENTICATION_TYPE.Open],
-        },
-    };
-
     beforeAll(() => {
         Logger.log = Logger.error = Logger.info = jest.fn();
     });
@@ -25,7 +19,7 @@ describe("authentication", () => {
         jest.restoreAllMocks();
     });
 
-    async function authCheck(req, status, message, header, authConfig = null) {
+    async function authCheck(req, status, message, header, authConfig) {
         const res = {
             status: jest.fn().mockImplementation((value) => {
                 res.status = value;
@@ -43,9 +37,8 @@ describe("authentication", () => {
         };
         const next = jest.fn();
 
-        // Use authConfig parameter if provided, otherwise use cds.context.authConfig
-        const config = authConfig || cds.context.authConfig;
-        const authenticate = createAuthMiddleware(config);
+        // authConfig must be provided explicitly
+        const authenticate = createAuthMiddleware(authConfig);
 
         try {
             await authenticate(req, res, next);
@@ -135,24 +128,19 @@ describe("authentication", () => {
 
     describe("Getting the authentication config data", () => {
         afterAll(() => {
-            cds.context = {};
             cds.env.ord = {};
             jest.restoreAllMocks();
         });
 
-        it("should return auth config without caching to cds.context", async () => {
-            cds.context = {};
+        it("should return auth config without caching", async () => {
             cds.env.ord = { authentication: {} };
 
             const authConfig = await getAuthConfig();
 
             expect(authConfig).toEqual(defaultAuthConfig);
-            // Should NOT cache to cds.context anymore
-            expect(cds.context.authConfig).toBeUndefined();
         });
 
         it("should create new config each time getAuthConfig is called", async () => {
-            cds.context = {};
             cds.env.ord = { authentication: {} };
 
             const authConfig1 = await getAuthConfig();
@@ -165,7 +153,6 @@ describe("authentication", () => {
         });
 
         it("should throw an error when auth configuration is not valid", async () => {
-            cds.context = {};
             cds.env.ord = { authentication: { basic: { credentials: { admin: "InvalidBCrypHash" } } } };
             Logger.error.mockClear();
 
@@ -181,52 +168,62 @@ describe("authentication", () => {
         afterEach(() => {
             delete process.env.BASIC_AUTH;
             cds.env.ord = { authentication: {} };
-            cds.context.authConfig = {};
         });
 
         it("should have access with default open authentication", async () => {
-            await authCheck({ headers: {} }, 200);
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Open],
+            };
+            await authCheck({ headers: {} }, 200, null, null, authConfig);
         });
 
         it("should not authenticate because of missing authorization header in case of any non-open authentication", async () => {
-            cds.context.authConfig.types = [AUTHENTICATION_TYPE.Basic];
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Basic],
+            };
             const req = {
                 headers: {},
             };
 
-            await authCheck(req, 401, "Authentication required.");
+            await authCheck(req, 401, "Authentication required.", null, authConfig);
         });
 
         it("should not authenticate and set header 'WWW-Authenticate' because of missing authorization header", async () => {
-            cds.context.authConfig.types = [AUTHENTICATION_TYPE.Basic];
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Basic],
+            };
             const req = {
                 headers: {},
             };
 
-            await authCheck(req, 401, "Authentication required.", "401");
+            await authCheck(req, 401, "Authentication required.", "401", authConfig);
         });
 
         it("should not authenticate because of wrongly configured unsupported authentication type", async () => {
-            cds.context.authConfig.types = "UnsupportedAuthType";
+            const authConfig = {
+                types: "UnsupportedAuthType",
+            };
             const req = {
                 headers: {},
             };
 
-            await authCheck(req, 401, "Not authorized");
+            await authCheck(req, 401, "Not authorized", null, authConfig);
         });
 
         it("should not authenticate because of invalid name of authentication type in the request header", async () => {
-            cds.context.authConfig.types = [AUTHENTICATION_TYPE.Basic];
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Basic],
+            };
             const req = {
                 headers: {
                     authorization: "Invalid " + Buffer.from(`invalid`).toString("base64"),
                 },
             };
-            await authCheck(req, 401, "Invalid authentication type");
+            await authCheck(req, 401, "Invalid authentication type", null, authConfig);
         });
 
         it("should authenticate with valid credentials in the request", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic],
                 credentials: mockValidUser,
             };
@@ -236,11 +233,11 @@ describe("authentication", () => {
                     authorization: "Basic " + Buffer.from("admin:secret").toString("base64"),
                 },
             };
-            await authCheck(req, 200);
+            await authCheck(req, 200, null, null, authConfig);
         });
 
         it("should not authenticate because of missing password in the request", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic],
                 credentials: mockValidUser,
             };
@@ -251,11 +248,11 @@ describe("authentication", () => {
                 },
             };
 
-            await authCheck(req, 401, "Invalid authentication format");
+            await authCheck(req, 401, "Invalid authentication format", null, authConfig);
         });
 
         it("should not authenticate because of invalid credentials in the request", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic],
                 credentials: mockValidUser,
             };
@@ -265,7 +262,7 @@ describe("authentication", () => {
                     authorization: "Basic " + Buffer.from("invalid:invalid").toString("base64"),
                 },
             };
-            await authCheck(req, 401, "Invalid credentials");
+            await authCheck(req, 401, "Invalid credentials", null, authConfig);
         });
     });
 
@@ -289,7 +286,6 @@ describe("authentication", () => {
             delete process.env.CF_MTLS_TRUSTED_CERT_PAIRS;
             delete process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS;
             cds.env.ord = { authentication: {} };
-            cds.context = {};
         });
 
         afterEach(() => {
@@ -298,7 +294,6 @@ describe("authentication", () => {
             delete process.env.CF_MTLS_TRUSTED_CERT_PAIRS;
             delete process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS;
             cds.env.ord = { authentication: {} };
-            cds.context = {};
         });
 
         it("should mark CF mTLS for lazy initialization without immediate validation", () => {
@@ -332,7 +327,7 @@ describe("authentication", () => {
         });
 
         it("should authenticate with valid certificate pair and root CA", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({
                     ok: true,
@@ -354,14 +349,14 @@ describe("authentication", () => {
                 },
             };
 
-            await authCheck(req, 200);
+            await authCheck(req, 200, null, null, authConfig);
             expect(req.cfMtlsIssuer).toBe(issuerDn);
             expect(req.cfMtlsSubject).toBe(subjectDn);
             expect(req.cfMtlsRootCaDn).toBe(rootCaDn);
         });
 
         it("should not authenticate with missing certificate headers", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({
                     ok: false,
@@ -374,11 +369,11 @@ describe("authentication", () => {
                 headers: {},
             };
 
-            await authCheck(req, 401, "Authentication required.");
+            await authCheck(req, 401, "Authentication required.", null, authConfig);
         });
 
         it("should not authenticate with invalid base64 encoding", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({ ok: false, reason: "INVALID_ENCODING" }),
             };
@@ -389,11 +384,11 @@ describe("authentication", () => {
                 },
             };
 
-            await authCheck(req, 400, "Bad Request: Invalid certificate headers");
+            await authCheck(req, 400, "Bad Request: Invalid certificate headers", null, authConfig);
         });
 
         it("should return 403 forbidden for certificate pair mismatch", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({
                     ok: false,
@@ -415,11 +410,11 @@ describe("authentication", () => {
                 },
             };
 
-            await authCheck(req, 403, "Forbidden: Invalid client certificate");
+            await authCheck(req, 403, "Forbidden: Invalid client certificate", null, authConfig);
         });
 
         it("should return 403 forbidden for root CA mismatch", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.CfMtls],
                 cfMtlsValidator: () => ({
                     ok: false,
@@ -442,7 +437,7 @@ describe("authentication", () => {
                 },
             };
 
-            await authCheck(req, 403, "Forbidden: Untrusted certificate authority");
+            await authCheck(req, 403, "Forbidden: Untrusted certificate authority", null, authConfig);
         });
 
         it("should support combination with Basic auth", () => {
@@ -461,7 +456,7 @@ describe("authentication", () => {
         });
 
         it("should handle Basic auth when both Basic and CF mTLS are configured", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
                 cfMtlsValidator: () => ({
@@ -478,11 +473,11 @@ describe("authentication", () => {
                 },
             };
 
-            await authCheck(req, 200);
+            await authCheck(req, 200, null, null, authConfig);
         });
 
         it("should handle CF mTLS when both Basic and CF mTLS are configured but no Basic header", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
                 cfMtlsValidator: () => ({
@@ -505,11 +500,11 @@ describe("authentication", () => {
                 },
             };
 
-            await authCheck(req, 200);
+            await authCheck(req, 200, null, null, authConfig);
         });
 
         it("should handle Basic auth when both Basic and CF mTLS are configured with Basic header", async () => {
-            cds.context.authConfig = {
+            const authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls],
                 credentials: mockValidUser,
             };
@@ -520,7 +515,7 @@ describe("authentication", () => {
                 },
             };
 
-            await authCheck(req, 200);
+            await authCheck(req, 200, null, null, authConfig);
         });
 
         it("should support multiple authentication strategies in ORD document", () => {
