@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
-const { authenticate, createAuthConfig, getAuthConfig } = require("../../lib/auth/authentication");
+const { createAuthMiddleware, createAuthConfig, getAuthConfig } = require("../../lib/auth/authentication");
 const { Logger } = require("../../lib/logger");
 
 describe("authentication", () => {
@@ -25,7 +25,7 @@ describe("authentication", () => {
         jest.restoreAllMocks();
     });
 
-    async function authCheck(req, status, message, header) {
+    async function authCheck(req, status, message, header, authConfig = null) {
         const res = {
             status: jest.fn().mockImplementation((value) => {
                 res.status = value;
@@ -42,6 +42,10 @@ describe("authentication", () => {
             }),
         };
         const next = jest.fn();
+
+        // Use authConfig parameter if provided, otherwise use cds.context.authConfig
+        const config = authConfig || cds.context.authConfig;
+        const authenticate = createAuthMiddleware(config);
 
         try {
             await authenticate(req, res, next);
@@ -136,29 +140,28 @@ describe("authentication", () => {
             jest.restoreAllMocks();
         });
 
-        it("should return auth config from cds.context if provided", async () => {
-            cds.context = {
-                authConfig: defaultAuthConfig,
-            };
-            const authConfig = await getAuthConfig();
-            expect(authConfig).toEqual(cds.context.authConfig);
-        });
-
-        it("should run createAuthConfig if cds.context undefined", async () => {
+        it("should return auth config without caching to cds.context", async () => {
             cds.context = {};
-            const authConfig = await getAuthConfig();
-
-            expect(authConfig).toEqual(defaultAuthConfig);
-            expect(authConfig).toEqual(cds.context.authConfig);
-        });
-
-        it("should run createAuthConfig if cds.context undefined", async () => {
-            cds.context = {};
+            cds.env.ord = { authentication: {} };
 
             const authConfig = await getAuthConfig();
 
             expect(authConfig).toEqual(defaultAuthConfig);
-            expect(authConfig).toEqual(cds.context.authConfig);
+            // Should NOT cache to cds.context anymore
+            expect(cds.context.authConfig).toBeUndefined();
+        });
+
+        it("should create new config each time getAuthConfig is called", async () => {
+            cds.context = {};
+            cds.env.ord = { authentication: {} };
+
+            const authConfig1 = await getAuthConfig();
+            const authConfig2 = await getAuthConfig();
+
+            expect(authConfig1).toEqual(defaultAuthConfig);
+            expect(authConfig2).toEqual(defaultAuthConfig);
+            // They should be different objects (not cached)
+            expect(authConfig1).not.toBe(authConfig2);
         });
 
         it("should throw an error when auth configuration is not valid", async () => {
