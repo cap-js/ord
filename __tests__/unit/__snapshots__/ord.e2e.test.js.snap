@@ -1055,11 +1055,11 @@ exports[`Tests for Data Product definition Check interop CSN annotation mapping 
         "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:apiResource:TestService:v1",
+      "ordId": "customer.capjsord:apiResource:TestService:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:TestService",
+        "sap.cds:service:customer.capjsord:TestService",
       ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -1070,7 +1070,7 @@ exports[`Tests for Data Product definition Check interop CSN annotation mapping 
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:TestService:v1/TestService.oas3.json",
+          "url": "/ord/v1/customer.capjsord:apiResource:TestService:v1/TestService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -1080,7 +1080,7 @@ exports[`Tests for Data Product definition Check interop CSN annotation mapping 
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:TestService:v1/TestService.edmx",
+          "url": "/ord/v1/customer.capjsord:apiResource:TestService:v1/TestService.edmx",
         },
       ],
       "shortDescription": "Short description of TestService",
@@ -1088,88 +1088,47 @@ exports[`Tests for Data Product definition Check interop CSN annotation mapping 
       "version": "1.0.0",
       "visibility": "public",
     },
-    {
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:BusinessPartner:v1",
-            },
-          ],
-        },
-      ],
-      "extensible": {
-        "supported": "yes",
-      },
-      "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
-    },
   ],
   "consumptionBundles": [
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "capjsord:consumptionBundle:noAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
     },
   ],
-  "dataProducts": [
-    {
-      "category": "business-object",
-      "description": "The Supplier data product offers access to all customers.",
-      "entityTypes": [
-        "sap.odm:entityType:BusinessPartner:v1",
-        "sap.sm:entityType:BusinessPartner:v1",
-      ],
-      "lastUpdate": "2024-06-20T14:04:01+01:00",
-      "localId": "Supplier",
-      "ordId": "sap.sm:dataProduct:Supplier:v1",
-      "outputPorts": [
-        {
-          "ordId": "sap.sm:apiResource:SupplierService:v1",
-        },
-      ],
-      "partOfPackage": "sap.sm:package:smDataProducts:v1",
-      "releaseStatus": "active",
-      "responsible": "sap:ach:CIC-DP-CO",
-      "shortDescription": "Ariba Supplier data product",
-      "title": "Supplier",
-      "type": "primary",
-      "version": "1.1.11",
-      "visibility": "public",
-    },
-  ],
-  "description": "this is my custom description",
+  "description": "this is an application description",
   "groups": [
     {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:TestService",
+      "groupId": "sap.cds:service:customer.capjsord:TestService",
       "groupTypeId": "sap.cds:service",
       "title": "Test Service",
     },
   ],
-  "openResourceDiscovery": "1.10",
+  "openResourceDiscovery": "1.12",
   "packages": [
     {
-      "description": "This package contains public APIs for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "description": "This package contains public General for cap js ord.",
+      "ordId": "customer.capjsord:package:capjsord:v1",
       "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
+        "customer:product:cap.js.ord:",
       ],
-      "shortDescription": "Package containing public APIs",
-      "title": "capire bookshop ord sample",
+      "shortDescription": "Package containing public General",
+      "title": "cap js ord",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
   ],
   "policyLevels": [
-    "sap:core:v1",
+    "none",
   ],
   "products": [
     {
-      "ordId": "customer:product:capire.bookshop.ord.sample:",
-      "shortDescription": "Short description of capire bookshop ord sample",
-      "title": "capire bookshop ord sample",
+      "ordId": "customer:product:cap.js.ord:",
+      "shortDescription": "Short description of cap js ord",
+      "title": "cap js ord",
       "vendor": "customer:vendor:Customer:",
     },
   ],
@@ -2287,11 +2246,11 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
         "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:apiResource:customer.namespace.TestService.v3:v1",
+      "ordId": "customer.capjsord:apiResource:customer.namespace.TestService.v3:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:customer.namespace.TestService.v3",
+        "sap.cds:service:customer.capjsord:customer.namespace.TestService.v3",
       ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -2302,7 +2261,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:customer.namespace.TestService.v3:v1/customer.namespace.TestService.v3.oas3.json",
+          "url": "/ord/v1/customer.capjsord:apiResource:customer.namespace.TestService.v3:v1/customer.namespace.TestService.v3.oas3.json",
         },
         {
           "accessStrategies": [
@@ -2312,7 +2271,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:customer.namespace.TestService.v3:v1/customer.namespace.TestService.v3.edmx",
+          "url": "/ord/v1/customer.capjsord:apiResource:customer.namespace.TestService.v3:v1/customer.namespace.TestService.v3.edmx",
         },
       ],
       "shortDescription": "Short description of customer.namespace.TestService.v3",
@@ -2330,11 +2289,11 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
         "supported": "no",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "sap.test.cdsrc.sample:apiResource:customer.namespace.SimpleService:v1",
+      "ordId": "customer.capjsord:apiResource:customer.namespace.SimpleService:v1",
       "partOfGroups": [
-        "sap.cds:service:sap.test.cdsrc.sample:customer.namespace.SimpleService",
+        "sap.cds:service:customer.capjsord:customer.namespace.SimpleService",
       ],
-      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "partOfPackage": "customer.capjsord:package:capjsord:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
         {
@@ -2345,7 +2304,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:customer.namespace.SimpleService:v1/customer.namespace.SimpleService.oas3.json",
+          "url": "/ord/v1/customer.capjsord:apiResource:customer.namespace.SimpleService:v1/customer.namespace.SimpleService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -2355,7 +2314,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:customer.namespace.SimpleService:v1/customer.namespace.SimpleService.edmx",
+          "url": "/ord/v1/customer.capjsord:apiResource:customer.namespace.SimpleService:v1/customer.namespace.SimpleService.edmx",
         },
       ],
       "shortDescription": "Short description of customer.namespace.SimpleService",
@@ -2363,93 +2322,52 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
       "version": "1.0.0",
       "visibility": "public",
     },
-    {
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:BusinessPartner:v1",
-            },
-          ],
-        },
-      ],
-      "extensible": {
-        "supported": "yes",
-      },
-      "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
-    },
   ],
   "consumptionBundles": [
     {
       "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
+      "ordId": "capjsord:consumptionBundle:noAuth:v1",
       "shortDescription": "If we have another protected API then it will be another object",
       "title": "Unprotected resources",
       "version": "1.0.0",
     },
   ],
-  "dataProducts": [
-    {
-      "category": "business-object",
-      "description": "The Supplier data product offers access to all customers.",
-      "entityTypes": [
-        "sap.odm:entityType:BusinessPartner:v1",
-        "sap.sm:entityType:BusinessPartner:v1",
-      ],
-      "lastUpdate": "2024-06-20T14:04:01+01:00",
-      "localId": "Supplier",
-      "ordId": "sap.sm:dataProduct:Supplier:v1",
-      "outputPorts": [
-        {
-          "ordId": "sap.sm:apiResource:SupplierService:v1",
-        },
-      ],
-      "partOfPackage": "sap.sm:package:smDataProducts:v1",
-      "releaseStatus": "active",
-      "responsible": "sap:ach:CIC-DP-CO",
-      "shortDescription": "Ariba Supplier data product",
-      "title": "Supplier",
-      "type": "primary",
-      "version": "1.1.11",
-      "visibility": "public",
-    },
-  ],
-  "description": "this is my custom description",
+  "description": "this is an application description",
   "groups": [
     {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:customer.namespace.TestService.v3",
+      "groupId": "sap.cds:service:customer.capjsord:customer.namespace.TestService.v3",
       "groupTypeId": "sap.cds:service",
       "title": "v3 Service",
     },
     {
-      "groupId": "sap.cds:service:sap.test.cdsrc.sample:customer.namespace.SimpleService",
+      "groupId": "sap.cds:service:customer.capjsord:customer.namespace.SimpleService",
       "groupTypeId": "sap.cds:service",
       "title": "Simple Service",
     },
   ],
-  "openResourceDiscovery": "1.10",
+  "openResourceDiscovery": "1.12",
   "packages": [
     {
-      "description": "This package contains public APIs for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+      "description": "This package contains public General for cap js ord.",
+      "ordId": "customer.capjsord:package:capjsord:v1",
       "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
+        "customer:product:cap.js.ord:",
       ],
-      "shortDescription": "Package containing public APIs",
-      "title": "capire bookshop ord sample",
+      "shortDescription": "Package containing public General",
+      "title": "cap js ord",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
   ],
   "policyLevels": [
-    "sap:core:v1",
+    "none",
   ],
   "products": [
     {
-      "ordId": "customer:product:capire.bookshop.ord.sample:",
-      "shortDescription": "Short description of capire bookshop ord sample",
-      "title": "capire bookshop ord sample",
+      "ordId": "customer:product:cap.js.ord:",
+      "shortDescription": "Short description of cap js ord",
+      "title": "cap js ord",
       "vendor": "customer:vendor:Customer:",
     },
   ],

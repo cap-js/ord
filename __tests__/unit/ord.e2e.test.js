@@ -28,9 +28,6 @@ describe("End-to-end test for ORD document", () => {
 
         beforeAll(async () => {
             cds.root = path.join(__dirname, "../bookshop");
-            // Load CDS environment configuration from .cdsrc.json
-            const config = cds.env.load(cds.root, ".cdsrc.json");
-            Object.assign(cds.env, config);
             csn = await cds.load(path.join(cds.root, "srv"));
             ord = require("../../lib/ord");
         });
@@ -302,29 +299,11 @@ describe("Tests for Data Product definition", () => {
 
     it("Check interop CSN annotation mapping through ORD", async () => {
         let document;
-        await jest.isolateModules(async () => {
-            delete global.cds;
-
-            // Re-require CDS in isolated context
+        await jest.isolateModules(() => {
             const cds = require("@sap/cds");
-
-            // Set up proper test environment
-            cds.root = path.join(__dirname, "../bookshop");
-            // Load CDS environment configuration from .cdsrc.json
-            const config = cds.env.load(cds.root, ".cdsrc.json");
-            Object.assign(cds.env, config);
-
-            // Initialize authentication in isolated module context
-            const authentication = require("../../lib/auth/authentication");
-            jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-                hasBasic: false,
-                hasCfMtls: false,
-            });
-
-            const dateMod = require("../../lib/date");
-            jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             const ordLocal = require("../../lib/ord");
+
             const linkedModel = cds.linked(`
                 service TestService {
                     entity TestEntity {
@@ -349,29 +328,11 @@ describe("Tests for Data Product definition", () => {
 
     it("Check interop CSN service name parsing through ORD", async () => {
         let document;
-        await jest.isolateModules(async () => {
-            delete global.cds;
-
-            // Re-require CDS in isolated context
+        await jest.isolateModules(() => {
             const cds = require("@sap/cds");
-
-            // Set up proper test environment
-            cds.root = path.join(__dirname, "../bookshop");
-            // Load CDS environment configuration from .cdsrc.json
-            const config = cds.env.load(cds.root, ".cdsrc.json");
-            Object.assign(cds.env, config);
-
-            // Initialize authentication in isolated module context
-            const authentication = require("../../lib/auth/authentication");
-            jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-                hasBasic: false,
-                hasCfMtls: false,
-            });
-
-            const dateMod = require("../../lib/date");
-            jest.spyOn(dateMod, "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             const ordLocal = require("../../lib/ord");
+
             const linkedModel = cds.linked(`
             namespace customer.namespace;
             service TestService.v3 {
@@ -435,8 +396,6 @@ describe("Tests for eventResource and apiResource", () => {
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
                 authConfig: {
                     accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-                    hasBasic: false,
-                    hasCfMtls: false,
                 },
             });
             ordWithMCP = require("../../lib/ord");
@@ -475,8 +434,6 @@ describe("Tests for eventResource and apiResource", () => {
             jest.spyOn(require("@sap/cds"), "context", "get").mockReturnValue({
                 authConfig: {
                     accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-                    hasBasic: false,
-                    hasCfMtls: false,
                 },
             });
             ordWithMCP = require("../../lib/ord");

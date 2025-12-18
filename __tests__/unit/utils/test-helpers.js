@@ -7,8 +7,6 @@ const { ORD_ACCESS_STRATEGY } = require("../../../lib/constants");
 function createOpenAuthConfig() {
     return {
         accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-        hasBasic: false,
-        hasCfMtls: false,
     };
 }
 
