@@ -316,12 +316,7 @@ describe("Tests for Data Product definition", () => {
 
             // Initialize authentication in isolated module context
             const authentication = require("../../lib/auth/authentication");
-            jest.spyOn(authentication, "getOrdAuthConfig").mockReturnValue({
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-                hasBasic: false,
-                hasCfMtls: false,
-            });
-            jest.spyOn(authentication, "getOrdAccessStrategies").mockReturnValue({
+            jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
                 hasBasic: false,
                 hasCfMtls: false,
@@ -368,12 +363,7 @@ describe("Tests for Data Product definition", () => {
 
             // Initialize authentication in isolated module context
             const authentication = require("../../lib/auth/authentication");
-            jest.spyOn(authentication, "getOrdAuthConfig").mockReturnValue({
-                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
-                hasBasic: false,
-                hasCfMtls: false,
-            });
-            jest.spyOn(authentication, "getOrdAccessStrategies").mockReturnValue({
+            jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
                 accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
                 hasBasic: false,
                 hasCfMtls: false,

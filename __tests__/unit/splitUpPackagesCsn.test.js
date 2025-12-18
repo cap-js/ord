@@ -21,12 +21,9 @@ describe("ORD Generation for Business Accelerator Hub", () => {
         const authentication = require("../../lib/auth/authentication");
 
         // Mock the createAuthConfig to return a default open configuration
-        jest.spyOn(authentication, "createAuthConfig").mockResolvedValue({
+        jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         });
-
-        // Initialize the auth config
-        authentication.getOrdAuthConfig();
 
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         // Mock MCP plugin availability to false for these tests

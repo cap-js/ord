@@ -10,7 +10,7 @@ const cds = require("@sap/cds");
 const express = require("express");
 const request = require("supertest");
 const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY, CF_MTLS_HEADERS } = require("../../lib/constants");
-const { createAuthMiddleware, createAuthConfig, getOrdAuthConfig } = require("../../lib/auth/authentication");
+const { createAuthMiddleware, createAuthConfig } = require("../../lib/auth/authentication");
 const Logger = require("../../lib/logger");
 
 describe("authentication", () => {
@@ -122,28 +122,30 @@ describe("authentication", () => {
         it("should return auth config without caching", () => {
             cds.env.ord = { authentication: {} };
 
-            const authConfig = getOrdAuthConfig();
+            const authConfig = createAuthConfig();
 
             expect(authConfig).toEqual(defaultAuthConfig);
         });
 
-        it("should create new config each time getOrdAuthConfig is called", () => {
+        it("should create new config each time createAuthConfig is called", () => {
             cds.env.ord = { authentication: {} };
 
-            const authConfig1 = getOrdAuthConfig();
-            const authConfig2 = getOrdAuthConfig();
+            const authConfig1 = createAuthConfig();
+            const authConfig2 = createAuthConfig();
 
             expect(authConfig1).toEqual(defaultAuthConfig);
             expect(authConfig2).toEqual(defaultAuthConfig);
-            // They should be different objects (not cached)
+            // They should be different objects (not cached at module level)
             expect(authConfig1).not.toBe(authConfig2);
         });
 
-        it("should throw an error when auth configuration is not valid", () => {
+        it("should return error in config when auth configuration is not valid", () => {
             cds.env.ord = { authentication: { basic: { credentials: { admin: "InvalidBCrypHash" } } } };
-            expect(() => getOrdAuthConfig()).toThrow("Invalid authentication configuration");
+            const authConfig = createAuthConfig();
+            expect(authConfig.error).toBe("All passwords must be bcrypt hashes");
             expect(Logger.error).toHaveBeenCalledWith(
-                "Authentication configuration error: All passwords must be bcrypt hashes"
+                "createAuthConfig:",
+                'Password for user "admin" must be a bcrypt hash'
             );
         });
     });
