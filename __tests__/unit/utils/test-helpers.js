@@ -1,4 +1,4 @@
-const { ORD_ACCESS_STRATEGY } = require("../../../lib/constants");
+const { ORD_ACCESS_STRATEGY, AUTHENTICATION_TYPE } = require("../../../lib/constants");
 
 /**
  * Create standard open authentication configuration object
@@ -6,6 +6,7 @@ const { ORD_ACCESS_STRATEGY } = require("../../../lib/constants");
  */
 function createOpenAuthConfig() {
     return {
+        types: [AUTHENTICATION_TYPE.Open],
         accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
     };
 }
