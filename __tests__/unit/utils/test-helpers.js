@@ -12,12 +12,12 @@ function createOpenAuthConfig() {
 }
 
 /**
- * Mock authentication service configuration
+ * Mock authentication module configuration
  * @param {Object} authentication - Authentication module to mock
  * @param {Object} authConfig - Authentication configuration (defaults to open)
  * @returns {Object} Jest spy object for createAuthConfig
  */
-function mockAuthenticationService(authentication, authConfig = createOpenAuthConfig()) {
+function mockAuthenticationModule(authentication, authConfig = createOpenAuthConfig()) {
     const createAuthConfigSpy = jest.spyOn(authentication, "createAuthConfig").mockReturnValue(authConfig);
     return { createAuthConfigSpy };
 }
@@ -37,6 +37,6 @@ module.exports = {
     createOpenAuthConfig,
 
     // Mock functions
-    mockAuthenticationService,
+    mockAuthenticationModule,
     mockCreateAuthConfig,
 };

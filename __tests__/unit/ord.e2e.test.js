@@ -8,10 +8,10 @@ beforeAll(() => {
 
     // Initialize authentication configuration for tests
     const authentication = require("../../lib/auth/authentication");
-    const { mockAuthenticationService } = require("./utils/test-helpers");
+    const { mockAuthenticationModule } = require("./utils/test-helpers");
 
-    // Mock the authentication service functions
-    mockAuthenticationService(authentication);
+    // Mock the authentication module functions
+    mockAuthenticationModule(authentication);
 
     // Mock date function once for all tests
     jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
