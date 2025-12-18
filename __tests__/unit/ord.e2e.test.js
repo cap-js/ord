@@ -189,7 +189,7 @@ describe("End-to-end test for ORD document", () => {
 describe("Tests for products and packages", () => {
     let csn, ord;
 
-    beforeAll(async () => {
+    beforeAll(() => {
         ord = require("../../lib/ord");
         cds.root = path.join(__dirname, "../bookshop");
     });
@@ -364,7 +364,7 @@ describe("Tests for Data Product definition", () => {
 describe("Tests for eventResource and apiResource", () => {
     let ord;
 
-    beforeAll(async () => {
+    beforeAll(() => {
         ord = require("../../lib/ord");
         cds.root = path.join(__dirname, "../bookshop");
     });

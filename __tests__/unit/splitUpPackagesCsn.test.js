@@ -6,7 +6,7 @@ const bahCsn = require("../__mocks__/splitUpPackagesCsn.json");
 describe("ORD Generation for Business Accelerator Hub", () => {
     let ord;
 
-    beforeAll(async () => {
+    beforeAll(() => {
         cds.root = path.join(__dirname, "../bookshop");
 
         // Initialize authentication configuration for tests
