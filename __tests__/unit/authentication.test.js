@@ -10,7 +10,7 @@ const cds = require("@sap/cds");
 const express = require("express");
 const request = require("supertest");
 const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY, CF_MTLS_HEADERS } = require("../../lib/constants");
-const { createAuthMiddleware, createAuthConfig, getAuthConfig } = require("../../lib/auth/authentication");
+const { createAuthMiddleware, createAuthConfig, getOrdAuthConfig } = require("../../lib/auth/authentication");
 const Logger = require("../../lib/logger");
 
 describe("authentication", () => {
@@ -119,19 +119,19 @@ describe("authentication", () => {
             jest.restoreAllMocks();
         });
 
-        it("should return auth config without caching", async () => {
+        it("should return auth config without caching", () => {
             cds.env.ord = { authentication: {} };
 
-            const authConfig = await getAuthConfig();
+            const authConfig = getOrdAuthConfig();
 
             expect(authConfig).toEqual(defaultAuthConfig);
         });
 
-        it("should create new config each time getAuthConfig is called", async () => {
+        it("should create new config each time getOrdAuthConfig is called", () => {
             cds.env.ord = { authentication: {} };
 
-            const authConfig1 = await getAuthConfig();
-            const authConfig2 = await getAuthConfig();
+            const authConfig1 = getOrdAuthConfig();
+            const authConfig2 = getOrdAuthConfig();
 
             expect(authConfig1).toEqual(defaultAuthConfig);
             expect(authConfig2).toEqual(defaultAuthConfig);
@@ -139,12 +139,11 @@ describe("authentication", () => {
             expect(authConfig1).not.toBe(authConfig2);
         });
 
-        it("should throw an error when auth configuration is not valid", async () => {
+        it("should throw an error when auth configuration is not valid", () => {
             cds.env.ord = { authentication: { basic: { credentials: { admin: "InvalidBCrypHash" } } } };
-            await expect(getAuthConfig()).rejects.toThrow("Invalid authentication configuration");
+            expect(() => getOrdAuthConfig()).toThrow("Invalid authentication configuration");
             expect(Logger.error).toHaveBeenCalledWith(
-                expect.stringContaining("createAuthConfig:"),
-                expect.stringContaining("bcrypt hash"),
+                "Authentication configuration error: All passwords must be bcrypt hashes"
             );
         });
     });

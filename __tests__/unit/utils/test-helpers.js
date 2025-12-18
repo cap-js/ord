@@ -31,10 +31,10 @@ function mockCdsContext(cds, authConfig = createOpenAuthConfig()) {
  * @returns {Object} Object containing both spy objects
  */
 function mockAuthenticationService(authentication, authConfig = createOpenAuthConfig()) {
-    const getAuthConfigSpy = jest.spyOn(authentication, "getAuthConfig").mockResolvedValue(authConfig);
-    const getAuthConfigSyncSpy = jest.spyOn(authentication, "getAuthConfigSync").mockReturnValue(authConfig);
+    const getOrdAuthConfigSpy = jest.spyOn(authentication, "getOrdAuthConfig").mockReturnValue(authConfig);
+    const getOrdAccessStrategiesSpy = jest.spyOn(authentication, "getOrdAccessStrategies").mockReturnValue(authConfig.accessStrategies);
 
-    return { getAuthConfigSpy, getAuthConfigSyncSpy };
+    return { getOrdAuthConfigSpy, getOrdAccessStrategiesSpy };
 }
 
 /**
