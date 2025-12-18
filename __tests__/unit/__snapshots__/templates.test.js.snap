@@ -175,6 +175,7 @@ exports[`templates createMCPAPIResourceTemplate should create MCP API resource t
           "type": "open",
         },
       ],
+      "customType": "sap:mcp-server-card:v0",
       "mediaType": "application/json",
       "type": "custom",
       "url": "/ord/v1/customer.testNamespace:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",

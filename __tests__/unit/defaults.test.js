@@ -7,6 +7,7 @@ jest.mock("../../lib/auth/authentication", () => ({
 }));
 
 const defaults = require("../../lib/defaults");
+const { AUTHENTICATION_TYPE } = require("../../lib/constants");
 
 describe("defaults", () => {
     describe("$schema", () => {
@@ -180,7 +181,11 @@ describe("defaults", () => {
     });
     describe("baseTemplate", () => {
         it("should return default value", () => {
-            expect(defaults.baseTemplate).toMatchSnapshot();
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            expect(defaults.baseTemplate(authConfig)).toMatchSnapshot();
         });
     });
 });

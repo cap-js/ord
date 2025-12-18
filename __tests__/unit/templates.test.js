@@ -483,6 +483,7 @@ describe("templates", () => {
                 resourceDefinitions: [
                     {
                         type: "custom",
+                        customType: "sap:mcp-server-card:v0",
                         mediaType: "application/json",
                         url: "/ord/v1/customer.testNamespace:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
                         accessStrategies: [{ type: "open" }],
