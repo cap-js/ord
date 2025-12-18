@@ -7,11 +7,16 @@ jest.mock("../../lib/logger", () => ({
 }));
 
 const cds = require("@sap/cds");
-const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
+const express = require("express");
+const request = require("supertest");
+const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY, CF_MTLS_HEADERS } = require("../../lib/constants");
 const { createAuthMiddleware, createAuthConfig, getAuthConfig } = require("../../lib/auth/authentication");
 const Logger = require("../../lib/logger");
 
 describe("authentication", () => {
+    // Constants
+    const TEST_ENDPOINT = "/test";
+    
     // The bcrypt hash decrypted is: secret
     const mockValidUser = { admin: "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW" };
     const defaultAuthConfig = {
@@ -23,47 +28,25 @@ describe("authentication", () => {
         jest.clearAllMocks();
     });
 
-    async function authCheck(req, status, message, header, authConfig) {
-        const res = {
-            status: jest.fn().mockImplementation((value) => {
-                res.status = value;
-                return res;
-            }),
-            setHeader: jest.fn().mockImplementation((key, value) => {
-                res.header = { [key]: value };
-                return res;
-            }),
-            end: jest.fn(),
-            send: jest.fn().mockImplementation((message) => {
-                res.message = message;
-                return res;
-            }),
-        };
-        const next = jest.fn();
-
-        // authConfig must be provided explicitly
+    /**
+     * Creates a test Express app with authentication middleware
+     * @param {Object} authConfig - Authentication configuration
+     * @param {Function} requestHandler - Optional custom request handler to capture req object
+     * @returns {Express.Application} Express app for testing
+     */
+    function createTestApp(authConfig, requestHandler) {
+        const app = express();
         const authenticate = createAuthMiddleware(authConfig);
 
-        try {
-            await authenticate(req, res, next);
-        } catch (error) {
-            if (message) {
-                expect(error.message).toBe(message);
+        app.get(TEST_ENDPOINT, authenticate, (req, res) => {
+            if (requestHandler) {
+                requestHandler(req, res);
+            } else {
+                res.status(200).send("OK");
             }
-            return;
-        }
+        });
 
-        if (status) {
-            expect(res.status).toBe(status);
-        }
-
-        if (message) {
-            expect(res.message).toBe(message);
-        }
-
-        if (header) {
-            expect(res.header["WWW-Authenticate"]).toEqual(expect.stringContaining(header));
-        }
+        return app;
     }
 
     describe("Initialization of authentication config data", () => {
@@ -176,52 +159,47 @@ describe("authentication", () => {
             const authConfig = {
                 types: [AUTHENTICATION_TYPE.Open],
             };
-            await authCheck({ headers: {} }, 200, null, null, authConfig);
+            await request(createTestApp(authConfig)).get(TEST_ENDPOINT).expect(200).expect("OK");
         });
 
         it("should not authenticate because of missing authorization header in case of any non-open authentication", async () => {
             const authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic],
             };
-            const req = {
-                headers: {},
-            };
 
-            await authCheck(req, 401, "Authentication required.", null, authConfig);
+            await request(createTestApp(authConfig)).get(TEST_ENDPOINT).expect(401).expect("Authentication required.");
         });
 
         it("should not authenticate and set header 'WWW-Authenticate' because of missing authorization header", async () => {
             const authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic],
             };
-            const req = {
-                headers: {},
-            };
 
-            await authCheck(req, 401, "Authentication required.", "401", authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .expect(401)
+                .expect("WWW-Authenticate", /401/)
+                .expect("Authentication required.");
         });
 
         it("should not authenticate because of wrongly configured unsupported authentication type", async () => {
             const authConfig = {
                 types: "UnsupportedAuthType",
             };
-            const req = {
-                headers: {},
-            };
 
-            await authCheck(req, 401, "Not authorized", null, authConfig);
+            await request(createTestApp(authConfig)).get(TEST_ENDPOINT).expect(401).expect("Not authorized");
         });
 
         it("should not authenticate because of invalid name of authentication type in the request header", async () => {
             const authConfig = {
                 types: [AUTHENTICATION_TYPE.Basic],
             };
-            const req = {
-                headers: {
-                    authorization: "Invalid " + Buffer.from(`invalid`).toString("base64"),
-                },
-            };
-            await authCheck(req, 401, "Invalid authentication type", null, authConfig);
+
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set("Authorization", "Invalid " + Buffer.from("invalid").toString("base64"))
+                .expect(401)
+                .expect("Invalid authentication type");
         });
 
         it("should authenticate with valid credentials in the request", async () => {
@@ -230,12 +208,11 @@ describe("authentication", () => {
                 credentials: mockValidUser,
             };
 
-            const req = {
-                headers: {
-                    authorization: "Basic " + Buffer.from("admin:secret").toString("base64"),
-                },
-            };
-            await authCheck(req, 200, null, null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set("Authorization", "Basic " + Buffer.from("admin:secret").toString("base64"))
+                .expect(200)
+                .expect("OK");
         });
 
         it("should not authenticate because of missing password in the request", async () => {
@@ -244,13 +221,11 @@ describe("authentication", () => {
                 credentials: mockValidUser,
             };
 
-            const req = {
-                headers: {
-                    authorization: "Basic " + Buffer.from(`admin`).toString("base64"),
-                },
-            };
-
-            await authCheck(req, 401, "Invalid authentication format", null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set("Authorization", "Basic " + Buffer.from("admin").toString("base64"))
+                .expect(401)
+                .expect("Invalid authentication format");
         });
 
         it("should not authenticate because of invalid credentials in the request", async () => {
@@ -259,12 +234,11 @@ describe("authentication", () => {
                 credentials: mockValidUser,
             };
 
-            const req = {
-                headers: {
-                    authorization: "Basic " + Buffer.from("invalid:invalid").toString("base64"),
-                },
-            };
-            await authCheck(req, 401, "Invalid credentials", null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set("Authorization", "Basic " + Buffer.from("invalid:invalid").toString("base64"))
+                .expect(401)
+                .expect("Invalid credentials");
         });
     });
 
@@ -343,21 +317,26 @@ describe("authentication", () => {
             const subjectDn = "CN=aggregator, O=SAP SE, C=DE";
             const rootCaDn = "CN=SAP Global Root CA, O=SAP SE, C=DE";
 
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert": "dummy-xfcc-value",
-                    "x-ssl-client": "1",
-                    "x-ssl-client-verify": "0",
-                    "x-ssl-client-issuer-dn": Buffer.from(issuerDn).toString("base64"),
-                    "x-ssl-client-subject-dn": Buffer.from(subjectDn).toString("base64"),
-                    "x-ssl-client-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
-                },
-            };
+            let capturedReq;
+            const app = createTestApp(authConfig, (req, res) => {
+                capturedReq = req;
+                res.status(200).send("OK");
+            });
 
-            await authCheck(req, 200, null, null, authConfig);
-            expect(req.cfMtlsIssuer).toBe(issuerDn);
-            expect(req.cfMtlsSubject).toBe(subjectDn);
-            expect(req.cfMtlsRootCaDn).toBe(rootCaDn);
+            await request(app)
+                .get(TEST_ENDPOINT)
+                .set(CF_MTLS_HEADERS.XFCC, "dummy-xfcc-value")
+                .set(CF_MTLS_HEADERS.CLIENT, "1")
+                .set(CF_MTLS_HEADERS.CLIENT_VERIFY, "0")
+                .set(CF_MTLS_HEADERS.ISSUER, Buffer.from(issuerDn).toString("base64"))
+                .set(CF_MTLS_HEADERS.SUBJECT, Buffer.from(subjectDn).toString("base64"))
+                .set(CF_MTLS_HEADERS.ROOT_CA, Buffer.from(rootCaDn).toString("base64"))
+                .expect(200)
+                .expect("OK");
+
+            expect(capturedReq.cfMtlsIssuer).toBe(issuerDn);
+            expect(capturedReq.cfMtlsSubject).toBe(subjectDn);
+            expect(capturedReq.cfMtlsRootCaDn).toBe(rootCaDn);
         });
 
         it("should not authenticate with missing XFCC verification headers", async () => {
@@ -369,14 +348,11 @@ describe("authentication", () => {
                 }),
             };
 
-            const req = {
-                headers: {
-                    // Has mTLS headers but missing XFCC verification headers
-                    "x-ssl-client-issuer-dn": Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString("base64"),
-                },
-            };
-
-            await authCheck(req, 401, "Missing proxy verification of mTLS client certificate", null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set(CF_MTLS_HEADERS.ISSUER, Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString("base64"))
+                .expect(401)
+                .expect("Missing proxy verification of mTLS client certificate");
         });
 
         it("should not authenticate with missing certificate headers", async () => {
@@ -385,19 +361,17 @@ describe("authentication", () => {
                 cfMtlsValidator: () => ({
                     ok: false,
                     reason: "HEADER_MISSING",
-                    missing: "x-ssl-client-issuer-dn",
+                    missing: CF_MTLS_HEADERS.ISSUER,
                 }),
             };
 
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert": "dummy-xfcc-value",
-                    "x-ssl-client": "1",
-                    "x-ssl-client-verify": "0",
-                },
-            };
-
-            await authCheck(req, 401, "Client certificate authentication required", null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set(CF_MTLS_HEADERS.XFCC, "dummy-xfcc-value")
+                .set(CF_MTLS_HEADERS.CLIENT, "1")
+                .set(CF_MTLS_HEADERS.CLIENT_VERIFY, "0")
+                .expect(401)
+                .expect("Client certificate authentication required");
         });
 
         it("should not authenticate with invalid base64 encoding", async () => {
@@ -406,16 +380,14 @@ describe("authentication", () => {
                 cfMtlsValidator: () => ({ ok: false, reason: "INVALID_ENCODING" }),
             };
 
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert": "dummy-xfcc-value",
-                    "x-ssl-client": "1",
-                    "x-ssl-client-verify": "0",
-                    "x-ssl-client-issuer-dn": "not-valid-base64!!!",
-                },
-            };
-
-            await authCheck(req, 400, "Bad Request: Invalid certificate headers", null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set(CF_MTLS_HEADERS.XFCC, "dummy-xfcc-value")
+                .set(CF_MTLS_HEADERS.CLIENT, "1")
+                .set(CF_MTLS_HEADERS.CLIENT_VERIFY, "0")
+                .set(CF_MTLS_HEADERS.ISSUER, "not-valid-base64!!!")
+                .expect(400)
+                .expect("Bad Request: Invalid certificate headers");
         });
 
         it("should return 403 forbidden for certificate pair mismatch", async () => {
@@ -429,18 +401,16 @@ describe("authentication", () => {
                 }),
             };
 
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert": "dummy-xfcc-value",
-                    "x-ssl-client": "1",
-                    "x-ssl-client-verify": "0",
-                    "x-ssl-client-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString("base64"),
-                    "x-ssl-client-subject-dn": Buffer.from("CN=intruder, O=Evil, C=XX").toString("base64"),
-                    "x-ssl-client-root-ca-dn": Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString("base64"),
-                },
-            };
-
-            await authCheck(req, 403, "Forbidden: Invalid client certificate", null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set(CF_MTLS_HEADERS.XFCC, "dummy-xfcc-value")
+                .set(CF_MTLS_HEADERS.CLIENT, "1")
+                .set(CF_MTLS_HEADERS.CLIENT_VERIFY, "0")
+                .set(CF_MTLS_HEADERS.ISSUER, Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString("base64"))
+                .set(CF_MTLS_HEADERS.SUBJECT, Buffer.from("CN=intruder, O=Evil, C=XX").toString("base64"))
+                .set(CF_MTLS_HEADERS.ROOT_CA, Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString("base64"))
+                .expect(403)
+                .expect("Forbidden: Invalid client certificate");
         });
 
         it("should return 403 forbidden for root CA mismatch", async () => {
@@ -453,20 +423,16 @@ describe("authentication", () => {
                 }),
             };
 
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert": "dummy-xfcc-value",
-                    "x-ssl-client": "1",
-                    "x-ssl-client-verify": "0",
-                    "x-ssl-client-issuer-dn": Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString(
-                        "base64",
-                    ),
-                    "x-ssl-client-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
-                    "x-ssl-client-root-ca-dn": Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString("base64"),
-                },
-            };
-
-            await authCheck(req, 403, "Forbidden: Untrusted certificate authority", null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set(CF_MTLS_HEADERS.XFCC, "dummy-xfcc-value")
+                .set(CF_MTLS_HEADERS.CLIENT, "1")
+                .set(CF_MTLS_HEADERS.CLIENT_VERIFY, "0")
+                .set(CF_MTLS_HEADERS.ISSUER, Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString("base64"))
+                .set(CF_MTLS_HEADERS.SUBJECT, Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"))
+                .set(CF_MTLS_HEADERS.ROOT_CA, Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString("base64"))
+                .expect(403)
+                .expect("Forbidden: Untrusted certificate authority");
         });
 
         it("should support combination with Basic auth", () => {
@@ -496,13 +462,11 @@ describe("authentication", () => {
                 }),
             };
 
-            const req = {
-                headers: {
-                    authorization: "Basic " + Buffer.from("admin:secret").toString("base64"),
-                },
-            };
-
-            await authCheck(req, 200, null, null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set("Authorization", "Basic " + Buffer.from("admin:secret").toString("base64"))
+                .expect(200)
+                .expect("OK");
         });
 
         it("should handle CF mTLS when both Basic and CF mTLS are configured but no Basic header", async () => {
@@ -521,18 +485,16 @@ describe("authentication", () => {
             const subjectDn = "CN=aggregator, O=SAP SE, C=DE";
             const rootCaDn = "CN=SAP Global Root CA, O=SAP SE, C=DE";
 
-            const req = {
-                headers: {
-                    "x-forwarded-client-cert": "dummy-xfcc-value",
-                    "x-ssl-client": "1",
-                    "x-ssl-client-verify": "0",
-                    "x-ssl-client-issuer-dn": Buffer.from(issuerDn).toString("base64"),
-                    "x-ssl-client-subject-dn": Buffer.from(subjectDn).toString("base64"),
-                    "x-ssl-client-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
-                },
-            };
-
-            await authCheck(req, 200, null, null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set(CF_MTLS_HEADERS.XFCC, "dummy-xfcc-value")
+                .set(CF_MTLS_HEADERS.CLIENT, "1")
+                .set(CF_MTLS_HEADERS.CLIENT_VERIFY, "0")
+                .set(CF_MTLS_HEADERS.ISSUER, Buffer.from(issuerDn).toString("base64"))
+                .set(CF_MTLS_HEADERS.SUBJECT, Buffer.from(subjectDn).toString("base64"))
+                .set(CF_MTLS_HEADERS.ROOT_CA, Buffer.from(rootCaDn).toString("base64"))
+                .expect(200)
+                .expect("OK");
         });
 
         it("should handle Basic auth when both Basic and CF mTLS are configured with Basic header", async () => {
@@ -541,13 +503,11 @@ describe("authentication", () => {
                 credentials: mockValidUser,
             };
 
-            const req = {
-                headers: {
-                    authorization: "Basic " + Buffer.from(`admin:secret`).toString("base64"),
-                },
-            };
-
-            await authCheck(req, 200, null, null, authConfig);
+            await request(createTestApp(authConfig))
+                .get(TEST_ENDPOINT)
+                .set("Authorization", "Basic " + Buffer.from("admin:secret").toString("base64"))
+                .expect(200)
+                .expect("OK");
         });
 
         it("should support multiple authentication strategies in ORD document", () => {
