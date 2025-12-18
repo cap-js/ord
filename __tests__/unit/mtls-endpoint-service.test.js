@@ -35,7 +35,7 @@ describe("mtls-endpoint-service", () => {
             ]);
             expect(result.rootCaDn).toEqual([]);
             expect(mockLogger.info).toHaveBeenCalledWith(
-                "Successfully fetched mTLS cert info from https://config.example.com/cert-info - Issuer: CN=Test CA,O=Test,C=DE, Subject: CN=test-service,O=Test,C=DE",
+                "Successfully fetched mTLS cert info from https://config.example.com/cert-info",
             );
         });
 
@@ -148,7 +148,6 @@ describe("mtls-endpoint-service", () => {
             expect(result.rootCaDn).toEqual([]);
             expect(global.fetch).not.toHaveBeenCalled();
         });
-
     });
 
     describe("mergeTrustedCerts", () => {
