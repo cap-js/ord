@@ -35,6 +35,7 @@ const path = require("path");
 const http = require("http");
 const net = require("net");
 const fs = require("fs");
+const { CF_MTLS_HEADERS } = require("../../lib/constants");
 
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
 const ORD_DOCUMENT_ENDPOINT = "/ord/v1/documents/ord-document";
@@ -156,13 +157,13 @@ function stopMockConfigServer(server) {
 function createMtlsHeaders(issuer, subject, rootCaDn) {
     return {
         // XFCC headers indicating proxy has verified the certificate
-        "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
-        "x-ssl-client": "1",
-        "x-ssl-client-verify": "0",
+        [CF_MTLS_HEADERS.XFCC]: "Hash=abc123;Subject=CN=test",
+        [CF_MTLS_HEADERS.CLIENT]: "1",
+        [CF_MTLS_HEADERS.CLIENT_VERIFY]: "0",
         // Certificate DN headers (corrected to match actual gorouter headers)
-        "x-ssl-client-issuer-dn": Buffer.from(issuer).toString("base64"),
-        "x-ssl-client-subject-dn": Buffer.from(subject).toString("base64"),
-        "x-ssl-client-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
+        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(issuer).toString("base64"),
+        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from(subject).toString("base64"),
+        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(rootCaDn).toString("base64"),
     };
 }
 
@@ -335,8 +336,8 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
     describe("mTLS Authentication - Invalid Certificate Scenarios", () => {
         test("should reject request with missing issuer header", async () => {
             const headers = {
-                "x-ssl-client-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString("base64"),
-                "x-ssl-client-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
+                [CF_MTLS_HEADERS.SUBJECT]: Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString("base64"),
+                [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
             };
 
             await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(401);
@@ -344,8 +345,8 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
 
         test("should reject request with missing subject header", async () => {
             const headers = {
-                "x-ssl-client-issuer-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString("base64"),
-                "x-ssl-client-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
+                [CF_MTLS_HEADERS.ISSUER]: Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString("base64"),
+                [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
             };
 
             await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(401);
@@ -353,8 +354,8 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
 
         test("should reject request with missing root CA header", async () => {
             const headers = {
-                "x-ssl-client-issuer-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString("base64"),
-                "x-ssl-client-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString("base64"),
+                [CF_MTLS_HEADERS.ISSUER]: Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certIssuer).toString("base64"),
+                [CF_MTLS_HEADERS.SUBJECT]: Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString("base64"),
             };
 
             await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(401);
@@ -654,8 +655,8 @@ describe("ORD Integration Tests - mTLS via .cdsrc.json configEndpoint (fetchMtls
     describe("mTLS Authentication - Invalid Certificate Scenarios", () => {
         test("should reject request with missing issuer header", async () => {
             const headers = {
-                "x-ssl-client-subject-dn": Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString("base64"),
-                "x-ssl-client-root-ca-dn": Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
+                [CF_MTLS_HEADERS.SUBJECT]: Buffer.from(MOCK_CERT_CONFIG_RESPONSE.certSubject).toString("base64"),
+                [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(MOCK_ROOT_CA_DN).toString("base64"),
             };
 
             await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(headers).expect(401);
