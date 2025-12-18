@@ -114,7 +114,7 @@ function _handleVisibility(ordExtensions, definition, defaultVisibility) {
 ```javascript
 async function authenticate(req, res, next) {
     const authConfig = getAuthConfig();
-    const authTypes = authConfig.accessStrategies.map(s => s.type);
+    const authTypes = authConfig.accessStrategies.map((s) => s.type);
 
     if (authTypes.includes("open")) {
         return next();
@@ -136,53 +136,52 @@ async function authenticate(req, res, next) {
 
 ### 6. Test Helper Pattern
 
-**Pattern**: Centralized test utility functions for consistent mocking
+**Pattern**: Centralized test utility functions for consistent authentication mocking
 **Implementation**: `__tests__/unit/utils/test-helpers.js`
 
 ```javascript
-// Reusable authentication mock setup
-function setupAuthMocks(authType = 'open') {
-    const mockAuthConfig = mockCreateAuthConfig(authType);
-    mockAuthenticationService(mockAuthConfig);
-    mockCdsContext();
-    return mockAuthConfig;
+// Create standard open authentication configuration
+function createOpenAuthConfig() {
+    return {
+        types: [AUTHENTICATION_TYPE.Open],
+        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+    };
 }
 
-// Configurable authentication configurations
-function mockCreateAuthConfig(type) {
-    const configs = {
-        open: { accessStrategies: [{ type: 'open' }] },
-        basic: { accessStrategies: [{ type: 'basic' }] },
-        mtls: { accessStrategies: [{ type: 'mtls' }] }
-    };
-    return configs[type] || configs.open;
+// Mock authentication module with Jest spy
+function mockAuthenticationModule(authentication, authConfig = createOpenAuthConfig()) {
+    const createAuthConfigSpy = jest.spyOn(authentication, "createAuthConfig").mockReturnValue(authConfig);
+    return { createAuthConfigSpy };
+}
+
+// Mock createAuthConfig function directly
+function mockCreateAuthConfig(authentication, authConfig = createOpenAuthConfig()) {
+    return jest.spyOn(authentication, "createAuthConfig").mockReturnValue(authConfig);
 }
 ```
 
 **Benefits**:
 
 - Eliminates code duplication across test files
-- Ensures consistent mock configurations
-- Simplifies test setup and maintenance
-- Provides reusable patterns for future tests
+- Provides consistent authentication mocking patterns
+- Returns Jest spies for verification in tests
+- Simplifies test setup with sensible defaults
+- Allows custom auth configurations when needed
 
 ## Component Relationships
 
 ### Core Components
 
 1. **Entry Points**
-
     - `cds-plugin.js`: Framework integration
     - `lib/ord-service.cds`: Service definition
 
 2. **Processing Engine**
-
     - `lib/ord.js`: Main ORD generation logic
     - `lib/templates.js`: Template system
     - `lib/defaults.js`: Default values and validation
 
 3. **Support Systems**
-
     - `lib/authentication.js`: Security layer
     - `lib/build.js`: Build system integration
     - `lib/utils.js`: Utility functions

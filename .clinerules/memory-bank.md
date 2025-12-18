@@ -15,6 +15,8 @@ PB --> TC[techContext.md]
     SP --> AC
     TC --> AC
 
+    AC --> P[progress.md]
+
 ### Core Files (Required)
 
 1. `projectbrief.md`
@@ -50,6 +52,13 @@ PB --> TC[techContext.md]
     - Technical constraints
     - Dependencies
     - Tool usage patterns
+
+6. `progress.md`
+    - What works
+    - What's left to build
+    - Current status
+    - Known issues
+    - Evolution of project decisions
 
 ### Additional Context
 
@@ -107,6 +116,6 @@ Start[Update Process]
 
     Start --> Process
 
-Note: When triggered by **update memory bank**, I MUST review every memory bank file, even if some don't require updates. Focus particularly on activeContext.md as it tracks current state.
+Note: When triggered by **update memory bank**, I MUST review every memory bank file, even if some don't require updates. Focus particularly on activeContext.md and progress.md as they track current state.
 
 REMEMBER: After every memory reset, I begin completely fresh. The Memory Bank is my only link to previous work. It must be maintained with precision and clarity, as my effectiveness depends entirely on its accuracy.
