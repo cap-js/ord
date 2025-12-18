@@ -1,9 +1,3 @@
-// Mock the Logger module
-jest.mock("../../lib/logger", () => ({
-    log: jest.fn(),
-    error: jest.fn(),
-}));
-
 const {
     isMCPPluginAvailable,
     isMCPPluginInPackageJson,

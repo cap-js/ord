@@ -1,11 +1,3 @@
-// Mock the Logger module
-jest.mock("../../lib/logger", () => ({
-    log: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-    warn: jest.fn(),
-}));
-
 const cds = require("@sap/cds");
 const path = require("path");
 const { ORD_ACCESS_STRATEGY } = require("../../lib/constants");

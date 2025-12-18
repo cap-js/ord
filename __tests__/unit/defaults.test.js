@@ -1,11 +1,3 @@
-
-// Mock the authentication module instead of cds.context
-jest.mock("../../lib/auth/authentication", () => ({
-    getAuthConfigSync: jest.fn(() => ({
-        accessStrategies: [{ type: "open" }],
-    })),
-}));
-
 const defaults = require("../../lib/defaults");
 const { AUTHENTICATION_TYPE } = require("../../lib/constants");
 

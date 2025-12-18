@@ -1,8 +1,4 @@
 const cds = require("@sap/cds");
-const { mockCdsContext } = require("./utils/test-helpers");
-
-// Mock CDS context with open authentication
-mockCdsContext(cds);
 const { createAPIResourceTemplate, createEventResourceTemplate } = require("../../lib/templates");
 
 describe("namespace local and global", () => {

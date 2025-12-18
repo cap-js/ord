@@ -6,10 +6,6 @@ const {
     RESOURCE_VISIBILITY,
     ALLOWED_VISIBILITY,
 } = require("../../lib/constants");
-const { mockCdsContext } = require("./utils/test-helpers");
-
-// Mock CDS context with open authentication
-mockCdsContext(cds);
 const {
     createEntityTypeTemplate,
     createEntityTypeMappingsItemTemplate,

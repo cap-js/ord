@@ -5,12 +5,6 @@ const { getMetadata } = require("../../lib/index");
 const { isMCPPluginAvailable } = require("../../lib/mcpAdapter");
 const cdsc = require("@sap/cds-compiler/lib/main");
 
-// Mock the Logger module
-jest.mock("../../lib/logger", () => ({
-    log: jest.fn(),
-    error: jest.fn(),
-}));
-
 jest.mock("@cap-js/openapi", () => ({
     compile: jest.fn(),
 }));

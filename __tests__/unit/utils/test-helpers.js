@@ -13,18 +13,6 @@ function createOpenAuthConfig() {
 }
 
 /**
- * Mock CDS context authentication configuration
- * @param {Object} cds - CDS object to mock
- * @param {Object} authConfig - Authentication configuration (defaults to open)
- * @returns {Object} Jest spy object
- */
-function mockCdsContext(cds, authConfig = createOpenAuthConfig()) {
-    return jest.spyOn(cds, "context", "get").mockReturnValue({
-        authConfig,
-    });
-}
-
-/**
  * Mock authentication service configuration
  * @param {Object} authentication - Authentication module to mock
  * @param {Object} authConfig - Authentication configuration (defaults to open)
@@ -50,7 +38,6 @@ module.exports = {
     createOpenAuthConfig,
 
     // Mock functions
-    mockCdsContext,
     mockAuthenticationService,
     mockCreateAuthConfig,
 };
