@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.4.0 (2025-12-19)
+
+## What's Changed
+
+- chore(deps): update actions/checkout action to v6 by @renovate[bot] in https://github.com/cap-js/ord/pull/301
+- fix(deps): update spring boot to v3.5.8 by @renovate[bot] in https://github.com/cap-js/ord/pull/300
+- Fix: remove legacy logger and logic by @zongqichen in https://github.com/cap-js/ord/pull/304
+- Feat: support mtls by @zongqichen in https://github.com/cap-js/ord/pull/299
+- chore(deps): update dependency prettier to v3.7.3 by @renovate[bot] in https://github.com/cap-js/ord/pull/305
+- Fix: odata in dataproduct by @zongqichen in https://github.com/cap-js/ord/pull/312
+- feat: MCP API resource generation when MCP plugin is detected by @swennemers in https://github.com/cap-js/ord/pull/260
+- Allow custom compiler options for OpenAPI / AsyncAPI by @henrybrink in https://github.com/cap-js/ord/pull/314
+- chore(deps): update actions/cache action to v5 by @renovate[bot] in https://github.com/cap-js/ord/pull/315
+- chore(deps): update dependency prettier to v3.7.4 by @renovate[bot] in https://github.com/cap-js/ord/pull/310
+- fix(deps): update cds.services.version to v4.5.1 by @renovate[bot] in https://github.com/cap-js/ord/pull/309
+- fix(deps): update cds.services.version to v4.6.0 by @renovate[bot] in https://github.com/cap-js/ord/pull/316
+- Fix: add customType to mcp apiResources by @zongqichen in https://github.com/cap-js/ord/pull/317
+- Fix: cds.context overwritten during authConfig by @zongqichen in https://github.com/cap-js/ord/pull/319
+- Feat: Test mtls by @zongqichen in https://github.com/cap-js/ord/pull/313
+- fix(deps): update spring boot to v3.5.9 by @renovate[bot] in https://github.com/cap-js/ord/pull/321
+
+## New Contributors
+
+- @henrybrink made their first contribution in https://github.com/cap-js/ord/pull/314
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.3.14...v1.4.0
+
 ## 1.3.14 (2025-11-18)
 
 ## What's Changed
