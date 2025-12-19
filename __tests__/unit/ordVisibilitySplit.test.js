@@ -1,11 +1,3 @@
-const cds = require("@sap/cds");
-const { AUTHENTICATION_TYPE } = require("../../lib/constants");
-
-jest.spyOn(cds, "context", "get").mockReturnValue({
-    authConfig: {
-        types: [AUTHENTICATION_TYPE.Open],
-    },
-});
 const {
     createEntityTypeTemplate,
     createAPIResourceTemplate,

@@ -1,17 +1,18 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { AUTHENTICATION_TYPE } = require("../../lib/constants");
 
 describe("Tests for ORD document generated out of mocked csn files", () => {
     let ord;
 
     beforeAll(() => {
         cds.root = path.join(__dirname, "../bookshop");
-        jest.spyOn(cds, "context", "get").mockReturnValue({
-            authConfig: {
-                types: [AUTHENTICATION_TYPE.Open],
-            },
-        });
+
+        // Initialize authentication configuration for tests
+        const authentication = require("../../lib/auth/authentication");
+        const { mockCreateAuthConfig } = require("./utils/test-helpers");
+
+        // Mock the createAuthConfig to return a default open configuration
+        mockCreateAuthConfig(authentication);
 
         jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         // Mock MCP plugin availability to false for these tests
@@ -30,7 +31,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
     afterAll(() => {
         jest.restoreAllMocks();
-        jest.clearAllMocks();
     });
 
     describe("Tests for ORD document when .cdsrc.json has no `ord` property", () => {
@@ -38,7 +38,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             cds.env = {};
             const csn = require("../__mocks__/publicResourcesCsn.json");
             const document = ord(csn);
-            expect(document).not.toBeUndefined();
             expect(document).toMatchSnapshot();
         });
     });
@@ -49,7 +48,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/noEntitiesInServiceDefinitionCsn.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.apiResources).toHaveLength(1);
             expect(document.eventResources).toHaveLength(1);
             expect(document.eventResources[0].ordId).toEqual(expect.stringContaining("EbMtEmitter"));
@@ -63,7 +61,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/localAndNonODMReferencedEntitiesCsn.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.entityTypes).toHaveLength(1);
             expect(document.entityTypes[0].partOfPackage).toEqual(
                 "sap.test.cdsrc.sample:package:capirebookshopordsample:v1", //for customer, no package by type
@@ -84,7 +81,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/privateResourcesCsn.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.packages).toHaveLength(0);
             expect(document.apiResources).toBeUndefined();
             expect(document.eventResources).toBeUndefined();
@@ -96,7 +92,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/internalResourcesCsn.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.packages).toBeDefined();
             expect(document.apiResources).toBeDefined();
             expect(document.eventResources).toBeDefined();
@@ -108,7 +103,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/noApisCsn.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.apiResources).toBeUndefined();
             expect(document.eventResources).toBeUndefined();
         });
@@ -117,7 +111,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/csnWithoutEvents.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.apiResources).toHaveLength(1);
             expect(document.eventResources).toBeUndefined();
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("LocalService"));
@@ -127,7 +120,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/csnWithOneEvent.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.apiResources).toHaveLength(2);
             expect(document.eventResources).toHaveLength(1);
             expect(document.apiResources[0].ordId).toEqual(expect.stringContaining("LocalService"));
@@ -139,7 +131,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/dataProductCsn.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.apiResources).toHaveLength(1);
             const dataProductApiResources = document.apiResources.filter(
                 (resource) => resource.implementationStandard === "sap.dp:data-subscription-api:v1",
@@ -164,7 +155,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/dataProductSimpleAnnotationCsn.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.apiResources).toHaveLength(1);
             const dataProductApiResources = document.apiResources.filter(
                 (resource) => resource.implementationStandard === "sap.dp:data-subscription-api:v1",
@@ -190,7 +180,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/dataProductSimpleAnnotationCsn.json");
             const document = ord(csn);
 
-            expect(document).not.toBeUndefined();
             expect(document.eventResources).toHaveLength(1);
             expect(document.eventResources[0].visibility).toEqual("internal");
         });

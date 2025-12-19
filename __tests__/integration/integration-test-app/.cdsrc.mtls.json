@@ -1,0 +1,11 @@
+{
+    "ord": {
+        "authentication": {
+            "cfMtls": {
+                "certs": [],
+                "configEndpoints": ["http://localhost:9999/v1/info"],
+                "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"]
+            }
+        }
+    }
+}

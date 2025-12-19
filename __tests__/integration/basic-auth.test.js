@@ -48,12 +48,13 @@ describe("ORD Integration Tests - Basic Authentication", () => {
 
         console.log(`Test app root: ${testAppRoot}`);
 
-        // Start CDS server with Basic Authentication (uses .cdsrc.json config)
+        // Start CDS server with Basic Authentication only (uses .cdsrc.basic.json config)
         serverProcess = spawn("npx", ["cds", "run"], {
             cwd: testAppRoot,
             env: {
                 ...process.env,
-                // Basic auth is configured via .cdsrc.json (cds.ord.authentication.basic)
+                // Use basic-auth only configuration to avoid mTLS initialization conflicts
+                CDS_CONFIG: path.join(testAppRoot, ".cdsrc.basic.json"),
             },
             stdio: ["ignore", "pipe", "pipe"],
         });

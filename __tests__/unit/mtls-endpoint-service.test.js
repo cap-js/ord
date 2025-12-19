@@ -148,20 +148,6 @@ describe("mtls-endpoint-service", () => {
             expect(result.rootCaDn).toEqual([]);
             expect(global.fetch).not.toHaveBeenCalled();
         });
-
-        it.skip("should handle timeout", async () => {
-            // Skip this test as it's timing-sensitive and not critical for functionality
-            global.fetch.mockImplementationOnce(() => new Promise(() => {})); // Never resolves
-
-            const result = await fetchMtlsTrustedCertsFromEndpoints(
-                ["https://slow-endpoint.com/cert"],
-                mockLogger,
-                100, // Short timeout
-            );
-
-            expect(result.certs).toEqual([]);
-            expect(mockLogger.error).toHaveBeenCalledWith(expect.stringContaining("Request timeout after 100ms"));
-        });
     });
 
     describe("mergeTrustedCerts", () => {

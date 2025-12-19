@@ -1,18 +1,11 @@
 const cds = require("@sap/cds");
 const {
-    AUTHENTICATION_TYPE,
     ORD_ODM_ENTITY_NAME_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_EXTENSIONS_PREFIX,
     RESOURCE_VISIBILITY,
     ALLOWED_VISIBILITY,
 } = require("../../lib/constants");
-
-jest.spyOn(cds, "context", "get").mockReturnValue({
-    authConfig: {
-        types: [AUTHENTICATION_TYPE.Open],
-    },
-});
 const {
     createEntityTypeTemplate,
     createEntityTypeMappingsItemTemplate,
@@ -27,7 +20,7 @@ const {
     isPrimaryDataProductService,
 } = require("../../lib/templates");
 
-const { Logger } = require("../../lib/logger");
+const Logger = require("../../lib/logger");
 
 describe("visibility handling", () => {
     let loggerSpy;

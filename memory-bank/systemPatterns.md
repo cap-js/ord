@@ -114,12 +114,13 @@ function _handleVisibility(ordExtensions, definition, defaultVisibility) {
 ```javascript
 async function authenticate(req, res, next) {
     const authConfig = getAuthConfig();
+    const authTypes = authConfig.accessStrategies.map((s) => s.type);
 
-    if (authConfig.types.includes("open")) {
+    if (authTypes.includes("open")) {
         return next();
     }
 
-    if (authConfig.types.includes("basic")) {
+    if (authTypes.includes("basic")) {
         return await handleBasicAuth(req, res, next);
     }
 
@@ -133,23 +134,54 @@ async function authenticate(req, res, next) {
 - **Basic**: Username/password with bcrypt hashing
 - **Future**: UCL-mTLS for enterprise scenarios
 
+### 6. Test Helper Pattern
+
+**Pattern**: Centralized test utility functions for consistent authentication mocking
+**Implementation**: `__tests__/unit/utils/test-helpers.js`
+
+```javascript
+// Create standard open authentication configuration
+function createOpenAuthConfig() {
+    return {
+        types: [AUTHENTICATION_TYPE.Open],
+        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+    };
+}
+
+// Mock authentication module with Jest spy
+function mockAuthenticationModule(authentication, authConfig = createOpenAuthConfig()) {
+    const createAuthConfigSpy = jest.spyOn(authentication, "createAuthConfig").mockReturnValue(authConfig);
+    return { createAuthConfigSpy };
+}
+
+// Mock createAuthConfig function directly
+function mockCreateAuthConfig(authentication, authConfig = createOpenAuthConfig()) {
+    return jest.spyOn(authentication, "createAuthConfig").mockReturnValue(authConfig);
+}
+```
+
+**Benefits**:
+
+- Eliminates code duplication across test files
+- Provides consistent authentication mocking patterns
+- Returns Jest spies for verification in tests
+- Simplifies test setup with sensible defaults
+- Allows custom auth configurations when needed
+
 ## Component Relationships
 
 ### Core Components
 
 1. **Entry Points**
-
     - `cds-plugin.js`: Framework integration
     - `lib/ord-service.cds`: Service definition
 
 2. **Processing Engine**
-
     - `lib/ord.js`: Main ORD generation logic
     - `lib/templates.js`: Template system
     - `lib/defaults.js`: Default values and validation
 
 3. **Support Systems**
-
     - `lib/authentication.js`: Security layer
     - `lib/build.js`: Build system integration
     - `lib/utils.js`: Utility functions

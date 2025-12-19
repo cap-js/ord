@@ -1,14 +1,8 @@
 const cds = require("@sap/cds");
-const { getAuthConfig } = require("./lib/auth/authentication");
 
 if (cds.cli.command === "build") {
     cds.build?.register?.("ord", require("./lib/build"));
 }
-
-// load auth config before any service is started
-cds.on("bootstrap", async () => {
-    getAuthConfig();
-});
 
 function _lazyRegisterCompileTarget() {
     const ord = require("./lib/index").ord;

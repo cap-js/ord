@@ -5,19 +5,20 @@ const {
     dnTokensMatch,
     createCfMtlsValidator,
 } = require("../../lib/auth/cf-mtls");
+const { CF_MTLS_HEADERS } = require("../../lib/constants");
 
 describe("CF mTLS Validation", () => {
     const mockHeaderNames = {
-        issuer: "x-forwarded-client-cert-issuer-dn",
-        subject: "x-forwarded-client-cert-subject-dn",
-        rootCa: "x-forwarded-client-cert-root-ca-dn",
+        issuer: CF_MTLS_HEADERS.ISSUER,
+        subject: CF_MTLS_HEADERS.SUBJECT,
+        rootCa: CF_MTLS_HEADERS.ROOT_CA,
     };
 
     // Valid XFCC headers for testing
     const validXfccHeaders = {
-        "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
-        "x-ssl-client": "1",
-        "x-ssl-client-verify": "0",
+        [CF_MTLS_HEADERS.XFCC]: "Hash=abc123;Subject=CN=test",
+        [CF_MTLS_HEADERS.CLIENT]: "1",
+        [CF_MTLS_HEADERS.CLIENT_VERIFY]: "0",
     };
 
     describe("isXfccProxyVerified", () => {
@@ -31,8 +32,8 @@ describe("CF mTLS Validation", () => {
         it("should return false when x-forwarded-client-cert header is missing", () => {
             const req = {
                 headers: {
-                    "x-ssl-client": "1",
-                    "x-ssl-client-verify": "0",
+                    [CF_MTLS_HEADERS.CLIENT]: "1",
+                    [CF_MTLS_HEADERS.CLIENT_VERIFY]: "0",
                 },
             };
             expect(isXfccProxyVerified(req)).toBe(false);
@@ -41,9 +42,9 @@ describe("CF mTLS Validation", () => {
         it("should return false when x-ssl-client is not '1'", () => {
             const req = {
                 headers: {
-                    "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
-                    "x-ssl-client": "0",
-                    "x-ssl-client-verify": "0",
+                    [CF_MTLS_HEADERS.XFCC]: "Hash=abc123;Subject=CN=test",
+                    [CF_MTLS_HEADERS.CLIENT]: "0",
+                    [CF_MTLS_HEADERS.CLIENT_VERIFY]: "0",
                 },
             };
             expect(isXfccProxyVerified(req)).toBe(false);
@@ -52,9 +53,9 @@ describe("CF mTLS Validation", () => {
         it("should return false when x-ssl-client-verify is not '0'", () => {
             const req = {
                 headers: {
-                    "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
-                    "x-ssl-client": "1",
-                    "x-ssl-client-verify": "1",
+                    [CF_MTLS_HEADERS.XFCC]: "Hash=abc123;Subject=CN=test",
+                    [CF_MTLS_HEADERS.CLIENT]: "1",
+                    [CF_MTLS_HEADERS.CLIENT_VERIFY]: "1",
                 },
             };
             expect(isXfccProxyVerified(req)).toBe(false);
@@ -72,9 +73,9 @@ describe("CF mTLS Validation", () => {
         it("should handle array header values by taking first element", () => {
             const req = {
                 headers: {
-                    "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
-                    "x-ssl-client": ["1", "0"],
-                    "x-ssl-client-verify": ["0", "1"],
+                    [CF_MTLS_HEADERS.XFCC]: "Hash=abc123;Subject=CN=test",
+                    [CF_MTLS_HEADERS.CLIENT]: ["1", "0"],
+                    [CF_MTLS_HEADERS.CLIENT_VERIFY]: ["0", "1"],
                 },
             };
             expect(isXfccProxyVerified(req)).toBe(true);
@@ -83,9 +84,9 @@ describe("CF mTLS Validation", () => {
         it("should return false when x-ssl-client array has wrong first value", () => {
             const req = {
                 headers: {
-                    "x-forwarded-client-cert": "Hash=abc123;Subject=CN=test",
-                    "x-ssl-client": ["0", "1"],
-                    "x-ssl-client-verify": "0",
+                    [CF_MTLS_HEADERS.XFCC]: "Hash=abc123;Subject=CN=test",
+                    [CF_MTLS_HEADERS.CLIENT]: ["0", "1"],
+                    [CF_MTLS_HEADERS.CLIENT_VERIFY]: "0",
                 },
             };
             expect(isXfccProxyVerified(req)).toBe(false);
@@ -100,9 +101,9 @@ describe("CF mTLS Validation", () => {
 
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from(issuerDn).toString("base64"),
-                    "x-forwarded-client-cert-subject-dn": Buffer.from(subjectDn).toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from(rootCaDn).toString("base64"),
+                    [CF_MTLS_HEADERS.ISSUER]: Buffer.from(issuerDn).toString("base64"),
+                    [CF_MTLS_HEADERS.SUBJECT]: Buffer.from(subjectDn).toString("base64"),
+                    [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(rootCaDn).toString("base64"),
                 },
             };
 
@@ -123,8 +124,8 @@ describe("CF mTLS Validation", () => {
         it("should return error for missing issuer header", () => {
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=test").toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=root").toString("base64"),
+                    [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=test").toString("base64"),
+                    [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=root").toString("base64"),
                 },
             };
             const result = extractCertHeaders(req, mockHeaderNames);
@@ -135,8 +136,8 @@ describe("CF mTLS Validation", () => {
         it("should return error for missing subject header", () => {
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=test").toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=root").toString("base64"),
+                    [CF_MTLS_HEADERS.ISSUER]: Buffer.from("CN=test").toString("base64"),
+                    [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=root").toString("base64"),
                 },
             };
             const result = extractCertHeaders(req, mockHeaderNames);
@@ -147,8 +148,8 @@ describe("CF mTLS Validation", () => {
         it("should return error for missing root CA header", () => {
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=test").toString("base64"),
-                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=test").toString("base64"),
+                    [CF_MTLS_HEADERS.ISSUER]: Buffer.from("CN=test").toString("base64"),
+                    [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=test").toString("base64"),
                 },
             };
             const result = extractCertHeaders(req, mockHeaderNames);
@@ -160,12 +161,12 @@ describe("CF mTLS Validation", () => {
             const issuerDn = "CN=test, O=SAP SE";
             const req = {
                 headers: {
-                    "x-forwarded-client-cert-issuer-dn": [
+                    [CF_MTLS_HEADERS.ISSUER]: [
                         Buffer.from(issuerDn).toString("base64"),
                         Buffer.from("CN=other").toString("base64"),
                     ],
-                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=subject").toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=root").toString("base64"),
+                    [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=subject").toString("base64"),
+                    [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=root").toString("base64"),
                 },
             };
             const result = extractCertHeaders(req, mockHeaderNames);
@@ -180,17 +181,17 @@ describe("CF mTLS Validation", () => {
             const req = {
                 headers: {
                     // Node.js/Express automatically lowercases header keys
-                    "x-forwarded-client-cert-issuer-dn": Buffer.from(issuerDn).toString("base64"),
-                    "x-forwarded-client-cert-subject-dn": Buffer.from("CN=subject").toString("base64"),
-                    "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=root").toString("base64"),
+                    [CF_MTLS_HEADERS.ISSUER]: Buffer.from(issuerDn).toString("base64"),
+                    [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=subject").toString("base64"),
+                    [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=root").toString("base64"),
                 },
             };
             // Even though we provide mixed-case header names in config, it should work
             // because the function lowercases them for lookup
             const result = extractCertHeaders(req, {
-                issuer: "X-Forwarded-Client-Cert-Issuer-DN",
-                subject: "X-Forwarded-Client-Cert-Subject-DN",
-                rootCa: "X-Forwarded-Client-Cert-Root-CA-DN",
+                issuer: "X-Ssl-Client-Issuer-DN",
+                subject: "X-Ssl-Client-Subject-DN",
+                rootCa: "X-Ssl-Client-Root-CA-DN",
             });
             expect(result.issuer).toBe(issuerDn);
         });
@@ -394,15 +395,13 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
-                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
                     },
                 };
                 const result = validator(req);
@@ -416,15 +415,13 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=backup-service, O=SAP SE, C=US").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=backup-service, O=SAP SE, C=US").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
-                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
                     },
                 };
                 const result = validator(req);
@@ -435,15 +432,13 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "C=DE, O=SAP SE, CN=SAP Cloud Platform Client CA",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("C=DE, O=SAP SE, CN=aggregator").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("C=DE, O=SAP SE, CN=aggregator").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("C=DE, O=SAP SE, CN=SAP Global Root CA").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
-                            "C=DE, O=SAP SE, CN=SAP Global Root CA",
-                        ).toString("base64"),
                     },
                 };
                 const result = validator(req);
@@ -454,14 +449,13 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "/C=DE/O=SAP SE/CN=SAP Cloud Platform Client CA",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn":
-                            Buffer.from("/C=DE/O=SAP SE/CN=aggregator").toString("base64"),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
-                            "/C=DE/O=SAP SE/CN=SAP Global Root CA",
-                        ).toString("base64"),
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("/C=DE/O=SAP SE/CN=aggregator").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("/C=DE/O=SAP SE/CN=SAP Global Root CA").toString(
+                            "base64",
+                        ),
                     },
                 };
                 const result = validator(req);
@@ -474,15 +468,13 @@ describe("CF mTLS Validation", () => {
             it("should return ok:false with XFCC_VERIFICATION_FAILED when XFCC headers are missing", () => {
                 const req = {
                     headers: {
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
-                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
                         // Missing XFCC headers
                     },
                 };
@@ -495,16 +487,14 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-ssl-client": "0", // Invalid value
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.CLIENT]: "0", // Invalid value
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
-                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
                     },
                 };
                 const result = validator(req);
@@ -516,15 +506,13 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
-                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
                     },
                 };
                 const result = validator(req);
@@ -542,8 +530,8 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=test").toString("base64"),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from("CN=root").toString("base64"),
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=test").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=root").toString("base64"),
                     },
                 };
                 const result = validator(req);
@@ -555,13 +543,13 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
                             "CN=SAP Global Root CA, O=SAP SE, C=DE",
                         ).toString("base64"),
                     },
@@ -577,13 +565,13 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=intruder, O=Evil Corp, C=XX").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=intruder, O=Evil Corp, C=XX").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
                             "CN=SAP Global Root CA, O=SAP SE, C=DE",
                         ).toString("base64"),
                     },
@@ -597,13 +585,13 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
                             "CN=Evil Root CA, O=Evil Corp, C=XX",
                         ).toString("base64"),
                     },
@@ -619,12 +607,12 @@ describe("CF mTLS Validation", () => {
                 const req1 = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        "x-forwarded-client-cert-subject-dn":
+                        [CF_MTLS_HEADERS.SUBJECT]:
                             Buffer.from("CN=unknown, O=SAP SE, C=DE").toString("base64"),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
                             "CN=SAP Global Root CA, O=SAP SE, C=DE",
                         ).toString("base64"),
                     },
@@ -635,13 +623,13 @@ describe("CF mTLS Validation", () => {
                 const req2 = {
                     headers: {
                         ...validXfccHeaders,
-                        "x-forwarded-client-cert-issuer-dn": Buffer.from("CN=Unknown CA, O=SAP SE, C=DE").toString(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from("CN=Unknown CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-subject-dn": Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        "x-forwarded-client-cert-root-ca-dn": Buffer.from(
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
                             "CN=SAP Global Root CA, O=SAP SE, C=DE",
                         ).toString("base64"),
                     },
