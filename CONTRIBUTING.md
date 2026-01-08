@@ -59,8 +59,6 @@ npm i
 For testing an example app is available in the `xmpl` folder:
 
 ```bash
-#If not already globally installed, install cds-dk
-npm install -g @sap/cds-dk
 cds w xmpl
 ```
 

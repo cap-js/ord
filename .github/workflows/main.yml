@@ -19,7 +19,6 @@ jobs:
 
             - name: Install dependencies and prepare documents
               run: |
-                  npm install -g @sap/cds-dk@latest
                   npm install @sap/cds@latest
                   cds version
 

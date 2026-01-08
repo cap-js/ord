@@ -19,7 +19,6 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  npm install -g @sap/cds-dk@latest
                   npm install
 
             - name: Run basic auth integration tests
