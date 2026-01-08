@@ -13,6 +13,7 @@
 **CAP Framework Integration**:
 
 - **@sap/cds**: Core CAP framework (>=8.9.4)
+- **@sap/cds-dk**: CAP development kit (>=8.9.5)
 - **CSN (Core Schema Notation)**: CAP's internal model representation
 
 **Key Dependencies**:
@@ -54,6 +55,9 @@
 ```bash
 # Node.js (versions 18-22 currently supported)
 node --version  # Should be v18.x, v20.x, or v22.x
+
+# CAP development kit
+npm install -g @sap/cds-dk
 
 # Clone with submodules (if using calesi)
 git clone --recursive https://github.com/cap-js/calesi.git
