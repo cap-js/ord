@@ -35,8 +35,7 @@
         "@cap-js/sqlite": "^2"
     },
     "peerDependencies": {
-        "@sap/cds": ">=8.9.4",
-        "@sap/cds-dk": ">=8.9.5"
+        "@sap/cds": ">=8.9.4"
     },
     "dependencies": {
         "@cap-js/asyncapi": "^1.0.3",
