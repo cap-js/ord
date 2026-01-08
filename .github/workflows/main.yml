@@ -20,7 +20,7 @@ jobs:
             - name: Install dependencies and prepare documents
               run: |
                   npm install @sap/cds@latest
-                  cds version
+                  npx cds version
 
             - name: Node.js Test
               run: |
@@ -37,5 +37,5 @@ jobs:
               run: |
                   cd xmpl_java
                   npm i
-                  cds build --for ord
+                  npx cds build --for ord
                   mvn clean test
