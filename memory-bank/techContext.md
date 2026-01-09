@@ -101,7 +101,6 @@ cds compile srv/ --to ord -o ./custom-output/
 ### CAP Framework Dependencies
 
 - **Minimum CAP Version**: 8.9.4 (peer dependency)
-- **Minimum CDS-DK Version**: 8.9.5 (peer dependency)
 - **CSN Compatibility**: Must handle all CAP CSN model structures
 - **Interop CSN**: Generate interop-compatible CSN format
 - **Plugin Architecture**: Must follow CAP plugin conventions

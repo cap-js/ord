@@ -1,33 +1,31 @@
-const cds = require("@sap/cds");
 const path = require("path");
-const OrdBuildPlugin = require("../../lib/build");
 const { BUILD_DEFAULT_PATH } = require("../../lib/constants");
 const index = require("../../lib/index");
 
-jest.mock("@sap/cds-dk", () => {
-    return {
-        build: {
-            Plugin: class {
-                constructor() {
-                    this.task = {
-                        dest: undefined,
-                        src: null,
-                    };
-                }
-                write() {
-                    return {
-                        to: () => {
-                            return Promise.resolve();
-                        },
-                    };
-                }
-                async model() {
-                    return Promise.resolve({});
-                }
+// Setup cds.build.Plugin mock BEFORE requiring build.js
+const cds = require("@sap/cds");
+cds.build = cds.build || {};
+cds.build.Plugin = class {
+    constructor() {
+        this.task = {
+            dest: undefined,
+            src: null,
+        };
+    }
+    write() {
+        return {
+            to: () => {
+                return Promise.resolve();
             },
-        },
-    };
-});
+        };
+    }
+    async model() {
+        return Promise.resolve({});
+    }
+};
+
+// Now require the build plugin after the mock is set up
+const OrdBuildPlugin = require("../../lib/build");
 
 jest.mock("../../lib/index", () => {
     return {
