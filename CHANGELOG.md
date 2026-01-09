@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.4.1 (2026-01-09)
+
+## What's Changed
+
+- fix(deps): update cds.services.version to v4.6.1 by @renovate[bot] in https://github.com/cap-js/ord/pull/323
+- Fix: use @sap/cds instead of @sap/cds-dk for build plugin by @zongqichen in https://github.com/cap-js/ord/pull/324
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.4.0...v1.4.1
+
 ## 1.4.0 (2025-12-19)
 
 ## What's Changed
