@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.4.2 (2026-01-14)
+
+## What's Changed
+
+- Fix: Adjust API apiProtocol for primary data product services by @swennemers in https://github.com/cap-js/ord/pull/327
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.4.1...v1.4.2
+
 ## 1.4.1 (2026-01-09)
 
 ## What's Changed
