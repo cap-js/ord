@@ -105,7 +105,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "visibility": "internal",
     },
     {
-      "apiProtocol": "rest",
+      "apiProtocol": "sap.dp:data-subscription-api:v1",
       "description": "Description for sap.capdpprod.DPBooks.v1",
       "direction": "outbound",
       "entityTypeMappings": [
@@ -132,7 +132,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "extensible": {
         "supported": "no",
       },
-      "implementationStandard": "sap.dp:data-subscription-api:v1",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1",
       "partOfGroups": [
@@ -452,7 +451,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "visibility": "internal",
     },
     {
-      "apiProtocol": "rest",
+      "apiProtocol": "sap.dp:data-subscription-api:v1",
       "description": "Description for sap.capdpprod.DPBooks.v1",
       "direction": "outbound",
       "entityTypeMappings": [
@@ -479,7 +478,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "extensible": {
         "supported": "no",
       },
-      "implementationStandard": "sap.dp:data-subscription-api:v1",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1",
       "partOfGroups": [
@@ -799,7 +797,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "visibility": "internal",
     },
     {
-      "apiProtocol": "rest",
+      "apiProtocol": "sap.dp:data-subscription-api:v1",
       "description": "Description for sap.capdpprod.DPBooks.v1",
       "direction": "outbound",
       "entityTypeMappings": [
@@ -826,7 +824,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "extensible": {
         "supported": "no",
       },
-      "implementationStandard": "sap.dp:data-subscription-api:v1",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1",
       "partOfGroups": [
@@ -2479,7 +2476,7 @@ exports[`Tests for eventResource and apiResource should allow MCP API resource c
       "visibility": "internal",
     },
     {
-      "apiProtocol": "rest",
+      "apiProtocol": "sap.dp:data-subscription-api:v1",
       "description": "Description for sap.capdpprod.DPBooks.v1",
       "direction": "outbound",
       "entityTypeMappings": [
@@ -2506,7 +2503,6 @@ exports[`Tests for eventResource and apiResource should allow MCP API resource c
       "extensible": {
         "supported": "no",
       },
-      "implementationStandard": "sap.dp:data-subscription-api:v1",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "sap.test.cdsrc.sample:apiResource:sap.capdpprod.DPBooks:v1",
       "partOfGroups": [
@@ -3426,7 +3422,7 @@ exports[`Tests for products and packages should not contain products property if
       "visibility": "internal",
     },
     {
-      "apiProtocol": "rest",
+      "apiProtocol": "sap.dp:data-subscription-api:v1",
       "description": "Description for sap.capdpprod.DPBooks.v1",
       "direction": "outbound",
       "entityTypeMappings": [
@@ -3453,7 +3449,6 @@ exports[`Tests for products and packages should not contain products property if
       "extensible": {
         "supported": "no",
       },
-      "implementationStandard": "sap.dp:data-subscription-api:v1",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1",
       "partOfGroups": [
@@ -3726,7 +3721,7 @@ exports[`Tests for products and packages should raise error log when custom prod
       "visibility": "internal",
     },
     {
-      "apiProtocol": "rest",
+      "apiProtocol": "sap.dp:data-subscription-api:v1",
       "description": "Description for sap.capdpprod.DPBooks.v1",
       "direction": "outbound",
       "entityTypeMappings": [
@@ -3753,7 +3748,6 @@ exports[`Tests for products and packages should raise error log when custom prod
       "extensible": {
         "supported": "no",
       },
-      "implementationStandard": "sap.dp:data-subscription-api:v1",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1",
       "partOfGroups": [
@@ -4034,7 +4028,7 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "visibility": "internal",
     },
     {
-      "apiProtocol": "rest",
+      "apiProtocol": "sap.dp:data-subscription-api:v1",
       "description": "Description for sap.capdpprod.DPBooks.v1",
       "direction": "outbound",
       "entityTypeMappings": [
@@ -4061,7 +4055,6 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "extensible": {
         "supported": "no",
       },
-      "implementationStandard": "sap.dp:data-subscription-api:v1",
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "ordId": "customer.capirebookshopordsample:apiResource:sap.capdpprod.DPBooks:v1",
       "partOfGroups": [

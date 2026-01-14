@@ -295,9 +295,8 @@ describe("Version Suffix Extraction for Data Product Services", () => {
             );
 
             expect(result).toHaveLength(1);
-            expect(result[0].apiProtocol).toBe("rest");
             expect(result[0].direction).toBe("outbound");
-            expect(result[0].implementationStandard).toBe("sap.dp:data-subscription-api:v1");
+            expect(result[0].apiProtocol).toBe("sap.dp:data-subscription-api:v1");
             expect(result[0].entryPoints).toEqual([]);
             expect(result[0].resourceDefinitions).toHaveLength(1);
             expect(result[0].resourceDefinitions[0].type).toBe("sap-csn-interop-effective-v1");
@@ -325,9 +324,8 @@ describe("Version Suffix Extraction for Data Product Services", () => {
             expect(result[0].ordId).toBe("sap.test:apiResource:DataService:v1");
             expect(result[0].version).toBe("1.0.0");
             expect(result[0].partOfGroups[0]).toBe("sap.cds:service:sap.test:DataService");
-            expect(result[0].apiProtocol).toBe("rest");
             expect(result[0].direction).toBe("outbound");
-            expect(result[0].implementationStandard).toBe("sap.dp:data-subscription-api:v1");
+            expect(result[0].apiProtocol).toBe("sap.dp:data-subscription-api:v1");
         });
 
         test("should handle .v2 suffix correctly with @data.product annotation", () => {
