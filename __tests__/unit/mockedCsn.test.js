@@ -133,7 +133,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
             expect(document.apiResources).toHaveLength(1);
             const dataProductApiResources = document.apiResources.filter(
-                (resource) => resource.implementationStandard === "sap.dp:data-subscription-api:v1",
+                (resource) => resource.apiProtocol === "sap.dp:data-subscription-api:v1",
             );
             expect(dataProductApiResources).toHaveLength(1);
             expect(dataProductApiResources[0].resourceDefinitions).toHaveLength(1);
@@ -157,7 +157,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
             expect(document.apiResources).toHaveLength(1);
             const dataProductApiResources = document.apiResources.filter(
-                (resource) => resource.implementationStandard === "sap.dp:data-subscription-api:v1",
+                (resource) => resource.apiProtocol === "sap.dp:data-subscription-api:v1",
             );
             expect(dataProductApiResources).toHaveLength(1);
             expect(dataProductApiResources[0].resourceDefinitions).toHaveLength(1);
@@ -166,7 +166,6 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
                 "sap.test.cdsrc.sample:package:capirebookshopordsample-api-internal:v1",
             );
             expect(dataProductApiResources[0].visibility).toEqual("internal");
-            expect(dataProductApiResources[0].apiProtocol).toEqual("rest");
             expect(dataProductApiResources[0].direction).toEqual("outbound");
         });
 
