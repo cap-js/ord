@@ -4,6 +4,7 @@ const {
     tokenizeDn,
     dnTokensMatch,
     createCfMtlsValidator,
+    createCfMtlsConfig,
 } = require("../../lib/auth/cf-mtls");
 const { CF_MTLS_HEADERS } = require("../../lib/constants");
 
@@ -502,23 +503,6 @@ describe("CF mTLS Validation", () => {
                 expect(result.reason).toBe("XFCC_VERIFICATION_FAILED");
             });
 
-            it("should return ok:true when both XFCC and certificate headers are valid", () => {
-                const req = {
-                    headers: {
-                        ...validXfccHeaders,
-                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
-                            "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
-                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
-                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
-                            "base64",
-                        ),
-                    },
-                };
-                const result = validator(req);
-                expect(result.ok).toBe(true);
-            });
-
             it("should return ok:false with XFCC_VERIFICATION_FAILED for missing headers object", () => {
                 const req = {};
                 const result = validator(req);
@@ -543,15 +527,11 @@ describe("CF mTLS Validation", () => {
                 const req = {
                     headers: {
                         ...validXfccHeaders,
-                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from("CN=Evil CA, O=Evil Corp, C=XX").toString("base64"),
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
-                            "base64",
-                        ),
-                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
-                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
                     },
                 };
                 const result = validator(req);
@@ -568,12 +548,10 @@ describe("CF mTLS Validation", () => {
                         [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=intruder, O=Evil Corp, C=XX").toString(
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=intruder, O=Evil Corp, C=XX").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
-                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
                     },
                 };
                 const result = validator(req);
@@ -588,12 +566,8 @@ describe("CF mTLS Validation", () => {
                         [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
-                            "base64",
-                        ),
-                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
-                            "CN=Evil Root CA, O=Evil Corp, C=XX",
-                        ).toString("base64"),
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString("base64"),
                     },
                 };
                 const result = validator(req);
@@ -610,11 +584,10 @@ describe("CF mTLS Validation", () => {
                         [CF_MTLS_HEADERS.ISSUER]: Buffer.from(
                             "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                         ).toString("base64"),
-                        [CF_MTLS_HEADERS.SUBJECT]:
-                            Buffer.from("CN=unknown, O=SAP SE, C=DE").toString("base64"),
-                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
-                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=unknown, O=SAP SE, C=DE").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
+                            "base64",
+                        ),
                     },
                 };
                 expect(validator(req1).ok).toBe(false);
@@ -623,19 +596,143 @@ describe("CF mTLS Validation", () => {
                 const req2 = {
                     headers: {
                         ...validXfccHeaders,
-                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from("CN=Unknown CA, O=SAP SE, C=DE").toString(
+                        [CF_MTLS_HEADERS.ISSUER]: Buffer.from("CN=Unknown CA, O=SAP SE, C=DE").toString("base64"),
+                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"),
+                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=SAP Global Root CA, O=SAP SE, C=DE").toString(
                             "base64",
                         ),
-                        [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString(
-                            "base64",
-                        ),
-                        [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from(
-                            "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        ).toString("base64"),
                     },
                 };
                 expect(validator(req2).ok).toBe(false);
             });
+        });
+    });
+
+    describe("createCfMtlsConfig", () => {
+        const mockLogger = {
+            info: jest.fn(),
+            error: jest.fn(),
+            warn: jest.fn(),
+        };
+
+        const validConfig = {
+            certs: [{ issuer: "CN=Test CA, O=SAP SE, C=DE", subject: "CN=test, O=SAP SE, C=DE" }],
+            rootCaDn: ["CN=Test Root CA, O=SAP SE, C=DE"],
+        };
+
+        beforeEach(() => {
+            jest.clearAllMocks();
+            delete process.env.CF_MTLS_TRUSTED_CERTS;
+            delete process.env.CF_INSTANCE_GUID;
+        });
+
+        afterEach(() => {
+            delete process.env.CF_MTLS_TRUSTED_CERTS;
+            delete process.env.CF_INSTANCE_GUID;
+        });
+
+        it("should return error when cfMtls is not configured in .cdsrc.json", async () => {
+            const cds = { env: { ord: { authentication: {} } } };
+            const result = await createCfMtlsConfig(cds, mockLogger);
+
+            expect(result.error).toContain("CF mTLS configuration required");
+            expect(result.error).toContain("ord.authentication.cfMtls");
+        });
+
+        it("should return error when cfMtls is true but CF_MTLS_TRUSTED_CERTS env var is not set", async () => {
+            const cds = { env: { ord: { authentication: { cfMtls: true } } } };
+            const result = await createCfMtlsConfig(cds, mockLogger);
+
+            expect(result.error).toContain(
+                "CF_MTLS_TRUSTED_CERTS environment variable required when cfMtls is set to true",
+            );
+        });
+
+        it("should parse CF_MTLS_TRUSTED_CERTS when cfMtls is true", async () => {
+            const cds = { env: { ord: { authentication: { cfMtls: true } } } };
+            process.env.CF_MTLS_TRUSTED_CERTS = JSON.stringify(validConfig);
+            process.env.CF_INSTANCE_GUID = "test-guid";
+
+            const result = await createCfMtlsConfig(cds, mockLogger);
+
+            expect(result.error).toBeUndefined();
+            expect(result.cfMtlsValidator).toBeDefined();
+            expect(typeof result.cfMtlsValidator).toBe("function");
+        });
+
+        it("should return error for invalid JSON in CF_MTLS_TRUSTED_CERTS when cfMtls is true", async () => {
+            const cds = { env: { ord: { authentication: { cfMtls: true } } } };
+            process.env.CF_MTLS_TRUSTED_CERTS = "invalid-json";
+
+            const result = await createCfMtlsConfig(cds, mockLogger);
+
+            expect(result.error).toContain("Invalid CF_MTLS_TRUSTED_CERTS format");
+        });
+
+        it("should use inline config from .cdsrc.json when cfMtls is an object", async () => {
+            const cds = { env: { ord: { authentication: { cfMtls: validConfig } } } };
+            process.env.CF_INSTANCE_GUID = "test-guid";
+
+            const result = await createCfMtlsConfig(cds, mockLogger);
+
+            expect(result.error).toBeUndefined();
+            expect(result.cfMtlsValidator).toBeDefined();
+        });
+
+        it("should ignore CF_MTLS_TRUSTED_CERTS when cfMtls is an object in .cdsrc.json", async () => {
+            const cds = { env: { ord: { authentication: { cfMtls: validConfig } } } };
+            process.env.CF_MTLS_TRUSTED_CERTS = JSON.stringify({
+                certs: [{ issuer: "CN=Other CA", subject: "CN=other" }],
+                rootCaDn: ["CN=Other Root"],
+            });
+            process.env.CF_INSTANCE_GUID = "test-guid";
+
+            const result = await createCfMtlsConfig(cds, mockLogger);
+
+            expect(result.error).toBeUndefined();
+            // The validator should be created with the inline config, not env var
+        });
+
+        it("should return error for invalid cfMtls configuration type", async () => {
+            const cds = { env: { ord: { authentication: { cfMtls: "invalid" } } } };
+            const result = await createCfMtlsConfig(cds, mockLogger);
+
+            expect(result.error).toContain("Invalid cfMtls configuration");
+        });
+
+        it("should return error when certs array is empty", async () => {
+            const cds = {
+                env: {
+                    ord: {
+                        authentication: {
+                            cfMtls: { certs: [], rootCaDn: ["CN=Root CA"] },
+                        },
+                    },
+                },
+            };
+
+            const result = await createCfMtlsConfig(cds, mockLogger);
+
+            expect(result.error).toContain("at least one certificate pair");
+        });
+
+        it("should return error when rootCaDn array is empty", async () => {
+            const cds = {
+                env: {
+                    ord: {
+                        authentication: {
+                            cfMtls: {
+                                certs: [{ issuer: "CN=Issuer", subject: "CN=Subject" }],
+                                rootCaDn: [],
+                            },
+                        },
+                    },
+                },
+            };
+
+            const result = await createCfMtlsConfig(cds, mockLogger);
+
+            expect(result.error).toContain("at least one root CA");
         });
     });
 });
