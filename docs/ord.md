@@ -214,9 +214,7 @@ CF (Cloud Foundry) mTLS authentication provides secure machine-to-machine commun
 
 ---
 
-#### Quick Start
-
-CF mTLS requires two configuration steps:
+#### Production Configuration (Recommended)
 
 **Step 1: Enable in `.cdsrc.json`**
 
@@ -232,11 +230,9 @@ CF mTLS requires two configuration steps:
 
 **Step 2: Provide configuration via environment variable**
 
-Choose one of the following options based on your use case:
+**Option A: UCL Integration (Recommended)**
 
-**Option A: Dynamic Certificates (UCL)**
-
-Use this when connecting to SAP UCL (Unified Customer Landscape):
+For SAP UCL (Unified Customer Landscape) integration:
 
 ```bash
 export CF_MTLS_TRUSTED_CERTS='{
@@ -247,7 +243,7 @@ export CF_MTLS_TRUSTED_CERTS='{
 
 **Option B: Custom Certificates**
 
-Use this when using your own certificates:
+For custom certificates without UCL:
 
 ```bash
 export CF_MTLS_TRUSTED_CERTS='{
@@ -258,59 +254,9 @@ export CF_MTLS_TRUSTED_CERTS='{
 
 ---
 
-#### Configuration Reference
-
-| Field             | Required | Description                                                 |
-| ----------------- | -------- | ----------------------------------------------------------- |
-| `certs`           | No\*     | Array of `{issuer, subject}` certificate pairs to trust     |
-| `rootCaDn`        | **Yes**  | Array of trusted root CA Distinguished Names                |
-| `configEndpoints` | No       | Array of URLs to fetch certificates dynamically (e.g., UCL) |
-
-\* `certs` can be omitted when `configEndpoints` is provided.
-
-> **Security Note**: `rootCaDn` is never fetched from endpoints. It must always be configured statically.
-
----
-
-#### How It Works
-
-1. **TLS Termination**: The CloudFoundry gorouter terminates TLS and validates the client certificate chain
-2. **Header Forwarding**: Certificate information is forwarded via base64-encoded HTTP headers
-3. **Validation**: This plugin validates the certificate issuer/subject pair and root CA DN against the configured allow list
-
-**Certificate Headers** (set by CF gorouter):
-
-| Header                    | Content                         |
-| ------------------------- | ------------------------------- |
-| `x-ssl-client-issuer-dn`  | Certificate Issuer DN (base64)  |
-| `x-ssl-client-subject-dn` | Certificate Subject DN (base64) |
-| `x-ssl-client-root-ca-dn` | Root CA DN (base64)             |
-
----
-
-#### Validation Rules
-
-- **Pair Validation**: Issuer and Subject must match together as a configured pair
-- **Root CA Validation**: Root CA DN must match one of the trusted root CAs
-- **Order-Insensitive**: `"CN=test, O=SAP SE"` matches `"O=SAP SE, CN=test"`
-- **Whitespace-Tolerant**: Extra spaces are normalized
-
----
-
-#### HTTP Status Codes
-
-| Status           | Reason                                  |
-| ---------------- | --------------------------------------- |
-| 200 OK           | Valid certificate                       |
-| 400 Bad Request  | Invalid header encoding                 |
-| 401 Unauthorized | Missing certificate headers             |
-| 403 Forbidden    | Certificate pair or root CA not trusted |
-
----
-
 #### Development Configuration
 
-For local development and testing, you can configure the full mTLS settings in `.cdsrc.json`:
+For local development and testing, configure the full mTLS settings in `.cdsrc.json`:
 
 ```json
 {
@@ -331,6 +277,29 @@ For local development and testing, you can configure the full mTLS settings in `
 ```
 
 > **⚠️ Security Warning**: Avoid putting production certificate configurations in `.cdsrc.json` as it may be committed to source control. Use environment variables for production.
+
+---
+
+#### Configuration Reference
+
+| Field             | Required                              | Description                                                 |
+| ----------------- | ------------------------------------- | ----------------------------------------------------------- |
+| `certs`           | Yes (unless `configEndpoints` is set) | Array of `{issuer, subject}` certificate pairs to trust     |
+| `rootCaDn`        | **Yes**                               | Array of trusted root CA Distinguished Names                |
+| `configEndpoints` | No                                    | Array of URLs to fetch certificates dynamically (e.g., UCL) |
+
+> **Note**: When `configEndpoints` is configured, `certs` will be fetched from those endpoints. `rootCaDn` is never fetched from endpoints and must always be configured statically.
+
+---
+
+#### HTTP Status Codes
+
+| Status           | Reason                                  |
+| ---------------- | --------------------------------------- |
+| 200 OK           | Valid certificate                       |
+| 400 Bad Request  | Invalid header encoding                 |
+| 401 Unauthorized | Missing certificate headers             |
+| 403 Forbidden    | Certificate pair or root CA not trusted |
 
 ---
 
@@ -357,184 +326,9 @@ When both are configured, the plugin tries each authentication method in order u
 
 ---
 
-#### Error Handling
-
-**Endpoint-Related Errors:**
-
-- **Endpoint Fetch Failure**: If all endpoints fail and no static configuration exists, service startup will fail
-- **Partial Endpoint Failure**: If some endpoints fail but others succeed (or static config exists), service continues
-- **Invalid Response Format**: Endpoints returning invalid JSON are logged and skipped
-- **Timeout**: Endpoints that don't respond within 10 seconds are skipped
-
-**Runtime Auth Errors:**
-
-- Invalid certificates receive 401/403 responses with appropriate error messages
-- Failed authentication attempts are logged with certificate details for security auditing
-
----
-
-#### Security Considerations
-
-1. **Header Trust**: This implementation trusts the certificate information forwarded in HTTP headers. SAP BTP Cloud Foundry gorouter ensures these headers are secure and cannot be spoofed.
-
-2. **TLS at the Edge**: The CloudFoundry gorouter terminates TLS and performs full certificate validation before forwarding requests to your application.
-
-3. **Certificate Pair Whitelist**: Keep your certificate pairs list minimal and up-to-date. Remove pairs for decommissioned clients.
-
-4. **Root CA Validation**: Always configure trusted root CAs to ensure certificates come from authorized certificate authorities.
-
-5. **Root CA Trust**: Root CA DNs are NEVER fetched from endpoints, only from static configuration. This is a security-by-design decision.
-
-6. **No Cryptographic Validation**: This module validates DN strings only, not actual certificates. Cryptographic validation is handled by the CF router.
-
-7. **Logging**: Failed authentication attempts are logged with certificate details for security auditing.
-
----
-
-#### Troubleshooting
-
-##### "CF mTLS requires at least one certificate pair"
-
-**Cause**: After merging static configuration and endpoint responses, no certificate pairs were available. This can happen when:
-
-- The `certs` array is empty or omitted
-- All `configEndpoints` failed to load certificates
-- No endpoints were configured and no static `certs` were provided
-
-**Solution**:
-
-- Configure at least one certificate pair via `cds.env.ord.cfMtls.certs` or the `CF_MTLS_TRUSTED_CERTS` environment variable, OR
-- Ensure at least one `configEndpoint` is reachable and returns valid certificate information, OR
-- Use a combination of both static and dynamic configuration
-
-##### "CF mTLS requires at least one root CA DN"
-
-**Cause**: The `rootCaDn` array is missing or empty.
-
-**Solution**: Configure at least one trusted root CA via `cds.env.ord.cfMtls.rootCaDn` or the `CF_MTLS_TRUSTED_CERTS` environment variable.
-
-##### "Client certificate authentication required" (401)
-
-**Cause**: One or more certificate headers are missing from the request.
-
-**Solution**:
-
-- Verify the client is sending a valid certificate
-- Check that the CloudFoundry gorouter is forwarding certificate information
-- Verify the header names match your configuration
-
-##### "Bad Request: Invalid certificate headers" (400)
-
-**Cause**: Certificate headers are not properly base64-encoded.
-
-**Solution**:
-
-- Ensure headers are base64-encoded
-- Verify the CloudFoundry gorouter is configured correctly
-- Check for header corruption during transmission
-
-##### "Forbidden: Invalid client certificate" (403)
-
-**Cause**: The certificate issuer/subject pair doesn't match any configured pair.
-
-**Solution**:
-
-- Check the application logs for the actual Issuer and Subject received
-- Verify both issuer and subject are configured as a pair
-- Remember that all DN tokens must match (not just CN)
-
-##### "Forbidden: Untrusted certificate authority" (403)
-
-**Cause**: The root CA DN doesn't match any trusted root CA.
-
-**Solution**:
-
-- Check the application logs for the actual Root CA DN received
-- Add the root CA to your trusted list if legitimate
-- Verify the certificate chain is correct
-
-##### Endpoint Fetch Issues
-
-**Symptom**: Logs show "Failed to fetch mTLS cert from [endpoint]"
-
-**Solutions**:
-
-- Verify endpoint URL is correct and accessible
-- Check network connectivity from your application
-- Ensure endpoint returns valid JSON in the expected format
-- Check endpoint timeout settings (default 10 seconds)
-- Verify endpoint authentication if required
-
-##### "This implementation requires SAP BTP Cloud Foundry"
-
-**Symptom**: mTLS authentication not working in non-CF environments
-
-**Cause**: This implementation relies on CloudFoundry gorouter-specific headers that are not available in other environments.
-
-**Solution**:
-
-- If you're using SAP BTP Cloud Foundry: Ensure mTLS is enabled in your space and routes are configured correctly
-- If you're using other environments (AWS, Azure, Kubernetes, etc.): This implementation will not work. You need to:
-    - Use standard Node.js TLS (`req.socket.getPeerCertificate()`) if your app terminates TLS
-    - Parse standard XFCC headers if using Istio/Envoy
-    - Implement custom header parsing for your specific reverse proxy
-    - Consider using a different authentication mechanism (OAuth2, API keys, etc.)
-
----
-
-#### FAQ
-
-##### Do I need to configure `configEndpoints`?
-
-**No.** The `configEndpoints` feature is completely optional. Static configuration via `certs` array is sufficient for most use cases and is recommended for development and testing environments.
-
-##### Can I use this in Kubernetes without Cloud Foundry?
-
-**No.** This implementation is specifically designed for SAP BTP Cloud Foundry and relies on CF gorouter-specific headers. For Kubernetes environments, you'll need a different mTLS implementation.
-
-##### Can I use this with NGINX or HAProxy?
-
-**No.** This implementation expects specific header names and formats used by the CloudFoundry gorouter. Other reverse proxies use different header formats.
-
-##### Why can't I fetch `rootCaDn` from endpoints?
-
-**Security.** Root CAs define which certificate authorities you trust. This must be explicitly configured in your application, not fetched from external sources that could potentially be compromised.
-
-##### Can I combine static and dynamic certificate configuration?
-
-**Yes!** You can configure both static `certs` and `configEndpoints`. Certificates from all sources will be merged together.
-
-##### What happens if all my `configEndpoints` fail?
-
-If you have static `certs` configured, authentication will continue using those certificates. If you have no static certificates and all endpoints fail, the service startup will fail to ensure security.
-
-##### How often are `configEndpoints` refreshed?
-
-Endpoints are fetched once during service startup. To refresh certificates, you need to restart the application.
-
-##### Can I use environment variables in production?
-
-**Yes.** The `CF_MTLS_TRUSTED_CERTS` environment variable is designed for production use and follows 12-Factor App principles. Use `.cdsrc.json` only for development and environment variables for production.
-
----
-
-#### Logging
-
-The implementation provides detailed logging for monitoring and debugging:
-
-```
-INFO: Fetching mTLS trusted certificates from 2 endpoint(s)...
-INFO: Successfully fetched mTLS cert info from https://config1.example.com/mtls-info
-ERROR: Failed to fetch mTLS cert from https://config2.example.com/mtls-info: Network error
-INFO: Merged mTLS config: 3 certificate pair(s), 2 root CA DN(s)
-INFO: Loaded 3 trusted certificate pair(s) and 2 trusted root CA DN(s)
-```
-
----
-
 #### ORD Access Strategy
 
-When CF mTLS is configured, the plugin automatically adds `"sap:cmp-mtls:v1"` to the `accessStrategies` in the generated ORD document, indicating that resources are protected by CF mTLS authentication.
+When CF mTLS is configured, the plugin automatically adds `"sap:cmp-mtls:v1"` to the `accessStrategies` in the generated ORD document.
 
 ---
 

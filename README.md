@@ -114,33 +114,63 @@ This will output something like `admin:$2y$05$...` - use only the hash part (sta
 
 #### CF mTLS Authentication
 
-Configure Cloud Foundry mutual TLS authentication in `.cdsrc.json`:
+Configure Cloud Foundry mutual TLS authentication for SAP BTP Cloud Foundry environments.
+
+**Production Configuration with UCL (Recommended)**
+
+For SAP UCL (Unified Customer Landscape) integration, enable mTLS in `.cdsrc.json` and configure UCL endpoints via environment variable:
 
 ```json
 {
-    "cds": {
-        "ord": {
-            "authentication": {
-                "cfMtls": {
-                    "certs": [
-                        {
-                            "issuer": "CN=SAP PKI Certificate Service Client CA,OU=SAP BTP Clients,O=SAP SE,C=DE",
-                            "subject": "CN=my-service,OU=SAP Cloud Platform Clients,O=SAP SE,C=DE"
-                        }
-                    ],
-                    "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,C=DE"]
-                }
+    "ord": {
+        "authentication": {
+            "cfMtls": true
+        }
+    }
+}
+```
+
+```bash
+export CF_MTLS_TRUSTED_CERTS='{
+  "configEndpoints": ["https://your-ucl-endpoint/v1/info"],
+  "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"]
+}'
+```
+
+**Production Configuration with Custom Certificates**
+
+For custom certificates without UCL:
+
+```bash
+export CF_MTLS_TRUSTED_CERTS='{
+  "certs": [{"issuer": "CN=My CA,O=MyOrg", "subject": "CN=my-service,O=MyOrg"}],
+  "rootCaDn": ["CN=My Root CA,O=MyOrg"]
+}'
+```
+
+**Development Configuration**
+
+For local development, configure the full mTLS settings directly in `.cdsrc.json`:
+
+```json
+{
+    "ord": {
+        "authentication": {
+            "cfMtls": {
+                "certs": [
+                    {
+                        "issuer": "CN=Test CA,O=MyOrg,C=DE",
+                        "subject": "CN=test-client,O=MyOrg,C=DE"
+                    }
+                ],
+                "rootCaDn": ["CN=Test Root CA,O=MyOrg,C=DE"]
             }
         }
     }
 }
 ```
 
-Or use the environment variable:
-
-```bash
-CF_MTLS_TRUSTED_CERTS='{"certs":[...],"rootCaDn":[...]}'
-```
+> **Note:** For detailed CF mTLS configuration options, see the [documentation](./docs/ord.md#cf-mtls-authentication).
 
 #### Multiple Authentication Strategies
 
