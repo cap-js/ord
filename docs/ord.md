@@ -206,443 +206,154 @@ The ORD plugin supports multiple authentication mechanisms to protect ORD endpoi
 
 ### CF mTLS Authentication
 
-CF (Cloud Foundry) mTLS authentication provides secure machine-to-machine communication in SAP BTP Cloud Foundry environments using client certificate validation with enhanced security checks.
+CF (Cloud Foundry) mTLS authentication provides secure machine-to-machine communication in SAP BTP Cloud Foundry environments using client certificate validation.
 
-> **⚠️ Important: Environment Requirement**
+> **⚠️ Environment Requirement**
 >
-> This mTLS implementation is **specifically designed for SAP BTP Cloud Foundry environments**. It relies on the CloudFoundry gorouter to:
->
-> - Terminate TLS connections
-> - Validate client certificates cryptographically
-> - Forward certificate information via specific HTTP headers
->
-> **This implementation does NOT support:**
->
-> - Non-CloudFoundry environments (AWS, Azure, GCP, on-premises)
-> - Standard Kubernetes/Istio mTLS
-> - Direct Node.js TLS certificate validation
-> - Other reverse proxy configurations (NGINX, HAProxy, etc.)
->
-> If you need mTLS authentication in non-CF environments, you will need a different implementation.
-
-#### Overview
-
-CF mTLS authentication uses mutual TLS (mTLS) with comprehensive certificate validation:
-
-1. **TLS Termination & Certificate Validation**: Handled by the CloudFoundry gorouter
-    - Verifies the certificate chain
-    - Validates the certificate issuer
-    - Ensures the certificate is not expired or revoked
-    - Forwards certificate information via base64-encoded HTTP headers
-
-2. **Certificate Information Validation**: Handled by this ORD plugin
-    - Validates Issuer DN (Distinguished Name)
-    - Validates Subject DN
-    - Validates Root CA DN
-    - Requires Issuer + Subject to match as a pair
-    - Returns HTTP 401 (Unauthorized) for missing certificates
-    - Returns HTTP 403 (Forbidden) for invalid certificate information
-    - Returns HTTP 400 (Bad Request) for malformed headers
-
-**Important**: This implementation is designed for SAP BTP Cloud Foundry environments where the gorouter terminates TLS and forwards certificate information via three separate base64-encoded headers.
+> This mTLS implementation is **specifically designed for SAP BTP Cloud Foundry environments**. It relies on the CloudFoundry gorouter to terminate TLS and forward certificate information via HTTP headers.
 
 ---
 
-#### Static Configuration
+#### Quick Start
 
-Configure CF mTLS with certificates defined directly in your configuration files or environment variables.
+CF mTLS requires two configuration steps:
 
-##### Via .cdsrc.json
+**Step 1: Enable in `.cdsrc.json`**
 
 ```json
 {
-    "cds": {
-        "ord": {
-            "authentication": {
-                "cfMtls": {
-                    "certs": [
-                        {
-                            "issuer": "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
-                            "subject": "CN=ord-aggregator, O=SAP SE, C=DE"
-                        },
-                        {
-                            "issuer": "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
-                            "subject": "CN=backup-aggregator, O=SAP SE, C=US"
-                        }
-                    ],
-                    "rootCaDn": [
-                        "CN=SAP Global Root CA, O=SAP SE, C=DE",
-                        "CN=DigiCert Global Root CA, O=DigiCert Inc, C=US"
-                    ]
-                }
-            }
+    "ord": {
+        "authentication": {
+            "cfMtls": true
         }
     }
 }
 ```
 
-> **Note**: CF mTLS authentication is automatically enabled when the `cfMtls` configuration is present. No need to specify authentication types explicitly.
+**Step 2: Provide configuration via environment variable**
 
-##### Via Environment Variables
+Choose one of the following options based on your use case:
+
+**Option A: Dynamic Certificates (UCL)**
+
+Use this when connecting to SAP UCL (Unified Customer Landscape):
 
 ```bash
-# Configure trusted certificates (JSON format)
 export CF_MTLS_TRUSTED_CERTS='{
-  "certs": [
-    {
-      "issuer": "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
-      "subject": "CN=ord-aggregator, O=SAP SE, C=DE"
-    }
-  ],
-  "rootCaDn": [
-    "CN=SAP Global Root CA, O=SAP SE, C=DE"
-  ]
+  "configEndpoints": ["https://your-ucl-endpoint/v1/info"],
+  "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"]
+}'
+```
+
+**Option B: Custom Certificates**
+
+Use this when using your own certificates:
+
+```bash
+export CF_MTLS_TRUSTED_CERTS='{
+  "certs": [{"issuer": "CN=My CA,O=MyOrg", "subject": "CN=my-service,O=MyOrg"}],
+  "rootCaDn": ["CN=My Root CA,O=MyOrg"]
 }'
 ```
 
 ---
 
-#### Dynamic Configuration
+#### Configuration Reference
 
-> **Note**: The `configEndpoints` feature is **completely optional**. Static configuration is recommended for most use cases.
+| Field             | Required | Description                                                 |
+| ----------------- | -------- | ----------------------------------------------------------- |
+| `certs`           | No\*     | Array of `{issuer, subject}` certificate pairs to trust     |
+| `rootCaDn`        | **Yes**  | Array of trusted root CA Distinguished Names                |
+| `configEndpoints` | No       | Array of URLs to fetch certificates dynamically (e.g., UCL) |
 
-CF mTLS supports fetching trusted certificates dynamically from external configuration endpoints. This allows for centralized certificate management without redeploying your application.
+\* `certs` can be omitted when `configEndpoints` is provided.
 
-**Use Cases for Dynamic Configuration:**
-
-- Centralized certificate management across multiple applications
-- Certificate rotation without application redeployment
-- Separation of certificate configuration from application code
-- Multi-environment deployments with different certificates per environment
-
-##### Configuration with Endpoints
-
-Both static certificates and dynamic endpoints can be combined. Certificates from endpoints will be merged with static configuration.
-
-**Via .cdsrc.json:**
-
-```json
-{
-    "cds": {
-        "ord": {
-            "authentication": {
-                "cfMtls": {
-                    "certs": [
-                        {
-                            "issuer": "CN=Static CA, O=MyOrg, C=DE",
-                            "subject": "CN=static-app, O=MyOrg, C=DE"
-                        }
-                    ],
-                    "rootCaDn": ["CN=MyOrg Root CA, C=DE"],
-                    "configEndpoints": ["https://config.example.com/mtls-info"]
-                }
-            }
-        }
-    }
-}
-```
-
-**Via Environment Variable:**
-
-```bash
-export CF_MTLS_TRUSTED_CERTS='{
-  "certs": [{"issuer":"CN=CA,O=Org,C=DE","subject":"CN=service,O=Org,C=DE"}],
-  "rootCaDn": ["CN=Root CA,O=Org,C=DE"],
-  "configEndpoints": ["https://config.example.com/mtls-info"]
-}'
-```
-
-##### Endpoint Response Format
-
-Each endpoint should return JSON in this format:
-
-```json
-{
-    "certIssuer": "CN=Dynamic CA, O=Org, C=DE",
-    "certSubject": "CN=dynamic-service, O=Org, C=DE"
-}
-```
-
-**Multiple Certificates Response:**
-
-Endpoints can also return arrays of certificate pairs:
-
-```json
-[
-    {
-        "certIssuer": "CN=CA 1, O=Org, C=DE",
-        "certSubject": "CN=service-1, O=Org, C=DE"
-    },
-    {
-        "certIssuer": "CN=CA 2, O=Org, C=US",
-        "certSubject": "CN=service-2, O=Org, C=US"
-    }
-]
-```
-
-##### Configuration Examples
-
-**Static Only (Recommended for Development/Testing):**
-
-```json
-{
-    "cds": {
-        "ord": {
-            "authentication": {
-                "cfMtls": {
-                    "certs": [
-                        {
-                            "issuer": "CN=Test CA, O=MyOrg, C=DE",
-                            "subject": "CN=test-client, O=MyOrg, C=DE"
-                        }
-                    ],
-                    "rootCaDn": ["CN=MyOrg Root CA, C=DE"]
-                }
-            }
-        }
-    }
-}
-```
-
-**Dynamic Only (Recommended for Production):**
-
-```json
-{
-    "cds": {
-        "ord": {
-            "authentication": {
-                "cfMtls": {
-                    "certs": [],
-                    "rootCaDn": ["CN=MyOrg Root CA, C=DE"],
-                    "configEndpoints": [
-                        "https://config-primary.myorg.com/mtls-certs",
-                        "https://config-backup.myorg.com/mtls-certs"
-                    ]
-                }
-            }
-        }
-    }
-}
-```
-
-> **Note**: Even with dynamic configuration, `rootCaDn` must be specified statically for security.
-
-**Hybrid (Maximum Flexibility):**
-
-```json
-{
-    "cds": {
-        "ord": {
-            "authentication": {
-                "cfMtls": {
-                    "certs": [
-                        {
-                            "issuer": "CN=Fallback CA, O=MyOrg, C=DE",
-                            "subject": "CN=emergency-client, O=MyOrg, C=DE"
-                        }
-                    ],
-                    "rootCaDn": ["CN=MyOrg Root CA, C=DE"],
-                    "configEndpoints": ["https://config.myorg.com/mtls-certs"]
-                }
-            }
-        }
-    }
-}
-```
-
-##### Dynamic Configuration Features
-
-- **Multiple endpoints supported**: Fetched in parallel for performance
-- **Automatic retry and error handling**: Failed endpoints don't block authentication if static config exists
-- **Certificate merging**: Certificates from endpoints are merged with static configuration
-- **Duplicate removal**: Automatically removes duplicate certificates
-- **Timeout protection**: 10-second timeout per endpoint (default)
-- **Security by design**: Root CA DNs are ONLY read from static configuration, never from endpoints
-
-##### How It Works
-
-1. **Service Startup**:
-    - Authentication configuration is initialized
-    - If `configEndpoints` are configured, certificates are fetched from all endpoints in parallel
-    - Fetched certificates are merged with static configuration
-    - Duplicate certificates are removed
-
-2. **Request Authentication**:
-    - Client certificate information is extracted from HTTP headers
-    - Issuer and subject are validated as a pair
-    - Root CA DN is validated separately
-    - All three must match for authentication to succeed
-
-##### Configuration Examples
-
-**Static Configuration Only:**
-
-```json
-{
-    "ord": {
-        "cfMtls": {
-            "certs": [
-                {
-                    "issuer": "CN=Static CA, O=MyOrg, C=DE",
-                    "subject": "CN=my-app, O=MyOrg, C=DE"
-                }
-            ],
-            "rootCaDn": ["CN=MyOrg Root CA, C=DE"]
-        }
-    }
-}
-```
-
-**Dynamic Configuration Only:**
-
-```json
-{
-    "ord": {
-        "cfMtls": {
-            "certs": [],
-            "rootCaDn": ["CN=MyOrg Root CA, C=DE"],
-            "configEndpoints": ["https://config.myorg.com/mtls-certs"]
-        }
-    }
-}
-```
-
-**Combined Static + Dynamic:**
-
-```json
-{
-    "ord": {
-        "cfMtls": {
-            "certs": [
-                {
-                    "issuer": "CN=Static CA, O=MyOrg, C=DE",
-                    "subject": "CN=static-app, O=MyOrg, C=DE"
-                }
-            ],
-            "rootCaDn": ["CN=MyOrg Root CA, C=DE"],
-            "configEndpoints": [
-                "https://config-primary.myorg.com/mtls-certs",
-                "https://config-backup.myorg.com/mtls-certs"
-            ]
-        }
-    }
-}
-```
+> **Security Note**: `rootCaDn` is never fetched from endpoints. It must always be configured statically.
 
 ---
 
-#### Configuration Parameters
+#### How It Works
 
-| Parameter        | Environment Variable    | cds.env Path                                | Default | Description                                                             |
-| ---------------- | ----------------------- | ------------------------------------------- | ------- | ----------------------------------------------------------------------- |
-| Trusted Certs    | `CF_MTLS_TRUSTED_CERTS` | `ord.authentication.cfMtls.certs`           | `[]`    | Optional (if `configEndpoints` provided). Array of issuer/subject pairs |
-| Trusted Root CAs | `CF_MTLS_TRUSTED_CERTS` | `ord.authentication.cfMtls.rootCaDn`        | -       | **Required**. Array of trusted root CA DNs                              |
-| Config Endpoints | `CF_MTLS_TRUSTED_CERTS` | `ord.authentication.cfMtls.configEndpoints` | `[]`    | Optional. URLs to fetch certificates dynamically                        |
+1. **TLS Termination**: The CloudFoundry gorouter terminates TLS and validates the client certificate chain
+2. **Header Forwarding**: Certificate information is forwarded via base64-encoded HTTP headers
+3. **Validation**: This plugin validates the certificate issuer/subject pair and root CA DN against the configured allow list
 
-**Note**:
+**Certificate Headers** (set by CF gorouter):
 
-- CF mTLS authentication is automatically enabled when the `cfMtls` configuration is present
-- The `CF_MTLS_TRUSTED_CERTS` environment variable contains all configuration fields in JSON format (`certs`, `rootCaDn`, `configEndpoints`)
-
----
-
-#### Certificate Validation Rules
-
-The plugin validates certificates according to the CF mTLS specification (`sap:cmp-mtls:v1`):
-
-1. **Pair Validation**: Issuer and Subject must match together as a configured pair
-    - You cannot have valid issuer with wrong subject or vice versa
-    - Both must match one of the configured pairs
-
-2. **Root CA Validation**: Root CA DN must match one of the trusted root CAs
-    - Provides additional security layer
-    - Ensures certificate is from a trusted authority chain
-
-3. **Order-Insensitive DN Comparison**: Token order in Distinguished Names doesn't matter
-    - `"CN=test, O=SAP SE, C=DE"` matches `"C=DE, O=SAP SE, CN=test"`
-
-4. **Whitespace Normalization**: Extra spaces are trimmed from each token
-    - `"CN=test, O=SAP SE, C=DE"` matches `"CN=test,O=SAP SE,C=DE"`
-
-5. **Exact Token Match**: All tokens must match exactly (set equality)
-    - `"CN=test, O=SAP SE"` does NOT match `"CN=test, O=SAP SE, C=DE"`
+| Header                    | Content                         |
+| ------------------------- | ------------------------------- |
+| `x-ssl-client-issuer-dn`  | Certificate Issuer DN (base64)  |
+| `x-ssl-client-subject-dn` | Certificate Subject DN (base64) |
+| `x-ssl-client-root-ca-dn` | Root CA DN (base64)             |
 
 ---
 
-#### Certificate Headers
+#### Validation Rules
 
-The CloudFoundry gorouter forwards certificate information via three separate base64-encoded headers:
-
-| Header                               | Content                | Encoding |
-| ------------------------------------ | ---------------------- | -------- |
-| `x-forwarded-client-cert-issuer-dn`  | Certificate Issuer DN  | Base64   |
-| `x-forwarded-client-cert-subject-dn` | Certificate Subject DN | Base64   |
-| `x-forwarded-client-cert-root-ca-dn` | Root CA DN             | Base64   |
-
-**Example header values:**
-
-```
-x-forwarded-client-cert-issuer-dn: Q049U0FQIENsb3VkIFBsYXRmb3JtIENsaWVudCBDQSwgTz1TQVAgU0UsIEM9REU=
-x-forwarded-client-cert-subject-dn: Q049YWdncmVnYXRvciwgTz1TQVAgU0UsIEM9REU=
-x-forwarded-client-cert-root-ca-dn: Q049U0FQIEdsb2JhbCBSb290IENBLCBPPU5BUCBTRSwgQz1ERQ==
-```
-
-These decode to:
-
-```
-Issuer:  CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE
-Subject: CN=aggregator, O=SAP SE, C=DE
-Root CA: CN=SAP Global Root CA, O=SAP SE, C=DE
-```
-
----
-
-#### Combining with Other Authentication Methods
-
-CF mTLS can be combined with Basic authentication to support multiple client types:
-
-```json
-{
-    "cds": {
-        "ord": {
-            "authentication": {
-                "basic": {
-                    "credentials": {
-                        "admin": "$2a$10$..."
-                    }
-                },
-                "cfMtls": {
-                    "certs": [
-                        {
-                            "issuer": "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
-                            "subject": "CN=ord-aggregator, O=SAP SE, C=DE"
-                        }
-                    ],
-                    "rootCaDn": ["CN=SAP Global Root CA, O=SAP SE, C=DE"]
-                }
-            }
-        }
-    }
-}
-```
-
-**Note**:
-
-- Authentication types are automatically detected based on what you configure
-- When any secure authentication method is configured, open authentication is automatically disabled
-- The plugin tries each authentication strategy in order until one succeeds
+- **Pair Validation**: Issuer and Subject must match together as a configured pair
+- **Root CA Validation**: Root CA DN must match one of the trusted root CAs
+- **Order-Insensitive**: `"CN=test, O=SAP SE"` matches `"O=SAP SE, CN=test"`
+- **Whitespace-Tolerant**: Extra spaces are normalized
 
 ---
 
 #### HTTP Status Codes
 
-| Status Code      | Reason                    | Description                                           |
-| ---------------- | ------------------------- | ----------------------------------------------------- |
-| 200 OK           | Valid certificate         | Certificate pair and root CA match configuration      |
-| 400 Bad Request  | Invalid encoding          | Certificate headers are not properly base64-encoded   |
-| 401 Unauthorized | Missing headers           | One or more required certificate headers are missing  |
-| 403 Forbidden    | Certificate pair mismatch | Issuer/Subject pair doesn't match any configured pair |
-| 403 Forbidden    | Root CA mismatch          | Root CA DN doesn't match any trusted root CA          |
+| Status           | Reason                                  |
+| ---------------- | --------------------------------------- |
+| 200 OK           | Valid certificate                       |
+| 400 Bad Request  | Invalid header encoding                 |
+| 401 Unauthorized | Missing certificate headers             |
+| 403 Forbidden    | Certificate pair or root CA not trusted |
+
+---
+
+#### Development Configuration
+
+For local development and testing, you can configure the full mTLS settings in `.cdsrc.json`:
+
+```json
+{
+    "ord": {
+        "authentication": {
+            "cfMtls": {
+                "certs": [
+                    {
+                        "issuer": "CN=Test CA,O=MyOrg,C=DE",
+                        "subject": "CN=test-client,O=MyOrg,C=DE"
+                    }
+                ],
+                "rootCaDn": ["CN=Test Root CA,O=MyOrg,C=DE"]
+            }
+        }
+    }
+}
+```
+
+> **⚠️ Security Warning**: Avoid putting production certificate configurations in `.cdsrc.json` as it may be committed to source control. Use environment variables for production.
+
+---
+
+#### Combining with Basic Authentication
+
+CF mTLS can be combined with Basic authentication:
+
+```json
+{
+    "ord": {
+        "authentication": {
+            "basic": {
+                "credentials": {
+                    "admin": "$2a$10$..."
+                }
+            },
+            "cfMtls": true
+        }
+    }
+}
+```
+
+When both are configured, the plugin tries each authentication method in order until one succeeds.
 
 ---
 
@@ -803,10 +514,7 @@ Endpoints are fetched once during service startup. To refresh certificates, you 
 
 ##### Can I use environment variables in production?
 
-**Yes.** The `CF_MTLS_TRUSTED_CERTS` environment variable is designed for production use and follows 12-Factor App principles. However, for better maintainability, consider using `.cdsrc.json` in development and environment variables only for environment-specific overrides in production.
-
-- Check for timeout issues (default 10 seconds)
-- Review endpoint logs for errors
+**Yes.** The `CF_MTLS_TRUSTED_CERTS` environment variable is designed for production use and follows 12-Factor App principles. Use `.cdsrc.json` only for development and environment variables for production.
 
 ---
 
@@ -863,12 +571,12 @@ More information, see [ORD Document specification](https://pages.github.tools.sa
 
 ## Summary
 
-| Scenario                         | Approach                                          |
-| -------------------------------- | ------------------------------------------------- |
-| Global Metadata                  | Define in `.cdsrc.json` under `ord`               |
-| Service Metadata                 | Use `@ORD.Extensions` annotations in `.cds` files |
-| Custom ORD Content               | Use `customOrdContentFile`                        |
-| Linking to Existing SAP Products | Use `existingProductORDId`                        |
-| Defining Custom Products         | Add `products` section manually                   |
-| Basic Authentication             | Configure in `authentication.types`               |
-| CF mTLS Static Config            | Define `certs` and `rootCaDn` in `ord.cfMtls`     |
+| Scenario                         | Approach                                                                |
+| -------------------------------- | ----------------------------------------------------------------------- |
+| Global Metadata                  | Define in `.cdsrc.json` under `ord`                                     |
+| Service Metadata                 | Use `@ORD.Extensions` annotations in `.cds` files                       |
+| Custom ORD Content               | Use `customOrdContentFile`                                              |
+| Linking to Existing SAP Products | Use `existingProductORDId`                                              |
+| Defining Custom Products         | Add `products` section manually                                         |
+| Basic Authentication             | Configure `ord.authentication.basic`                                    |
+| CF mTLS Authentication           | Set `ord.authentication.cfMtls: true` + `CF_MTLS_TRUSTED_CERTS` env var |
