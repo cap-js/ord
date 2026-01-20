@@ -12,15 +12,15 @@
  * Run with: npm run test:integration:mtls
  * The GitHub Actions workflow ensures sequential execution across test files.
  *
- * Test Suite 1: Environment Variable Priority (port 4005)
- *   - Proves CF_MTLS_TRUSTED_CERTS overrides config file settings
- *   - Uses dynamically created temporary wrong config file
+ * Test Suite 1: Production Mode (port 4005)
+ *   - Tests cfMtls: true with CF_MTLS_TRUSTED_CERTS environment variable
+ *   - This is the recommended production configuration
  *   - No mock server needed (env var provides cert info directly)
  *
- * Test Suite 2: Config Endpoint Fetch (port 4006, mock 9999)
- *   - Tests fetchMtlsCertInfo endpoint fetching from .cdsrc.mtls.json
- *   - Uses existing .cdsrc.mtls.json configuration
- *   - No CF_MTLS_TRUSTED_CERTS env var (forces config endpoint fetch)
+ * Test Suite 2: Development Mode with configEndpoints (port 4006, mock 9999)
+ *   - Tests cfMtls: { configEndpoints: [...] } from .cdsrc.mtls.json
+ *   - Uses mock server to simulate UCL config endpoint
+ *   - This is for development/testing with UCL integration
  *
  * Cleanup order (CRITICAL):
  *   1. Stop CDS server
@@ -168,36 +168,31 @@ function createMtlsHeaders(issuer, subject, rootCaDn) {
 }
 
 // ============================================================================
-// Test Suite 1: Environment Variable Priority
+// Test Suite 1: Production Mode (cfMtls: true + CF_MTLS_TRUSTED_CERTS)
 // ============================================================================
-describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Variable Priority)", () => {
+describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
     const BASE_URL = "http://localhost:4005";
     const TEST_APP_ROOT = path.join(__dirname, "integration-test-app");
-    const TEMP_CONFIG_PATH = path.join(TEST_APP_ROOT, ".cdsrc.temp-wrong.json");
+    const TEMP_CONFIG_PATH = path.join(TEST_APP_ROOT, ".cdsrc.temp-production.json");
 
     let serverProcess;
 
     beforeAll(async () => {
-        console.log("\n=== Test Suite 1: Environment Variable Priority ===");
+        console.log("\n=== Test Suite 1: Production Mode (cfMtls: true) ===");
 
-        // 1. Create temporary wrong config file dynamically
-        const wrongConfig = {
+        // 1. Create production-style config file: cfMtls: true (requires env var)
+        const productionConfig = {
             ord: {
                 authentication: {
-                    cfMtls: {
-                        certs: [],
-                        configEndpoints: ["http://localhost:8888/wrong-endpoint"], // Wrong endpoint
-                        rootCaDn: ["CN=Wrong Root CA,O=Wrong Org,C=US"], // Wrong root CA
-                    },
+                    cfMtls: true, // Production mode - requires CF_MTLS_TRUSTED_CERTS
                 },
             },
         };
-        fs.writeFileSync(TEMP_CONFIG_PATH, JSON.stringify(wrongConfig, null, 4));
-        console.log("Created temporary wrong config to prove env var override");
+        fs.writeFileSync(TEMP_CONFIG_PATH, JSON.stringify(productionConfig, null, 4));
+        console.log("Created production-style config with cfMtls: true");
 
-        // 2. Prepare CORRECT mTLS config via environment variable (directly provides certs)
-        // Note: We don't start a mock server here because CF_MTLS_TRUSTED_CERTS
-        // directly provides the cert info - no fetching needed
+        // 2. Prepare mTLS config via environment variable
+        // This is the recommended production setup: cfMtls: true in config + env var for certs
         const mtlsConfig = {
             certs: [
                 {
@@ -208,14 +203,14 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
             rootCaDn: [MOCK_ROOT_CA_DN],
         };
 
-        // 3. Start CDS with CF_MTLS_TRUSTED_CERTS (should override wrong config file)
+        // 3. Start CDS with cfMtls: true config and CF_MTLS_TRUSTED_CERTS env var
         serverProcess = spawn("npx", ["cds", "run"], {
             cwd: TEST_APP_ROOT,
             env: {
                 ...process.env,
                 PORT: "4005",
-                CF_MTLS_TRUSTED_CERTS: JSON.stringify(mtlsConfig), // Correct config in env var
-                CDS_CONFIG: TEMP_CONFIG_PATH, // Use temporary wrong config
+                CF_MTLS_TRUSTED_CERTS: JSON.stringify(mtlsConfig), // Certs from env var
+                CDS_CONFIG: TEMP_CONFIG_PATH, // cfMtls: true config file
             },
             stdio: ["ignore", "pipe", "pipe"],
         });
@@ -281,11 +276,11 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
         console.log("Test Suite 1 cleanup complete\n");
     }, 10000);
 
-    // ========== Environment Variable Priority Tests ==========
-    describe("Environment Variable Priority - Proof of Override", () => {
-        test("should prove CF_MTLS_TRUSTED_CERTS overrides wrong .cdsrc.json config", async () => {
-            // .cdsrc.json has wrong configEndpoint and wrong rootCaDn
-            // But env var has correct config, so this should succeed
+    // ========== Production Mode Tests ==========
+    describe("Production Mode - cfMtls: true with CF_MTLS_TRUSTED_CERTS", () => {
+        test("should work with cfMtls: true when CF_MTLS_TRUSTED_CERTS provides cert config", async () => {
+            // cfMtls: true in config file declares intent to use mTLS
+            // CF_MTLS_TRUSTED_CERTS env var provides the actual cert configuration
             const mtlsHeaders = createMtlsHeaders(
                 MOCK_CERT_CONFIG_RESPONSE.certIssuer,
                 MOCK_CERT_CONFIG_RESPONSE.certSubject,
@@ -475,9 +470,9 @@ describe("ORD Integration Tests - mTLS via CF_MTLS_TRUSTED_CERTS (Environment Va
 });
 
 // ============================================================================
-// Test Suite 2: .cdsrc.json Configuration with fetchMtlsCertInfo
+// Test Suite 2: Development Mode with configEndpoints (cfMtls: { ... })
 // ============================================================================
-describe("ORD Integration Tests - mTLS via .cdsrc.json configEndpoint (fetchMtlsCertInfo)", () => {
+describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with configEndpoints)", () => {
     const BASE_URL = "http://localhost:4006";
     const MOCK_SERVER_PORT = 9999; // Match existing .cdsrc.mtls.json configuration
     const MOCK_CONFIG_ENDPOINT = `http://localhost:${MOCK_SERVER_PORT}/v1/info`;
@@ -487,7 +482,7 @@ describe("ORD Integration Tests - mTLS via .cdsrc.json configEndpoint (fetchMtls
     let mockConfigServer;
 
     beforeAll(async () => {
-        console.log("\n=== Test Suite 2: .cdsrc.json Configuration with fetchMtlsCertInfo ===");
+        console.log("\n=== Test Suite 2: Development Mode (cfMtls object with configEndpoints) ===");
 
         // 1. Start mock config server (matches existing .cdsrc.mtls.json port)
         mockConfigServer = await startMockConfigServer(MOCK_SERVER_PORT);
