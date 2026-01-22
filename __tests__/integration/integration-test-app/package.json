@@ -4,6 +4,9 @@
     "scripts": {
         "start": "cds-serve"
     },
+    "dependencies": {
+        "@cap-js/ord": "*"
+    },
     "cds": {
         "requires": {
             "db": {
