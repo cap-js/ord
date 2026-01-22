@@ -27,3 +27,6 @@ jobs:
 
             - name: Run mTLS integration tests
               run: npm run test:integration:mtls -- --verbose
+
+            - name: Run build integration tests
+              run: npm run test:integration:build -- --verbose
