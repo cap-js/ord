@@ -159,8 +159,7 @@ describe("Build", () => {
         expect(buildClass._writeResourcesFiles).toHaveBeenCalledTimes(1);
     });
 
-    it("should output error when getMetadata failed", async () => {
-        jest.spyOn(console, "log").mockImplementation(() => {});
+    it("should throw error when getMetadata fails", async () => {
         const getMetadataMock = jest.spyOn(require("../../lib/index"), "getMetadata");
         const errorMessage = "Failed to get metadata";
         getMetadataMock.mockImplementation(() => {
@@ -178,10 +177,8 @@ describe("Build", () => {
                 ],
             },
         ];
-        const promise = [];
-        await buildClass._writeResourcesFiles(resObj, {}, promise);
-        expect(console.log).toHaveBeenCalledTimes(0);
-        expect(promise.length).toEqual(0);
+        const promises = [];
+        await expect(buildClass._writeResourcesFiles(resObj, {}, promises)).rejects.toThrow(errorMessage);
     });
 
     it("should update resource URLs with relative paths and without colunms", () => {

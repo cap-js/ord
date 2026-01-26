@@ -23,6 +23,7 @@
         "test": "jest __tests__/unit --ci --collectCoverage",
         "test:integration:basic": "jest __tests__/integration/basic-auth.test.js --testPathIgnorePatterns=/node_modules/ --forceExit",
         "test:integration:mtls": "jest __tests__/integration/mtls-auth.test.js --testPathIgnorePatterns=/node_modules/ --forceExit",
+        "test:integration:build": "jest __tests__/integration/cds-build.test.js --testPathIgnorePatterns=/node_modules/ --forceExit",
         "update-snapshot": "jest --ci --updateSnapshot",
         "cds:version": "cds v -i"
     },
