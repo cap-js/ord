@@ -4,6 +4,16 @@
 
 ### Recent Development Activity
 
+**Dependency Review and Issue Triage (January 26, 2026)**:
+
+- **Spring Boot 4 Branch Evaluation**: Reviewed `renovate/major-spring-boot` branch that proposed upgrading from Spring Boot 3.5.10 to 4.0.2
+- **CAP Compatibility Check**: Investigated CAP Java Spring Boot version support - confirmed CAP Java only supports Spring Boot 3.x (not 4.x yet)
+- **Decision**: Deleted the `renovate/major-spring-boot` branch as CAP framework doesn't yet support Spring Boot 4
+- **Issue #101 Review**: Evaluated GitHub issue about moving assets out of repo
+  - Identified 7.2MB GIF and 356KB PNG in `asset/etc/` directory
+  - Confirmed assets are NOT included in npm package (excluded via `files` field in package.json)
+  - Conclusion: No action needed - assets don't affect package size, only git clone
+
 **Test Code Refactoring - Clean Code Implementation (December 15, 2025)**:
 
 - **Objective**: Eliminate duplicate authentication mock configurations across test files following Clean Code principles
@@ -79,22 +89,21 @@
 - **Dependency Modernization**: Major dependency updates including Node v22, Express v5, Jest v30, Spring Boot v3.5.6
 - **Renovate Integration**: Configured Renovate bot for automated dependency management
 
-### Current Development Priorities (December 2025)
+### Current Development Priorities (January 2026)
 
-1. **Authentication System Stability**: Successfully fixed all authentication test failures and validated the new architecture without `types` property
-2. **Test Suite Reliability**: All 325 tests now pass, including the previously problematic authentication tests
-3. **Production Stability**: Monitoring and stabilizing recent features (interop CSN, authentication improvements) in production environments
-4. **Java Runtime Maturation**: Achieving full feature parity between Node.js and Java implementations
-5. **Interop CSN Stability**: Ensuring robust interop CSN generation across various CAP model patterns
-6. **Authentication Refinement**: Improving authentication configuration flexibility and security
-7. **Node.js Version Strategy**: Planning support strategy for Node.js versions beyond v22 as ecosystem evolves
-8. **Performance Optimization**: Addressing build-time and memory usage concerns for large CAP applications
-9. **MCP Protocol Integration**: Exploring enhanced MCP API exposure capabilities
+1. **CAP Java Spring Boot 4 Support**: Monitor CAP framework updates for Spring Boot 4 compatibility
+2. **Issue Triage**: Continue reviewing and addressing community issues (e.g., Issue #101 - assets in repo)
+3. **Authentication System Stability**: Maintain stable authentication architecture
+4. **Test Suite Reliability**: All 357 tests now pass with comprehensive coverage
+5. **Production Stability**: Monitoring and stabilizing features in production environments
+6. **Java Runtime Maturation**: Achieving full feature parity between Node.js and Java implementations
+7. **Interop CSN Stability**: Ensuring robust interop CSN generation across various CAP model patterns
+8. **Node.js Version Strategy**: Planning support strategy for Node.js versions (currently 18-22)
+9. **Performance Optimization**: Addressing build-time and memory usage concerns for large CAP applications
 10. **Supply Chain Security**: Maintaining trusted publishing and provenance capabilities
-11. **Dependency Management**: Keeping dependencies current through automated Renovate updates
+11. **Dependency Management**: Keeping dependencies current through automated Renovate updates (excluding incompatible upgrades like Spring Boot 4)
 12. **Documentation Modernization**: Updating documentation to reflect current architecture and best practices
-13. **Community Feedback Integration**: Incorporating user feedback from v1.3.x releases into future development
-14. **CSN Format Compatibility**: Ensuring clean CSN generation for various integration scenarios
+13. **Community Feedback Integration**: Incorporating user feedback from v1.4.x releases into future development
 
 ## Active Decisions and Considerations
 
