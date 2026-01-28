@@ -107,6 +107,22 @@ describe("ORD Build Integration Tests", () => {
                 }
             }
         });
+
+        test("should include @OpenAPI.servers annotation in OpenAPI document", () => {
+            const testServiceApi = ordDocument.apiResources.find((api) => api.ordId.includes("TestService"));
+            expect(testServiceApi).toBeDefined();
+
+            const openApiDef = testServiceApi.resourceDefinitions.find((def) => def.url.endsWith(".oas3.json"));
+            expect(openApiDef).toBeDefined();
+
+            const openApiPath = path.join(ORD_GEN_DIR, openApiDef.url);
+            const openApiContent = JSON.parse(fs.readFileSync(openApiPath, "utf-8"));
+
+            expect(openApiContent.servers).toBeDefined();
+            expect(openApiContent.servers).toHaveLength(2);
+            expect(openApiContent.servers[0].url).toBe("https://test-service.api.example.com");
+            expect(openApiContent.servers[1].url).toBe("https://test-service-sandbox.api.example.com");
+        });
     });
 
     describe("Failed Build", () => {

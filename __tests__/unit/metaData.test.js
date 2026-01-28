@@ -242,4 +242,40 @@ describe("metaData", () => {
         expect(result.contentType).toBe("application/json");
         expect(result.response).toBe("Content with compile options");
     });
+
+    describe("@OpenAPI.servers annotation", () => {
+        const url = "/ord/v1/ns:apiResource:TestService:v1/TestService.oas3.json";
+        let capturedOptions;
+
+        beforeEach(() => {
+            capturedOptions = null;
+            openapi.mockImplementation((csn, options) => {
+                capturedOptions = options;
+                return "content";
+            });
+        });
+
+        test("should pass servers from annotation to openapi compiler", async () => {
+            const servers = [{ url: "https://api.example.com", description: "Production" }];
+            const mockCsn = {
+                definitions: { TestService: { "@OpenAPI.servers": servers } },
+            };
+
+            await getMetadata(url, mockCsn);
+
+            expect(capturedOptions["openapi:servers"]).toBe(JSON.stringify(servers));
+        });
+
+        test.each([
+            ["missing", {}],
+            ["empty array", { "@OpenAPI.servers": [] }],
+            ["not an array", { "@OpenAPI.servers": "invalid" }],
+        ])("should not set servers when annotation is %s", async (_, serviceDef) => {
+            const mockCsn = { definitions: { TestService: serviceDef } };
+
+            await getMetadata(url, mockCsn);
+
+            expect(capturedOptions["openapi:servers"]).toBeUndefined();
+        });
+    });
 });

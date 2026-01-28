@@ -36,6 +36,18 @@ service LocalService {
 
 annotate LocalService with @ORD.Extensions: {title: 'This is Local Service title'};
 
+// Service-level OpenAPI servers configuration
+annotate LocalService with @OpenAPI.servers: [
+    {
+        url        : 'https://local-service.api.sap.com',
+        description: 'LocalService Production'
+    },
+    {
+        url        : 'https://local-service-sandbox.api.sap.com',
+        description: 'LocalService Sandbox'
+    }
+];
+
 annotate AdminService with @ORD.Extensions: {
     title         : 'This is Admin Service title',
     industry      : [

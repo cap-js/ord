@@ -20,3 +20,8 @@ annotate TestService with @ORD.Extensions: {
     visibility      : 'public',
     version         : '1.0.0'
 };
+
+annotate TestService with @OpenAPI.servers: [
+    { url: 'https://test-service.api.example.com', description: 'Production' },
+    { url: 'https://test-service-sandbox.api.example.com', description: 'Sandbox' }
+];

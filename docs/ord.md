@@ -6,6 +6,7 @@
 2. [Configuration](#configuration)
     - [Global Application Settings](#1-overriding-global-application-information)
     - [Service-Level Customization](#2-overriding-service-level-information)
+    - [OpenAPI Servers](#3-openapi-servers-configuration)
 3. [Custom ORD Content](#adding-custom-ord-content)
 4. [Products](#adding-products)
     - [Using Existing SAP Products](#1-using-an-existing-sap-product)
@@ -63,6 +64,18 @@ annotate ProcessorService with @ORD.Extensions: {
 
 > **Note:**
 > Standard annotations like `@Core.Description` and `@description` are also automatically read by the plugin.
+
+---
+
+### 3. OpenAPI Servers Configuration
+
+Use `@OpenAPI.servers` to add production URLs to generated OpenAPI documents (for SAP Business Accelerator Hub "Try Out" feature):
+
+```js
+annotate MyService with @OpenAPI.servers: [
+    { url: 'https://my-service.api.sap.com', description: 'Production' }
+];
+```
 
 ---
 
@@ -369,6 +382,7 @@ More information, see [ORD Document specification](https://pages.github.tools.sa
 | -------------------------------- | ----------------------------------------------------------------------- |
 | Global Metadata                  | Define in `.cdsrc.json` under `ord`                                     |
 | Service Metadata                 | Use `@ORD.Extensions` annotations in `.cds` files                       |
+| OpenAPI Servers                  | Use `@OpenAPI.servers` annotation                                       |
 | Custom ORD Content               | Use `customOrdContentFile`                                              |
 | Linking to Existing SAP Products | Use `existingProductORDId`                                              |
 | Defining Custom Products         | Add `products` section manually                                         |
