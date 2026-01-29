@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.4.3 (2026-01-29)
+
+## What's Changed
+
+- feat: support @OpenAPI.servers annotation for service-level server URLs by @swennemers in https://github.com/cap-js/ord/pull/339
+- fix: throw BuildError during cds build to terminate build on errors by @zongqichen in https://github.com/cap-js/ord/pull/334
+- fix: finalize CF mTLS configuration documentation by @zongqichen in https://github.com/cap-js/ord/pull/331
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.4.2...v1.4.3
+
 ## 1.4.2 (2026-01-14)
 
 ## What's Changed
