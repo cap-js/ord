@@ -3,6 +3,7 @@ using {
     ProcessorService,
     AdminService
 } from './incidents-services';
+using { sap.sai.Supplier.v1 as Supplier } from 'sap-sai-supplier-v1';
 
 namespace sap.capire.incidents;
 
@@ -69,4 +70,9 @@ service EntertainmentDataProduct {
     entity Film   as projection on my.Movie;
     entity Show   as projection on my.Show;
 
+}
+
+// Service consuming external Data Product
+service SupplierService {
+    entity Suppliers as projection on Supplier.Supplier;
 }

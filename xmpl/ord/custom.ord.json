@@ -73,9 +73,15 @@
             "ordId": "sap.s4:integrationDependency:subscriptionReplication:v2",
             "version": "2.2.3",
             "title": "Subscription Billing Replication",
+            "shortDescription": "Dependency for replicating subscription billing data.",
+            "description": "This integration dependency describes the subscription billing replication.",
             "visibility": "internal",
+            "releaseStatus": "active",
+            "mandatory": true,
+            "partOfPackage": "customer.sample:package:capireordsample-integrationDependency:v1",
             "aspects": [
                 {
+                    "title": "Purchasing Organization API",
                     "apiResources": [
                         {
                             "ordId": "sap.s4com:apiResource:PurchasingOrganization:v1",
