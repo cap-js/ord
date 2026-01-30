@@ -1,0 +1,13 @@
+{
+  "name": "sap-sai-supplier-v1",
+  "version": "1.0.0",
+  "cds": {
+    "requires": {
+      "sap.sai.Supplier.v1": {
+        "kind": "data.product",
+        "model": "sap-sai-supplier-v1",
+        "ordId": "sap.sai:apiResource:Supplier:v1"
+      }
+    }
+  }
+}
