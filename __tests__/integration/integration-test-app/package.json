@@ -5,9 +5,7 @@
         "start": "cds-serve"
     },
     "dependencies": {
-        "@cap-js/ord": "*",
-        "test-sai-supplier-v1": "file:./srv/imported/test-sai-supplier-v1",
-        "test-s4-supplier-v1": "file:./srv/imported/test-s4-supplier-v1"
+        "@cap-js/ord": "*"
     },
     "cds": {
         "requires": {
