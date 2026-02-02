@@ -3,7 +3,8 @@ using {
     ProcessorService,
     AdminService
 } from './incidents-services';
-using { sap.sai.Supplier.v1 as Supplier } from 'sap-sai-supplier-v1';
+using {sap.sai.Supplier.v1 as SaiSupplier} from 'sap-sai-supplier-v1';
+using {sap.s4com.Supplier.v1 as S4comSupplier} from 'sap-s4com-supplier-v1';
 
 namespace sap.capire.incidents;
 
@@ -72,7 +73,20 @@ service EntertainmentDataProduct {
 
 }
 
-// Service consuming external Data Product
+// Services consuming external Data Products
 service SupplierService {
-    entity Suppliers as projection on Supplier.Supplier;
+    entity SaiSuppliers   as projection on SaiSupplier.Supplier;
+    entity S4comSuppliers as projection on S4comSupplier.Supplier;
 }
+
+// Customize IntegrationDependency aspects via @ORD.Extensions
+annotate sap.sai.Supplier.v1 with @ORD.Extensions: {
+    title      : 'SAI Supplier API',
+    description: 'Integration with SAP Analytics Intelligence Supplier Data Product'
+};
+
+annotate sap.s4com.Supplier.v1 with @ORD.Extensions: {
+    title      : 'S/4HANA Cloud Supplier API',
+    description: 'Integration with SAP S/4HANA Cloud Supplier Data Product',
+    mandatory  : true
+};

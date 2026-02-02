@@ -1,5 +1,5 @@
 const { createAPIResourceTemplate } = require("../../lib/templates");
-const { DATA_PRODUCT_ANNOTATION, DATA_PRODUCT_SIMPLE_ANNOTATION, DATA_PRODUCT_TYPE } = require("../../lib/constants");
+const { DATA_PRODUCT_ANNOTATION, DATA_PRODUCT_SHORTEN_ANNOTATION, DATA_PRODUCT_TYPE } = require("../../lib/constants");
 
 describe("Version Suffix Extraction for Data Product Services", () => {
     const mockAppConfig = {
@@ -309,7 +309,7 @@ describe("Version Suffix Extraction for Data Product Services", () => {
         test("should handle .v1 suffix correctly with @data.product annotation", () => {
             const serviceDefinition = {
                 name: "sap.test.DataService.v1",
-                [DATA_PRODUCT_SIMPLE_ANNOTATION]: true,
+                [DATA_PRODUCT_SHORTEN_ANNOTATION]: true,
             };
 
             const result = createAPIResourceTemplate(
@@ -331,7 +331,7 @@ describe("Version Suffix Extraction for Data Product Services", () => {
         test("should handle .v2 suffix correctly with @data.product annotation", () => {
             const serviceDefinition = {
                 name: "sap.test.DataService.v2",
-                [DATA_PRODUCT_SIMPLE_ANNOTATION]: "yes",
+                [DATA_PRODUCT_SHORTEN_ANNOTATION]: "yes",
             };
 
             const result = createAPIResourceTemplate(
@@ -351,7 +351,7 @@ describe("Version Suffix Extraction for Data Product Services", () => {
         test("should use current behavior when @data.product is false", () => {
             const serviceDefinition = {
                 name: "sap.test.DataService.v2",
-                [DATA_PRODUCT_SIMPLE_ANNOTATION]: false,
+                [DATA_PRODUCT_SHORTEN_ANNOTATION]: false,
             };
 
             const result = createAPIResourceTemplate(
@@ -372,7 +372,7 @@ describe("Version Suffix Extraction for Data Product Services", () => {
             const serviceDefinition = {
                 name: "sap.test.DataService.v3",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
-                [DATA_PRODUCT_SIMPLE_ANNOTATION]: false,
+                [DATA_PRODUCT_SHORTEN_ANNOTATION]: false,
             };
 
             const result = createAPIResourceTemplate(
@@ -393,7 +393,7 @@ describe("Version Suffix Extraction for Data Product Services", () => {
             const serviceDefinition = {
                 name: "sap.test.DataService.v2",
                 [DATA_PRODUCT_ANNOTATION]: "secondary",
-                [DATA_PRODUCT_SIMPLE_ANNOTATION]: true,
+                [DATA_PRODUCT_SHORTEN_ANNOTATION]: true,
             };
 
             const result = createAPIResourceTemplate(
