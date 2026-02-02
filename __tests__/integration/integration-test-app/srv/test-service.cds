@@ -34,12 +34,6 @@ annotate TestService with @OpenAPI.servers: [
     }
 ];
 
-// Service consuming external Data Products
-service SupplierService {
-    entity SaiSuppliers as projection on SaiSupplier.Supplier;
-    entity S4Suppliers  as projection on S4Supplier.Supplier;
-}
-
 // Customize IntegrationDependency aspects via @ORD.Extensions
 annotate test.sai.Supplier.v1 with @ORD.Extensions: {
     title      : 'Test SAI Supplier API',
