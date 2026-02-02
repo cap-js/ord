@@ -195,6 +195,60 @@ describe("integrationDependency", () => {
             expect(result.title).toBe("Custom Integration Title");
             expect(result.mandatory).toBe(true);
         });
+
+        it("should allow cdsrc to override version and releaseStatus", () => {
+            const appConfigWithCdsrc = {
+                ...mockAppConfig,
+                env: {
+                    integrationDependency: {
+                        version: "2.0.0",
+                        releaseStatus: "beta",
+                    },
+                },
+            };
+
+            const externalServices = [
+                {
+                    serviceName: "sap.sai.Supplier.v1",
+                    ordId: "sap.sai:apiResource:Supplier:v1",
+                    minVersion: "1.0.0",
+                    definition: {},
+                },
+            ];
+
+            const result = createIntegrationDependency(externalServices, appConfigWithCdsrc, mockPackageIds);
+
+            expect(result.version).toBe("2.0.0");
+            expect(result.releaseStatus).toBe("beta");
+        });
+
+        it("should allow cdsrc to override visibility and add description", () => {
+            const appConfigWithCdsrc = {
+                ...mockAppConfig,
+                env: {
+                    integrationDependency: {
+                        visibility: RESOURCE_VISIBILITY.internal,
+                        description: "Custom integration dependency description",
+                        shortDescription: "Custom short description",
+                    },
+                },
+            };
+
+            const externalServices = [
+                {
+                    serviceName: "sap.sai.Supplier.v1",
+                    ordId: "sap.sai:apiResource:Supplier:v1",
+                    minVersion: "1.0.0",
+                    definition: {},
+                },
+            ];
+
+            const result = createIntegrationDependency(externalServices, appConfigWithCdsrc, mockPackageIds);
+
+            expect(result.visibility).toBe(RESOURCE_VISIBILITY.internal);
+            expect(result.description).toBe("Custom integration dependency description");
+            expect(result.shortDescription).toBe("Custom short description");
+        });
     });
 
     describe("getIntegrationDependencies", () => {

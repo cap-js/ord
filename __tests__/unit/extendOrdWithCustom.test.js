@@ -151,6 +151,43 @@ describe("extendOrdWithCustom", () => {
             expect(mcpResource.releaseStatus).toBe("beta");
             expect(mcpResource.apiProtocol).toBe("mcp"); // Should remain unchanged
         });
+
+        it("should patch IntegrationDependency via custom.ord.json", () => {
+            const ordContent = {
+                integrationDependencies: [
+                    {
+                        ordId: "customer.testapp:integrationDependency:externalDependencies:v1",
+                        title: "External Dependencies",
+                        version: "1.0.0",
+                        releaseStatus: "active",
+                        visibility: "public",
+                        mandatory: false,
+                        partOfPackage: "customer.testapp:package:testapp-integrationDependency:v1",
+                        aspects: [
+                            {
+                                title: "sap.sai.Supplier.v1",
+                                mandatory: false,
+                                apiResources: [{ ordId: "sap.sai:apiResource:Supplier:v1", minVersion: "1.0.0" }],
+                            },
+                        ],
+                    },
+                ],
+            };
+            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithIntegrationDependency.json");
+            const result = extendCustomORDContentIfExists(appConfig, ordContent);
+
+            expect(result.integrationDependencies).toHaveLength(1);
+            const integrationDep = result.integrationDependencies[0];
+            expect(integrationDep.ordId).toBe("customer.testapp:integrationDependency:externalDependencies:v1");
+            expect(integrationDep.version).toBe("2.0.0");
+            expect(integrationDep.title).toBe("Custom External Dependencies");
+            expect(integrationDep.description).toBe("Patched via custom.ord.json");
+            // Should preserve original values not in patch
+            expect(integrationDep.releaseStatus).toBe("active");
+            expect(integrationDep.visibility).toBe("public");
+            expect(integrationDep.mandatory).toBe(false);
+            expect(integrationDep.aspects).toHaveLength(1);
+        });
     });
 });
 
