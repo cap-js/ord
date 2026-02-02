@@ -27,13 +27,6 @@
                 "vendor": "sap:vendor:SAP:"
             }
         ],
-        "authentication": {
-            "basic": {
-                "credentials": {
-                    "admin": "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW"
-                }
-            }
-        },
         "compileOptions": {
             "openapi": {
                 "openapi:url": "https://{host}.testhost/${service-path}"

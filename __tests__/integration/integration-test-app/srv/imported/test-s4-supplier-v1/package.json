@@ -1,0 +1,13 @@
+{
+    "name": "test-s4-supplier-v1",
+    "version": "1.0.0",
+    "cds": {
+        "requires": {
+            "test.s4.Supplier.v1": {
+                "kind": "data.product",
+                "model": "test-s4-supplier-v1",
+                "ordId": "test.s4:apiResource:Supplier:v1"
+            }
+        }
+    }
+}

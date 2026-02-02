@@ -1,0 +1,10 @@
+{
+    "integrationDependencies": [
+        {
+            "ordId": "customer.ord.integration.test:integrationDependency:externalDependencies:v1",
+            "title": "Patched External Dependencies",
+            "shortDescription": "Patched via custom.ord.json",
+            "mandatory": true
+        }
+    ]
+}
