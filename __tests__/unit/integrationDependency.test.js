@@ -9,7 +9,6 @@ describe("integrationDependency", () => {
     const mockAppConfig = {
         ordNamespace: "customer.testapp",
         appName: "testapp",
-        lastUpdate: "2024-01-15T10:00:00+00:00",
         env: {},
     };
 
@@ -33,7 +32,7 @@ describe("integrationDependency", () => {
             const csn = {
                 definitions: {
                     "sap.sai.Supplier.v1": {
-                        kind: "service",
+                        "kind": "service",
                         "@cds.external": true,
                         "@data.product": true,
                         "@cds.dp.ordId": "sap.sai:apiResource:Supplier:v1",
@@ -54,13 +53,13 @@ describe("integrationDependency", () => {
             const csn = {
                 definitions: {
                     "sap.sai.Supplier.v1": {
-                        kind: "service",
+                        "kind": "service",
                         "@cds.external": true,
                         "@data.product": true,
                         "@cds.dp.ordId": "sap.sai:apiResource:Supplier:v1",
                     },
                     "sap.sai.Invoice.v2": {
-                        kind: "service",
+                        "kind": "service",
                         "@cds.external": true,
                         "@data.product": true,
                         "@cds.dp.ordId": "sap.sai:apiResource:Invoice:v2",
@@ -75,7 +74,7 @@ describe("integrationDependency", () => {
             const csn = {
                 definitions: {
                     "sap.sai.SupplierEvents.v1": {
-                        kind: "service",
+                        "kind": "service",
                         "@cds.external": true,
                         "@data.product": true,
                         "@cds.dp.ordId": "sap.sai:eventResource:SupplierEvents:v1",
@@ -90,7 +89,7 @@ describe("integrationDependency", () => {
             const csn = {
                 definitions: {
                     "sap.sai.Supplier.v1": {
-                        kind: "service",
+                        "kind": "service",
                         "@data.product": true,
                         "@cds.dp.ordId": "sap.sai:apiResource:Supplier:v1",
                     },
@@ -120,7 +119,6 @@ describe("integrationDependency", () => {
             expect(result.releaseStatus).toBe("active");
             expect(result.visibility).toBe(RESOURCE_VISIBILITY.public);
             expect(result.mandatory).toBe(false);
-            expect(result.lastUpdate).toBe(mockAppConfig.lastUpdate);
             expect(result.partOfPackage).toBe("customer.testapp:package:testapp-integrationDependency:v1");
         });
 
@@ -216,13 +214,13 @@ describe("integrationDependency", () => {
             const csn = {
                 definitions: {
                     "sap.sai.Supplier.v1": {
-                        kind: "service",
+                        "kind": "service",
                         "@cds.external": true,
                         "@data.product": true,
                         "@cds.dp.ordId": "sap.sai:apiResource:Supplier:v1",
                     },
                     "sap.sai.Invoice.v1": {
-                        kind: "service",
+                        "kind": "service",
                         "@cds.external": true,
                         "@data.product": true,
                         "@cds.dp.ordId": "sap.sai:apiResource:Invoice:v1",
