@@ -15,6 +15,7 @@
     - [CF mTLS Authentication](#cf-mtls-authentication)
 6. [Parameters](#parameters)
 7. [ORD Root Properties](#ord-root-property)
+8. [Importing External Data Products](#importing-external-data-products)
 
 ---
 
@@ -376,6 +377,41 @@ More information, see [ORD Document specification](https://pages.github.tools.sa
 
 ---
 
+## Importing External Data Products
+
+The plugin auto-generates `IntegrationDependency` resources when you import external Data Products.
+
+### External Package Definition
+
+Create a `.cds` file with these required annotations:
+
+```cds
+@cds.dp.ordId: 'sap.s4:dataProduct:Supplier:v1'
+@cds.external
+@data.product
+@protocol: 'none'
+service external.Supplier {
+  entity Supplier { key ID: String; name: String; }
+}
+```
+
+| Annotation       | Purpose                                 |
+| ---------------- | --------------------------------------- |
+| `@cds.dp.ordId`  | ORD ID of the external Data Product     |
+| `@cds.external`  | Marks service as external               |
+| `@data.product`  | Identifies as Data Product              |
+| `@protocol`      | Set to `'none'` for external packages   |
+
+### Import in Your Service
+
+```cds
+using { external.Supplier } from './external/SupplierDP';
+```
+
+The plugin generates an `IntegrationDependency` with an aspect referencing the external Data Product ORD ID.
+
+---
+
 ## Summary
 
 | Scenario                         | Approach                                                                |
@@ -388,3 +424,4 @@ More information, see [ORD Document specification](https://pages.github.tools.sa
 | Defining Custom Products         | Add `products` section manually                                         |
 | Basic Authentication             | Configure `ord.authentication.basic`                                    |
 | CF mTLS Authentication           | Set `ord.authentication.cfMtls: true` + `CF_MTLS_TRUSTED_CERTS` env var |
+| External Data Products           | Use `@cds.external`, `@data.product`, `@cds.dp.ordId` annotations       |
