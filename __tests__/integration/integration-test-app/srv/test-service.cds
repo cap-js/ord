@@ -1,4 +1,6 @@
 using {test.integration as my} from '../db/schema';
+using {test.sai.Supplier.v1 as SaiSupplier} from 'test-sai-supplier-v1';
+using {test.s4.Supplier.v1 as S4Supplier} from 'test-s4-supplier-v1';
 
 service TestService @(path: '/test') {
 
@@ -22,6 +24,23 @@ annotate TestService with @ORD.Extensions: {
 };
 
 annotate TestService with @OpenAPI.servers: [
-    { url: 'https://test-service.api.example.com', description: 'Production' },
-    { url: 'https://test-service-sandbox.api.example.com', description: 'Sandbox' }
+    {
+        url        : 'https://test-service.api.example.com',
+        description: 'Production'
+    },
+    {
+        url        : 'https://test-service-sandbox.api.example.com',
+        description: 'Sandbox'
+    }
 ];
+
+// Customize IntegrationDependency aspects via @ORD.Extensions
+annotate test.sai.Supplier.v1 with @ORD.Extensions: {
+    title      : 'Test SAI Supplier API',
+    description: 'Integration with Test SAI Supplier Data Product'
+};
+
+annotate test.s4.Supplier.v1 with @ORD.Extensions: {
+    title      : 'Test S4 Supplier API',
+    description: 'Integration with Test S4 Supplier Data Product'
+};
