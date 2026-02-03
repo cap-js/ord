@@ -20,6 +20,7 @@ jobs:
             - name: Install dependencies and prepare documents
               run: |
                   npm install -g @sap/cds-dk@9.6.0
+                  npm install @sap/cds@9.6.1
                   cds version
 
             - name: Node.js Test
