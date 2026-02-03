@@ -2225,9 +2225,6 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
       "version": "1.0.0",
     },
     "flavor": "effective",
-    Symbol(Feature flags): {
-      "$dataProductService": true,
-    },
   },
 }
 `;
