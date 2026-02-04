@@ -23,7 +23,6 @@
     "apiResources": [
         {
             "title": "This is the title of Manually Implemented Service",
-            "partOfGroups": null,
             "shortDescription": "Short description of Manually Implemented Service",
             "description": "Description for Manually Implemented Service",
             "visibility": "public",
@@ -31,6 +30,9 @@
             "version": "1.0.0",
             "partOfPackage": "customer.sample:package:capireordsample-api:v1",
             "apiProtocol": "odata-v4",
+            "entryPoints": [
+                "/odata/v4/manual"
+            ],
             "resourceDefinitions": [
                 {
                     "type": "openapi-v3",
@@ -73,17 +75,23 @@
             "ordId": "sap.s4:integrationDependency:subscriptionReplication:v2",
             "version": "2.2.3",
             "title": "Subscription Billing Replication",
+            "shortDescription": "Integration dependency for subscription billing data replication",
+            "description": "This integration dependency defines the requirements for replicating subscription billing data from SAP S/4HANA.",
+            "partOfPackage": "customer.sample:package:capireordsample-api:v1",
             "visibility": "internal",
+            "releaseStatus": "active",
+            "mandatory": true,
             "aspects": [
                 {
+                    "title": "Purchasing Organization Aspect",
+                    "mandatory": true,
+                    "supportMultipleProviders": true,
                     "apiResources": [
                         {
                             "ordId": "sap.s4com:apiResource:PurchasingOrganization:v1",
                             "minVersion": "1.0.0"
                         }
-                    ],
-                    "mandatory": true,
-                    "supportMultipleProviders": true
+                    ]
                 }
             ]
         }

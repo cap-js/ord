@@ -5,6 +5,7 @@ const {
     ORD_EXTENSIONS_PREFIX,
     RESOURCE_VISIBILITY,
     ALLOWED_VISIBILITY,
+    ORD_API_PROTOCOL,
 } = require("../../lib/constants");
 const {
     createEntityTypeTemplate,
@@ -19,6 +20,7 @@ const {
     _handleVisibility,
     isPrimaryDataProductService,
 } = require("../../lib/templates");
+const { resolveApiResourceProtocol, _getExplicitProtocols } = require("../../lib/protocol-resolver");
 
 const Logger = require("../../lib/logger");
 
@@ -1019,6 +1021,182 @@ describe("templates", () => {
             const model = _propagateORDVisibility(linkedModel);
             const eventDefinition = model.definitions["MyService.ServiceEvent"];
             expect(eventDefinition[ORD_EXTENSIONS_PREFIX + "visibility"]).toBeUndefined();
+        });
+    });
+
+    describe("_getExplicitProtocols", () => {
+        it("should return null when no @protocol annotation", () => {
+            const srvDefinition = { name: "MyService" };
+            expect(_getExplicitProtocols(srvDefinition)).toBeNull();
+        });
+
+        it("should return array for string protocol", () => {
+            const srvDefinition = { "name": "MyService", "@protocol": "rest" };
+            expect(_getExplicitProtocols(srvDefinition)).toEqual(["rest"]);
+        });
+
+        it("should return array as-is for array protocol", () => {
+            const srvDefinition = { "name": "MyService", "@protocol": ["odata", "rest"] };
+            expect(_getExplicitProtocols(srvDefinition)).toEqual(["odata", "rest"]);
+        });
+
+        it("should handle single-item array", () => {
+            const srvDefinition = { "name": "MyService", "@protocol": ["graphql"] };
+            expect(_getExplicitProtocols(srvDefinition)).toEqual(["graphql"]);
+        });
+    });
+
+    describe("resolveApiResourceProtocol", () => {
+        let loggerWarnSpy;
+
+        beforeEach(() => {
+            loggerWarnSpy = jest.spyOn(Logger, "warn").mockImplementation(() => {});
+        });
+
+        afterEach(() => {
+            loggerWarnSpy.mockRestore();
+        });
+
+        it("should return odata-v4 for default OData service without explicit protocol", () => {
+            const model = cds.linked(`
+                service MyService {
+                    entity Books { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["MyService"];
+            const result = resolveApiResourceProtocol("MyService", srvDefinition, {
+                capEndpoints: [],
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            expect(result).toHaveLength(1);
+            expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.ODATA_V4);
+            expect(result[0].hasResourceDefinitions).toBe(true);
+            // entryPoints should not contain null
+            expect(result[0].entryPoints).not.toContain(null);
+        });
+
+        it("should return empty array for unknown explicit protocol", () => {
+            const srvDefinition = {
+                "name": "MyService",
+                "@protocol": "unknown-protocol",
+            };
+            const result = resolveApiResourceProtocol("MyService", srvDefinition, {
+                capEndpoints: [],
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            expect(result).toEqual([]);
+            expect(loggerWarnSpy).toHaveBeenCalledWith(
+                expect.stringContaining("Unknown protocol 'unknown-protocol' is not supported"),
+            );
+        });
+
+        it("should handle INA protocol as ORD-only protocol", () => {
+            const srvDefinition = {
+                "name": "INAService",
+                "@protocol": "ina",
+            };
+            const result = resolveApiResourceProtocol("INAService", srvDefinition, {
+                capEndpoints: [],
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            expect(result).toHaveLength(1);
+            expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.SAP_INA);
+            expect(result[0].entryPoints).toEqual([]);
+            expect(result[0].hasResourceDefinitions).toBe(false);
+        });
+
+        it("should warn and skip GraphQL protocol", () => {
+            // GraphQL is supported by ORD but plugin can't generate resource definitions
+            const srvDefinition = {
+                "name": "GraphQLService",
+                "@protocol": "graphql",
+            };
+            const result = resolveApiResourceProtocol("GraphQLService", srvDefinition, {
+                capEndpoints: [],
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            // Should return empty array as plugin doesn't support graphql
+            expect(result).toEqual([]);
+            // The warning should indicate plugin limitation, not ORD limitation
+            expect(loggerWarnSpy).toHaveBeenCalledWith(
+                expect.stringContaining("plugin cannot generate its resource definitions yet"),
+            );
+        });
+
+        it("should return data subscription protocol for primary data product service", () => {
+            const srvDefinition = {
+                "name": "DataProductService",
+                "@DataIntegration.dataProduct.type": "primary",
+            };
+            const result = resolveApiResourceProtocol("DataProductService", srvDefinition, {
+                capEndpoints: [],
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            expect(result).toHaveLength(1);
+            expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.SAP_DATA_SUBSCRIPTION);
+            expect(result[0].entryPoints).toEqual([]);
+            expect(result[0].hasResourceDefinitions).toBe(true);
+        });
+
+        it("should never produce [null] in entryPoints (Rule C)", () => {
+            // Test various scenarios that previously could produce null
+            const testCases = [
+                { "name": "Svc1", "@protocol": "ina" },
+                { "name": "Svc2", "@DataIntegration.dataProduct.type": "primary" },
+                { "name": "Svc3" }, // default OData
+            ];
+
+            testCases.forEach((srvDefinition) => {
+                const result = resolveApiResourceProtocol(srvDefinition.name, srvDefinition, {
+                    capEndpoints: [],
+                    isPrimaryDataProduct: isPrimaryDataProductService,
+                });
+                result.forEach((r) => {
+                    expect(r.entryPoints).not.toContain(null);
+                    expect(r.entryPoints).not.toContain(undefined);
+                });
+            });
+        });
+
+        it("should not fallback to OData when explicit protocol is set (Rule A)", () => {
+            // If @protocol is explicitly set to something CDS doesn't recognize,
+            // we should NOT fallback to OData
+            const srvDefinition = {
+                "name": "CustomService",
+                "@protocol": "custom-protocol",
+            };
+            const result = resolveApiResourceProtocol("CustomService", srvDefinition, {
+                capEndpoints: [],
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            // Should return empty array, not OData fallback
+            expect(result).toEqual([]);
+            // Should NOT have odata-v4 in the result
+            const hasOData = result.some((r) => r.apiProtocol === ORD_API_PROTOCOL.ODATA_V4);
+            expect(hasOData).toBe(false);
+        });
+
+        it("should only fallback to OData when no explicit protocol (Rule B)", () => {
+            // Service without @protocol annotation should fallback to OData
+            const model = cds.linked(`
+                service DefaultService {
+                    entity Items { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["DefaultService"];
+            const result = resolveApiResourceProtocol("DefaultService", srvDefinition, {
+                capEndpoints: [],
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            expect(result).toHaveLength(1);
+            expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.ODATA_V4);
         });
     });
 });
