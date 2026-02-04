@@ -6,9 +6,9 @@ const Logger = require("../../lib/logger");
 
 describe("protocol-resolver", () => {
     describe("_getExplicitProtocols", () => {
-        it("should return null when no @protocol annotation", () => {
+        it("should return empty array when no @protocol annotation", () => {
             const srvDefinition = { name: "MyService" };
-            expect(_getExplicitProtocols(srvDefinition)).toBeNull();
+            expect(_getExplicitProtocols(srvDefinition)).toEqual([]);
         });
 
         it("should return array for string protocol", () => {
@@ -119,7 +119,7 @@ describe("protocol-resolver", () => {
             const testCases = [
                 { "name": "Svc1", "@protocol": "ina" },
                 { "name": "Svc2", "@DataIntegration.dataProduct.type": "primary" },
-                { "name": "Svc3" },
+                { name: "Svc3" },
             ];
 
             testCases.forEach((srvDefinition) => {
@@ -160,6 +160,64 @@ describe("protocol-resolver", () => {
 
             expect(result).toHaveLength(1);
             expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.ODATA_V4);
+        });
+
+        it("should support multi-protocol scenarios (e.g., @protocol: ['ina', 'odata'])", () => {
+            const model = cds.linked(`
+                @protocol: ['ina', 'odata']
+                service MultiProtocolService {
+                    entity Items { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["MultiProtocolService"];
+            const result = resolveApiResourceProtocol("MultiProtocolService", srvDefinition, {
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            // Should return both INA and OData protocols
+            expect(result.length).toBeGreaterThanOrEqual(1);
+
+            // Check for INA protocol (ORD-only)
+            const inaResult = result.find((r) => r.apiProtocol === ORD_API_PROTOCOL.SAP_INA);
+            expect(inaResult).toBeDefined();
+            expect(inaResult.hasResourceDefinitions).toBe(false);
+
+            // Check for OData protocol (CAP-served)
+            const odataResult = result.find((r) => r.apiProtocol === ORD_API_PROTOCOL.ODATA_V4);
+            expect(odataResult).toBeDefined();
+            expect(odataResult.hasResourceDefinitions).toBe(true);
+
+            // Verify no null in entryPoints (Rule C)
+            result.forEach((r) => {
+                expect(r.entryPoints).not.toContain(null);
+                expect(r.entryPoints).not.toContain(undefined);
+            });
+        });
+
+        it("should support @protocol: ['odata', 'rest'] multi-protocol", () => {
+            const model = cds.linked(`
+                @protocol: ['odata', 'rest']
+                service DualProtocolService {
+                    entity Items { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["DualProtocolService"];
+            const result = resolveApiResourceProtocol("DualProtocolService", srvDefinition, {
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            // Should return both OData and REST protocols
+            expect(result.length).toBe(2);
+
+            const protocols = result.map((r) => r.apiProtocol);
+            expect(protocols).toContain(ORD_API_PROTOCOL.ODATA_V4);
+            expect(protocols).toContain(ORD_API_PROTOCOL.REST);
+
+            // Both should have resource definitions
+            result.forEach((r) => {
+                expect(r.hasResourceDefinitions).toBe(true);
+                expect(r.entryPoints).not.toContain(null);
+            });
         });
     });
 });
