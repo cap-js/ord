@@ -19,7 +19,7 @@ jobs:
 
             - name: Install dependencies
               run: |
-                  npm install -g @sap/cds-dk
+                  npm install -g @sap/cds-dk@latest
                   npm ci
                   cds version
 
@@ -35,5 +35,6 @@ jobs:
             - name: Build and test Java sample
               run: |
                   cd xmpl_java
+                  npm i
                   cds build --for ord
                   mvn clean test
