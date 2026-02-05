@@ -34,6 +34,5 @@ jobs:
             - name: Build and test Java sample
               run: |
                   cd xmpl_java
-                  npm ci
                   npx cds build --for ord
                   mvn clean test
