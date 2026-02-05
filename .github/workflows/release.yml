@@ -20,7 +20,7 @@ jobs:
 
             - name: Run Tests
               run: |
-                  npm install
+                  npm ci
                   npm run lint
 
             - name: get-version

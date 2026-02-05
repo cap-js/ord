@@ -18,9 +18,7 @@ jobs:
                   node-version: 22
 
             - name: Install dependencies
-              run: |
-                  npm install -g @sap/cds-dk@latest
-                  npm install
+              run: npm ci
 
             - name: Run basic auth integration tests
               run: npm run test:integration:basic -- --verbose
