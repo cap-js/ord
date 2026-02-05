@@ -6,18 +6,9 @@
     "author": "SAP SE (https://www.sap.com)",
     "homepage": "https://cap.cloud.sap/",
     "license": "Apache-2.0",
-    "workspaces": [
-        "xmpl",
-        "xmpl_java",
-        "__tests__/integration/integration-test-app"
-    ],
+    "workspaces": ["xmpl", "xmpl_java", "__tests__/integration/integration-test-app"],
     "main": "cds-plugin.js",
-    "files": [
-        "cds-plugin.js",
-        "lib",
-        "data",
-        "LICENSES"
-    ],
+    "files": ["cds-plugin.js", "lib", "data", "LICENSES"],
     "scripts": {
         "lint": "npx eslint .",
         "test": "jest __tests__/unit --ci --collectCoverage",
@@ -48,6 +39,9 @@
     },
     "engines": {
         "node": ">=18 <23"
+    },
+    "overrides": {
+        "@sap/cds-compiler": "6.6.2"
     },
     "cds": {
         "requires": {
