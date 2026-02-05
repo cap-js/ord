@@ -49,6 +49,9 @@
     "engines": {
         "node": ">=18 <23"
     },
+    "overrides": {
+        "@sap/cds-compiler": "6.6.2"
+    },
     "cds": {
         "requires": {
             "SAP ORD Service": {
