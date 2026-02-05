@@ -17,14 +17,16 @@ jobs:
               with:
                   node-version: 22
 
-            - name: Install dependencies
+            - name: Install dependencies and prepare documents
               run: |
                   npm install -g @sap/cds-dk@latest
-                  npm ci
+                  npm install @sap/cds@latest
                   cds version
 
             - name: Node.js Test
-              run: npm run test
+              run: |
+                  npm i
+                  npm run test
 
             - name: Set up JDK 21
               uses: actions/setup-java@v5
