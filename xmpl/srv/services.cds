@@ -90,3 +90,18 @@ annotate sap.s4com.Supplier.v1 with @ORD.Extensions: {
     description: 'Integration with SAP S/4HANA Cloud Supplier Data Product',
     mandatory  : true
 };
+
+// INA Protocol Service - demonstrates ORD-only protocol handling
+// CDS doesn't recognize 'ina' protocol, but ORD plugin maps it to 'sap-ina-api-v1'
+@protocol: 'ina'
+@title   : 'Analytics Service'
+service AnalyticsService {
+    entity Cinema as projection on my.Cinema;
+    entity Film   as projection on my.Movie;
+}
+
+annotate AnalyticsService with @ORD.Extensions: {
+    title           : 'Analytics Service for SAP INA',
+    shortDescription: 'INA protocol service for analytics queries',
+    visibility      : 'public'
+};
