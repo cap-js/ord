@@ -85,3 +85,17 @@ annotate AnalyticsService with @ORD.Extensions: {
     shortDescription: 'INA protocol service for analytics queries',
     visibility      : 'public'
 };
+
+// GraphQL Protocol Service - demonstrates GraphQL protocol support
+@protocol: 'graphql'
+@title   : 'GraphQL Service'
+service GraphQLService {
+    entity Cinema as projection on my.Cinema;
+    entity Film   as projection on my.Movie;
+}
+
+annotate GraphQLService with @ORD.Extensions: {
+    title           : 'GraphQL Service for Cinema',
+    shortDescription: 'GraphQL protocol service for cinema data',
+    visibility      : 'public'
+};

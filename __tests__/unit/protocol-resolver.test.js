@@ -85,19 +85,22 @@ describe("protocol-resolver", () => {
             expect(result[0].hasResourceDefinitions).toBe(false);
         });
 
-        it("should warn and skip GraphQL protocol", () => {
-            const srvDefinition = {
-                "name": "GraphQLService",
-                "@protocol": "graphql",
-            };
+        it("should handle GraphQL protocol", () => {
+            const model = cds.linked(`
+                @protocol: 'graphql'
+                service GraphQLService {
+                    entity Books { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["GraphQLService"];
             const result = resolveApiResourceProtocol("GraphQLService", srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
-            expect(result).toEqual([]);
-            expect(loggerWarnSpy).toHaveBeenCalledWith(
-                expect.stringContaining("plugin cannot generate its resource definitions yet"),
-            );
+            expect(result).toHaveLength(1);
+            expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.GRAPHQL);
+            expect(result[0].hasResourceDefinitions).toBe(true);
+            expect(result[0].entryPoints).not.toContain(null);
         });
 
         it("should return data subscription protocol for primary data product service", () => {
