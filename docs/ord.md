@@ -15,6 +15,7 @@
     - [CF mTLS Authentication](#cf-mtls-authentication)
 6. [Parameters](#parameters)
 7. [ORD Root Properties](#ord-root-property)
+8. [External Data Products](#external-data-products)
 
 ---
 
@@ -376,6 +377,37 @@ More information, see [ORD Document specification](https://pages.github.tools.sa
 
 ---
 
+## External Data Products
+
+When your application consumes external Data Products, the plugin auto-generates `IntegrationDependency` resources.
+
+**Required annotations on external service:**
+
+- `@cds.external`
+- `@data.product`
+- `@cds.dp.ordId` - ORD ID of the external Data Product
+
+**Add external package to your project's `package.json` dependencies:**
+
+```json
+{
+  "dependencies": {
+    "sap-sai-supplier-v1": "<package-source>"
+  }
+}
+```
+
+**Customize aspects via `@ORD.Extensions`:**
+
+```cds
+annotate sap.sai.Supplier.v1 with @ORD.Extensions: {
+    title      : 'SAI Supplier API',
+    description: 'Integration with SAP Analytics Intelligence Supplier Data Product'
+};
+```
+
+---
+
 ## Summary
 
 | Scenario                         | Approach                                                                |
@@ -388,3 +420,4 @@ More information, see [ORD Document specification](https://pages.github.tools.sa
 | Defining Custom Products         | Add `products` section manually                                         |
 | Basic Authentication             | Configure `ord.authentication.basic`                                    |
 | CF mTLS Authentication           | Set `ord.authentication.cfMtls: true` + `CF_MTLS_TRUSTED_CERTS` env var |
+| External Data Products           | Services with `@cds.external`, `@data.product`, `@cds.dp.ordId` generate IntegrationDependencies |

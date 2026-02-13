@@ -3,6 +3,8 @@ using {
     ProcessorService,
     AdminService
 } from './incidents-services';
+using {sap.sai.Supplier.v1 as SaiSupplier} from 'sap-sai-supplier-v1';
+using {sap.s4com.Supplier.v1 as S4comSupplier} from 'sap-s4com-supplier-v1';
 
 namespace sap.capire.incidents;
 
@@ -70,6 +72,24 @@ service EntertainmentDataProduct {
     entity Show   as projection on my.Show;
 
 }
+
+// Services consuming external Data Products
+service SupplierService {
+    entity SaiSuppliers   as projection on SaiSupplier.Supplier;
+    entity S4comSuppliers as projection on S4comSupplier.Supplier;
+}
+
+// Customize IntegrationDependency aspects via @ORD.Extensions
+annotate sap.sai.Supplier.v1 with @ORD.Extensions: {
+    title      : 'SAI Supplier API',
+    description: 'Integration with SAP Analytics Intelligence Supplier Data Product'
+};
+
+annotate sap.s4com.Supplier.v1 with @ORD.Extensions: {
+    title      : 'S/4HANA Cloud Supplier API',
+    description: 'Integration with SAP S/4HANA Cloud Supplier Data Product',
+    mandatory  : true
+};
 
 // INA Protocol Service - demonstrates ORD-only protocol handling
 // CDS doesn't recognize 'ina' protocol, but ORD plugin maps it to 'sap-ina-api-v1'

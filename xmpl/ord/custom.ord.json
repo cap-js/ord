@@ -77,7 +77,7 @@
             "title": "Subscription Billing Replication",
             "shortDescription": "Integration dependency for subscription billing data replication",
             "description": "This integration dependency defines the requirements for replicating subscription billing data from SAP S/4HANA.",
-            "partOfPackage": "customer.sample:package:capireordsample-api:v1",
+            "partOfPackage": "customer.sample:package:capireordsample-integrationDependency:v1",
             "visibility": "internal",
             "releaseStatus": "active",
             "mandatory": true,
