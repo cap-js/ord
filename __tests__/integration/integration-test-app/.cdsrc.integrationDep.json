@@ -1,0 +1,11 @@
+{
+    "ord": {
+        "integrationDependency": {
+            "title": "Custom External Dependencies",
+            "version": "2.0.0",
+            "releaseStatus": "beta",
+            "visibility": "internal",
+            "description": "Custom description from cdsrc"
+        }
+    }
+}
