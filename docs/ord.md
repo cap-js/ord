@@ -11,10 +11,11 @@
 4. [Products](#adding-products)
     - [Using Existing SAP Products](#1-using-an-existing-sap-product)
     - [Defining Custom Products](#2-defining-a-non-sap-product)
-5. [Authentication](#authentication)
+5. [Event Broker Integration Dependencies](#event-broker-integration-dependencies)
+6. [Authentication](#authentication)
     - [CF mTLS Authentication](#cf-mtls-authentication)
-6. [Parameters](#parameters)
-7. [ORD Root Properties](#ord-root-property)
+7. [Parameters](#parameters)
+8. [ORD Root Properties](#ord-root-property)
 
 ---
 
@@ -210,6 +211,108 @@ If the product `ordId` is invalid, the plugin will fall back to using a default 
 ### 3. No Product Settings
 
 If no explicit product settings are provided, the plugin will automatically apply its default behavior.
+
+---
+
+## Event Broker Integration Dependencies
+
+When using [**@cap-js/event-broker**](https://github.com/cap-js/event-broker) to consume events from SAP Cloud Application Event Hub, the ORD plugin can automatically generate **Integration Dependencies** documenting the consumed event types.
+
+Integration Dependencies describe external system integrations in the ORD document, specifically which event types your application subscribes to from the Event Hub.
+
+### Automatic Detection (Runtime)
+
+At runtime, the plugin automatically detects:
+
+- Event Broker configuration in `cds.requires.messaging`
+- The `ceSource` namespace from Event Broker credentials
+- Subscribed event types from active messaging services
+
+### Build-Time Configuration
+
+For `cds build --for ord` (static generation), the consumed event types cannot be automatically detected from runtime subscriptions. In this case, configure them explicitly via `consumedEventTypes`:
+
+**Example in `.cdsrc.json`:**
+
+```json
+{
+    "ord": {
+        "namespace": "customer.myapp",
+        "consumedEventTypes": [
+            "sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1",
+            "sap.s4.beh.salesorder.v1.SalesOrder.Created.v1"
+        ]
+    }
+}
+```
+
+**Or in `package.json`:**
+
+```json
+{
+    "cds": {
+        "ord": {
+            "namespace": "customer.myapp",
+            "consumedEventTypes": ["sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1"]
+        }
+    }
+}
+```
+
+### Generated Integration Dependency
+
+With the configuration above, the plugin generates an Integration Dependency like:
+
+```json
+{
+    "ordId": "customer.myapp:integrationDependency:RawEvent:v1",
+    "title": "Customer Integration Needs",
+    "shortDescription": "Integration dependency for Event Hub event subscriptions",
+    "partOfPackage": "customer.myapp:package:...:v1",
+    "version": "1.0.0",
+    "visibility": "public",
+    "releaseStatus": "active",
+    "mandatory": false,
+    "aspects": [
+        {
+            "title": "RawEvent",
+            "mandatory": false,
+            "eventResources": [
+                {
+                    "ordId": "<sourceNamespace>:eventResource:RawEvent:v1",
+                    "subset": [
+                        { "eventType": "sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1" },
+                        { "eventType": "sap.s4.beh.salesorder.v1.SalesOrder.Created.v1" }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+### Customizing Integration Dependencies
+
+You can customize Integration Dependency properties via `custom.ord.json`:
+
+```json
+{
+    "integrationDependencies": [
+        {
+            "ordId": "customer.myapp:integrationDependency:RawEvent:v1",
+            "title": "My Custom Title",
+            "shortDescription": "Custom description",
+            "visibility": "internal"
+        }
+    ]
+}
+```
+
+### Requirements
+
+- **@cap-js/event-broker** must be configured in `cds.requires.messaging`
+- Event Broker credentials must include a `ceSource` property (for namespace detection)
+- For build-time: `consumedEventTypes` must be configured in `cds.ord`
 
 ---
 

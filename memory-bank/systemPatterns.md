@@ -84,7 +84,7 @@ Priority Order (highest to lowest):
 **Pattern**: Composable template functions with inheritance
 **Implementation**: `lib/templates.js`
 
-```javascript
+````javascript
 // Base template creation
 const createAPIResourceTemplate = (serviceName, serviceDefinition, appConfig, packageIds, accessStrategies) => {
     return {
@@ -98,15 +98,57 @@ const createAPIResourceTemplate = (serviceName, serviceDefinition, appConfig, pa
 function _handleVisibility(ordExtensions, definition, defaultVisibility) {
     // Applies visibility rules with fallbacks
 }
-```
-
 **Benefits**:
 
 - Consistent ORD document structure
 - Easy customization through extensions
 - Reusable template components
 
-### 5. Authentication Middleware Pattern
+### 5. Event Broker Adapter Pattern
+
+**Pattern**: Plugin detection and Integration Dependency generation
+**Implementation**: `lib/eventBrokerAdapter.js`
+
+```javascript
+// Detect Event Broker configuration
+function isEventBrokerConfigured(envRequires = cds.env?.requires) {
+    // Checks for event-broker kind in messaging services
+    return Object.values(envRequires).some(
+        config => config.kind === 'event-broker' ||
+                  config.vcap?.label === 'event-broker'
+    );
+}
+
+// Extract consumed event types for ORD
+function getEventBrokerOrdInfo(options) {
+    // Combines runtime subscriptions + build-time config (consumedEventTypes)
+    return {
+        namespace: extractedNamespace,
+        eventTypes: [...],
+        hasEvents: true
+    };
+}
+````
+
+**Integration Flow**:
+
+```
+Event Broker Detection → Namespace Extraction → Event Type Collection → Integration Dependency Template
+```
+
+**Configuration Options**:
+
+- **Runtime**: Auto-detects subscribed events from messaging services
+- **Build-time**: `cds.ord.consumedEventTypes` array in `.cdsrc.json` or `package.json`
+- **Namespace**: Extracted from Event Broker credentials `ceSource` path
+
+**Key Design Decisions**:
+
+1. **Dual Namespace Handling**: `ordNamespace` for Integration Dependency ordId, `sourceNamespace` for eventResource ordId
+2. **Package Selection**: Uses visibility-based `_getPackageID()` consistent with other resources
+3. **Graceful Degradation**: No Integration Dependencies if Event Broker not configured or no events found
+
+### 6. Authentication Middleware Pattern
 
 **Pattern**: Pluggable authentication with multiple strategies
 **Implementation**: `lib/authentication.js`
@@ -134,7 +176,7 @@ async function authenticate(req, res, next) {
 - **Basic**: Username/password with bcrypt hashing
 - **Future**: UCL-mTLS for enterprise scenarios
 
-### 6. Test Helper Pattern
+### 7. Test Helper Pattern
 
 **Pattern**: Centralized test utility functions for consistent authentication mocking
 **Implementation**: `__tests__/unit/utils/test-helpers.js`

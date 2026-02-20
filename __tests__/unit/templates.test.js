@@ -13,6 +13,7 @@ const {
     createAPIResourceTemplate,
     createEventResourceTemplate,
     createMCPAPIResourceTemplate,
+    createIntegrationDependencyTemplate,
     _getEntityTypeMappings,
     _getExposedEntityTypes,
     _propagateORDVisibility,
@@ -1020,5 +1021,232 @@ describe("templates", () => {
             const eventDefinition = model.definitions["MyService.ServiceEvent"];
             expect(eventDefinition[ORD_EXTENSIONS_PREFIX + "visibility"]).toBeUndefined();
         });
+    });
+});
+
+describe("createIntegrationDependencyTemplate", () => {
+    let loggerSpy;
+
+    beforeEach(() => {
+        loggerSpy = jest.spyOn(Logger, "warn").mockImplementation(() => {});
+    });
+
+    afterEach(() => {
+        loggerSpy.mockRestore();
+    });
+
+    it("should create valid integration dependency with all required fields", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.eventsource",
+            eventTypes: ["sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1"],
+            packageIds: ["customer.myapp:package:main:v1"],
+            packageVersion: "1.0.0",
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+
+        expect(result).toBeDefined();
+        expect(result.ordId).toBe("customer.myapp:integrationDependency:RawEvent:v1");
+        expect(result.title).toBe("Customer Integration Needs");
+        expect(result.partOfPackage).toBe("customer.myapp:package:main:v1");
+        expect(result.version).toBe("1.0.0");
+        expect(result.visibility).toBe("public");
+        expect(result.releaseStatus).toBe("active");
+        expect(result.mandatory).toBe(false);
+        expect(result.aspects).toHaveLength(1);
+        expect(result.aspects[0].title).toBe("RawEvent");
+        expect(result.aspects[0].eventResources).toHaveLength(1);
+        expect(result.aspects[0].eventResources[0].ordId).toBe("external.eventsource:eventResource:RawEvent:v1");
+        expect(result.aspects[0].eventResources[0].subset).toHaveLength(1);
+        expect(result.aspects[0].eventResources[0].subset[0].eventType).toBe(
+            "sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1",
+        );
+    });
+
+    it("should create integration dependency with multiple event types", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.source",
+            eventTypes: ["event.type.one", "event.type.two", "event.type.three"],
+            packageIds: ["customer.myapp:package:main:v1"],
+            packageVersion: "2.0.0",
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+
+        expect(result.aspects[0].eventResources[0].subset).toHaveLength(3);
+        expect(result.aspects[0].eventResources[0].subset[0].eventType).toBe("event.type.one");
+        expect(result.aspects[0].eventResources[0].subset[1].eventType).toBe("event.type.two");
+        expect(result.aspects[0].eventResources[0].subset[2].eventType).toBe("event.type.three");
+    });
+
+    it("should return null when ordNamespace is missing", () => {
+        const options = {
+            sourceNamespace: "external.source",
+            eventTypes: ["event.one"],
+            packageIds: ["customer.myapp:package:main:v1"],
+            packageVersion: "1.0.0",
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+        expect(result).toBeNull();
+        expect(loggerSpy).toHaveBeenCalled();
+    });
+
+    it("should return null when sourceNamespace is missing", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            eventTypes: ["event.one"],
+            packageIds: ["customer.myapp:package:main:v1"],
+            packageVersion: "1.0.0",
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+        expect(result).toBeNull();
+    });
+
+    it("should return null when no matching package found", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.source",
+            eventTypes: ["event.one"],
+            packageIds: [], // Empty packageIds
+            packageVersion: "1.0.0",
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+        expect(result).toBeNull();
+    });
+
+    it("should return null when packageVersion is missing", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.source",
+            eventTypes: ["event.one"],
+            packageIds: ["customer.myapp:package:main:v1"],
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+        expect(result).toBeNull();
+    });
+
+    it("should return null when eventTypes is empty", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.source",
+            eventTypes: [],
+            packageIds: ["customer.myapp:package:main:v1"],
+            packageVersion: "1.0.0",
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+        expect(result).toBeNull();
+    });
+
+    it("should return null when eventTypes is undefined", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.source",
+            packageIds: ["customer.myapp:package:main:v1"],
+            packageVersion: "1.0.0",
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+        expect(result).toBeNull();
+    });
+
+    it("should allow customization via ordExtensions", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.source",
+            eventTypes: ["event.one"],
+            packageIds: ["customer.myapp:package:main:v1", "customer.myapp:package:main-internal:v1"],
+            packageVersion: "1.0.0",
+            ordExtensions: {
+                title: "Custom Title",
+                shortDescription: "Custom short description",
+                visibility: "internal",
+                releaseStatus: "beta",
+                mandatory: true,
+                description: "Full description of the integration dependency",
+            },
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+
+        expect(result.title).toBe("Custom Title");
+        expect(result.shortDescription).toBe("Custom short description");
+        expect(result.visibility).toBe("internal");
+        expect(result.partOfPackage).toBe("customer.myapp:package:main-internal:v1");
+        expect(result.releaseStatus).toBe("beta");
+        expect(result.mandatory).toBe(true);
+        expect(result.description).toBe("Full description of the integration dependency");
+    });
+
+    it("should preserve default values when ordExtensions is empty", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.source",
+            eventTypes: ["event.one"],
+            packageIds: ["customer.myapp:package:main:v1"],
+            packageVersion: "1.0.0",
+            ordExtensions: {},
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+
+        expect(result.title).toBe("Customer Integration Needs");
+        expect(result.visibility).toBe("public");
+        expect(result.releaseStatus).toBe("active");
+        expect(result.mandatory).toBe(false);
+    });
+
+    it("should use different namespaces for integrationDependency and eventResource", () => {
+        const options = {
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "sap.eventbroker.ns",
+            eventTypes: ["sap.s4.event.v1"],
+            packageIds: ["customer.myapp:package:main:v1"],
+            packageVersion: "1.0.0",
+        };
+
+        const result = createIntegrationDependencyTemplate(options);
+
+        // integrationDependency belongs to the consuming application
+        expect(result.ordId).toBe("customer.myapp:integrationDependency:RawEvent:v1");
+        // eventResource references the external event source
+        expect(result.aspects[0].eventResources[0].ordId).toBe("sap.eventbroker.ns:eventResource:RawEvent:v1");
+    });
+
+    it("should select correct package based on visibility", () => {
+        const packageIds = [
+            "customer.myapp:package:api:v1",
+            "customer.myapp:package:api-internal:v1",
+            "customer.myapp:package:api-private:v1",
+        ];
+
+        // Public visibility should select the package without -internal/-private suffix
+        const publicResult = createIntegrationDependencyTemplate({
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.source",
+            eventTypes: ["event.one"],
+            packageIds,
+            packageVersion: "1.0.0",
+        });
+        expect(publicResult.partOfPackage).toBe("customer.myapp:package:api:v1");
+        expect(publicResult.visibility).toBe("public");
+
+        // Internal visibility should select the -internal package
+        const internalResult = createIntegrationDependencyTemplate({
+            ordNamespace: "customer.myapp",
+            sourceNamespace: "external.source",
+            eventTypes: ["event.one"],
+            packageIds,
+            packageVersion: "1.0.0",
+            ordExtensions: { visibility: "internal" },
+        });
+        expect(internalResult.partOfPackage).toBe("customer.myapp:package:api-internal:v1");
+        expect(internalResult.visibility).toBe("internal");
     });
 });
