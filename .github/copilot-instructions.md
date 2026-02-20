@@ -37,17 +37,21 @@ Data product services may carry a suffixed name `.vN`; `_extractVersionFromServi
 
 ODM or relationship annotations (`@ODM.entityName`, `@EntityRelationship.entityType`) generate entityTypeMappings/exposedEntityTypes. ODM mappings flagged `isODMMapping` are NOT emitted as entityTypes (only referenced). SAP policy levels (e.g. `sap:core:v1`) suppress entity type emission (central registry expectation).
 
-## 8. Authentication Layer
+## 8. Event Broker Integration Dependencies
+
+`eventBrokerAdapter.js` detects @cap-js/event-broker configuration and generates Integration Dependencies. Dual namespace handling: `ordNamespace` for integrationDependency ordId (consuming app), `sourceNamespace` for eventResource ordId (external source from ceSource). Configuration: `cds.ord.consumedEventTypes` array for build-time. Package selection uses `_getPackageID()` with visibility. Graceful skip if Event Broker not configured or no events.
+
+## 9. Authentication Layer
 
 `authentication.js` builds `accessStrategies` array (currently open/basic). Environment precedence: `ORD_AUTH_TYPE` then `.cdsrc.json`. Basic auth expects bcrypt hashes (see README). When adding new strategy, propagate through `getAuthConfig()` and templates (each resourceDefinition includes `accessStrategies`).
 
-## 9. Testing Conventions
+## 10. Testing Conventions
 
 Test types:
 `__tests__/ord.e2e.test.js` (integration / feature)—favor field assertions over brittle full-document snapshots for dynamic/custom merges (especially MCP). Snapshot tests still exist elsewhere; update with caution (`npm test -- -u`). Unit/behavior tests in `unittest/` & fine-grained mocks in `__tests__/__mocks__`.
 When altering merge or template logic: add/adjust a focused assertion in e2e rather than broad snapshot regeneration unless structure fundamentally changes.
 
-## 10. Safe Change Checklist (always)
+## 11. Safe Change Checklist (always)
 
 1. Read memory bank (`memory-bank/*.md`) for active context & architectural constraints.
 2. If modifying model-related logic: inspect relevant template/helper in `templates.js` & invocation in `ord.js`.
@@ -55,18 +59,18 @@ When altering merge or template logic: add/adjust a focused assertion in e2e rat
 4. Avoid introducing duplicate logic—extend existing template helpers instead.
 5. Preserve `apiProtocol` when merging custom overrides; never silently drop `resourceDefinitions`.
 
-## 11. Common Pitfalls
+## 12. Common Pitfalls
 
 - Forgetting to set `cds.root` before loading CSN in tests → custom file merge fails.
 - Adding snapshot assertions for mutable counts (API/Event resources can grow with model) → flaky CI.
 - Overwriting MCP ordId without preserving protocol/definitions (merge helper now safeguards—maintain it when refactoring).
 - Emitting private resources or unused packages—ensure filtering stays intact after changes.
 
-## 12. Useful File Map
+## 13. Useful File Map
 
-`lib/ord.js` (entry orchestration) | `lib/templates.js` (all generation rules) | `lib/extendOrdWithCustom.js` (merge by ordId + null cleanup) | `lib/defaults.js` (package/product defaults) | `lib/authentication.js` (access strategies) | `lib/interopCsn.js` (interop export) | `cds-plugin.js` (registration) | `__tests__/ord.e2e.test.js` (integration patterns) | `docs/ord.md` (user customization guide).
+`lib/ord.js` (entry orchestration) | `lib/templates.js` (all generation rules) | `lib/extendOrdWithCustom.js` (merge by ordId + null cleanup) | `lib/defaults.js` (package/product defaults) | `lib/authentication.js` (access strategies) | `lib/interopCsn.js` (interop export) | `lib/eventBrokerAdapter.js` (Event Broker detection) | `cds-plugin.js` (registration) | `__tests__/ord.e2e.test.js` (integration patterns) | `docs/ord.md` (user customization guide).
 
-## 13. When Unsure
+## 14. When Unsure
 
 Compare behavior using a local `npm test` run; prefer adding a minimal assertion over expanding snapshots; document any new rule in `systemPatterns.md` + update this file if it changes core flow or precedence.
 

@@ -4,6 +4,28 @@
 
 ### Recent Development Activity
 
+**Event Broker Integration Dependencies (February 13, 2026)**:
+
+- **Objective**: Generate ORD Integration Dependencies for applications consuming events via @cap-js/event-broker
+- **Problem Addressed**: Applications consuming events from SAP Cloud Application Event Hub had no ORD documentation for their event subscriptions
+- **Solution Implemented**:
+    - Created `lib/eventBrokerAdapter.js` for Event Broker detection and event type extraction
+    - Added `createIntegrationDependencyTemplate()` in `lib/templates.js` for generating Integration Dependency resources
+    - Integrated Event Broker support into `lib/ord.js` via `_addEventBrokerIntegrationDependencies()`
+    - Added `consumedEventTypes` configuration option for build-time event specification
+- **Key Design Decisions**:
+    - **Dual Namespace Handling**: `ordNamespace` for Integration Dependency ordId (consuming app), `sourceNamespace` for eventResource ordId (event source)
+    - **Visibility-based Package Selection**: Uses `_getPackageID()` consistent with other ORD resources
+    - **Graceful Degradation**: No Integration Dependencies generated if Event Broker not configured
+    - **Build-time Configuration**: `cds.ord.consumedEventTypes` array for static ORD generation
+- **Documentation**: Added Event Broker section to `docs/ord.md` explaining configuration options
+- **Testing**:
+    - 45 unit tests for eventBrokerAdapter
+    - 13 template tests for createIntegrationDependencyTemplate
+    - 8 E2E tests for Integration Dependency generation
+- **Architecture Updates**: Updated `memory-bank/systemPatterns.md` with Event Broker Adapter Pattern
+- **Test Results**: All 419 tests pass (excluding pre-existing supertest dependency issue)
+
 **Test Code Refactoring - Clean Code Implementation (December 15, 2025)**:
 
 - **Objective**: Eliminate duplicate authentication mock configurations across test files following Clean Code principles

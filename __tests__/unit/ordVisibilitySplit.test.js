@@ -208,9 +208,30 @@ describe("templates", () => {
             expect(result).toBe("sap.test:package:test-simple-entityType-match:v1");
         });
 
-        it("should use namespace fallback when no resourceType is provided", () => {
+        it("should select first package without -internal/-private suffix when no resourceType is provided", () => {
             const result = _getPackageID("customer.testNamespace", packageIds);
-            expect(result).toBe("customer.testNamespace:package:fallback-package:v1");
+            // Now finds first package without -internal/-private suffix (public visibility default)
+            expect(result).toBe("sap.test:package:test-entityType-public:v1");
+        });
+
+        it("should use namespace fallback when no matching package found for visibility", () => {
+            const internalOnlyPackages = [
+                "sap.test:package:test-api-internal:v1",
+                "customer.testNamespace:package:fallback:v1",
+            ];
+            // Public visibility but only internal packages available - falls back to namespace match
+            const result = _getPackageID("customer.testNamespace", internalOnlyPackages);
+            expect(result).toBe("customer.testNamespace:package:fallback:v1");
+        });
+
+        it("should find internal package when visibility is internal", () => {
+            const mixedPackages = [
+                "sap.test:package:test-api:v1",
+                "sap.test:package:test-api-internal:v1",
+                "customer.testNamespace:package:fallback:v1",
+            ];
+            const result = _getPackageID("customer.testNamespace", mixedPackages, null, "internal");
+            expect(result).toBe("sap.test:package:test-api-internal:v1");
         });
 
         it("should return undefined when no packageIds are provided", () => {
