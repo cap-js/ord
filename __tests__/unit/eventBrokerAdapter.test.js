@@ -389,6 +389,74 @@ describe("eventBrokerAdapter", () => {
             expect(result).toHaveLength(1);
             expect(result).toContain("event.one");
         });
+
+        test("should fallback to ordConfig.consumedEventTypes when no runtime services found", () => {
+            cds.services = {};
+
+            const result = getAllConsumedEventTypes({
+                ordConfig: {
+                    consumedEventTypes: ["sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1"],
+                },
+            });
+            expect(result).toHaveLength(1);
+            expect(result).toContain("sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1");
+        });
+
+        test("should handle single string consumedEventTypes in ordConfig", () => {
+            cds.services = {};
+
+            const result = getAllConsumedEventTypes({
+                ordConfig: {
+                    consumedEventTypes: "sap.s4.beh.salesorder.v1.SalesOrder.Created.v1",
+                },
+            });
+            expect(result).toHaveLength(1);
+            expect(result).toContain("sap.s4.beh.salesorder.v1.SalesOrder.Created.v1");
+        });
+
+        test("should filter blocked event types from ordConfig.consumedEventTypes", () => {
+            cds.services = {};
+
+            const result = getAllConsumedEventTypes({
+                ordConfig: {
+                    consumedEventTypes: ["valid.event.v1", "*", "cds.messaging.error"],
+                },
+            });
+            expect(result).toHaveLength(1);
+            expect(result).toContain("valid.event.v1");
+            expect(result).not.toContain("*");
+            expect(result).not.toContain("cds.messaging.error");
+        });
+
+        test("should not use ordConfig when runtime services have events", () => {
+            cds.services = {
+                messaging: {
+                    constructor: { name: "EventBroker" },
+                    subscribedTopics: new Set(["runtime.event.v1"]),
+                },
+            };
+
+            const result = getAllConsumedEventTypes({
+                ordConfig: {
+                    consumedEventTypes: ["config.event.v1"],
+                },
+            });
+            expect(result).toHaveLength(1);
+            expect(result).toContain("runtime.event.v1");
+            expect(result).not.toContain("config.event.v1");
+        });
+
+        test("should ignore non-string entries in ordConfig.consumedEventTypes", () => {
+            cds.services = {};
+
+            const result = getAllConsumedEventTypes({
+                ordConfig: {
+                    consumedEventTypes: ["valid.event.v1", 123, null, { type: "object" }],
+                },
+            });
+            expect(result).toHaveLength(1);
+            expect(result).toContain("valid.event.v1");
+        });
     });
 
     describe("getEventBrokerNamespace", () => {
