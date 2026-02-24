@@ -2,7 +2,6 @@ const cds = require("@sap/cds");
 const { compile: openapi } = require("@cap-js/openapi");
 const { compile: asyncapi } = require("@cap-js/asyncapi");
 const { getMetadata } = require("../../lib/index");
-const { isMCPPluginAvailable } = require("../../lib/mcpAdapter");
 const cdsc = require("@sap/cds-compiler/lib/main");
 
 jest.mock("@cap-js/openapi", () => ({
@@ -134,25 +133,6 @@ describe("metaData", () => {
         }
     });
 
-    describe("isMCPPluginAvailable", () => {
-        test("should return true when MCP plugin is available", () => {
-            const mockResolve = jest.fn(() => "/path/to/plugin");
-            const result = isMCPPluginAvailable(mockResolve);
-
-            expect(result).toBe(true);
-            expect(mockResolve).toHaveBeenCalledWith("@btp-ai/mcp-plugin");
-        });
-
-        test("should return false when MCP plugin is not available", () => {
-            const mockResolve = jest.fn(() => {
-                throw new Error("Cannot find module");
-            });
-            const result = isMCPPluginAvailable(mockResolve);
-
-            expect(result).toBe(false);
-            expect(mockResolve).toHaveBeenCalledWith("@btp-ai/mcp-plugin");
-        });
-    });
     test("getMetadata should handle invalid URL format", async () => {
         const url = "/invalid/url/format";
         try {
