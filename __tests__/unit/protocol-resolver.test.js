@@ -202,7 +202,7 @@ describe("protocol-resolver", () => {
             );
         });
 
-        it("should handle ina protocol even if other prodocols are present", () => {
+        it("should handle ina protocol even if other protocols are present", () => {
             const model = cds.linked(`
                 @protocol: ['rest', 'graphql', 'ina']
                 service MyService {
