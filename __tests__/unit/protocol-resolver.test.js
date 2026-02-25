@@ -161,5 +161,63 @@ describe("protocol-resolver", () => {
             expect(result).toHaveLength(1);
             expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.ODATA_V4);
         });
+
+        it("should handle multiple explicit protocols and include OData if present", () => {
+            const model = cds.linked(`
+                @protocol: ['rest', 'odata']
+                service MyService {
+                    entity Books { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["MyService"];
+            const result = resolveApiResourceProtocol("MultiProtocolService", srvDefinition, {
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            expect(result).toHaveLength(2);
+            const protocols = result.map((r) => r.apiProtocol);
+            expect(protocols).toContain(ORD_API_PROTOCOL.REST);
+            expect(protocols).toContain(ORD_API_PROTOCOL.ODATA_V4);
+        });
+
+        it("should handle multiple explicit protocols and skip unsupported ones", () => {
+            const model = cds.linked(`
+                @protocol: ['rest', 'graphql', 'unknown-protocol']
+                service MyService {
+                    entity Books { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["MyService"];
+            const result = resolveApiResourceProtocol("MixedProtocolService", srvDefinition, {
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+
+            expect(result).toHaveLength(1);
+            expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.REST);
+            expect(loggerWarnSpy).toHaveBeenCalledWith(
+                expect.stringContaining("plugin cannot generate its resource definitions yet"),
+            );
+            expect(loggerWarnSpy).toHaveBeenCalledWith(
+                expect.stringContaining("Unknown protocol 'unknown-protocol' is not supported"),
+            );
+        });
+
+        it("should handle ina protocol even if other prodocols are present", () => {
+            const model = cds.linked(`
+                @protocol: ['rest', 'graphql', 'ina']
+                service MyService {
+                    entity Books { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["MyService"];
+            const result = resolveApiResourceProtocol("ComplexService", srvDefinition, {
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+            expect(result).toHaveLength(2);
+            const inaProtocol = result.find((r) => r.apiProtocol === ORD_API_PROTOCOL.SAP_INA);
+            expect(inaProtocol).toBeDefined();
+            expect(inaProtocol.entryPoints).toEqual([]);
+            expect(inaProtocol.hasResourceDefinitions).toBe(false);
+        });
     });
 });
