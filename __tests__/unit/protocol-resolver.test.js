@@ -8,22 +8,22 @@ describe("protocol-resolver", () => {
     describe("_getExplicitProtocol", () => {
         it("should return null when no @protocol annotation", () => {
             const srvDefinition = { name: "MyService" };
-            expect(_getExplicitProtocol(srvDefinition)).toBeNull();
+            expect(_getExplicitProtocol(srvDefinition)).toEqual([]);
         });
 
         it("should return string protocol as-is", () => {
             const srvDefinition = { "name": "MyService", "@protocol": "rest" };
-            expect(_getExplicitProtocol(srvDefinition)).toBe("rest");
+            expect(_getExplicitProtocol(srvDefinition)).toEqual(["rest"]);
         });
 
-        it("should return first protocol from array", () => {
+        it("should return entire array", () => {
             const srvDefinition = { "name": "MyService", "@protocol": ["odata", "rest"] };
-            expect(_getExplicitProtocol(srvDefinition)).toBe("odata");
+            expect(_getExplicitProtocol(srvDefinition)).toEqual(["odata", "rest"]);
         });
 
         it("should handle single-item array", () => {
             const srvDefinition = { "name": "MyService", "@protocol": ["graphql"] };
-            expect(_getExplicitProtocol(srvDefinition)).toBe("graphql");
+            expect(_getExplicitProtocol(srvDefinition)).toEqual(["graphql"]);
         });
     });
 
