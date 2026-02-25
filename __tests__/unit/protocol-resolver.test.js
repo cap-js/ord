@@ -6,12 +6,12 @@ const Logger = require("../../lib/logger");
 
 describe("protocol-resolver", () => {
     describe("_getExplicitProtocol", () => {
-        it("should return null when no @protocol annotation", () => {
+        it("should return empty list when no @protocol annotation", () => {
             const srvDefinition = { name: "MyService" };
             expect(_getExplicitProtocol(srvDefinition)).toEqual([]);
         });
 
-        it("should return string protocol as-is", () => {
+        it("should return single-item array when @protocol is string", () => {
             const srvDefinition = { "name": "MyService", "@protocol": "rest" };
             expect(_getExplicitProtocol(srvDefinition)).toEqual(["rest"]);
         });
