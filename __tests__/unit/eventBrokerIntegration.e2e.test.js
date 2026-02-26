@@ -162,7 +162,7 @@ describe("Event Broker Integration Dependencies E2E", () => {
         expect(packageIds).toContain(intDep.partOfPackage);
     });
 
-    it("should pass fallbackNamespace to getEventBrokerOrdInfo", () => {
+    it("should pass fallbackNamespace and csn to getEventBrokerOrdInfo", () => {
         cds.env.ord = cds.env.ord || {};
         cds.env.ord.namespace = "test.namespace";
 
@@ -175,9 +175,12 @@ describe("Event Broker Integration Dependencies E2E", () => {
 
         ord(csn);
 
-        expect(eventBrokerAdapter.getEventBrokerOrdInfo).toHaveBeenCalledWith({
-            fallbackNamespace: "test.namespace",
-        });
+        expect(eventBrokerAdapter.getEventBrokerOrdInfo).toHaveBeenCalledWith(
+            expect.objectContaining({
+                fallbackNamespace: "test.namespace",
+                csn: expect.any(Object),
+            }),
+        );
     });
 
     it("should handle single event type", () => {

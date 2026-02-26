@@ -19,6 +19,7 @@ const {
     isEventBrokerReady,
     getEventBrokerConfigs,
     extractNamespaceFromCredentials,
+    getConsumedEventTypesFromCsn,
     getConsumedEventTypesFromService,
     getAllConsumedEventTypes,
     getEventBrokerNamespace,
@@ -315,6 +316,164 @@ describe("eventBrokerAdapter", () => {
         });
     });
 
+    describe("getConsumedEventTypesFromCsn", () => {
+        test("should extract event types with @ORD.Extensions.consumedEvent annotation", () => {
+            const csn = {
+                definitions: {
+                    "MyService.BusinessPartnerChanged": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": true,
+                        "@topic": "sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1",
+                    },
+                },
+            };
+
+            const result = getConsumedEventTypesFromCsn(csn);
+            expect(result).toHaveLength(1);
+            expect(result).toContain("sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1");
+        });
+
+        test("should support shorthand @ORD.consumedEvent annotation", () => {
+            const csn = {
+                definitions: {
+                    "MyService.SalesOrderCreated": {
+                        "kind": "event",
+                        "@ORD.consumedEvent": true,
+                        "@topic": "sap.s4.beh.salesorder.v1.SalesOrder.Created.v1",
+                    },
+                },
+            };
+
+            const result = getConsumedEventTypesFromCsn(csn);
+            expect(result).toHaveLength(1);
+            expect(result).toContain("sap.s4.beh.salesorder.v1.SalesOrder.Created.v1");
+        });
+
+        test("should use fully qualified name when @topic is missing", () => {
+            const csn = {
+                definitions: {
+                    "sap.s4.beh.CustomEvent": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": true,
+                    },
+                },
+            };
+
+            const result = getConsumedEventTypesFromCsn(csn);
+            expect(result).toHaveLength(1);
+            expect(result).toContain("sap.s4.beh.CustomEvent");
+        });
+
+        test("should extract multiple events", () => {
+            const csn = {
+                definitions: {
+                    "Service.Event1": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": true,
+                        "@topic": "external.event.one.v1",
+                    },
+                    "Service.Event2": {
+                        "kind": "event",
+                        "@ORD.consumedEvent": true,
+                        "@topic": "external.event.two.v1",
+                    },
+                },
+            };
+
+            const result = getConsumedEventTypesFromCsn(csn);
+            expect(result).toHaveLength(2);
+            expect(result).toContain("external.event.one.v1");
+            expect(result).toContain("external.event.two.v1");
+        });
+
+        test("should ignore events without consumed annotation", () => {
+            const csn = {
+                definitions: {
+                    "Service.InternalEvent": {
+                        "kind": "event",
+                        "@topic": "internal.event.v1",
+                    },
+                    "Service.ConsumedEvent": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": true,
+                        "@topic": "consumed.event.v1",
+                    },
+                },
+            };
+
+            const result = getConsumedEventTypesFromCsn(csn);
+            expect(result).toHaveLength(1);
+            expect(result).toContain("consumed.event.v1");
+            expect(result).not.toContain("internal.event.v1");
+        });
+
+        test("should ignore non-event definitions", () => {
+            const csn = {
+                definitions: {
+                    "Service.Entity": {
+                        "kind": "entity",
+                        "@ORD.Extensions.consumedEvent": true,
+                    },
+                    "Service.ConsumedEvent": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": true,
+                        "@topic": "consumed.event.v1",
+                    },
+                },
+            };
+
+            const result = getConsumedEventTypesFromCsn(csn);
+            expect(result).toHaveLength(1);
+            expect(result).toContain("consumed.event.v1");
+        });
+
+        test("should return empty array when csn is null", () => {
+            const result = getConsumedEventTypesFromCsn(null);
+            expect(result).toHaveLength(0);
+        });
+
+        test("should return empty array when csn.definitions is undefined", () => {
+            const result = getConsumedEventTypesFromCsn({});
+            expect(result).toHaveLength(0);
+        });
+
+        test("should filter out blocked event types", () => {
+            const csn = {
+                definitions: {
+                    "Service.WildcardEvent": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": true,
+                        "@topic": "*",
+                    },
+                    "Service.ValidEvent": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": true,
+                        "@topic": "valid.event.v1",
+                    },
+                },
+            };
+
+            const result = getConsumedEventTypesFromCsn(csn);
+            expect(result).toHaveLength(1);
+            expect(result).toContain("valid.event.v1");
+        });
+
+        test("should ignore annotation with false value", () => {
+            const csn = {
+                definitions: {
+                    "Service.DisabledEvent": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": false,
+                        "@topic": "disabled.event.v1",
+                    },
+                },
+            };
+
+            const result = getConsumedEventTypesFromCsn(csn);
+            expect(result).toHaveLength(0);
+        });
+    });
+
     describe("getAllConsumedEventTypes", () => {
         test("should aggregate events from multiple EventBroker services", () => {
             cds.services = {
@@ -456,6 +615,79 @@ describe("eventBrokerAdapter", () => {
             });
             expect(result).toHaveLength(1);
             expect(result).toContain("valid.event.v1");
+        });
+
+        test("should use CSN events as second priority after runtime services", () => {
+            cds.services = {};
+            const csn = {
+                definitions: {
+                    "Service.ConsumedEvent": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": true,
+                        "@topic": "csn.event.v1",
+                    },
+                },
+            };
+
+            const result = getAllConsumedEventTypes({
+                csn,
+                ordConfig: {
+                    consumedEventTypes: ["config.event.v1"],
+                },
+            });
+            expect(result).toHaveLength(1);
+            expect(result).toContain("csn.event.v1");
+            expect(result).not.toContain("config.event.v1");
+        });
+
+        test("should fallback to ordConfig when CSN has no consumed events", () => {
+            cds.services = {};
+            const csn = {
+                definitions: {
+                    "Service.RegularEvent": {
+                        "kind": "event",
+                        "@topic": "regular.event.v1",
+                    },
+                },
+            };
+
+            const result = getAllConsumedEventTypes({
+                csn,
+                ordConfig: {
+                    consumedEventTypes: ["config.event.v1"],
+                },
+            });
+            expect(result).toHaveLength(1);
+            expect(result).toContain("config.event.v1");
+        });
+
+        test("should prioritize runtime services over CSN events", () => {
+            cds.services = {
+                messaging: {
+                    constructor: { name: "EventBroker" },
+                    subscribedTopics: new Set(["runtime.event.v1"]),
+                },
+            };
+            const csn = {
+                definitions: {
+                    "Service.ConsumedEvent": {
+                        "kind": "event",
+                        "@ORD.Extensions.consumedEvent": true,
+                        "@topic": "csn.event.v1",
+                    },
+                },
+            };
+
+            const result = getAllConsumedEventTypes({
+                csn,
+                ordConfig: {
+                    consumedEventTypes: ["config.event.v1"],
+                },
+            });
+            expect(result).toHaveLength(1);
+            expect(result).toContain("runtime.event.v1");
+            expect(result).not.toContain("csn.event.v1");
+            expect(result).not.toContain("config.event.v1");
         });
     });
 

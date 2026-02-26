@@ -230,9 +230,35 @@ At runtime, the plugin automatically detects:
 
 ### Build-Time Configuration
 
-For `cds build --for ord` (static generation), the consumed event types cannot be automatically detected from runtime subscriptions. In this case, configure them explicitly via `consumedEventTypes`:
+For `cds build --for ord` (static generation), consumed event types can be defined in two ways:
 
-**Example in `.cdsrc.json`:**
+#### Option 1: CDS Annotations (Recommended)
+
+Define consumed events directly in your CDS model using `@ORD.Extensions.consumedEvent` (or the shorthand `@ORD.consumedEvent`):
+
+```cds
+service EventsService {
+    // Mark event as consumed for ORD Integration Dependencies
+    @ORD.Extensions.consumedEvent
+    @topic: 'sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1'
+    event BusinessPartnerChanged {
+        BusinessPartner : String;
+    }
+
+    // Multiple consumed events supported
+    @ORD.consumedEvent  // shorthand annotation
+    @topic: 'sap.s4.beh.salesorder.v1.SalesOrder.Created.v1'
+    event SalesOrderCreated {
+        SalesOrder : String;
+    }
+}
+```
+
+> **Note:** The `@topic` annotation specifies the external event type name used in the Integration Dependency. If omitted, the fully qualified CDS event name is used.
+
+#### Option 2: Configuration (Fallback)
+
+Alternatively, configure consumed event types via `consumedEventTypes` in `.cdsrc.json`:
 
 ```json
 {
@@ -258,6 +284,8 @@ For `cds build --for ord` (static generation), the consumed event types cannot b
     }
 }
 ```
+
+> **Priority:** CDS annotations take precedence over configuration. Use configuration only if you cannot annotate the CDS model.
 
 ### Generated Integration Dependency
 
@@ -312,7 +340,7 @@ You can customize Integration Dependency properties via `custom.ord.json`:
 
 - **@cap-js/event-broker** must be configured in `cds.requires.messaging`
 - Event Broker credentials must include a `ceSource` property (for namespace detection)
-- For build-time: `consumedEventTypes` must be configured in `cds.ord`
+- For build-time: Use `@ORD.Extensions.consumedEvent` annotations in CDS **or** configure `consumedEventTypes` in `cds.ord`
 
 ---
 
