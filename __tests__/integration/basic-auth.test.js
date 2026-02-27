@@ -241,9 +241,9 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should contain expected resources", () => {
-            expect(ordDocument.apiResources).toHaveLength(1);
+            expect(ordDocument.apiResources).toHaveLength(2);
             expect(ordDocument.eventResources).toHaveLength(1);
-            expect(ordDocument.packages).toHaveLength(1);
+            expect(ordDocument.packages).toHaveLength(2);
         });
 
         test("should have 'basic-auth' accessStrategies in all resources", () => {
