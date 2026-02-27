@@ -1,0 +1,10 @@
+{
+    "integrationDependencies": [
+        {
+            "ordId": "customer.testapp:integrationDependency:externalDependencies:v1",
+            "version": "2.0.0",
+            "title": "Custom External Dependencies",
+            "description": "Patched via custom.ord.json"
+        }
+    ]
+}
