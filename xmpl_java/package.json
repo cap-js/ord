@@ -5,5 +5,8 @@
     "license": "ISC",
     "dependencies": {
         "@cap-js/ord": "file:../../ord"
+    },
+    "devDependencies": {
+        "@sap/cds-dk": ">=8"
     }
 }

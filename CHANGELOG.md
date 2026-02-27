@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.4.4 (2026-02-05)
+
+## What's Changed
+
+- fix: support INA protocol and prevent null entryPoints by @zongqichen in https://github.com/cap-js/ord/pull/351
+- fix: lock cds-compiler to 6.6.2 via overrides by @zongqichen in https://github.com/cap-js/ord/pull/352
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.4.3...v1.4.4
+
 ## 1.4.3 (2026-01-29)
 
 ## What's Changed

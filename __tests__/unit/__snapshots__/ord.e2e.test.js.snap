@@ -1519,6 +1519,24 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
       },
       "kind": "entity",
     },
+    "sap.capdpprod.DPBooks.v1.Dummy_1": {
+      "elements": {
+        "a": {
+          "type": "cds.Integer",
+        },
+        "b": {
+          "type": "cds.Integer",
+        },
+        "c": {
+          "type": "cds.Integer",
+        },
+        "id": {
+          "key": true,
+          "type": "cds.Integer",
+        },
+      },
+      "kind": "entity",
+    },
     "sap.capdpprod.DPBooks.v1.Genres": {
       "@UI.Identification": [
         {
