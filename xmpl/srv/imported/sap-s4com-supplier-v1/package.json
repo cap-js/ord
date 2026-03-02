@@ -1,0 +1,13 @@
+{
+  "name": "sap-s4com-supplier-v1",
+  "version": "1.0.0",
+  "cds": {
+    "requires": {
+      "sap.s4com.Supplier.v1": {
+        "kind": "data.product",
+        "model": "sap-s4com-supplier-v1",
+        "ordId": "sap.s4com:apiResource:Supplier:v1"
+      }
+    }
+  }
+}
