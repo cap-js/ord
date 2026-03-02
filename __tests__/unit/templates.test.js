@@ -408,6 +408,61 @@ describe("templates", () => {
             const srvDefinition = model.definitions[testNamespace + serviceName];
             expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toEqual([]);
         });
+
+        describe("MCP protocol resource definitions", () => {
+            const { MCP_RESOURCE_DEFINITION_TYPE } = require("../../lib/constants");
+
+            it("should create correct resource definition for MCP protocol", () => {
+                // CAP core doesn't recognize 'mcp' protocol (@protocol: 'mcp' returns empty endpoints)
+                // Only added when plugin is there
+                // So we need to mock the protocol resolver to test the MCP resource definition branch
+                jest.resetModules();
+
+                jest.doMock("../../lib/protocol-resolver", () => ({
+                    resolveApiResourceProtocol: jest.fn().mockReturnValue([
+                        {
+                            apiProtocol: "mcp",
+                            entryPoints: ["/mcp/mcp-service"],
+                            hasResourceDefinitions: true,
+                        },
+                    ]),
+                }));
+
+                const { createAPIResourceTemplate: createAPIResourceTemplateMocked } = require("../../lib/templates");
+
+                const serviceName = "McpService";
+                const model = cds.linked(`
+                    service McpService {
+                       entity Items {
+                           key ID: UUID;
+                           name: String;
+                       }
+                    };
+                `);
+                const srvDefinition = model.definitions["McpService"];
+                const packageIds = ["sap.test.cdsrc.sample:package:test-api:v1"];
+                const accessStrategies = [{ type: "open" }];
+
+                const apiResourceTemplate = createAPIResourceTemplateMocked(
+                    serviceName,
+                    srvDefinition,
+                    appConfig,
+                    packageIds,
+                    accessStrategies,
+                );
+
+                expect(apiResourceTemplate).toHaveLength(1);
+                const mcpResource = apiResourceTemplate[0];
+                expect(mcpResource.apiProtocol).toBe("mcp");
+                expect(mcpResource.resourceDefinitions).toHaveLength(1);
+                expect(mcpResource.resourceDefinitions[0].type).toBe(MCP_RESOURCE_DEFINITION_TYPE);
+                expect(mcpResource.resourceDefinitions[0].mediaType).toBe("application/json");
+                expect(mcpResource.resourceDefinitions[0].url).toContain(".mcp.json");
+
+                jest.dontMock("../../lib/protocol-resolver");
+                jest.resetModules();
+            });
+        });
     });
 
     describe("createEventResourceTemplate", () => {

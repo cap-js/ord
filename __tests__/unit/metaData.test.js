@@ -133,6 +133,47 @@ describe("metaData", () => {
         }
     });
 
+    test("getMetadata should return mcp content for a given URL", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.mcp.json";
+        const mockMcpServerCard = {
+            $schema: "https://example.com/mcp-server-card.schema.json",
+            name: "sap.cds.service/admin",
+            title: "AdminService",
+            version: "1.0.0",
+            description: "Admin service",
+            tools: [],
+        };
+        const expectedResponse = {
+            contentType: "application/json",
+            response: JSON.stringify(mockMcpServerCard),
+        };
+        jest.spyOn(cds, "compile").mockImplementation(() => ({
+            to: {
+                mcp: () => JSON.stringify(mockMcpServerCard),
+            },
+        }));
+
+        const result = await getMetadata(url);
+
+        expect(result).toEqual(expectedResponse);
+    });
+
+    test("getMetadata should raise error when get mcp failed", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.mcp.json";
+        jest.spyOn(cds, "compile").mockImplementation(() => ({
+            to: {
+                mcp: () => {
+                    throw new Error("MCP error");
+                },
+            },
+        }));
+        try {
+            await getMetadata(url);
+        } catch (error) {
+            expect(error.message).toBe("MCP error");
+        }
+    });
+
     test("getMetadata should handle invalid URL format", async () => {
         const url = "/invalid/url/format";
         try {
