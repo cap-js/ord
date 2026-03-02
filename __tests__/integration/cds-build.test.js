@@ -10,12 +10,19 @@ const ORD_DOC_PATH = path.join(ORD_GEN_DIR, "ord-document.json");
 
 /**
  * Execute cds build command and return result
+ * @param {string} cwd - Working directory
+ * @param {string} [configFile] - Optional path to CDS config file
  */
-function runCdsBuild(cwd) {
+function runCdsBuild(cwd, configFile) {
     return new Promise((resolve) => {
+        const env = { ...process.env };
+        if (configFile) {
+            env.CDS_CONFIG = configFile;
+        }
+
         const buildProcess = spawn("npx", ["cds", "build", "--for", "ord"], {
             cwd,
-            env: { ...process.env },
+            env,
             stdio: ["ignore", "pipe", "pipe"],
         });
 
@@ -122,6 +129,130 @@ describe("ORD Build Integration Tests", () => {
             expect(openApiContent.servers).toHaveLength(2);
             expect(openApiContent.servers[0].url).toBe("https://test-service.api.example.com");
             expect(openApiContent.servers[1].url).toBe("https://test-service-sandbox.api.example.com");
+        });
+
+        test("should generate IntegrationDependency for external Data Products", () => {
+            expect(ordDocument).toHaveProperty("integrationDependencies");
+            expect(ordDocument.integrationDependencies).toHaveLength(1);
+
+            const integrationDep = ordDocument.integrationDependencies[0];
+            expect(integrationDep.ordId).toContain(":integrationDependency:externalDependencies:v1");
+            expect(integrationDep.title).toBe("External Dependencies");
+            expect(integrationDep.version).toBe("1.0.0");
+            expect(integrationDep.releaseStatus).toBe("active");
+            expect(integrationDep.visibility).toBe("public");
+            expect(integrationDep.mandatory).toBe(false);
+            expect(integrationDep.partOfPackage).toContain(":package:");
+        });
+
+        test("should have correct IntegrationDependency aspects with @ORD.Extensions", () => {
+            const integrationDep = ordDocument.integrationDependencies[0];
+            expect(integrationDep.aspects).toHaveLength(2);
+
+            const saiAspect = integrationDep.aspects.find((a) => a.apiResources[0].ordId.includes("test.sai"));
+            expect(saiAspect).toBeDefined();
+            expect(saiAspect.title).toBe("Test SAI Supplier API");
+            expect(saiAspect.description).toBe("Integration with Test SAI Supplier Data Product");
+            expect(saiAspect.mandatory).toBe(false);
+            expect(saiAspect.apiResources[0].ordId).toBe("test.sai:apiResource:Supplier:v1");
+            expect(saiAspect.apiResources[0].minVersion).toBe("1.0.0");
+
+            const s4Aspect = integrationDep.aspects.find((a) => a.apiResources[0].ordId.includes("test.s4"));
+            expect(s4Aspect).toBeDefined();
+            expect(s4Aspect.title).toBe("Test S4 Supplier API");
+            expect(s4Aspect.description).toBe("Integration with Test S4 Supplier Data Product");
+        });
+    });
+
+    describe("IntegrationDependency with cdsrc customization", () => {
+        let buildResult;
+        let ordDocument;
+        const CDSRC_CONFIG = path.join(TEST_APP_ROOT, ".cdsrc.integrationDep.json");
+
+        beforeAll(async () => {
+            cleanupDir(GEN_DIR);
+            buildResult = await runCdsBuild(TEST_APP_ROOT, CDSRC_CONFIG);
+            if (fs.existsSync(ORD_DOC_PATH)) {
+                ordDocument = JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8"));
+            }
+        }, 60000);
+
+        afterAll(() => {
+            cleanupDir(GEN_DIR);
+        });
+
+        test("should exit with code 0", () => {
+            expect(buildResult.code).toBe(0);
+        });
+
+        test("should apply cdsrc customization to IntegrationDependency", () => {
+            expect(ordDocument).toHaveProperty("integrationDependencies");
+            expect(ordDocument.integrationDependencies).toHaveLength(1);
+
+            const integrationDep = ordDocument.integrationDependencies[0];
+            expect(integrationDep.title).toBe("Custom External Dependencies");
+            expect(integrationDep.version).toBe("2.0.0");
+            expect(integrationDep.releaseStatus).toBe("beta");
+            expect(integrationDep.visibility).toBe("internal");
+            expect(integrationDep.description).toBe("Custom description from cdsrc");
+        });
+
+        test("should preserve aspects with @ORD.Extensions even with cdsrc customization", () => {
+            const integrationDep = ordDocument.integrationDependencies[0];
+            expect(integrationDep.aspects).toHaveLength(2);
+
+            const saiAspect = integrationDep.aspects.find((a) => a.apiResources[0].ordId.includes("test.sai"));
+            expect(saiAspect).toBeDefined();
+            expect(saiAspect.title).toBe("Test SAI Supplier API");
+        });
+    });
+
+    describe("IntegrationDependency with custom.ord.json merging", () => {
+        let buildResult;
+        let ordDocument;
+        const CDSRC_CONFIG = path.join(TEST_APP_ROOT, ".cdsrc.customord.json");
+
+        beforeAll(async () => {
+            cleanupDir(GEN_DIR);
+            buildResult = await runCdsBuild(TEST_APP_ROOT, CDSRC_CONFIG);
+            if (fs.existsSync(ORD_DOC_PATH)) {
+                ordDocument = JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8"));
+            }
+        }, 60000);
+
+        afterAll(() => {
+            cleanupDir(GEN_DIR);
+        });
+
+        test("should exit with code 0", () => {
+            expect(buildResult.code).toBe(0);
+        });
+
+        test("should merge custom.ord.json patches to IntegrationDependency", () => {
+            expect(ordDocument).toHaveProperty("integrationDependencies");
+            expect(ordDocument.integrationDependencies).toHaveLength(1);
+
+            const integrationDep = ordDocument.integrationDependencies[0];
+            expect(integrationDep.title).toBe("Patched External Dependencies");
+            expect(integrationDep.shortDescription).toBe("Patched via custom.ord.json");
+            expect(integrationDep.mandatory).toBe(true);
+        });
+
+        test("should preserve non-patched properties from generated IntegrationDependency", () => {
+            const integrationDep = ordDocument.integrationDependencies[0];
+            // These should remain from the generated resource
+            expect(integrationDep.version).toBe("1.0.0");
+            expect(integrationDep.releaseStatus).toBe("active");
+            expect(integrationDep.visibility).toBe("public");
+        });
+
+        test("should preserve aspects from generated IntegrationDependency", () => {
+            const integrationDep = ordDocument.integrationDependencies[0];
+            expect(integrationDep.aspects).toHaveLength(2);
+
+            const saiAspect = integrationDep.aspects.find((a) => a.apiResources[0].ordId.includes("test.sai"));
+            expect(saiAspect).toBeDefined();
+            expect(saiAspect.title).toBe("Test SAI Supplier API");
         });
     });
 
