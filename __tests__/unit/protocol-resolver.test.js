@@ -85,31 +85,19 @@ describe("protocol-resolver", () => {
             expect(result[0].hasResourceDefinitions).toBe(false);
         });
 
-        it("should resolve GraphQL protocol when @cap-js/graphql plugin is loaded", () => {
-            // Simulate @cap-js/graphql registering itself in cds.env.protocols
-            const originalProtocols = { ...cds.service.protocols };
-            cds.service.protocols["graphql"] = { path: "/graphql", impl: "@cap-js/graphql" };
+        it("should warn and skip GraphQL protocol when plugin is not loaded", () => {
+            const srvDefinition = {
+                "name": "GraphQLService",
+                "@protocol": "graphql",
+            };
+            const result = resolveApiResourceProtocol("GraphQLService", srvDefinition, {
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
 
-            try {
-                const model = cds.linked(`
-                    @protocol: 'graphql'
-                    service GraphQLService {
-                        entity Books { key ID: UUID; }
-                    }
-                `);
-                const srvDefinition = model.definitions["GraphQLService"];
-                const result = resolveApiResourceProtocol("GraphQLService", srvDefinition, {
-                    isPrimaryDataProduct: isPrimaryDataProductService,
-                });
-
-                expect(result).toHaveLength(1);
-                expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.GRAPHQL);
-                expect(result[0].hasResourceDefinitions).toBe(true);
-                expect(result[0].entryPoints).not.toContain(null);
-            } finally {
-                delete cds.service.protocols["graphql"];
-                Object.assign(cds.service.protocols, originalProtocols);
-            }
+            expect(result).toEqual([]);
+            expect(loggerWarnSpy).toHaveBeenCalledWith(
+                expect.stringContaining("Unknown protocol 'graphql' is not supported"),
+            );
         });
 
         it("should return data subscription protocol for primary data product service", () => {
@@ -192,10 +180,75 @@ describe("protocol-resolver", () => {
             expect(protocols).toContain(ORD_API_PROTOCOL.ODATA_V4);
         });
 
-        it("should handle multiple explicit protocols including GraphQL when plugin is loaded", () => {
-            cds.service.protocols["graphql"] = { path: "/graphql", impl: "@cap-js/graphql" };
+        it("should handle multiple explicit protocols and skip unsupported ones", () => {
+            const model = cds.linked(`
+                @protocol: ['rest', 'graphql', 'unknown-protocol']
+                service MyService {
+                    entity Books { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["MyService"];
+            const result = resolveApiResourceProtocol("MixedProtocolService", srvDefinition, {
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
 
-            try {
+            expect(result).toHaveLength(1);
+            expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.REST);
+            expect(loggerWarnSpy).toHaveBeenCalledWith(
+                expect.stringContaining("Unknown protocol 'graphql' is not supported"),
+            );
+            expect(loggerWarnSpy).toHaveBeenCalledWith(
+                expect.stringContaining("Unknown protocol 'unknown-protocol' is not supported"),
+            );
+        });
+
+        it("should handle ina protocol even if other protocols are present", () => {
+            const model = cds.linked(`
+                @protocol: ['rest', 'graphql', 'ina']
+                service MyService {
+                    entity Books { key ID: UUID; }
+                }
+            `);
+            const srvDefinition = model.definitions["MyService"];
+            const result = resolveApiResourceProtocol("ComplexService", srvDefinition, {
+                isPrimaryDataProduct: isPrimaryDataProductService,
+            });
+            expect(result).toHaveLength(2);
+            const inaProtocol = result.find((r) => r.apiProtocol === ORD_API_PROTOCOL.SAP_INA);
+            expect(inaProtocol).toBeDefined();
+            expect(inaProtocol.entryPoints).toEqual([]);
+            expect(inaProtocol.hasResourceDefinitions).toBe(false);
+        });
+
+        // GraphQL protocol tests (with @cap-js/graphql plugin loaded)
+        describe("with @cap-js/graphql plugin loaded", () => {
+            beforeEach(() => {
+                cds.service.protocols["graphql"] = { path: "/graphql", impl: "@cap-js/graphql" };
+            });
+
+            afterEach(() => {
+                delete cds.service.protocols["graphql"];
+            });
+
+            it("should resolve GraphQL protocol", () => {
+                const model = cds.linked(`
+                    @protocol: 'graphql'
+                    service GraphQLService {
+                        entity Books { key ID: UUID; }
+                    }
+                `);
+                const srvDefinition = model.definitions["GraphQLService"];
+                const result = resolveApiResourceProtocol("GraphQLService", srvDefinition, {
+                    isPrimaryDataProduct: isPrimaryDataProductService,
+                });
+
+                expect(result).toHaveLength(1);
+                expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.GRAPHQL);
+                expect(result[0].hasResourceDefinitions).toBe(true);
+                expect(result[0].entryPoints).not.toContain(null);
+            });
+
+            it("should handle multiple protocols including GraphQL", () => {
                 const model = cds.linked(`
                     @protocol: ['rest', 'graphql', 'unknown-protocol']
                     service MyService {
@@ -214,15 +267,9 @@ describe("protocol-resolver", () => {
                 expect(loggerWarnSpy).toHaveBeenCalledWith(
                     expect.stringContaining("Unknown protocol 'unknown-protocol' is not supported"),
                 );
-            } finally {
-                delete cds.service.protocols["graphql"];
-            }
-        });
+            });
 
-        it("should handle ina and graphql protocols even if other protocols are present", () => {
-            cds.service.protocols["graphql"] = { path: "/graphql", impl: "@cap-js/graphql" };
-
-            try {
+            it("should handle ina and graphql protocols together", () => {
                 const model = cds.linked(`
                     @protocol: ['rest', 'graphql', 'ina']
                     service MyService {
@@ -241,9 +288,7 @@ describe("protocol-resolver", () => {
                 const inaProtocol = result.find((r) => r.apiProtocol === ORD_API_PROTOCOL.SAP_INA);
                 expect(inaProtocol.entryPoints).toEqual([]);
                 expect(inaProtocol.hasResourceDefinitions).toBe(false);
-            } finally {
-                delete cds.service.protocols["graphql"];
-            }
+            });
         });
     });
 });
