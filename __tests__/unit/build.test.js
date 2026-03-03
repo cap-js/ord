@@ -89,6 +89,49 @@ describe("Build", () => {
     afterEach(() => {
         jest.clearAllMocks();
         jest.restoreAllMocks();
+        delete cds.env.plugins?.["@cap-js/graphql"];
+        delete cds.env.protocols?.graphql;
+    });
+
+    describe("GraphQL protocol restoration during cds build", () => {
+        it("should restore graphql protocol when plugin is installed but protocol is missing", async () => {
+            cds.env.plugins = { "@cap-js/graphql": { impl: "@cap-js/graphql/cds-plugin.js" } };
+            cds.env.protocols = cds.env.protocols || {};
+            delete cds.env.protocols.graphql;
+
+            jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation(() => {});
+
+            const buildClass = new OrdBuildPlugin();
+            await buildClass.build();
+
+            expect(cds.env.protocols.graphql).toEqual({ path: "/graphql", impl: "@cap-js/graphql" });
+        });
+
+        it("should not overwrite graphql protocol when already registered", async () => {
+            cds.env.plugins = { "@cap-js/graphql": { impl: "@cap-js/graphql/cds-plugin.js" } };
+            cds.env.protocols = cds.env.protocols || {};
+            cds.env.protocols.graphql = { path: "/custom-graphql", impl: "@cap-js/graphql" };
+
+            jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation(() => {});
+
+            const buildClass = new OrdBuildPlugin();
+            await buildClass.build();
+
+            expect(cds.env.protocols.graphql.path).toBe("/custom-graphql");
+        });
+
+        it("should not restore graphql protocol when plugin is not installed", async () => {
+            cds.env.plugins = {};
+            cds.env.protocols = cds.env.protocols || {};
+            delete cds.env.protocols.graphql;
+
+            jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation(() => {});
+
+            const buildClass = new OrdBuildPlugin();
+            await buildClass.build();
+
+            expect(cds.env.protocols.graphql).toBeUndefined();
+        });
     });
 
     it("should create an instance of OrdBuildPlugin", () => {
