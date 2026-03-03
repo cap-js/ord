@@ -85,7 +85,7 @@ describe("protocol-resolver", () => {
             expect(result[0].hasResourceDefinitions).toBe(false);
         });
 
-        it("should warn and skip GraphQL protocol when plugin is not loaded", () => {
+        it("should silently skip GraphQL protocol when plugin is not loaded", () => {
             const srvDefinition = {
                 "name": "GraphQLService",
                 "@protocol": "graphql",
@@ -95,9 +95,7 @@ describe("protocol-resolver", () => {
             });
 
             expect(result).toEqual([]);
-            expect(loggerWarnSpy).toHaveBeenCalledWith(
-                expect.stringContaining("Unknown protocol 'graphql' is not supported"),
-            );
+            expect(loggerWarnSpy).not.toHaveBeenCalled();
         });
 
         it("should return data subscription protocol for primary data product service", () => {
@@ -194,8 +192,8 @@ describe("protocol-resolver", () => {
 
             expect(result).toHaveLength(1);
             expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.REST);
-            expect(loggerWarnSpy).toHaveBeenCalledWith(
-                expect.stringContaining("Unknown protocol 'graphql' is not supported"),
+            expect(loggerWarnSpy).not.toHaveBeenCalledWith(
+                expect.stringContaining("Unknown protocol 'graphql'"),
             );
             expect(loggerWarnSpy).toHaveBeenCalledWith(
                 expect.stringContaining("Unknown protocol 'unknown-protocol' is not supported"),
