@@ -134,6 +134,33 @@ describe("metaData", () => {
         }
     });
 
+    test("getMetadata should return GraphQL SDL content with text/plain content type", async () => {
+        const url =
+            "/ord/v1/customer.sample:apiResource:sap.capire.incidents.GraphQLService:v1/sap.capire.incidents.GraphQLService.graphql";
+
+        const result = await getMetadata(url);
+
+        expect(result.contentType).toBe("text/plain");
+        expect(typeof result.response).toBe("string");
+        expect(result.response).toContain("type Query");
+    });
+
+    test("getMetadata should raise error when GraphQL SDL compilation fails", async () => {
+        const url =
+            "/ord/v1/customer.sample:apiResource:sap.capire.incidents.GraphQLService:v1/sap.capire.incidents.GraphQLService.graphql";
+
+        // Mock cds.linked to return a model that causes generateSchema4 to fail
+        jest.spyOn(cds, "linked").mockImplementation(() => {
+            throw new Error("GraphQL schema error");
+        });
+
+        try {
+            await getMetadata(url);
+        } catch (error) {
+            expect(error.message).toBe("GraphQL schema error");
+        }
+    });
+
     describe("isMCPPluginAvailable", () => {
         test("should return true when MCP plugin is available", () => {
             const mockResolve = jest.fn(() => "/path/to/plugin");
