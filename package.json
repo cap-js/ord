@@ -38,13 +38,7 @@
         "supertest": "^7.0.0"
     },
     "peerDependencies": {
-        "@sap/cds": ">=8.9.4",
-        "@cap-js/graphql": ">=0.10.0"
-    },
-    "peerDependenciesMeta": {
-        "@cap-js/graphql": {
-            "optional": true
-        }
+        "@sap/cds": ">=8.9.4"
     },
     "dependencies": {
         "@cap-js/asyncapi": "^1.0.3",
