@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { ORD_ACCESS_STRATEGY, CDS_ELEMENT_KIND } = require("../../lib/constants");
+const { CDS_ELEMENT_KIND } = require("../../lib/constants");
 
 // Global setup for all tests - runs once before all test suites
 beforeAll(() => {
