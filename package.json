@@ -45,7 +45,8 @@
         "@cap-js/openapi": "^1.2.1",
         "bcryptjs": "3.0.3",
         "cli-progress": "^3.12.0",
-        "lodash": "^4.17.21"
+        "lodash": "^4.17.21",
+        "node-worker-threads-pool": "^1.5.1"
     },
     "engines": {
         "node": ">=18 <23"

@@ -59,7 +59,7 @@ jest.mock("../../lib/index", () => {
                 ],
             };
         }),
-        getMetadata: jest.fn((url) => {
+        compileMetadata: jest.fn((url) => {
             return new Promise((resolve) => {
                 resolve({
                     _: {},
@@ -77,6 +77,18 @@ jest.mock("cli-progress", () => {
             start() {}
             update() {}
             stop() {}
+        },
+    };
+});
+
+jest.mock("node-worker-threads-pool", () => {
+    return {
+        StaticPool: class {
+            constructor() {}
+            destroy() {}
+            exec() {
+                return Promise.reject(new Error());
+            }
         },
     };
 });
@@ -99,7 +111,7 @@ describe("Build", () => {
             cds.env.protocols = cds.env.protocols || {};
             delete cds.env.protocols.graphql;
 
-            jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation(() => {});
+            jest.spyOn(OrdBuildPlugin.prototype, "_generateResourcesFiles").mockImplementation(() => {});
 
             const buildClass = new OrdBuildPlugin();
             await buildClass.build();
@@ -112,7 +124,7 @@ describe("Build", () => {
             cds.env.protocols = cds.env.protocols || {};
             cds.env.protocols.graphql = { path: "/custom-graphql", impl: "@cap-js/graphql" };
 
-            jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation(() => {});
+            jest.spyOn(OrdBuildPlugin.prototype, "_generateResourcesFiles").mockImplementation(() => {});
 
             const buildClass = new OrdBuildPlugin();
             await buildClass.build();
@@ -125,7 +137,7 @@ describe("Build", () => {
             cds.env.protocols = cds.env.protocols || {};
             delete cds.env.protocols.graphql;
 
-            jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation(() => {});
+            jest.spyOn(OrdBuildPlugin.prototype, "_generateResourcesFiles").mockImplementation(() => {});
 
             const buildClass = new OrdBuildPlugin();
             await buildClass.build();
@@ -154,34 +166,40 @@ describe("Build", () => {
     });
 
     it("should write the ord document and resources files", async () => {
-        jest.spyOn(console, "log").mockImplementation(() => {});
-        jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation((resObj, model, promises) => {
-            for (const resource of resObj) {
-                const subDir = cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, resource.ordId);
-                for (const resourceDefinition of resource.resourceDefinitions) {
-                    const url = resourceDefinition.url;
-                    const fileName = url.split("/").pop();
-                    promises.push(Promise.resolve(`Writing ${fileName} to ${subDir}`));
-                }
-            }
-        });
+        const invocations = [];
         const buildClass = new OrdBuildPlugin();
-        const promise = await buildClass.build();
-        expect(buildClass._writeResourcesFiles).toHaveBeenCalledTimes(2);
-        expect(promise.length).toEqual(5);
+
+        jest.spyOn(console, "log").mockImplementation(() => {});
+        jest.spyOn(OrdBuildPlugin.prototype, "_generateResourcesFiles").mockImplementation(async (_, resources) => {
+            await Promise.all(
+                resources.flatMap(({ ordId, resourceDefinitions }) =>
+                    resourceDefinitions
+                        .map(({ url }) => [
+                            url.split("/").pop(),
+                            cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, ordId),
+                        ])
+                        .map(async ([file, path]) => Promise.resolve(invocations.push(`Writing ${file} to ${path}`))),
+                ),
+            );
+        });
+
+        expect((await buildClass.build()).length).toEqual(2);
+        expect(buildClass._generateResourcesFiles).toHaveBeenCalledTimes(1);
+        expect(invocations.length).toEqual(4);
     });
 
     it("should not write resources files when eventResources is empty", async () => {
         jest.spyOn(console, "log").mockImplementation(() => {});
-        jest.spyOn(OrdBuildPlugin.prototype, "_writeResourcesFiles").mockImplementation((resObj, model, promises) => {
-            for (const resource of resObj) {
-                const subDir = cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, resource.ordId);
-                for (const resourceDefinition of resource.resourceDefinitions) {
-                    const url = resourceDefinition.url;
-                    const fileName = url.split("/").pop();
-                    promises.push(Promise.resolve(`Writing ${fileName} to ${subDir}`));
-                }
-            }
+        jest.spyOn(OrdBuildPlugin.prototype, "_generateResourcesFiles").mockImplementation(async (_, resources) => {
+            await Promise.all(
+                resources.flatMap(({ ordId, resourceDefinitions }) =>
+                    resourceDefinitions.map(({ url }) =>
+                        Promise.resolve(
+                            `Writing ${url.split("/").pop()} to ${cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, ordId)}`,
+                        ),
+                    ),
+                ),
+            );
         });
 
         const mockModel = {};
@@ -199,18 +217,12 @@ describe("Build", () => {
         plugin.model = jest.fn().mockResolvedValue(mockModel);
         const buildClass = new OrdBuildPlugin();
         await buildClass.build();
-        expect(buildClass._writeResourcesFiles).toHaveBeenCalledTimes(1);
+        expect(buildClass._generateResourcesFiles).toHaveBeenCalledTimes(1);
     });
 
-    it("should throw error when getMetadata fails", async () => {
-        const getMetadataMock = jest.spyOn(require("../../lib/index"), "getMetadata");
-        const errorMessage = "Failed to get metadata";
-        getMetadataMock.mockImplementation(() => {
-            throw new Error(errorMessage);
-        });
-
+    it("should throw error when compileMetadata fails", async () => {
         const buildClass = new OrdBuildPlugin();
-        const resObj = [
+        const resources = [
             {
                 ordId: "sap.sm:apiResource:SupplierService:v1",
                 resourceDefinitions: [
@@ -220,8 +232,8 @@ describe("Build", () => {
                 ],
             },
         ];
-        const promises = [];
-        await expect(buildClass._writeResourcesFiles(resObj, {}, promises)).rejects.toThrow(errorMessage);
+
+        await expect(buildClass._generateResourcesFiles({}, resources)).rejects.toThrow();
     });
 
     it("should update resource URLs with relative paths and without colunms", () => {
