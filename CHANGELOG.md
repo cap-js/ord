@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.4.5 (2026-03-03)
+
+## What's Changed
+
+- feat: support GraphQL protocol by @zongqichen in https://github.com/cap-js/ord/pull/362
+- feat: auto-generate IntegrationDependencies for consumed Data Products by @zongqichen in https://github.com/cap-js/ord/pull/344
+- fix: include service name in error messages by @zongqichen in https://github.com/cap-js/ord/pull/365
+- fix: path-to-regexp v8 compatibility for CDS 9.7.0 by @zongqichen in https://github.com/cap-js/ord/pull/361
+- fix: detect multi-protocol services by @MariusPerleSAP in https://github.com/cap-js/ord/pull/370
+- Interop-CSN: remove annotations @assert.unique by @stewsk in https://github.com/cap-js/ord/pull/348
+- test: add IntegrationDependency integration tests by @zongqichen in https://github.com/cap-js/ord/pull/347
+- chore(deps): update dependency eslint to v10 by @renovate in https://github.com/cap-js/ord/pull/358
+- chore(deps): update dependency @sap/cds-compiler to v6.7.3 by @renovate in https://github.com/cap-js/ord/pull/360
+- fix(deps): update spring boot to v3.5.11 by @renovate in https://github.com/cap-js/ord/pull/366
+- chore(deps): update dependency org.apache.maven.plugins:maven-surefire-plugin to v3.5.5 by @renovate in https://github.com/cap-js/ord/pull/368
+
+## New Contributors
+
+- @MariusPerleSAP made their first contribution in https://github.com/cap-js/ord/pull/370
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.4.4...v1.4.5
+
 ## 1.4.4 (2026-02-05)
 
 ## What's Changed
