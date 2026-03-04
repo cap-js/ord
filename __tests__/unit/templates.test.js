@@ -12,7 +12,6 @@ const {
     createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate,
-    createMCPAPIResourceTemplate,
     _getEntityTypeMappings,
     _getExposedEntityTypes,
     _propagateORDVisibility,
@@ -409,6 +408,61 @@ describe("templates", () => {
             const srvDefinition = model.definitions[testNamespace + serviceName];
             expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toEqual([]);
         });
+
+        describe("MCP protocol resource definitions", () => {
+            const { MCP_RESOURCE_DEFINITION_TYPE } = require("../../lib/constants");
+
+            it("should create correct resource definition for MCP protocol", () => {
+                // CAP core doesn't recognize 'mcp' protocol (@protocol: 'mcp' returns empty endpoints)
+                // Only added when plugin is there
+                // So we need to mock the protocol resolver to test the MCP resource definition branch
+                jest.resetModules();
+
+                jest.doMock("../../lib/protocol-resolver", () => ({
+                    resolveApiResourceProtocol: jest.fn().mockReturnValue([
+                        {
+                            apiProtocol: "mcp",
+                            entryPoints: ["/mcp/mcp-service"],
+                            hasResourceDefinitions: true,
+                        },
+                    ]),
+                }));
+
+                const { createAPIResourceTemplate: createAPIResourceTemplateMocked } = require("../../lib/templates");
+
+                const serviceName = "McpService";
+                const model = cds.linked(`
+                    service McpService {
+                       entity Items {
+                           key ID: UUID;
+                           name: String;
+                       }
+                    };
+                `);
+                const srvDefinition = model.definitions["McpService"];
+                const packageIds = ["sap.test.cdsrc.sample:package:test-api:v1"];
+                const accessStrategies = [{ type: "open" }];
+
+                const apiResourceTemplate = createAPIResourceTemplateMocked(
+                    serviceName,
+                    srvDefinition,
+                    appConfig,
+                    packageIds,
+                    accessStrategies,
+                );
+
+                expect(apiResourceTemplate).toHaveLength(1);
+                const mcpResource = apiResourceTemplate[0];
+                expect(mcpResource.apiProtocol).toBe("mcp");
+                expect(mcpResource.resourceDefinitions).toHaveLength(1);
+                expect(mcpResource.resourceDefinitions[0].type).toBe(MCP_RESOURCE_DEFINITION_TYPE);
+                expect(mcpResource.resourceDefinitions[0].mediaType).toBe("application/json");
+                expect(mcpResource.resourceDefinitions[0].url).toContain(".mcp.json");
+
+                jest.dontMock("../../lib/protocol-resolver");
+                jest.resetModules();
+            });
+        });
     });
 
     describe("createEventResourceTemplate", () => {
@@ -443,96 +497,6 @@ describe("templates", () => {
             const srvDefinition = model.definitions["MyService"];
             const packageIds = ["customer.testNamespace:package:test:v1"];
             expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        });
-    });
-
-    describe("createMCPAPIResourceTemplate", () => {
-        it("should create MCP API resource template correctly", () => {
-            // Mock MCP plugin to return null metadata (test default values)
-            jest.mock(
-                "@btp-ai/mcp-plugin/lib/utils/metadata",
-                () => ({
-                    generateORDMetadata: jest.fn(() => null),
-                }),
-                { virtual: true },
-            );
-
-            const packageIds = ["customer.testNamespace:package:api:v1"];
-            const accessStrategies = [{ type: "open" }];
-
-            const result = createMCPAPIResourceTemplate(appConfig, packageIds, accessStrategies);
-
-            // Snapshot added for regression tracking of MCP template structure
-            expect(result).toMatchSnapshot();
-            // Keep explicit structural equality to fail fast on critical changes
-            expect(result).toEqual({
-                ordId: "customer.testNamespace:apiResource:mcp-server:v1",
-                title: "MCP Server for testAppName",
-                shortDescription: "This is the MCP server to interact with the testAppName",
-                description: "This is the MCP server to interact with the testAppName",
-                version: "1.0.0",
-                lastUpdate: "2022-12-19T15:47:04+00:00",
-                visibility: "public",
-                partOfPackage: "customer.testNamespace:package:api:v1",
-                releaseStatus: "active",
-                apiProtocol: "mcp",
-                resourceDefinitions: [
-                    {
-                        type: "custom",
-                        customType: "sap:mcp-server-card:v0",
-                        mediaType: "application/json",
-                        url: "/ord/v1/customer.testNamespace:apiResource:mcp-server:v1/mcp-server-definition.mcp.json",
-                        accessStrategies: [{ type: "open" }],
-                    },
-                ],
-                entryPoints: ["/rest/mcp/streaming"],
-                extensible: { supported: "no" },
-            });
-        });
-
-        it("should handle visibility-based ordId generation correctly", () => {
-            // Test the core functionality by verifying ordId patterns for different visibilities
-            const packageIds = ["customer.testNamespace:package:api:v1"];
-            const accessStrategies = [{ type: "open" }];
-
-            // Test default behavior (public visibility)
-            const result = createMCPAPIResourceTemplate(appConfig, packageIds, accessStrategies);
-            expect(result.ordId).toBe("customer.testNamespace:apiResource:mcp-server:v1");
-            expect(result.visibility).toBe("public");
-        });
-
-        it("should handle array vs single object return correctly", () => {
-            // Test that the function can handle both single objects and arrays
-            const packageIds = ["customer.testNamespace:package:api:v1"];
-            const accessStrategies = [{ type: "open" }];
-
-            // Test default behavior (returns single object)
-            const result = createMCPAPIResourceTemplate(appConfig, packageIds, accessStrategies);
-            expect(Array.isArray(result)).toBe(false);
-            expect(result).toHaveProperty("ordId");
-            expect(result).toHaveProperty("title");
-            expect(result).toHaveProperty("visibility");
-        });
-
-        it("should maintain backward compatibility with existing behavior", () => {
-            // Test that existing behavior is preserved when plugin is not ready
-            const packageIds = ["customer.testNamespace:package:api:v1"];
-            const accessStrategies = [{ type: "open" }];
-
-            // Mock plugin not ready (existing behavior)
-            const mcpAdapterSpy = jest.spyOn(require("../../lib/mcpAdapter"), "isMCPPluginReady");
-            mcpAdapterSpy.mockReturnValue(false);
-
-            const result = createMCPAPIResourceTemplate(appConfig, packageIds, accessStrategies);
-
-            // Should return single object with default values
-            expect(Array.isArray(result)).toBe(false);
-            expect(result.ordId).toBe("customer.testNamespace:apiResource:mcp-server:v1");
-            expect(result.title).toBe("MCP Server for testAppName");
-            expect(result.visibility).toBe("public");
-
-            // Clean up
-            mcpAdapterSpy.mockRestore();
         });
     });
 

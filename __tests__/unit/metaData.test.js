@@ -2,7 +2,6 @@ const cds = require("@sap/cds");
 const { compile: openapi } = require("@cap-js/openapi");
 const { compile: asyncapi } = require("@cap-js/asyncapi");
 const { getMetadata } = require("../../lib/index");
-const { isMCPPluginAvailable } = require("../../lib/mcpAdapter");
 const cdsc = require("@sap/cds-compiler/lib/main");
 
 jest.mock("@cap-js/openapi", () => ({
@@ -134,6 +133,31 @@ describe("metaData", () => {
         }
     });
 
+    test("getMetadata should return mcp content for a given URL", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.mcp.json";
+        const mockMcpServerCard = {
+            $schema: "https://example.com/mcp-server-card.schema.json",
+            name: "sap.cds.service/admin",
+            title: "AdminService",
+            version: "1.0.0",
+            description: "Admin service",
+            tools: [],
+        };
+        const expectedResponse = {
+            contentType: "application/json",
+            response: JSON.stringify(mockMcpServerCard),
+        };
+        jest.spyOn(cds, "compile").mockImplementation(() => ({
+            to: {
+                mcp: () => JSON.stringify(mockMcpServerCard),
+            },
+        }));
+
+        const result = await getMetadata(url);
+
+        expect(result).toEqual(expectedResponse);
+    });
+
     test("getMetadata should return GraphQL SDL content with text/plain content type", async () => {
         const url =
             "/ord/v1/customer.sample:apiResource:sap.capire.incidents.GraphQLService:v1/sap.capire.incidents.GraphQLService.graphql";
@@ -161,25 +185,22 @@ describe("metaData", () => {
         }
     });
 
-    describe("isMCPPluginAvailable", () => {
-        test("should return true when MCP plugin is available", () => {
-            const mockResolve = jest.fn(() => "/path/to/plugin");
-            const result = isMCPPluginAvailable(mockResolve);
-
-            expect(result).toBe(true);
-            expect(mockResolve).toHaveBeenCalledWith("@btp-ai/mcp-plugin");
-        });
-
-        test("should return false when MCP plugin is not available", () => {
-            const mockResolve = jest.fn(() => {
-                throw new Error("Cannot find module");
-            });
-            const result = isMCPPluginAvailable(mockResolve);
-
-            expect(result).toBe(false);
-            expect(mockResolve).toHaveBeenCalledWith("@btp-ai/mcp-plugin");
-        });
+    test("getMetadata should raise error when get mcp failed", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.mcp.json";
+        jest.spyOn(cds, "compile").mockImplementation(() => ({
+            to: {
+                mcp: () => {
+                    throw new Error("MCP error");
+                },
+            },
+        }));
+        try {
+            await getMetadata(url);
+        } catch (error) {
+            expect(error.message).toBe("MCP error");
+        }
     });
+
     test("getMetadata should handle invalid URL format", async () => {
         const url = "/invalid/url/format";
         try {
