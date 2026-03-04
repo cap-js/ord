@@ -4,6 +4,24 @@
 
 ### Recent Development Activity
 
+**Event Broker Integration Dependencies Implementation (March 4, 2026)**:
+
+- **Objective**: Generate ORD Integration Dependencies for consumed events via Event Broker, achieving feature parity with the Java `cds-feature-event-hub` plugin
+- **Solution Implemented**:
+    - Created `lib/eventBrokerAdapter.js` for Event Broker detection and namespace extraction
+    - Extended `lib/integrationDependency.js` with dual-source event collection (Build-Time + Runtime)
+    - Added unit tests in `__tests__/unit/eventBrokerAdapter.test.js` and `__tests__/unit/integrationDependency.test.js`
+- **Key Features**:
+    - **Build-Time**: Services annotated with `@ORD.Extensions.integrationDependency` + events with `@topic` annotation
+    - **Runtime**: Reads `subscribedTopics` property from Event Broker messaging services
+    - **Namespace Detection**: Extracts from `credentials.ceSource` (e.g., `/default/sap.s4/...` → `sap.s4`)
+- **Architecture Impact**:
+    - New adapter pattern for external service detection (`eventBrokerAdapter.js`)
+    - Merged CDS annotations with runtime topic subscriptions using Set for deduplication
+    - Integration with main ORD generation flow via `getIntegrationDependencies()` in `ord.js`
+- **Test Results**: All integration dependency tests pass, unit tests for eventBrokerAdapter pass
+- **Documentation Updated**: Copilot instructions and systemPatterns.md updated with new patterns
+
 **Test Code Refactoring - Clean Code Implementation (December 15, 2025)**:
 
 - **Objective**: Eliminate duplicate authentication mock configurations across test files following Clean Code principles
