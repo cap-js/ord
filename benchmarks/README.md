@@ -40,7 +40,7 @@ benchmarks/
 
 ## Results
 
-### 1. Real Enterprise Project (requisition-srv)
+### 1. Real Enterprise Project (*-srv)
 
 > 29 API resources, 58 tasks (oas3 + edmx), 10 MB CSN model, ~4s per compilation
 
@@ -64,7 +64,7 @@ Sequential:  228s  ████████████████████�
 
 **Observation:** Scaling plateaus at ~8 workers for large models. 20 workers is slightly _slower_ than 8 due to worker creation overhead (10 MB model x 20 = 200 MB transferred via structured clone) and task starvation (58 tasks / 20 workers = only ~3 tasks per worker).
 
-### 2. Real Enterprise Project — OAS3 Only (requisition-srv)
+### 2. Real Enterprise Project — OAS3 Only (*-srv)
 
 > Isolating the heaviest compilation type. 29 OAS3 tasks, ~4s each.
 
@@ -115,7 +115,7 @@ All protocol types (OData/oas3, EDMX, CSN, AsyncAPI, GraphQL) compile correctly 
 
 ## Overhead Analysis
 
-Measured on requisition-srv (10 MB CSN, 29 services):
+Measured on *-srv (10 MB CSN, 29 services):
 
 ```
 Per-task breakdown:
