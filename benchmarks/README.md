@@ -147,14 +147,15 @@ Tested whether having workers write files directly (instead of sending response 
 
 > Tested with `threads=2C` (double the available CPUs) on the real enterprise project.
 
-| Implementation           | Workers     | Time    | Speedup  |
-| ------------------------ | ----------- | ------- | -------- |
-| Sequential (baseline)    | 1           | 228s    | 1.0x     |
-| Our default (cpus/2)     | auto        | 48s     | 4.7x     |
-| mlakov's fix with 0.5C   | auto        | 47s     | 4.8x     |
-| **mlakov's fix with 2C** | **2x cpus** | **67s** | **3.4x** |
+| Implementation        | Workers | Time    | Speedup        |
+| --------------------- | ------- | ------- | -------------- |
+| Sequential (baseline) | 1       | 282s    | 1.0x           |
+| PR #378 (cpus/2)      | 10      | 45s     | 6.3x           |
+| PR #376 with 0.5C     | 10      | 47s     | 6.0x           |
+| **PR #376 with 2C**   | **40**  | **67s** | **4.2x**       |
+| **PR #376 with 3C**   | **60**  | **OOM** | **crashed** 💥 |
 
-**Result: 2x CPUs is 40% slower than cpus/2** (67s vs 47s). When worker count exceeds available CPU cores, context-switching overhead outweighs any parallelism gains.
+**Result: 2C is 40% slower than 0.5C** (67s vs 47s), and **3C crashes with OOM** (`JavaScript heap out of memory`). With 60 workers each cloning a 10 MB model, total memory exceeds 600 MB, causing the Node.js heap to run out of memory.
 
 ## Key Findings
 
