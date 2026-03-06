@@ -40,7 +40,7 @@ benchmarks/
 
 ## Results
 
-### 1. Real Enterprise Project (*-srv)
+### 1. Real Enterprise Project (\*-srv)
 
 > 29 API resources, 58 tasks (oas3 + edmx), 10 MB CSN model, ~4s per compilation
 
@@ -64,7 +64,7 @@ Sequential:  228s  ████████████████████�
 
 **Observation:** Scaling plateaus at ~8 workers for large models. 20 workers is slightly _slower_ than 8 due to worker creation overhead (10 MB model x 20 = 200 MB transferred via structured clone) and task starvation (58 tasks / 20 workers = only ~3 tasks per worker).
 
-### 2. Real Enterprise Project — OAS3 Only (*-srv)
+### 2. Real Enterprise Project — OAS3 Only (\*-srv)
 
 > Isolating the heaviest compilation type. 29 OAS3 tasks, ~4s each.
 
@@ -115,7 +115,7 @@ All protocol types (OData/oas3, EDMX, CSN, AsyncAPI, GraphQL) compile correctly 
 
 ## Overhead Analysis
 
-Measured on *-srv (10 MB CSN, 29 services):
+Measured on \*-srv (10 MB CSN, 29 services):
 
 ```
 Per-task breakdown:
@@ -143,6 +143,19 @@ Tested whether having workers write files directly (instead of sending response 
 
 **Verdict:** Negligible difference. Compilation dominates; response transfer is <1% of task time.
 
+### 5. Over-provisioning: 2x CPUs is Counterproductive
+
+> Tested with `threads=2C` (double the available CPUs) on the real enterprise project.
+
+| Implementation           | Workers     | Time    | Speedup  |
+| ------------------------ | ----------- | ------- | -------- |
+| Sequential (baseline)    | 1           | 228s    | 1.0x     |
+| Our default (cpus/2)     | auto        | 48s     | 4.7x     |
+| mlakov's fix with 0.5C   | auto        | 47s     | 4.8x     |
+| **mlakov's fix with 2C** | **2x cpus** | **67s** | **3.4x** |
+
+**Result: 2x CPUs is 40% slower than cpus/2** (67s vs 47s). When worker count exceeds available CPU cores, context-switching overhead outweighs any parallelism gains.
+
 ## Key Findings
 
 1. **4-8 workers is the sweet spot** for real enterprise projects with large models (10+ MB CSN)
@@ -152,6 +165,7 @@ Tested whether having workers write files directly (instead of sending response 
 5. **`workerData` is essential**: Pass model once at worker creation, not per task via `exec()`
 6. **No threshold needed**: Even small projects (14 tasks) benefit from parallelization
 7. **Response transfer is not a bottleneck**: Workers writing to disk vs sending response back shows <2% difference
+8. **Over-provisioning hurts**: Setting workers to 2x CPU count is 40% slower than cpus/2 due to context-switching overhead
 
 ## Recommended Default
 
@@ -160,4 +174,4 @@ const os = require("os");
 const poolSize = Math.min(Math.ceil(os.availableParallelism() / 2), totalTasks);
 ```
 
-Half of available CPUs balances parallelism with overhead for large models. For CI/CD environments with fewer CPUs (2-4 cores), this naturally uses all available cores. Users can override via `cds.env.ord.threads` if needed.
+Half of available CPUs balances parallelism with overhead for large models. For CI/CD environments with fewer CPUs (2-4 cores), this naturally uses all available cores.
