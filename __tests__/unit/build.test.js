@@ -59,7 +59,7 @@ jest.mock("../../lib/index", () => {
                 ],
             };
         }),
-        compileMetadata: jest.fn((url) => {
+        getMetadata: jest.fn((url) => {
             return new Promise((resolve) => {
                 resolve({
                     _: {},
@@ -208,12 +208,12 @@ describe("Build", () => {
         expect(buildClass._generateResourcesFiles).toHaveBeenCalledTimes(1);
     });
 
-    it("should throw error when compileMetadata fails", async () => {
+    it("should throw error when metadata compilation fails", async () => {
         const buildClass = new OrdBuildPlugin();
         jest.spyOn(OrdBuildPlugin.prototype, "_createWorkerPool").mockImplementation(() => {
             return new (class {
-                destroy() {}
-                execute() { return Promise.reject(new Error()) }
+                close() {}
+                run() { return Promise.reject(new Error()) }
             })();
         });
 

@@ -268,9 +268,9 @@ describe("Tests for Data Product definition", () => {
         expect(csnResourceDef).toBeDefined();
         expect(csnResourceDef.url).toBeDefined();
 
-        const { compileMetadata } = require("../../lib/index");
+        const { getMetadata } = require("../../lib/index");
 
-        const result = await compileMetadata(csnResourceDef.url, csn);
+        const result = await getMetadata(csnResourceDef.url, csn);
         expect(result.contentType).toBe("application/json");
 
         let interopCsn = result.response;
