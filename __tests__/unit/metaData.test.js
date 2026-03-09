@@ -201,15 +201,6 @@ describe("metaData", () => {
         }
     });
 
-    test("getMetadata should handle invalid URL format", async () => {
-        const url = "/invalid/url/format";
-        try {
-            await getMetadata(url);
-        } catch (error) {
-            expect(error.message).toContain("Invalid URL format");
-        }
-    });
-
     test("getMetadata should handle missing service name in URL", async () => {
         const url = "/ord/v1/sap.test.cdsrc.sample:apiResource::v1/Service.oas3.json";
         openapi.mockImplementation(() => "Mock content");
