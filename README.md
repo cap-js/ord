@@ -237,9 +237,9 @@ Build all ord related documents, including ordDocument and services resources fi
 1. **workers**:
     * **Description**: Max number of workers to use during execution
     * **Supported Values**:
-       * _**workers=N**_ - fixed number of N (int) workers (e.g. 2 workers => _**workers=2**_)
-       * _**workers=NC**_ - N (int/float) workers per CPU core (e.g. 5 workers on a 2 core machine, 10 workers on a 4 core machine => _**workers=2.5C**_)
-    * **Default Value**: 1 worker per every 2 CPU cores => _**workers=0.5C**_
+       * _**workers=N**_ - max number of N (int) workers (e.g. 2 workers => _**workers=2**_)
+       * _**workers=NC**_ - max N (int/float) workers per CPU core (e.g. max 5 workers on a 2 core machine, max 10 workers on a 4 core machine => _**workers=2.5C**_)
+    * **Default Value**: max 1 worker per every 2 CPU cores => _**workers=0.5C**_
     * **Usage Examples**:
       * `cds build --for ord --opts 'workers=2'`
       * `cds build --for ord --opts 'workers=2.5C'`
