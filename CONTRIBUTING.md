@@ -39,29 +39,20 @@ The following rule governs code contributions:
 
 ## Development Setup
 
-As this is a CAP plugin, it is best to develop in the following calesi environment:
+Clone this repository on your machine:
 
 ```bash
-git clone --recursive https://github.com/cap-js/calesi.git
-cd calesi
-npm i
-```
-
-Then clone this repository inside the calesi projects plugin folder:
-
-```bash
-cd plugins
-git clone https://github.com/cap-js/ORD
-cd ORD
-npm i
+git clone https://github.com/cap-js/ord
+cd ord
+npm install
 ```
 
 For testing an example app is available in the `xmpl` folder:
 
 ```bash
 #If not already globally installed, install cds-dk
-npm install -g @sap/cds-dk
-cds w xmpl
+which cds || npm install -g @sap/cds-dk
+cds watch xmpl
 ```
 
 After the CAP app has started, open this link in your browser: <http://localhost:4004/.well-known/open-resource-discovery>
