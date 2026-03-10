@@ -1,5 +1,5 @@
-const { createAPIResourceTemplate } = require("../../lib/templates");
-const { DATA_PRODUCT_ANNOTATION, DATA_PRODUCT_SIMPLE_ANNOTATION, DATA_PRODUCT_TYPE } = require("../../lib/constants");
+const { createAPIResourceTemplate } = require("../../lib/core/templates");
+const { DATA_PRODUCT_ANNOTATION, DATA_PRODUCT_SIMPLE_ANNOTATION, DATA_PRODUCT_TYPE } = require("../../lib/common/constants");
 
 describe("Version Suffix Extraction for Data Product Services", () => {
     const mockAppConfig = {

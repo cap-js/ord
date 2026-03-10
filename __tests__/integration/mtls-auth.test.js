@@ -35,7 +35,7 @@ const path = require("path");
 const http = require("http");
 const net = require("net");
 const fs = require("fs");
-const { CF_MTLS_HEADERS } = require("../../lib/constants");
+const { CF_MTLS_HEADERS } = require("../../lib/common/constants");
 
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
 const ORD_DOCUMENT_ENDPOINT = "/ord/v1/documents/ord-document";

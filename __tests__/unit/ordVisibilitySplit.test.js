@@ -3,7 +3,7 @@ const {
     createAPIResourceTemplate,
     createEventResourceTemplate,
     _getPackageID,
-} = require("../../lib/templates");
+} = require("../../lib/core/templates");
 
 describe("templates", () => {
     const appConfig = {

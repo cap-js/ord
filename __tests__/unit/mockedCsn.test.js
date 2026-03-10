@@ -14,8 +14,8 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         // Mock the createAuthConfig to return a default open configuration
         mockCreateAuthConfig(authentication);
 
-        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
-        ord = require("../../lib/ord");
+        jest.spyOn(require("../../lib/common/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        ord = require("../../lib/core/ord");
     });
 
     beforeEach(() => {
