@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.5.0 (2026-03-11)
+
+## What's Changed
+
+- fix: migrate mcp by @SirSimon04 in https://github.com/cap-js/ord/pull/369
+- fix(deps): update cds.services.version to v4.8.0 by @renovate in https://github.com/cap-js/ord/pull/379
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.4.5...v1.5.0
+
 ## 1.4.5 (2026-03-03)
 
 ## What's Changed
