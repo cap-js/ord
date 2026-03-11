@@ -1,5 +1,5 @@
 const cds = require("@sap/cds");
-const { createAPIResourceTemplate, createEventResourceTemplate } = require("../../lib/templates");
+const { createAPIResourceTemplate, createEventResourceTemplate } = require("../../lib/core/templates");
 
 describe("namespace local and global", () => {
     it("should strip application namespace from local namespace", () => {

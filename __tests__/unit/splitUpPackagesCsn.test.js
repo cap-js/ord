@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { ORD_ACCESS_STRATEGY } = require("../../lib/constants");
+const { ORD_ACCESS_STRATEGY } = require("../../lib/common/constants");
 const bahCsn = require("../__mocks__/splitUpPackagesCsn.json");
 
 describe("ORD Generation for Business Accelerator Hub", () => {
@@ -17,9 +17,9 @@ describe("ORD Generation for Business Accelerator Hub", () => {
             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         });
 
-        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        jest.spyOn(require("../../lib/common/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
         // Require ord module after mocks are set up
-        ord = require("../../lib/ord");
+        ord = require("../../lib/core/ord");
     });
 
     beforeEach(() => {
