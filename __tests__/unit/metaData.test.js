@@ -45,6 +45,22 @@ describe("metaData", () => {
         await expect(getMetadata(url)).rejects.toThrow("OpenApi error");
     });
 
+    test("getMetadata should raise error when get openapi failed", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.edmx";
+        jest.spyOn(cds, "compile").mockImplementation(() => {
+            return {
+                to: {
+                    edmx: () => {
+                        throw new Error("EDMX error");
+                    }
+                }
+            }
+        });
+
+        await expect(getMetadata(url)).rejects.toThrow("EDMX error");
+    });
+
+
     test("getMetadata should return asyncapi content for a given URL", async () => {
         const url = "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json";
         const expectedResponse = {
