@@ -168,6 +168,48 @@ function mockCreateAuthConfig(authentication, authConfig = createOpenAuthConfig(
 - Simplifies test setup with sensible defaults
 - Allows custom auth configurations when needed
 
+### 7. Event Broker Integration Dependency Pattern
+
+**Pattern**: Dual-source event collection (Build-Time + Runtime)
+**Implementation**: `lib/integrationDependency.js` + `lib/eventBrokerAdapter.js`
+
+```javascript
+// Build-Time: CDS annotations
+function collectEventBasedServices(csn) {
+    // Services with @ORD.Extensions.integrationDependency
+    // Events with @topic annotation -> eventType
+}
+
+// Runtime: Event Broker subscribedTopics
+function getSubscribedTopics() {
+    // Reads cds.services messaging services
+    // Returns service.subscribedTopics (filtered)
+}
+
+// Merged into Integration Dependency
+const allEventTypes = new Set();
+// Add CDS @topic events
+// Add runtime subscribedTopics (if available)
+```
+
+**Namespace Resolution**:
+
+1. `@ORD.Extensions.eventResourcesNamespace` annotation (explicit)
+2. Event Broker `credentials.ceSource` extraction (fallback)
+
+**Key Functions**:
+
+- `isEventBrokerConfigured()`: Checks `cds.env.requires` for `kind: "event-broker"`
+- `getEventBrokerNamespace()`: Extracts namespace from ceSource (e.g., `/default/sap.s4/...` → `sap.s4`)
+- `getSubscribedTopics()`: Collects runtime topics from messaging services
+- `isRuntimeContext()`: Detects if running with `cds.services` available
+
+**Benefits**:
+
+- Java plugin parity (`cds-feature-event-hub`)
+- Works at build-time (CDS annotations) AND runtime (subscribedTopics)
+- Automatic namespace detection from Event Broker credentials
+
 ## Component Relationships
 
 ### Core Components
@@ -185,6 +227,8 @@ function mockCreateAuthConfig(authentication, authConfig = createOpenAuthConfig(
     - `lib/authentication.js`: Security layer
     - `lib/build.js`: Build system integration
     - `lib/utils.js`: Utility functions
+    - `lib/integrationDependency.js`: Integration Dependency generation
+    - `lib/eventBrokerAdapter.js`: Event Broker detection & namespace extraction
 
 4. **Extension Points**
     - `lib/extendOrdWithCustom.js`: Custom content integration

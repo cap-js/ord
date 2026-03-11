@@ -41,6 +41,17 @@ ODM or relationship annotations (`@ODM.entityName`, `@EntityRelationship.entityT
 
 `authentication.js` builds `accessStrategies` array (currently open/basic). Environment precedence: `ORD_AUTH_TYPE` then `.cdsrc.json`. Basic auth expects bcrypt hashes (see README). When adding new strategy, propagate through `getAuthConfig()` and templates (each resourceDefinition includes `accessStrategies`).
 
+## 8a. Event Broker Integration Dependencies
+
+`integrationDependency.js` generates ORD Integration Dependencies for consumed events via Event Broker. Two data sources:
+
+1. **Build-Time** (CDS annotations): Services annotated with `@ORD.Extensions.integrationDependency` + events with `@topic` annotation.
+2. **Runtime**: `subscribedTopics` property from Event Broker messaging services (mirrors Java `cds-feature-event-hub` plugin).
+
+Namespace extraction: `eventBrokerAdapter.js` reads `credentials.ceSource` (e.g., `/default/sap.s4/...` → `sap.s4`) to determine the external event resource namespace.
+
+Triggered when: Event Broker is configured (`kind: "event-broker"` in `cds.env.requires`) AND either CDS annotations exist OR runtime `subscribedTopics` are present.
+
 ## 9. Testing Conventions
 
 Test types:
@@ -61,10 +72,12 @@ When altering merge or template logic: add/adjust a focused assertion in e2e rat
 - Adding snapshot assertions for mutable counts (API/Event resources can grow with model) → flaky CI.
 - Overwriting MCP ordId without preserving protocol/definitions (merge helper now safeguards—maintain it when refactoring).
 - Emitting private resources or unused packages—ensure filtering stays intact after changes.
+- Event Broker namespace extraction requires `credentials.ceSource` in config—without it, Integration Dependency generation is skipped.
+- Runtime `subscribedTopics` only available with real Event Broker plugin, not `file-based-messaging`.
 
 ## 12. Useful File Map
 
-`lib/ord.js` (entry orchestration) | `lib/templates.js` (all generation rules) | `lib/extendOrdWithCustom.js` (merge by ordId + null cleanup) | `lib/defaults.js` (package/product defaults) | `lib/authentication.js` (access strategies) | `lib/interopCsn.js` (interop export) | `cds-plugin.js` (registration) | `__tests__/ord.e2e.test.js` (integration patterns) | `docs/ord.md` (user customization guide).
+`lib/ord.js` (entry orchestration) | `lib/templates.js` (all generation rules) | `lib/extendOrdWithCustom.js` (merge by ordId + null cleanup) | `lib/defaults.js` (package/product defaults) | `lib/authentication.js` (access strategies) | `lib/interopCsn.js` (interop export) | `lib/integrationDependency.js` (Integration Dependency generation) | `lib/eventBrokerAdapter.js` (Event Broker detection & namespace extraction) | `cds-plugin.js` (registration) | `__tests__/ord.e2e.test.js` (integration patterns) | `docs/ord.md` (user customization guide).
 
 ## 13. When Unsure
 
