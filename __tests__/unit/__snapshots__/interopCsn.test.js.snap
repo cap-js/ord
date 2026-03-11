@@ -12,8 +12,12 @@ exports[`interop-csn should extract service metadata 1`] = `
   "meta": {
     "__name": "MyService",
     "__namespace": "customer.namespace",
+    "__privateProperty": "shouldStay",
     "document": {
       "version": "2.0.0",
+    },
+    "features": {
+      "complete": true,
     },
     "flavor": "effective",
   },
