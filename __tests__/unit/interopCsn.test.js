@@ -52,6 +52,15 @@ describe("interop-csn", () => {
             definitions: {
                 "customer.namespace.MyService.v2": { kind: "service" },
             },
+            meta: {
+              creator: "shouldVanish",
+              compilerCsnFlavor: "shouldVanish",
+              unknownProp: "shouldVanish",
+              __privateProperty: "shouldStay",
+              features: {
+                "complete": true
+              },
+            }
         };
         expect(interopCSN(csn)).toMatchSnapshot();
     });
