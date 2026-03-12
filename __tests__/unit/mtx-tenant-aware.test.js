@@ -67,7 +67,12 @@ describe("Tenant-Aware ORD", () => {
             expect(ordServiceSource).toMatch(/cds\.app\.get\(`\$\{this\.path\}`/);
 
             // The ORD document endpoint must be on the router, not cds.app
-            expect(ordServiceSource).toContain("router.get(`/ord/v1/documents/ord-document`");
+            expect(ordServiceSource).toContain("router.get(`/v1/documents/ord-document`");
+
+            // The router must be mounted on /ord with CDS middlewares
+            expect(ordServiceSource).toContain(
+                'cds.app.use("/ord", cds.middlewares.before, router, cds.middlewares.after)',
+            );
         });
     });
 
