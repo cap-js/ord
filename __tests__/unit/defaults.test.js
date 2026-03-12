@@ -179,5 +179,30 @@ describe("defaults", () => {
             };
             expect(defaults.baseTemplate(authConfig)).toMatchSnapshot();
         });
+
+        it("should include perspective when configured", () => {
+            const authConfig = {
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            const ordConfig = { perspective: "system-version" };
+            const result = defaults.baseTemplate(authConfig, ordConfig);
+            expect(result.openResourceDiscoveryV1.documents[0].perspective).toBe("system-version");
+        });
+
+        it("should not include perspective when not configured", () => {
+            const authConfig = {
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            const result = defaults.baseTemplate(authConfig);
+            expect(result.openResourceDiscoveryV1.documents[0].perspective).toBeUndefined();
+        });
+
+        it("should not include perspective when ordConfig is empty", () => {
+            const authConfig = {
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            const result = defaults.baseTemplate(authConfig, {});
+            expect(result.openResourceDiscoveryV1.documents[0].perspective).toBeUndefined();
+        });
     });
 });

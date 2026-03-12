@@ -556,3 +556,48 @@ describe("Tests for eventResource and apiResource", () => {
         expect(document).toMatchSnapshot();
     });
 });
+
+describe("Tests for ORD document perspective", () => {
+    let csn, ord;
+
+    beforeAll(async () => {
+        cds.root = path.join(__dirname, "../bookshop");
+        csn = await cds.load(path.join(cds.root, "srv"));
+        ord = require("../../lib/ord");
+    });
+
+    afterEach(() => {
+        delete cds.env.ord.perspective;
+        delete cds.env.ord.describedSystemVersion;
+        delete cds.env.ord.describedSystemInstance;
+        delete cds.env.ord.describedSystemType;
+    });
+
+    test("ORD document includes perspective when configured", () => {
+        cds.env.ord.perspective = "system-version";
+        cds.env.ord.describedSystemVersion = { version: "1.2.0" };
+        const document = ord(csn);
+        expect(document.perspective).toBe("system-version");
+        expect(document.describedSystemVersion).toEqual({ version: "1.2.0" });
+    });
+
+    test("ORD document includes describedSystemInstance when configured", () => {
+        cds.env.ord.perspective = "system-instance";
+        cds.env.ord.describedSystemInstance = { baseUrl: "https://my-app.example.com" };
+        const document = ord(csn);
+        expect(document.perspective).toBe("system-instance");
+        expect(document.describedSystemInstance).toEqual({ baseUrl: "https://my-app.example.com" });
+    });
+
+    test("ORD document omits perspective when not configured", () => {
+        const document = ord(csn);
+        expect(document.perspective).toBeUndefined();
+        expect(document.describedSystemVersion).toBeUndefined();
+    });
+
+    test("Invalid perspective value is dropped with warning", () => {
+        cds.env.ord.perspective = "invalid-value";
+        const document = ord(csn);
+        expect(document.perspective).toBeUndefined();
+    });
+});
