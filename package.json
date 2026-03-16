@@ -61,6 +61,11 @@
             },
             "[java]": {
                 "SAP ORD Service": false
+            },
+            "[mtx-sidecar]": {
+                "SAP ORD Service": {
+                    "model": "@cap-js/ord/lib/services/mtx-ord-provider-service"
+                }
             }
         }
     }
