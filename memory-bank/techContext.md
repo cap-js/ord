@@ -257,17 +257,18 @@ annotate ProcessorService with @ORD.Extensions: {
 
 ### Production Deployment
 
-- **Authentication**: Always configure authentication for production (basic-auth standard)
-- **Configuration**: Set `authenticateMetadataEndpoints` appropriately for your environment
-- **Environment Variables**: Use for runtime configuration (overrides `.cdsrc.json`)
-- **Performance**: Monitor ORD generation and interop CSN performance in production
-- **Caching**: Consider caching strategies for frequently accessed ORD documents
+- **Authentication**: Always configure authentication for production (basic-auth or CF mTLS)
+- **Configuration**: Set `authenticateMetadataEndpoints` appropriately (defaults to `false`)
+- **Environment Variables**: Use `BASIC_AUTH`, `CF_MTLS_TRUSTED_CERTS` for runtime configuration
+- **Performance**: Parallel build generation improves large-model build times (v1.5.0+)
 - **Monitoring**: Log ORD endpoint access and generation times
-- **Node.js Version**: Ensure Node.js v22 compatibility
+- **Node.js Version**: Node.js v22 required (only supported version as of v1.3.13)
+- **Build Errors**: `cds build` now propagates `BuildError` on ORD failures — monitor CI pipelines
 
 ### Development Deployment
 
 - **Hot Reload**: Works with `cds watch` for development
+- **Custom ORD File**: Note that `require()` caches the custom ORD content file — restart required to pick up changes (known issue)
 - **Debug Mode**: Supports CAP debug logging
 - **Local Testing**: Example applications in `xmpl/` directory
 - **IDE Integration**: Works with SAP Business Application Studio and VS Code

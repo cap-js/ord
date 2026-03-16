@@ -121,6 +121,7 @@ annotate ProcessorService with @ORD.Extensions: {
 
 1. **Automated Compliance**: Ensures ORD specification compliance without manual effort
 2. **CAP Native**: Deep integration with CAP framework patterns and conventions
-3. **Flexible Security**: Configurable authentication from open access to enterprise-grade security
-4. **Comprehensive Coverage**: Supports all major ORD resource types and CAP constructs
+3. **Flexible Security**: Configurable authentication — open, basic-auth (bcrypt), or CF mTLS
+4. **Comprehensive Coverage**: Supports all major ORD resource types, CAP constructs, and protocols (OData, REST, GraphQL, MCP, INA, data products)
 5. **Platform Ready**: Designed for enterprise service discovery and catalog platforms
+6. **Build Performance**: Parallel resource file generation for fast CI/CD pipelines

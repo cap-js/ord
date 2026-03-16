@@ -4,397 +4,263 @@
 
 ### Recent Development Activity
 
-**Test Code Refactoring - Clean Code Implementation (December 15, 2025)**:
+**Code Review – Core Library (March 17, 2026)**:
 
-- **Objective**: Eliminate duplicate authentication mock configurations across test files following Clean Code principles
-- **Problem Identified**: Multiple test files contained identical authentication mock configurations, violating DRY (Don't Repeat Yourself) principle
-- **Solution Implemented**:
-    - Created comprehensive test helper utility module (`__tests__/unit/utils/test-helpers.js`)
-    - Implemented reusable helper functions: `mockCdsContext()`, `mockAuthenticationService()`, `mockCreateAuthConfig()`, `setupAuthMocks()`
-    - Support for different authentication configurations: Open, Basic, CF mTLS, and Mixed
-    - Refactored 5 test files to use helper functions: `templates.test.js`, `namespace.test.js`, `ordVisibilitySplit.test.js`, `mockedCsn.test.js`, `ord.e2e.test.js`
-- **Benefits Achieved**:
-    - **Reduced Code Duplication**: Eliminated 10+ instances of repeated authentication mock configurations
-    - **Improved Maintainability**: Authentication configuration changes now require updates in only one place
-    - **Enhanced Consistency**: All tests use identical mock configurations, reducing test flakiness
-    - **Simplified Test Writing**: New tests can easily reuse authentication helpers
-    - **Better Code Organization**: Clear separation between test logic and mock setup
-- **Test Results**: All 357 tests pass (356 passed, 1 skipped), maintaining 100% test reliability
-- **Code Coverage**: Maintained high coverage (82.44% overall) while improving code quality
-- **Architecture Impact**: Established new pattern for test helper utilities that can be extended for future testing needs
+A detailed code review of `lib/ord.js`, `lib/templates.js`, `lib/extendOrdWithCustom.js`, `lib/defaults.js`, and `lib/auth/authentication.js` surfaced the following issues to address:
 
-**Authentication Test Fix (December 11, 2025)**:
+- 🔴 **`cleanNullProperties` creates sparse arrays**: `delete arr[idx]` on null array entries leaves holes instead of removing them. Arrays need special handling before the null-delete loop.
+- 🔴 **`_propagateORDVisibility` iterates `model.definitions` as an array**: Uses `for...of` on a CAP linked-model proxy and accesses `.name` on children. Should use `Object.entries()`.
+- 🔴 **`typeof [] === "array"` dead branch**: In `extendOrdWithCustom.js`, the `=== "array"` check on `typeof` can never match; the array branch is dead code.
+- 🟠 **Duplicate blocked-service-name guard** in `_triageCsnDefinitions` loop (already handled by `_isValidService`).
+- 🟠 **`require()` caches the custom ORD file**: Runtime changes silently ignored. Should use `JSON.parse(fs.readFileSync(...))`.
+- 🟠 **`...(exposedEntityTypes ? { exposedEntityTypes } : [])` spreads array into object** – no-op; should be `{}`.
+- 🟠 **Double-negation**: `_shouldNotSkipIfServiceProtocolIsNone` → rename to `_isProtocolEnabled`.
+- 🟡 **`_.assignWith` used without customiser** – equivalent to `_.assign`, misleading.
+- 🟡 **`Array.includes` in `_flattenEntityGraph`** – O(n); replace with `Set.has`.
+- 🟡 **`_getProducts` silently mutates `appConfig`** – implicit coupling.
+- 🟡 **`_getPackageID` unreachable branch** – `resourceType` is falsy but used in template literal.
 
-- **Root Cause Identified**: Authentication tests were failing because they expected a `types` property that no longer exists in the production code
-- **User's Design Decision**: The user had intentionally removed the `types` property from authentication configuration, preferring to auto-parse authentication types from the `accessStrategies` configuration instead
-- **Problem**: Tests were still expecting `authConfig.types` but the production code only provides `authConfig.accessStrategies`
-- **Solution Implemented**:
-    - Completely removed all references to `types` property from test expectations
-    - Updated all test mock configurations to only use `accessStrategies`
-    - Fixed constant mismatches where tests expected `ORD_ACCESS_STRATEGY` values but production code uses `AUTHENTICATION_TYPE` values
-    - Updated mock authenticate function to extract authentication types from `accessStrategies.map(s => s.type)` instead of expecting a separate `types` array
-- **Tests Fixed**: All 6 previously failing CF mTLS authentication tests now pass
-- **Final Result**: All 325 tests now pass (324 passed, 1 skipped), confirming the new architecture works correctly
+**v1.5.0 (March 11, 2026)**:
 
-**Authentication Error Fix (December 10, 2025)**:
+- **Parallel Resource File Generation**: Enabled concurrent file generation for improved build performance (`lib/threads/`).
+- **MCP Migration Fix**: Fixed MCP API resource generation and `customType` handling.
+- **Interop CSN Cleanup**: Removed all unknown properties from the `meta` section in interop CSN.
+- **Simplified File Generation Logic**: Refactored build file output code for clarity.
+- **Dependency Update**: CDS services updated to v4.8.0.
 
-- **Root Cause Identified**: The error `Cannot read properties of undefined (reading 'authConfig')` was caused by unreliable `cds.context` usage for storing authentication configuration
-- **Solution Implemented**: Replaced `cds.context` dependency with module-level caching for authentication configuration
-- **Architecture Simplified**: Removed async complexity from authentication initialization, making it synchronous and more reliable
-- **Tests Updated**: Modified test suite to work with new module-level caching approach instead of `cds.context` mocking
+**v1.4.5 (March 3, 2026)**:
 
-**Latest Release (v1.3.14 - November 18, 2025)**:
+- **GraphQL Protocol Support**: Added `graphql-sdl` resource definition type; `graphql` mapped in `CAP_TO_ORD_PROTOCOL_MAP`.
+- **Auto IntegrationDependencies for Consumed Data Products**: `getIntegrationDependencies()` now auto-generates entries for consumed data products.
+- **INA Protocol Support**: Added INA as an ORD-only protocol (no resource definitions).
+- **Multi-Protocol Service Detection**: Fixed detection of services exposing multiple protocols simultaneously.
+- **Error Message Improvement**: Service name now included in protocol-resolver error messages.
+- **path-to-regexp v8 Compatibility**: Fixed compatibility issue with CDS 9.7.0.
+- **Interop CSN**: Removed `@assert.unique` annotations.
+- **ESLint**: Updated to v10.
 
-- **Interop CSN Enhancement**: Removed association "localized" from interop CSN generation to improve CSN compatibility
-- **Trusted Publishing Setup**: Prepared for trusted publishing and enabled provenance for better supply chain security
-- **Dependency Updates**: Updated supertest to v7 for improved testing capabilities
-- All tests passing with enhanced interop CSN generation
+**v1.4.4 (February 5, 2026)**:
 
-**Recent Release (v1.3.13 - November 12, 2025)**:
+- **INA Protocol**: Support for INA protocol and prevention of null `entryPoints`.
+- **CDS Compiler Lock**: Locked cds-compiler to 6.6.2 via npm overrides.
 
-- **Access Strategy Migration**: Switched access strategy to basic-auth for improved security posture
-- **Authentication Configuration**: Set `authenticateMetadataEndpoints` to false by default for better flexibility
-- **Node.js Version Support**: Limited support to Node.js version 22 only
-- **ORD Specification Update**: Updated openResourceDiscovery version to 1.12
-- **Enhanced Testing**: Added dedicated auth test files for better authentication coverage
+**v1.4.3 (January 29, 2026)**:
 
-**Recent Release (v1.3.12 - October 16, 2025)**:
+- **@OpenAPI.servers Annotation**: Support for service-level server URLs via `@OpenAPI.servers`.
+- **BuildError Propagation**: `cds build` now terminates properly on ORD errors.
+- **CF mTLS Documentation**: Finalized CF mTLS configuration documentation.
 
-- **Interop CSN i18n Fix**: Fixed internationalization handling in interop CSN by using "-" as separator for language keys instead of "\_"
-- **Dependency Updates**: Updated jacoco-maven-plugin and actions/setup-node
+**v1.4.2 (January 14, 2026)**:
 
-**Recent Release (v1.3.11 - October 10, 2025)**:
+- **Data Product API Protocol Fix**: Corrected `apiProtocol` assignment for primary data product services.
 
-- **Interop CSN Production**: Introduced comprehensive interop CSN generation for better CSN format compatibility
-- **Java Authentication Fix**: Resolved authentication issues in Java runtime
-- **Local Entity Exposure Fix**: Fixed missing local entity exposure in ORD documents
-- **Dependency Updates**: Updated CDS services to v4.4.1
+**v1.4.1 (January 9, 2026)**:
 
-**Major Feature Release (v1.3.10 - September 26, 2025)**:
+- **Build Plugin Dependency Fix**: Switched from `@sap/cds-dk` to `@sap/cds` for the build plugin.
 
-- **Dual Annotation Support for Data Products**: Enhanced data product service exposure to support both `@DataIntegration.dataProduct.type: 'primary'` and the simpler `@data.product` annotation
-- **Version Suffix Handling**: Implemented clean ORD ID generation for data product services with version suffixes (e.g., `.v1`, `.v2`)
-- **Custom Build Destination**: Added support for custom build destination paths
-- **Vipe Coding Support**: Configured support for vipe coding workflow
-- **Dependency Modernization**: Major dependency updates including Node v22, Express v5, Jest v30, Spring Boot v3.5.6
-- **Renovate Integration**: Configured Renovate bot for automated dependency management
+**v1.4.0 (December 19, 2025)**:
 
-### Current Development Priorities (December 2025)
+- **CF mTLS Authentication**: Full CF mTLS support with lazy-initialized validator and dedicated test suite.
+- **Legacy Logger Removal**: Removed old logger and legacy logic.
+- **MCP API Resource Generation**: Conditional generation when MCP plugin is detected (`isMCPPluginAvailable()`).
+- **Custom Compiler Options**: Allow passing custom compiler options to OpenAPI / AsyncAPI plugins.
+- **MCP `customType`**: Added `customType` field to MCP API resources.
+- **cds.context Auth Fix**: Fixed `cds.context` being overwritten during auth config resolution.
+- **OData in Data Products Fix**: Corrected OData handling for data product services.
 
-1. **Authentication System Stability**: Successfully fixed all authentication test failures and validated the new architecture without `types` property
-2. **Test Suite Reliability**: All 325 tests now pass, including the previously problematic authentication tests
-3. **Production Stability**: Monitoring and stabilizing recent features (interop CSN, authentication improvements) in production environments
-4. **Java Runtime Maturation**: Achieving full feature parity between Node.js and Java implementations
-5. **Interop CSN Stability**: Ensuring robust interop CSN generation across various CAP model patterns
-6. **Authentication Refinement**: Improving authentication configuration flexibility and security
-7. **Node.js Version Strategy**: Planning support strategy for Node.js versions beyond v22 as ecosystem evolves
-8. **Performance Optimization**: Addressing build-time and memory usage concerns for large CAP applications
-9. **MCP Protocol Integration**: Exploring enhanced MCP API exposure capabilities
-10. **Supply Chain Security**: Maintaining trusted publishing and provenance capabilities
-11. **Dependency Management**: Keeping dependencies current through automated Renovate updates
-12. **Documentation Modernization**: Updating documentation to reflect current architecture and best practices
-13. **Community Feedback Integration**: Incorporating user feedback from v1.3.x releases into future development
-14. **CSN Format Compatibility**: Ensuring clean CSN generation for various integration scenarios
+**Test Code Refactoring – Clean Code (December 15, 2025)**:
+
+- Created `__tests__/unit/utils/test-helpers.js` with reusable helpers: `mockCdsContext()`, `mockAuthenticationService()`, `mockCreateAuthConfig()`, `setupAuthMocks()`.
+- Refactored 5 test files to use helpers; eliminated 10+ instances of repeated mock configurations.
+- All 357 tests pass (356 passed, 1 skipped).
+
+### Current Development Priorities (March 2026)
+
+1. **Code Review Remediation**: Address high- and medium-priority findings from March 2026 code review (see above).
+2. **Build Performance**: Parallel file generation (v1.5.0) — monitor for regressions in large models.
+3. **Protocol Coverage**: GraphQL, INA, MCP, multi-protocol — ensure test coverage is comprehensive.
+4. **Interop CSN Stability**: Continued cleanup (unknown `meta` properties, `@assert.unique` removed).
+5. **Authentication Hardening**: CF mTLS stabilization and documentation.
+6. **Java Runtime Parity**: Achieving full feature parity between Node.js and Java implementations.
+7. **Dependency Currency**: Renovate keeping CDS services, Spring Boot, and toolchain up to date.
+8. **ORD Specification Compliance**: Tracking any updates beyond v1.12.
 
 ## Active Decisions and Considerations
 
 ### Architecture Decisions
 
-**Authentication System Overhaul**:
+**Protocol Resolution – Dedicated Module (`lib/protocol-resolver.js`)**:
 
-- **Removed `types` Property**: User intentionally removed the `types` property from authentication configuration, preferring to auto-parse authentication types from `accessStrategies` instead
-- **Auto-parsing Design**: Authentication types are now automatically derived from the `accessStrategies` array using `accessStrategies.map(s => s.type)`
-- **Cleaner Architecture**: This eliminates redundancy and ensures consistency between what's configured and what's used
-- **Module-Level Caching**: Authentication config is cached at the module level, eliminating dependency on `cds.context`
-- **Synchronous Configuration**: Authentication config loading is now synchronous, removing async complexity
-- **Better Error Handling**: Improved error handling for configuration initialization failures
-- **Test Architecture**: Updated test suite to use comprehensive mocking that works with the new architecture
+- Extracted from `templates.js` into its own module.
+- Three resolution rules:
+    - **Rule A**: Explicit protocol + empty CAP endpoints → do NOT fall back to OData.
+    - **Rule B**: No explicit protocol + no CAP endpoint → fall back to OData v4.
+    - **Rule C**: Never produce `[null]` in `entryPoints`.
+- `ORD_ONLY_PROTOCOLS` map handles protocols like INA that have no CAP endpoint concept.
+- `PLUGIN_UNSUPPORTED_PROTOCOLS` emits a warning for protocols ORD knows but the plugin cannot generate specs for yet.
 
-**Dual Entry Point Maintenance**:
+**Authentication System (multi-strategy middleware)**:
 
-- Continue supporting both static generation and runtime API patterns
-- Ensure feature parity between Node.js and Java implementations
-- Maintain backward compatibility across CAP framework versions
+- `createAuthConfig()` detects Basic and CF mTLS independently; types stored in `authConfig.types[]`.
+- CF mTLS validator is **lazily initialized** on first mTLS request to avoid blocking service startup.
+- `AUTH_STRATEGIES` registry maps `AUTHENTICATION_TYPE` keys to async handler functions.
+- `createAuthMiddleware(authConfig)` factory produces a per-config Express middleware via closure.
+- Access strategies for the ORD document are derived via `getAccessStrategiesFromAuthConfig()` (centralized in `lib/access-strategies.js`).
 
-**Configuration Strategy**:
+**Parallel Build (v1.5.0)**:
 
-- Environment variables take precedence for runtime configuration
-- `.cdsrc.json` provides application-level defaults
-- `authenticateMetadataEndpoints` default set to false for flexibility
-- Access strategy standardized to basic-auth for consistent security
-- Enhance annotation-based customization capabilities
-- Improve custom ORD content integration workflows
+- Resource file generation (OpenAPI, EDMX, CSN) now runs concurrently using worker threads (`lib/threads/`).
+- Main build orchestration in `lib/build.js` manages thread lifecycle.
 
-**Performance Optimization**:
+**Custom ORD Content Merge**:
 
-- Focus on build-time performance for large CAP applications
-- Optimize memory usage during ORD document generation
-- Consider caching strategies for frequently accessed metadata
+- `extendCustomORDContentIfExists()` in `lib/extendOrdWithCustom.js` merges by `ordId`.
+- `patchGeneratedOrdResources()` uses `_.assign` (structuredClone) to overlay custom properties.
+- Null properties in custom content delete the corresponding generated property.
+- ⚠️ Known issue: `require()` caches the custom file — to be replaced with `JSON.parse(fs.readFileSync(...))`.
 
-### Technical Considerations
+**MCP Resource**:
 
-**Authentication Architecture Improvements**:
+- Inserted conditionally if `isMCPPluginAvailable()` returns true.
+- Template in `templates.js#createMCPAPIResourceTemplate`.
+- `customType` field required; `apiProtocol` and `resourceDefinitions` are preserved during custom merge.
 
-- **No More `types` Property**: Authentication configuration no longer includes a separate `types` array - types are auto-parsed from `accessStrategies`
-- **Module-Level Caching**: Authentication configuration is now cached at the module level, eliminating dependency on `cds.context`
-- **Synchronous Loading**: Configuration loading is now synchronous, removing async complexity and potential race conditions
-- **Robust Error Handling**: Better error handling for invalid configurations with clear error messages
-- **Simplified Testing**: Test suite updated to work with new caching approach using comprehensive mock implementation
-- **Multi-Auth Strategy Support**: Proper fallback logic between Basic auth and CF mTLS authentication
+**Dual Entry Point**:
 
-**ORD Specification Compliance**:
+- Static: `cds build --for ord` / `cds.compile.to.ord(csn)` writes `gen/ord/*`.
+- Runtime: `OpenResourceDiscoveryService` serves live ORD JSON.
 
-- Currently supporting ORD specification v1.12
-- Stay current with ORD specification updates
-- Ensure generated documents pass ORD validation requirements
-- Maintain compatibility with ORD discovery tools and platforms
-- Interop CSN format aligns with latest standards
+### Configuration Strategy
 
-**CAP Framework Evolution**:
+```
+Environment Variables > Custom ORD Content File > @ORD.Extensions Annotations > .cdsrc.json > Plugin Defaults
+```
 
-- Track CAP framework changes and adapt accordingly
-- Leverage new CAP features for improved ORD generation
-- Maintain compatibility with existing CAP applications
+- `ORD_AUTH_TYPE`, `BASIC_AUTH`, `CF_MTLS_TRUSTED_CERTS` — runtime overrides.
+- `.cdsrc.json` `ord` section — application defaults.
+- `authenticateMetadataEndpoints` defaults to `false`.
 
 ## Important Patterns and Preferences
 
 ### Code Organization Patterns
 
-**Authentication Module Pattern**:
-
-- **No `types` Property**: Don't include a separate `types` array in authentication configuration - auto-parse from `accessStrategies` instead
-- **Module-Level Variables**: Use module-level variables for caching instead of global context objects
-- **Synchronous Initialization**: Prefer synchronous initialization over async when possible
-- **Error-First Design**: Always check for errors before proceeding with operations
-- **Clear Separation**: Separate configuration creation from configuration caching
-- **Comprehensive Testing**: Use complete mock implementations that mirror production behavior
-
 **Modular Architecture**:
 
-- Keep core logic in `lib/ord.js` focused on ORD generation
-- Maintain template system in `lib/templates.js` for reusability
-- Separate authentication concerns in `lib/authentication.js`
-- Use `lib/constants.js` for shared constants instead of magic strings
+```
+lib/
+├── auth/
+│   ├── authentication.js   # Multi-strategy middleware factory
+│   └── cf-mtls.js          # CF mTLS validator (lazy-loaded)
+├── services/
+│   ├── ord-service.cds     # Service definition
+│   └── ord-service.js      # Service implementation
+├── threads/                # Worker threads for parallel build
+├── access-strategies.js    # ORD access strategy mapping (centralized)
+├── build.js                # Build system integration
+├── constants.js            # Shared constants (Object.freeze)
+├── date.js                 # RFC3339 date helper
+├── defaults.js             # Default values and package generation
+├── extendOrdWithCustom.js  # Custom content merge by ordId
+├── index.js                # Public export
+├── integrationDependency.js# IntegrationDependency generation
+├── interopCsn.js           # Interop CSN export
+├── logger.js               # Logger abstraction
+├── metaData.js             # Metadata processing
+├── ord.js                  # Core ORD generation orchestrator
+├── protocol-resolver.js    # CAP→ORD protocol resolution
+├── templates.js            # All resource template builders
+└── utils.js                # Utility functions
+```
 
 **Version Suffix Handling Pattern**:
 
-- Use strict regex validation (`/\.v(\d+)$/`) for version extraction
-- Apply to primary data product services (both `@DataIntegration.dataProduct.type: "primary"` and `@data.product`)
-- Create temporary service definitions for proper namespace processing
-- Maintain backward compatibility for all non-matching patterns
+- Strict regex: `/\.v(\d+)$/` — rejects patterns like `.v1.1`, `.v1.0`, `.beta`.
+- Scoped to primary data products only.
+- Creates a temporary clean service definition for namespace processing.
 
-**Interop CSN Generation Pattern**:
+**Interop CSN Generation**:
 
-- Remove "localized" associations to improve compatibility
-- Use "-" as separator for language keys in i18n handling
-- Ensure CSN format aligns with CAP framework expectations
-- Support for local entity exposure in interop format
-
-**Configuration Hierarchy**:
-
-```
-Environment Variables > Custom ORD Content > @ORD.Extensions > CAP Annotations > Plugin Defaults
-```
+- Removes "localized" associations.
+- Removes `@assert.unique` annotations.
+- Removes unknown properties from `meta` section.
+- Uses "-" as separator for i18n language keys.
 
 **Testing Strategy**:
 
-- Comprehensive snapshot testing for ORD document structure validation
-- Unit tests for individual functions and components
-- Dedicated authentication test files with complete mock implementations
-- Integration tests for basic-auth and mTLS scenarios
-- End-to-end tests for complete workflows
-- Mock data organization in `__tests__/__mocks__/`
-- Interop CSN generation testing
-- Module-level mocking for authentication configuration
-- **No `types` Property in Mocks**: Test mocks should only use `accessStrategies`, never include a `types` property
+- Snapshot tests in `__tests__/unit/__snapshots__/` for stable structure validation.
+- Focused field assertions in `ord.e2e.test.js` for dynamic/custom merge scenarios.
+- `__tests__/unit/utils/test-helpers.js` for reusable auth mock helpers.
+- Integration tests in `__tests__/integration/` (basic-auth, mTLS, cds-build).
+- Do NOT add snapshot assertions for mutable counts (API/Event resources grow with model).
 
 ### Development Preferences
 
 **Code Style**:
 
-- 4-space indentation consistently applied
-- ESLint recommended rules enforcement
-- Constants in SCREAMING_SNAKE_CASE with Object.freeze()
-- Files in kebab-case, functions in camelCase
+- 4-space indentation.
+- ESLint v10 recommended rules.
+- Constants in `SCREAMING_SNAKE_CASE` with `Object.freeze()`.
+- Files in kebab-case, functions in camelCase.
 
 **Error Handling**:
 
-- Graceful degradation when optional features fail
-- Clear error messages for configuration issues
-- Proper validation of ORD document structure
-- Authentication error handling with appropriate HTTP status codes
-- Module-level error handling for configuration failures
-
-**Performance Considerations**:
-
-- Lazy loading of heavy dependencies
-- Efficient CSN model processing
-- Minimal memory footprint during generation
-- Progress reporting for long-running build operations
-- Module-level caching to avoid repeated initialization
+- `createAuthConfig()` returns `{ error: string }` on config failures; callers throw.
+- Build errors use `BuildError` to properly terminate `cds build`.
+- Graceful degradation (warn + fallback) for non-critical issues (e.g., unsupported protocol).
 
 ## Key Learnings
 
-### Key Technical Insights
+**Protocol Resolution Complexity**:
 
-**Authentication Test Architecture Lessons**:
+- CAP services can expose multiple protocols simultaneously (multi-protocol fix in v1.4.5).
+- Explicit `@protocol` annotation is the authoritative source; CAP endpoints are secondary.
+- ORD-only protocols (INA) have no CAP endpoint concept and must be handled separately.
 
-- **Removing Redundant Properties**: When a user removes a property like `types` from production code, all test references must be updated accordingly
-- **Auto-parsing Benefits**: Auto-parsing authentication types from configuration eliminates redundancy and ensures consistency
-- **Test Mock Alignment**: Test mocks must exactly match the production code structure - no extra properties should be included
-- **Constant Consistency**: Tests must use the same constants as production code (`AUTHENTICATION_TYPE` vs `ORD_ACCESS_STRATEGY`)
-- **Comprehensive Mock Updates**: When changing authentication architecture, all mock configurations need to be updated consistently
+**Authentication Layering**:
 
-**Authentication Architecture Lessons**:
+- Basic auth and CF mTLS can coexist; strategies are tried in order.
+- CF mTLS lazy initialization avoids blocking startup for non-mTLS users.
+- `bcryptjs` `$2y` prefix must be normalized to `$2a` for comparison.
 
-- **Simplified Configuration**: Removing redundant properties like `types` makes configuration cleaner and less error-prone
-- **Auto-parsing Reliability**: Deriving authentication types from `accessStrategies` ensures they're always in sync
-- **Module-Level Caching Benefits**: Module-level variables provide more reliable caching than framework-dependent global objects
-- **Synchronous Simplicity**: Removing async complexity from configuration loading eliminates race conditions and improves reliability
-- **Test Architecture**: Mocking module-level caches requires different approaches than mocking global context objects
+**Custom Merge Edge Cases**:
 
-**CSN Processing Complexity**:
+- `null` values in custom ORD content act as deletion markers — correct but must be preserved through array handling.
+- `require()` caching of the custom file is a known footgun in watch mode.
 
-- CAP CSN models can be highly complex with nested relationships
-- Service definitions require careful analysis to extract ORD-relevant information
-- Entity relationships need proper mapping to ORD entity types
-- Event definitions require special handling for AsyncAPI integration
+**Build Performance**:
 
-### Current Implementation Insights
-
-**Interop CSN Generation**:
-
-- Interop CSN provides a standardized CSN format for better integration compatibility
-- Removed "localized" associations improve downstream tooling compatibility
-- Language key separators standardized to "-" for i18n consistency
-- Local entity exposure properly included in interop CSN output
-- CSN format aligns with both CAP framework and ORD requirements
-
-**Data Product Annotation Handling**:
-
-- Dual annotation support requires careful precedence logic to avoid conflicts
-- `@DataIntegration.dataProduct.type: 'primary'` takes precedence over `@data.product` when both are present
-- Both annotations trigger identical ORD resource properties for consistency
-
-**Version Suffix Processing**:
-
-- Version suffix extraction requires strict pattern validation (`/\.v(\d+)$/`)
-- Namespace processing must be applied to clean service names to prevent duplication
-- Feature scoped only to primary data products to maintain backward compatibility
-
-**MCP Integration**:
-
-- Conditional API resource generation based on plugin availability
-- Comprehensive test coverage essential for optional feature scenarios
-- Backward compatibility maintained across integration scenarios
-
-**Authentication Configuration**:
-
-- Auto-parsing authentication types from configuration is more reliable than maintaining separate arrays
-- Module-level caching is more reliable than `cds.context` for application-wide configuration
-- Synchronous initialization eliminates race conditions and startup issues
-- Environment variables override configuration file settings for runtime flexibility
-- Clear error messages help developers debug configuration issues
-
-**Authentication Challenges**:
-
-- Balancing security with ease of development
-- Environment variable configuration can be complex for teams
-- Basic authentication with bcrypt provides good security baseline
-- Future UCL-mTLS support will require significant architecture changes
-
-**Customization Balance**:
-
-- Users need extensive customization capabilities
-- Too much flexibility can break ORD compliance
-- Annotation-based customization provides good developer experience
-- Custom ORD content files offer maximum flexibility for advanced users
-
-### Integration Learnings
-
-**CAP Framework Integration**:
-
-- Plugin registration patterns work well with CAP's architecture
-- Build system integration requires careful handling of file generation
-- Service definition approach provides clean runtime API implementation
-- Compiler integration enables programmatic ORD generation
-
-**External Tool Integration**:
-
-- OpenAPI and AsyncAPI plugins provide essential resource definitions
-- EDMX generation maintains OData protocol compliance
-- Resource definition file generation requires careful path management
-- Cross-platform compatibility (Windows/Linux/macOS) needs attention
-
-### User Experience Insights
-
-**Developer Workflow**:
-
-- Zero-configuration approach works well for standard CAP applications
-- Annotation-based customization feels natural to CAP developers
-- Build integration provides familiar development experience
-- Runtime API endpoints enable dynamic discovery scenarios
-
-**Enterprise Requirements**:
-
-- Authentication is critical for production deployments
-- Visibility controls are essential for internal/external resource separation
-- Custom ORD content enables integration with enterprise catalogs
-- Performance at scale requires ongoing optimization
+- Parallel file generation (v1.5.0) significantly reduces build time for large models.
+- Worker thread lifecycle must be carefully managed to avoid leaks.
 
 ## Next Steps and Considerations
 
-### Recently Completed
-
-- ✅ **Authentication Test Fix**: Successfully resolved all authentication test failures by removing `types` property references
-- ✅ **Test Suite Stability**: All 325 tests now pass, ensuring complete test coverage and reliability
-- ✅ **Authentication Architecture Cleanup**: Successfully aligned test mocks with production code that auto-parses authentication types
-- ✅ **Constant Consistency**: Fixed all constant mismatches between tests and production code
-- ✅ **Mock Configuration Updates**: Updated all test mock configurations to match new authentication architecture
-- ✅ **Authentication Error Fix**: Successfully resolved the `Cannot read properties of undefined (reading 'authConfig')` error
-- ✅ **Module-Level Caching**: Implemented reliable module-level caching for authentication configuration
-- ✅ **Synchronous Architecture**: Simplified authentication initialization by removing async complexity
-- ✅ **Test Suite Updates**: Updated test suite to work with new authentication architecture
-- ✅ **Interop CSN Production**: Successfully implemented comprehensive interop CSN generation
-- ✅ **CSN i18n Handling**: Fixed language key separator issues in interop CSN
-- ✅ **Authentication Refinement**: Improved authentication configuration and Java support
-- ✅ **Access Strategy Standardization**: Migrated to basic-auth for consistent security
-- ✅ **ORD Specification Update**: Updated to v1.12 support
-- ✅ **Trusted Publishing**: Enabled provenance and prepared for trusted publishing
-- ✅ **Version Suffix Handling**: Successfully implemented version extraction for data product services
-- ✅ **Dual Annotation Support**: Implemented support for both data product annotation patterns
-- ✅ **Comprehensive Testing**: Enhanced test coverage including dedicated auth tests
-
 ### Immediate Priorities
 
-- Monitor authentication system stability in production usage
-- Continue stabilizing Java runtime support
-- Track ORD specification v1.12 adoption
-- Consider Node.js version support beyond v22
-- Gather feedback on authentication configuration improvements
+- Fix high-priority code review issues: `cleanNullProperties` array handling, `_propagateORDVisibility` object iteration, `typeof "array"` dead branch in `extendOrdWithCustom`.
+- Replace `require(pathToCustomORDContent)` with `JSON.parse(fs.readFileSync(...))` to fix caching.
+- Fix `...(exposedEntityTypes ? { exposedEntityTypes } : [])` spread-into-object typo.
+- Rename `_shouldNotSkipIfServiceProtocolIsNone` → `_isProtocolEnabled`.
+- Monitor parallel build stability for large CAP applications.
+- Track ORD specification updates beyond v1.12.
+
+### Recently Completed
+
+- ✅ v1.5.0: Parallel resource file generation, MCP migration fix, interop CSN meta cleanup
+- ✅ v1.4.5: GraphQL support, auto IntegrationDependencies, INA protocol, multi-protocol detection
+- ✅ v1.4.4: INA protocol null entryPoints fix, cds-compiler lock
+- ✅ v1.4.3: @OpenAPI.servers support, BuildError propagation, CF mTLS docs
+- ✅ v1.4.2: Data product apiProtocol fix
+- ✅ v1.4.1: Build plugin dependency fix (@sap/cds instead of @sap/cds-dk)
+- ✅ v1.4.0: CF mTLS auth, MCP API resources, custom compiler options, legacy logger removal
+- ✅ Test helper utility module for reusable auth mocks
+- ✅ Authentication multi-strategy middleware with CF mTLS lazy loading
+- ✅ Interop CSN: removed localized associations, @assert.unique, unknown meta properties
 
 ## Current Challenges
 
-### Technical Challenges
-
-- **Test Suite Maintenance**: Ensuring test mocks stay synchronized with production code changes
-- **Authentication Configuration**: Balancing security with deployment flexibility
-- **Node.js Version Strategy**: Managing support for evolving Node.js versions
-- **Complexity Management**: Balancing feature richness with maintainability
-- **Performance Scaling**: Handling very large CAP applications efficiently
-- **Cross-Platform Compatibility**: Ensuring consistent behavior across environments (Node.js & Java)
-- **Dependency Management**: Managing OpenAPI/AsyncAPI plugin dependencies and automated updates
-
-### User Experience Challenges
-
-- **Configuration Complexity**: Simplifying advanced configuration scenarios
-- **Error Diagnostics**: Providing clear feedback when ORD generation fails
-- **Documentation Maintenance**: Keeping documentation current with rapid development
-- **Migration Support**: Helping users upgrade between plugin versions
-
-### Ecosystem Challenges
-
-- **ORD Specification Evolution**: Staying current with specification changes
-- **CAP Framework Changes**: Adapting to CAP framework evolution
-- **Tool Integration**: Maintaining compatibility with ORD discovery tools
-- **Community Feedback**: Incorporating diverse user requirements effectively
+- **Code Quality**: Several correctness and maintainability issues identified in code review need addressing.
+- **Test Suite Maintenance**: Growing feature surface (GraphQL, MCP, INA, multi-protocol) requires test coverage expansion.
+- **Build Parallelism**: Worker thread errors in parallel build must not silently swallow file generation failures.
+- **Custom File Caching**: `require()` caching of custom ORD JSON is a developer experience issue in watch mode.
+- **Java Runtime Parity**: Ensuring all Node.js features (GraphQL, MCP, parallel build) are available in Java runtime.
+- **ORD Specification Evolution**: Staying current as ORD spec evolves past v1.12.
