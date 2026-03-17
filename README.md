@@ -231,19 +231,18 @@ const ord = cds.compile.to.ord(csn);
 
 Build all ord related documents, including ordDocument and services resources files:
 
-
 ##### Supported Options
 
 1. **workers**:
-    * **Description**: Max number of workers to use during execution
-    * **Supported Values**:
-       * _**workers=N**_ - max number of N (int) workers (e.g. 2 workers => _**workers=2**_)
-       * _**workers=NC**_ - max N (int/float) workers per CPU core (e.g. max 5 workers on a 2 core machine, max 10 workers on a 4 core machine => _**workers=2.5C**_)
-    * **Default Value**: max 1 worker per every 2 CPU cores => _**workers=0.5C**_
-    * **Usage Examples**:
-      * `cds build --for ord --opts 'workers=2'`
-      * `cds build --for ord --opts 'workers=2.5C'`
-      * `cds build --for ord --opts 'workers=0.5C'` (equivalent to `cds build --for ord`)
+    - **Description**: Max number of workers to use during execution
+    - **Supported Values**:
+        - _**workers=N**_ - max number of N (int) workers (e.g. 2 workers => _**workers=2**_)
+        - _**workers=NC**_ - max N (int/float) workers per CPU core (e.g. max 5 workers on a 2 core machine, max 10 workers on a 4 core machine => _**workers=2.5C**_)
+    - **Default Value**: max 1 worker per every 2 CPU cores => _**workers=0.5C**_
+    - **Usage Examples**:
+        - `cds build --for ord --opts 'workers=2'`
+        - `cds build --for ord --opts 'workers=2.5C'`
+        - `cds build --for ord --opts 'workers=0.5C'` (equivalent to `cds build --for ord`)
 
 ```sh
 cds build --for ord
@@ -273,6 +272,68 @@ cds compile <path to srv folder> --to ord [-o] [destinationFilePath]
 ### Customizing ORD Document
 
 You can find more information, such as how to customize the ORD Document, in this [document](./docs/ord.md).
+
+### Extension API for External Plugins
+
+The ORD plugin provides an Extension API that allows external plugins to contribute data to the ORD document.
+
+#### Integration Dependency Providers
+
+External plugins (such as `@cap-js/event-broker`) can register providers that contribute **Integration Dependency** data to the ORD document. This enables automatic discovery of consumed external resources at runtime.
+
+**Registering a Provider:**
+
+```javascript
+const cds = require("@sap/cds");
+const ord = require("@cap-js/ord");
+
+cds.once("served", () => {
+    ord.registerIntegrationDependencyProvider(() => ({
+        namespace: "sap.s4", // Event resource namespace
+        events: [
+            // Array of consumed event types
+            "sap.s4.beh.salesorder.v1.SalesOrder.Changed.v1",
+            "sap.s4.beh.businesspartner.v1.BusinessPartner.Created.v1",
+        ],
+    }));
+});
+```
+
+**Provider Contract:**
+
+The provider function must return an object with:
+
+- `namespace` (string): The namespace of the event resource (e.g., "sap.s4")
+- `events` (string[]): Array of consumed event type names
+
+Return `null` if no events are consumed.
+
+**Generated ORD Output:**
+
+```json
+{
+    "integrationDependencies": [
+        {
+            "ordId": "customer.myapp:integrationDependency:consumedEvents:v1",
+            "title": "Consumed Events",
+            "aspects": [
+                {
+                    "eventResources": [
+                        {
+                            "ordId": "sap.s4:eventResource:RawEvent:v1",
+                            "subset": [{ "eventType": "sap.s4.beh.salesorder.v1.SalesOrder.Changed.v1" }]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+```
+
+**Built-in Support:**
+
+- `@cap-js/event-broker`: Automatically registers as a provider when both plugins are installed
 
 ## How to setup dev environment and run xmpl locally
 

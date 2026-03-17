@@ -10,7 +10,7 @@ This is a CAP (@sap/cds) plugin that generates and serves Open Resource Discover
 2. Runtime API: `OpenResourceDiscoveryService` (defined in `lib/ord-service.cds` + implemented in `ord-service.js`) serves live ORD JSON + referenced specs.
 
 Core composition (read these first when changing generation logic):
-`lib/ord.js` (orchestrator) -> `templates.js` (resource templates + visibility + version extraction) -> `defaults.js` (baseline values) -> `extendOrdWithCustom.js` (merge custom overrides) -> `authentication.js` (access strategies) -> `interopCsn.js` (CSN interop export) -> `build.js` (build target wiring).
+`lib/ord.js` (orchestrator) -> `templates.js` (resource templates + visibility + version extraction) -> `defaults.js` (baseline values) -> `extendOrdWithCustom.js` (merge custom overrides) -> `authentication.js` (access strategies) -> `interopCsn.js` (CSN interop export) -> `integrationDependency.js` (Integration Dependency generation) -> `extensionRegistry.js` (external provider registration) -> `build.js` (build target wiring).
 
 ## 2. Generation Flow (critical mental model)
 
@@ -64,7 +64,7 @@ When altering merge or template logic: add/adjust a focused assertion in e2e rat
 
 ## 12. Useful File Map
 
-`lib/ord.js` (entry orchestration) | `lib/templates.js` (all generation rules) | `lib/extendOrdWithCustom.js` (merge by ordId + null cleanup) | `lib/defaults.js` (package/product defaults) | `lib/authentication.js` (access strategies) | `lib/interopCsn.js` (interop export) | `cds-plugin.js` (registration) | `__tests__/ord.e2e.test.js` (integration patterns) | `docs/ord.md` (user customization guide).
+`lib/ord.js` (entry orchestration) | `lib/templates.js` (all generation rules) | `lib/extendOrdWithCustom.js` (merge by ordId + null cleanup) | `lib/defaults.js` (package/product defaults) | `lib/authentication.js` (access strategies) | `lib/interopCsn.js` (interop export) | `lib/extensionRegistry.js` (provider registration for Integration Dependencies) | `lib/integrationDependency.js` (Integration Dependency generation) | `cds-plugin.js` (registration) | `__tests__/ord.e2e.test.js` (integration patterns) | `docs/ord.md` (user customization guide).
 
 ## 13. When Unsure
 

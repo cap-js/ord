@@ -138,9 +138,9 @@ isPrimaryDataProduct → "internal"
 
 ```javascript
 const AUTH_STRATEGIES = {
-    [AUTHENTICATION_TYPE.Basic]:  basicAuthStrategy,   // bcrypt compare
-    [AUTHENTICATION_TYPE.CfMtls]: cfMtlsAuthStrategy,  // lazy-init CF mTLS validator
-    [AUTHENTICATION_TYPE.Open]:   openAuthStrategy,    // always success
+    [AUTHENTICATION_TYPE.Basic]: basicAuthStrategy, // bcrypt compare
+    [AUTHENTICATION_TYPE.CfMtls]: cfMtlsAuthStrategy, // lazy-init CF mTLS validator
+    [AUTHENTICATION_TYPE.Open]: openAuthStrategy, // always success
 };
 
 function createAuthMiddleware(authConfig) {
@@ -196,6 +196,37 @@ function setupAuthMocks(mocks, authType = "open") { ... }
 - Returns Jest spies for post-assertion in tests.
 - `createOpenAuthConfig()`, `createBasicAuthConfig()`, `createCfMtlsAuthConfig()` cover common cases.
 
+### 9. Extension Registry Pattern
+
+**Pattern**: Plugin-to-plugin communication via provider registration
+**Implementation**: `lib/extensionRegistry.js`
+
+```javascript
+// External plugin (e.g., @cap-js/event-broker) registers provider at startup:
+const ord = require("@cap-js/ord");
+ord.registerIntegrationDependencyProvider(() => ({
+    eventResources: [
+        {
+            ordId: "sap.s4:eventResource:CE_SALESORDEREVENTS:v1",
+            events: ["sap.s4.beh.salesorder.v1.SalesOrder.Changed.v1"],
+        },
+    ],
+}));
+```
+
+**Design**:
+
+- Providers are functions returning `{ eventResources: [{ ordId, events }] }` or `null`.
+- ORD plugin builds the final ORD `subset` structure from provider data.
+- Providers are called during ORD document generation (runtime only).
+- Provider errors are logged but don't break ORD generation.
+
+**Integration**:
+
+- `integrationDependency.js#createEventIntegrationDependency()` collects data from all providers.
+- Exported via `cds-plugin.js` as `module.exports.registerIntegrationDependencyProvider`.
+- Follows Java plugin pattern (Spring DI `OrdIntegrationDependencyProvider` beans).
+
 ## Component Relationships
 
 ### Core Components
@@ -220,6 +251,7 @@ function setupAuthMocks(mocks, authType = "open") { ... }
 
 4. **Extension Points**
     - `lib/extendOrdWithCustom.js`: Custom content merge by `ordId`
+    - `lib/extensionRegistry.js`: Provider registration for Integration Dependencies
     - `lib/integrationDependency.js`: IntegrationDependency generation
     - `lib/interopCsn.js`: Interop CSN export
     - `lib/metaData.js`: Metadata processing
