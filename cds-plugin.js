@@ -1,5 +1,5 @@
 const cds = require("@sap/cds");
-const { registerIntegrationDependencyProvider } = require("./lib/extensionRegistry");
+const { registerIntegrationDependencyProvider } = require("./lib/extension-registry");
 
 if (cds.cli.command === "build") {
     cds.build?.register?.("ord", require("./lib/build"));

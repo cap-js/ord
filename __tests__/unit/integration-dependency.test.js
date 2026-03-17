@@ -4,9 +4,9 @@ const {
     createIntegrationDependency,
     createEventIntegrationDependency,
     EVENT_INTEGRATION_DEPENDENCY_RESOURCE_NAME,
-} = require("../../lib/integrationDependency");
+} = require("../../lib/integration-dependency");
 const { RESOURCE_VISIBILITY } = require("../../lib/constants");
-const { registerIntegrationDependencyProvider, _clearProviders } = require("../../lib/extensionRegistry");
+const { registerIntegrationDependencyProvider, _clearProviders } = require("../../lib/extension-registry");
 
 describe("integrationDependency", () => {
     const mockAppConfig = {

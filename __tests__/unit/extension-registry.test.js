@@ -8,9 +8,9 @@ const {
     hasIntegrationDependencyProviders,
     _clearProviders,
     _getProviderCount,
-} = require("../../lib/extensionRegistry");
+} = require("../../lib/extension-registry");
 
-describe("extensionRegistry", () => {
+describe("extension-registry", () => {
     beforeEach(() => {
         // Clear providers before each test
         _clearProviders();

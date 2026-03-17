@@ -6,8 +6,8 @@
  */
 
 // Import from the ORD plugin
-const { registerIntegrationDependencyProvider, _clearProviders } = require("../../lib/extensionRegistry");
-const { getIntegrationDependencies } = require("../../lib/integrationDependency");
+const { registerIntegrationDependencyProvider, _clearProviders } = require("../../lib/extension-registry");
+const { getIntegrationDependencies } = require("../../lib/integration-dependency");
 
 describe("Extension Registry Integration", () => {
     const mockAppConfig = {
