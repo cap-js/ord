@@ -178,7 +178,29 @@ Parallel Resource File Generation (worker threads)
 Progress Reporting + Error Aggregation
 ```
 
-### 8. Test Helper Pattern
+### 8. Runtime API Service Pattern
+
+**Pattern**: `cds.ApplicationService` subclass registering Express routes directly
+**Implementation**: `lib/services/ord-service.js`
+
+```
+OpenResourceDiscoveryService.init()
+    ├── createAuthConfig()          → fail-closed on config errors
+    ├── createAuthMiddleware(cfg)   → closure-based Express middleware (open/basic/cf-mtls)
+    ├── GET this.path               → well-known discovery JSON (unauthenticated)
+    ├── GET /ord/v1/documents/ord-document  → full ORD document (authenticated)
+    ├── GET /ord/v1/documents/:id   → 404 placeholder (unimplemented)
+    └── GET /ord/v1[/:ordId[/:service]]     → spec files (OAS3/EDMX/CSN/MCP) via compileMetadata()
+```
+
+**Key implementation notes**:
+
+- `authMiddleware` factory is called **once** in `init()` and reused across all protected routes (no per-request overhead).
+- Three explicit metadata routes replace a single optional-param route for `path-to-regexp` v8 compatibility (CDS 9.7.0+).
+- `compileMetadata(req.url)` delegates spec compilation to `lib/meta-data.js` which dispatches by file extension (`.oas3.json`, `.edmx`, `.csn.json`, `.mcp.json`).
+- ⚠️ Known issues: (1) `ord(csn)` call is unguarded — an unhandled exception causes an unlogged 500; (2) `/ord/v1/documents/:id` is an unimplemented placeholder; (3) `/ord/v1` prefix is hard-coded rather than derived from `this.path`.
+
+### 9. Test Helper Pattern
 
 **Pattern**: Centralized test utility functions for consistent mocking
 **Implementation**: `__tests__/unit/utils/test-helpers.js`
@@ -202,7 +224,8 @@ function setupAuthMocks(mocks, authType = "open") { ... }
 
 1. **Entry Points**
     - `cds-plugin.js`: Framework integration (lazy registration)
-    - `lib/services/ord-service.cds`: Runtime service definition
+    - `lib/services/ord-service.cds`: Runtime service definition (`@rest @path: '/.well-known/open-resource-discovery'`)
+    - `lib/services/ord-service.js`: `OpenResourceDiscoveryService` – registers Express routes, wires `authMiddleware`, serves ORD document and metadata specs
 
 2. **Processing Engine**
     - `lib/ord.js`: Main ORD generation orchestrator
@@ -213,16 +236,17 @@ function setupAuthMocks(mocks, authType = "open") { ... }
 3. **Support Systems**
     - `lib/auth/authentication.js`: Multi-strategy auth middleware factory
     - `lib/auth/cf-mtls.js`: CF mTLS validator (lazy-loaded)
+    - `lib/auth/mtls-endpoint-service.js`: mTLS endpoint service helper
     - `lib/access-strategies.js`: Centralized ORD access strategy mapping
     - `lib/build.js`: Build system integration (parallel)
     - `lib/threads/`: Worker thread implementation
     - `lib/utils.js`: Utility functions
 
 4. **Extension Points**
-    - `lib/extendOrdWithCustom.js`: Custom content merge by `ordId`
-    - `lib/integrationDependency.js`: IntegrationDependency generation
-    - `lib/interopCsn.js`: Interop CSN export
-    - `lib/metaData.js`: Metadata processing
+    - `lib/extend-ord-with-custom.js`: Custom content merge by `ordId`
+    - `lib/integration-dependency.js`: IntegrationDependency generation
+    - `lib/interop-csn.js`: Interop CSN export
+    - `lib/meta-data.js`: Metadata / spec compilation (OAS3, EDMX, CSN, MCP, AsyncAPI)
 
 ### Data Flow Architecture
 

@@ -2,7 +2,7 @@ const {
     getIntegrationDependencies,
     collectExternalServices,
     createIntegrationDependency,
-} = require("../../lib/integrationDependency");
+} = require("../../lib/integration-dependency");
 const { RESOURCE_VISIBILITY } = require("../../lib/constants");
 
 describe("integrationDependency", () => {
