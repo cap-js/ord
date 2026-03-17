@@ -3,7 +3,7 @@
 ## Project Identity
 
 **Name:** `@cap-js/ord`
-**Version:** 1.3.14 (November 2025)
+**Version:** 1.5.0 (March 2026)
 **Type:** CAP Framework Plugin
 **Repository:** https://github.com/cap-js/ord
 **License:** Apache-2.0
@@ -39,16 +39,25 @@ This plugin adds support for the [Open Resource Discovery (ORD)](https://open-re
 - ORD document generation from CAP CSN models
 - REST API endpoints following ORD specification
 - Basic authentication with bcrypt password hashing
+- CF mTLS authentication for Cloud Foundry deployments
 - Custom ORD content integration
 - Build system integration for static file generation
+- Parallel resource file generation for improved build performance
 - Support for both Node.js and Java CAP runtimes
+- GraphQL protocol support
+- MCP (Model Context Protocol) API resource generation
+- INA protocol support
+- Multi-protocol service detection
+- Auto-generated IntegrationDependencies for consumed Data Products
+- Custom compiler options for OpenAPI / AsyncAPI generation
+- @OpenAPI.servers annotation support for service-level server URLs
 
 **Out of Scope:**
 
 - Non-CAP application support
 - ORD document validation beyond basic structure
 - Runtime modification of generated ORD documents
-- Support for Node.js versions outside the 18-22 range
+- Support for Node.js versions outside the currently supported range (v22)
 
 ## Key Constraints
 
@@ -57,5 +66,5 @@ This plugin adds support for the [Open Resource Discovery (ORD)](https://open-re
 - Must maintain performance for large CAP applications
 - Must support both development and production environments
 - Must handle sensitive metadata appropriately
-- Must support Node.js versions 18-22
+- Must support Node.js v22
 - Must maintain backward compatibility across versions
