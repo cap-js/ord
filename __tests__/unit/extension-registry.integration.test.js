@@ -165,9 +165,9 @@ describe("Extension Registry Integration", () => {
         });
     });
 
-    describe("Event Broker config-based eventResources simulation", () => {
-        it("should build eventResources from config and subscribed events", () => {
-            // Simulate the Event Broker's buildEventResourcesFromConfig logic
+    describe("Event Broker integration simulation", () => {
+        it("should integrate config-based event matching with ORD generation", () => {
+            // Simulate the Event Broker's provider registration with config-based matching
             const eventResourcesConfig = [
                 {
                     ordId: "sap.s4:eventResource:CE_BUSINESSPARTNEREVENTS:v1",
@@ -176,24 +176,32 @@ describe("Extension Registry Integration", () => {
             ];
             const subscribedEvents = ["sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1"];
 
-            // Simulate matching logic - Event Broker returns {ordId, events}
+            // Simulate Event Broker's provider matching logic
             const subscribedSet = new Set(subscribedEvents);
             const eventResources = [];
-
             for (const config of eventResourcesConfig) {
                 const matchedEventTypes = config.eventTypes.filter((et) => subscribedSet.has(et));
                 if (matchedEventTypes.length > 0) {
-                    eventResources.push({
-                        ordId: config.ordId,
-                        events: matchedEventTypes, // Simple array, not subset structure
-                    });
+                    eventResources.push({ ordId: config.ordId, events: matchedEventTypes });
                 }
             }
 
-            expect(eventResources).toHaveLength(1);
-            expect(eventResources[0].ordId).toBe("sap.s4:eventResource:CE_BUSINESSPARTNEREVENTS:v1");
-            expect(eventResources[0].events).toHaveLength(1);
-            expect(eventResources[0].events[0]).toBe("sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1");
+            // Register provider with the actual ORD Extension Registry
+            registerIntegrationDependencyProvider(() => ({ eventResources }));
+
+            // Test actual ORD plugin integration
+            const csn = { definitions: {} };
+            const result = getIntegrationDependencies(csn, mockAppConfig, mockPackageIds);
+
+            expect(result).toHaveLength(1);
+            expect(result[0].ordId).toContain(":integrationDependency:consumedEvents:v1");
+            expect(result[0].aspects[0].eventResources).toHaveLength(1);
+            expect(result[0].aspects[0].eventResources[0].ordId).toBe(
+                "sap.s4:eventResource:CE_BUSINESSPARTNEREVENTS:v1",
+            );
+            expect(result[0].aspects[0].eventResources[0].subset[0].eventType).toBe(
+                "sap.s4.beh.businesspartner.v1.BusinessPartner.Changed.v1",
+            );
         });
     });
 });

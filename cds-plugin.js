@@ -29,8 +29,12 @@ registerORDCompileTarget();
  * @example
  * const ord = require("@cap-js/ord");
  * ord.registerIntegrationDependencyProvider(() => ({
- *     namespace: "sap.s4",
- *     events: ["sap.s4.beh.salesorder.v1.SalesOrder.Changed.v1"]
+ *     eventResources: [
+ *         {
+ *             ordId: "sap.s4:eventResource:CE_SALESORDEREVENTS:v1",
+ *             events: ["sap.s4.beh.salesorder.v1.SalesOrder.Changed.v1"]
+ *         }
+ *     ]
  * }));
  */
 module.exports = {
