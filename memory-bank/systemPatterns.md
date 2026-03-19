@@ -218,7 +218,8 @@ function setupAuthMocks(mocks, authType = "open") { ... }
 - Returns Jest spies for post-assertion in tests.
 - `createOpenAuthConfig()`, `createBasicAuthConfig()`, `createCfMtlsAuthConfig()` cover common cases.
 
-### 9. Extension Registry Pattern
+### 10. Extension Registry Pattern
+
 
 **Pattern**: Plugin-to-plugin communication via provider registration
 **Implementation**: `lib/extensionRegistry.js`
