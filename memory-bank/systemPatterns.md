@@ -222,7 +222,8 @@ function setupAuthMocks(mocks, authType = "open") { ... }
 
 
 **Pattern**: Plugin-to-plugin communication via provider registration
-**Implementation**: `lib/extensionRegistry.js`
+**Implementation**: `lib/extension-registry.js`
+
 
 ```javascript
 // External plugin (e.g., @cap-js/event-broker) registers provider at startup:
