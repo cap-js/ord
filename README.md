@@ -303,8 +303,11 @@ cds.once("served", () => {
 
 The provider function must return an object with:
 
-- `namespace` (string): The namespace of the event resource (e.g., "sap.s4")
-- `events` (string[]): Array of consumed event type names
+- `eventResources` (Array): Array of event resource objects, each containing:
+  - `ordId` (string): The ORD ID of the external event resource (e.g., `"sap.s4:eventResource:CE_SALESORDEREVENTS:v1"`)
+  - `events` (string[]): Array of consumed event type names
+
+Return `null` if no events are consumed.
 
 Return `null` if no events are consumed.
 
