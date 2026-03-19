@@ -289,14 +289,17 @@ const ord = require("@cap-js/ord");
 
 cds.once("served", () => {
     ord.registerIntegrationDependencyProvider(() => ({
-        namespace: "sap.s4", // Event resource namespace
-        events: [
-            // Array of consumed event types
-            "sap.s4.beh.salesorder.v1.SalesOrder.Changed.v1",
-            "sap.s4.beh.businesspartner.v1.BusinessPartner.Created.v1",
+        eventResources: [
+            {
+                ordId: "sap.s4:eventResource:CE_SALESORDEREVENTS:v1",
+                events: [
+                    "sap.s4.beh.salesorder.v1.SalesOrder.Changed.v1",
+                    "sap.s4.beh.businesspartner.v1.BusinessPartner.Created.v1",
+                ],
+            },
         ],
     }));
-});
+
 ```
 
 **Provider Contract:**
