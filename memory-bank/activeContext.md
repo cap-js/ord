@@ -149,27 +149,28 @@ Environment Variables > Custom ORD Content File > @ORD.Extensions Annotations > 
 ```
 lib/
 ├── auth/
-│   ├── authentication.js   # Multi-strategy middleware factory
-│   └── cf-mtls.js          # CF mTLS validator (lazy-loaded)
+│   ├── authentication.js      # Multi-strategy middleware factory
+│   ├── cf-mtls.js             # CF mTLS validator (lazy-loaded)
+│   └── mtls-endpoint-service.js # mTLS endpoint service helper
 ├── services/
-│   ├── ord-service.cds     # Service definition
-│   └── ord-service.js      # Service implementation
-├── threads/                # Worker threads for parallel build
-├── access-strategies.js    # ORD access strategy mapping (centralized)
-├── build.js                # Build system integration
-├── constants.js            # Shared constants (Object.freeze)
-├── date.js                 # RFC3339 date helper
-├── defaults.js             # Default values and package generation
-├── extendOrdWithCustom.js  # Custom content merge by ordId
-├── index.js                # Public export
-├── integrationDependency.js# IntegrationDependency generation
-├── interopCsn.js           # Interop CSN export
-├── logger.js               # Logger abstraction
-├── metaData.js             # Metadata processing
-├── ord.js                  # Core ORD generation orchestrator
-├── protocol-resolver.js    # CAP→ORD protocol resolution
-├── templates.js            # All resource template builders
-└── utils.js                # Utility functions
+│   ├── ord-service.cds        # Runtime service definition (@rest @path:/.well-known/open-resource-discovery)
+│   └── ord-service.js         # OpenResourceDiscoveryService – Express routes + auth wiring
+├── threads/                   # Worker threads for parallel build
+├── access-strategies.js       # ORD access strategy mapping (centralized)
+├── build.js                   # Build system integration
+├── constants.js               # Shared constants (Object.freeze)
+├── date.js                    # RFC3339 date helper
+├── defaults.js                # Default values and package generation
+├── extend-ord-with-custom.js  # Custom content merge by ordId
+├── index.js                   # Public export
+├── integration-dependency.js  # IntegrationDependency generation
+├── interop-csn.js             # Interop CSN export
+├── logger.js                  # Logger abstraction
+├── meta-data.js               # Metadata / spec compilation (OAS3, EDMX, CSN, MCP)
+├── ord.js                     # Core ORD generation orchestrator
+├── protocol-resolver.js       # CAP→ORD protocol resolution
+├── templates.js               # All resource template builders
+└── utils.js                   # Utility functions
 ```
 
 **Version Suffix Handling Pattern**:
@@ -236,6 +237,7 @@ lib/
 
 ### Immediate Priorities
 
+- **`ord-service.js` hardening**: Wrap `ord(csn)` call in try/catch and log errors; remove or implement `/ord/v1/documents/:id` placeholder; unify hard-coded `/ord/v1` prefix with `this.path`.
 - Fix high-priority code review issues: `cleanNullProperties` array handling, `_propagateORDVisibility` object iteration, `typeof "array"` dead branch in `extendOrdWithCustom`.
 - Replace `require(pathToCustomORDContent)` with `JSON.parse(fs.readFileSync(...))` to fix caching.
 - Fix `...(exposedEntityTypes ? { exposedEntityTypes } : [])` spread-into-object typo.

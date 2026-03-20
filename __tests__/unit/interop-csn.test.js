@@ -1,4 +1,4 @@
-const { interopCSN } = require("../../lib/interopCsn.js");
+const { interopCSN } = require("../../lib/interop-csn.js");
 
 jest.mock("@sap/cds/lib/i18n/localize", () => ({
     bundles4: jest.fn(),
