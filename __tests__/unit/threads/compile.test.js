@@ -6,7 +6,7 @@ describe("compileMetadata", () => {
     afterEach(() => jest.resetModules());
 
     it("error is thrown when compilation fails", async () => {
-        jest.mock("../../../lib/metaData", () => (url) => Promise.reject(url));
+        jest.mock("../../../lib/meta-data", () => (url) => Promise.reject(url));
 
         const compile = require("../../../lib/threads/compile");
 
@@ -15,7 +15,7 @@ describe("compileMetadata", () => {
 
     it("should compile metadata and return response", async () => {
         jest.mock(
-            "../../../lib/metaData",
+            "../../../lib/meta-data",
             () => (url) =>
                 Promise.resolve({
                     response: url,

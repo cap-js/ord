@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
-const { extendCustomORDContentIfExists } = require("../../lib/extendOrdWithCustom");
+const { extendCustomORDContentIfExists } = require("../../lib/extend-ord-with-custom");
 
 describe("extendOrdWithCustom", () => {
     let appConfig = {};
