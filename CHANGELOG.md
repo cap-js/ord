@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.5.0 (2026-03-11)
+
+## What's Changed
+
+- feat: Enable parallel resource file generation by @mlakov in https://github.com/cap-js/ord/pull/376
+- fix: migrate mcp by @SirSimon04 in https://github.com/cap-js/ord/pull/369
+- fix: in interop-csn, remove all unknown properties from meta section by @stewsk in https://github.com/cap-js/ord/pull/387
+- fix(deps): update cds.services.version to v4.8.0 by @renovate in https://github.com/cap-js/ord/pull/379
+- chore: Simplify file generation logic by @mlakov in https://github.com/cap-js/ord/pull/381
+- chore: Update CONTRIBUTING.md by @mlakov in https://github.com/cap-js/ord/pull/386
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.4.5...v1.5.0
+
 ## 1.4.5 (2026-03-03)
 
 ## What's Changed

@@ -1,4 +1,4 @@
-const { interopCSN } = require("../../lib/interopCsn.js");
+const { interopCSN } = require("../../lib/interop-csn.js");
 
 jest.mock("@sap/cds/lib/i18n/localize", () => ({
     bundles4: jest.fn(),
@@ -52,6 +52,15 @@ describe("interop-csn", () => {
             definitions: {
                 "customer.namespace.MyService.v2": { kind: "service" },
             },
+            meta: {
+              creator: "shouldVanish",
+              compilerCsnFlavor: "shouldVanish",
+              unknownProp: "shouldVanish",
+              __privateProperty: "shouldStay",
+              features: {
+                "complete": true
+              },
+            }
         };
         expect(interopCSN(csn)).toMatchSnapshot();
     });

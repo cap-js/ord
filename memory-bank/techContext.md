@@ -180,17 +180,29 @@ service OpenResourceDiscoveryService {}
 
 ```
 lib/
-├── authentication.js    # Authentication middleware
-├── build.js            # Build system integration
-├── constants.js        # Shared constants
-├── defaults.js         # Default values and validation
-├── extendOrdWithCustom.js # Custom content integration
-├── index.js            # Main export
-├── ord.js              # Core ORD generation logic
-├── ord-service.cds     # Service definition
-├── ord-service.js      # Service implementation
-├── templates.js        # Template system
-└── utils.js            # Utility functions
+├── auth/
+│   ├── authentication.js         # Multi-strategy auth middleware factory
+│   ├── cf-mtls.js                # CF mTLS validator (lazy-loaded)
+│   └── mtls-endpoint-service.js  # mTLS endpoint service helper
+├── services/
+│   ├── ord-service.cds           # Service definition
+│   └── ord-service.js            # OpenResourceDiscoveryService implementation
+├── threads/                      # Worker threads for parallel build
+├── access-strategies.js          # ORD access strategy mapping (centralized)
+├── build.js                      # Build system integration
+├── constants.js                  # Shared constants (Object.freeze)
+├── date.js                       # RFC3339 date helper
+├── defaults.js                   # Default values and validation
+├── extend-ord-with-custom.js     # Custom content merge by ordId
+├── index.js                      # Main export
+├── integration-dependency.js     # IntegrationDependency generation
+├── interop-csn.js                # Interop CSN export
+├── logger.js                     # Logger abstraction
+├── meta-data.js                  # Metadata / spec compilation
+├── ord.js                        # Core ORD generation logic
+├── protocol-resolver.js          # CAP → ORD protocol mapping
+├── templates.js                  # Template system
+└── utils.js                      # Utility functions
 ```
 
 ### Testing Patterns
@@ -257,17 +269,18 @@ annotate ProcessorService with @ORD.Extensions: {
 
 ### Production Deployment
 
-- **Authentication**: Always configure authentication for production (basic-auth standard)
-- **Configuration**: Set `authenticateMetadataEndpoints` appropriately for your environment
-- **Environment Variables**: Use for runtime configuration (overrides `.cdsrc.json`)
-- **Performance**: Monitor ORD generation and interop CSN performance in production
-- **Caching**: Consider caching strategies for frequently accessed ORD documents
+- **Authentication**: Always configure authentication for production (basic-auth or CF mTLS)
+- **Configuration**: Set `authenticateMetadataEndpoints` appropriately (defaults to `false`)
+- **Environment Variables**: Use `BASIC_AUTH`, `CF_MTLS_TRUSTED_CERTS` for runtime configuration
+- **Performance**: Parallel build generation improves large-model build times (v1.5.0+)
 - **Monitoring**: Log ORD endpoint access and generation times
-- **Node.js Version**: Ensure Node.js v22 compatibility
+- **Node.js Version**: Node.js v22 required (only supported version as of v1.3.13)
+- **Build Errors**: `cds build` now propagates `BuildError` on ORD failures — monitor CI pipelines
 
 ### Development Deployment
 
 - **Hot Reload**: Works with `cds watch` for development
+- **Custom ORD File**: Note that `require()` caches the custom ORD content file — restart required to pick up changes (known issue)
 - **Debug Mode**: Supports CAP debug logging
 - **Local Testing**: Example applications in `xmpl/` directory
 - **IDE Integration**: Works with SAP Business Application Studio and VS Code

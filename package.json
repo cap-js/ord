@@ -1,6 +1,6 @@
 {
     "name": "@cap-js/ord",
-    "version": "1.4.5",
+    "version": "1.5.0",
     "description": "CAP Plugin for generating ORD document.",
     "repository": "cap-js/ord",
     "author": "SAP SE (https://www.sap.com)",
@@ -34,7 +34,7 @@
         "eslint": "^10.0.0",
         "express": "^4",
         "jest": "^30.0.0",
-        "prettier": "3.8.1",
+        "prettier": "3.8.2",
         "supertest": "^7.0.0"
     },
     "peerDependencies": {
@@ -45,7 +45,8 @@
         "@cap-js/openapi": "^1.2.1",
         "bcryptjs": "3.0.3",
         "cli-progress": "^3.12.0",
-        "lodash": "^4.17.21"
+        "lodash": "^4.17.21",
+        "piscina": "^5.1.4"
     },
     "engines": {
         "node": ">=18 <23"
@@ -56,10 +57,15 @@
     "cds": {
         "requires": {
             "SAP ORD Service": {
-                "model": "@cap-js/ord/lib/ord-service"
+                "model": "@cap-js/ord/lib/services/ord-service"
             },
             "[java]": {
                 "SAP ORD Service": false
+            },
+            "[mtx-sidecar]": {
+                "SAP ORD Service": {
+                    "model": "@cap-js/ord/lib/services/mtx-ord-provider-service"
+                }
             }
         }
     }
