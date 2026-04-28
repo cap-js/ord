@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`extendOrdWithCustom extendCustomORDContentIfExists should add new ord resources that are not supported by cap framework 1`] = `
+exports[`extendOrdWithCustom extend-ord-with-custom should add new ord resources that are not supported by cap framework 1`] = `
 {
   "dataProducts": [
     {
@@ -31,7 +31,7 @@ exports[`extendOrdWithCustom extendCustomORDContentIfExists should add new ord r
 }
 `;
 
-exports[`extendOrdWithCustom extendCustomORDContentIfExists should enhance the list of generated ord resources 1`] = `
+exports[`extendOrdWithCustom extend-ord-with-custom should enhance the list of generated ord resources 1`] = `
 {
   "packages": [
     {
@@ -46,7 +46,7 @@ exports[`extendOrdWithCustom extendCustomORDContentIfExists should enhance the l
 }
 `;
 
-exports[`extendOrdWithCustom extendCustomORDContentIfExists should ignore and log warn if found ord top-level primitive property in customOrdFile 1`] = `
+exports[`extendOrdWithCustom extend-ord-with-custom should ignore and log warn if found ord top-level primitive property in customOrdFile 1`] = `
 {
   "packages": [
     {
@@ -57,7 +57,7 @@ exports[`extendOrdWithCustom extendCustomORDContentIfExists should ignore and lo
 }
 `;
 
-exports[`extendOrdWithCustom extendCustomORDContentIfExists should should patch the existing generated ord resources 1`] = `
+exports[`extendOrdWithCustom extend-ord-with-custom should should patch the existing generated ord resources 1`] = `
 {
   "apiResources": [
     {

@@ -114,7 +114,10 @@ A detailed code review of `lib/ord.js`, `lib/templates.js`, `lib/extendOrdWithCu
 
 **Custom ORD Content Merge**:
 
-- `extendCustomORDContentIfExists()` in `lib/extendOrdWithCustom.js` merges by `ordId`.
+- `extendCustomORDContentIfExists()` was removed. Responsibility split into two focused functions in `lib/extend-ord-with-custom.js`:
+  - `getCustomORDContent(appConfig)` — loads custom ORD JSON from `env.ord.customOrdContentFile`; returns `undefined` if absent.
+  - `compareAndHandleCustomORDContentWithExistingContent(ordContent, customORDContent)` — merges by `ordId`.
+- In `lib/ord.js`, runtime extensions (from `cds.on("ord.extension.publish")`) and the config-based custom file are merged sequentially via a single `forEach` loop, with `undefined` entries filtered out.
 - `patchGeneratedOrdResources()` uses `_.assign` (structuredClone) to overlay custom properties.
 - Null properties in custom content delete the corresponding generated property.
 - ⚠️ Known issue: `require()` caches the custom file — to be replaced with `JSON.parse(fs.readFileSync(...))`.
@@ -238,7 +241,7 @@ lib/
 ### Immediate Priorities
 
 - **`ord-service.js` hardening**: Wrap `ord(csn)` call in try/catch and log errors; remove or implement `/ord/v1/documents/:id` placeholder; unify hard-coded `/ord/v1` prefix with `this.path`.
-- Fix high-priority code review issues: `cleanNullProperties` array handling, `_propagateORDVisibility` object iteration, `typeof "array"` dead branch in `extendOrdWithCustom`.
+- Fix high-priority code review issues: `cleanNullProperties` array handling, `_propagateORDVisibility` object iteration, `typeof "array"` dead branch.
 - Replace `require(pathToCustomORDContent)` with `JSON.parse(fs.readFileSync(...))` to fix caching.
 - Fix `...(exposedEntityTypes ? { exposedEntityTypes } : [])` spread-into-object typo.
 - Rename `_shouldNotSkipIfServiceProtocolIsNone` → `_isProtocolEnabled`.
@@ -247,6 +250,7 @@ lib/
 
 ### Recently Completed
 
+- ✅ Removed `extendCustomORDContentIfExists()` — split into `getCustomORDContent()` + `compareAndHandleCustomORDContentWithExistingContent()` for cleaner separation and runtime extension support
 - ✅ v1.5.0: Parallel resource file generation, MCP migration fix, interop CSN meta cleanup
 - ✅ v1.4.5: GraphQL support, auto IntegrationDependencies, INA protocol, multi-protocol detection
 - ✅ v1.4.4: INA protocol null entryPoints fix, cds-compiler lock
