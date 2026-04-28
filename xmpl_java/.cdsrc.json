@@ -1,4 +1,11 @@
 {
+    "build": {
+        "target": ".",
+        "tasks": [
+            { "for": "java", "src": "srv" },
+            { "for": "ord", "src": "srv", "dest": "srv/src/main/resources/ord" }
+        ]
+    },
     "ord": {
         "namespace": "customer.sample",
         "description": "this is my java example description",

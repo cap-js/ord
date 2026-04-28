@@ -124,9 +124,8 @@
 						</goals>
 						<configuration>
 							<commands>
-								<command>build --for java</command>
+								<command>build</command>
 								<command>deploy --to h2 --with-mocks --dry --out "${project.basedir}/src/main/resources/schema-h2.sql"</command>
-								<command>build --for ord -o "${project.basedir}/src/main/resources/ord"</command>
 							</commands>
 						</configuration>
 					</execution>
