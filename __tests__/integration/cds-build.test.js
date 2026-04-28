@@ -8,6 +8,20 @@ const GEN_DIR = path.join(TEST_APP_ROOT, "gen");
 const ORD_GEN_DIR = path.join(GEN_DIR, "srv");
 const ORD_DOC_PATH = path.join(ORD_GEN_DIR, "ord-document.json");
 
+function fixLastUpdateForStableTest(ord) {
+    (ord.consumptionBundles || []).find((cb) => {
+        cb.lastUpdate = "2026-05-04T13:45:01+01:00";
+    });
+    (ord.eventResources || []).find((er) => {
+        er.lastUpdate = "2026-05-04T13:45:01+01:00";
+    });
+    (ord.apiResources || []).find((ar) => {
+        ar.lastUpdate = "2026-05-04T13:45:01+01:00";
+    });
+
+    return ord;
+}
+
 /**
  * Execute cds build command and return result
  * @param {string} cwd - Working directory
@@ -76,6 +90,7 @@ describe("ORD Build Integration Tests", () => {
         test("should generate ord-document.json", () => {
             expect(fs.existsSync(ORD_DOC_PATH)).toBe(true);
             expect(fs.statSync(ORD_DOC_PATH).size).toBeGreaterThan(0);
+            expect(fixLastUpdateForStableTest(JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8")))).toMatchSnapshot();
         });
 
         test("should have correct ORD document structure", () => {
@@ -83,6 +98,8 @@ describe("ORD Build Integration Tests", () => {
             expect(ordDocument).toHaveProperty("apiResources");
             expect(ordDocument).toHaveProperty("eventResources");
             expect(ordDocument).toHaveProperty("packages");
+            expect(ordDocument).toHaveProperty("perspective");
+            expect(ordDocument).toHaveProperty("describedSystemVersion");
         });
 
         test("should generate API resource definition files with non-zero size", () => {
@@ -173,7 +190,7 @@ describe("ORD Build Integration Tests", () => {
             cleanupDir(GEN_DIR);
             buildResult = await runCdsBuild(TEST_APP_ROOT, CDSRC_CONFIG);
             if (fs.existsSync(ORD_DOC_PATH)) {
-                ordDocument = JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8"));
+                ordDocument = fixLastUpdateForStableTest(JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8")));
             }
         }, 60000);
 
@@ -183,6 +200,10 @@ describe("ORD Build Integration Tests", () => {
 
         test("should exit with code 0", () => {
             expect(buildResult.code).toBe(0);
+        });
+
+        test("should match snapshot", () => {
+            expect(ordDocument).toMatchSnapshot();
         });
 
         test("should apply cdsrc customization to IntegrationDependency", () => {
@@ -216,7 +237,7 @@ describe("ORD Build Integration Tests", () => {
             cleanupDir(GEN_DIR);
             buildResult = await runCdsBuild(TEST_APP_ROOT, CDSRC_CONFIG);
             if (fs.existsSync(ORD_DOC_PATH)) {
-                ordDocument = JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8"));
+                ordDocument = fixLastUpdateForStableTest(JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8")));
             }
         }, 60000);
 
@@ -226,6 +247,10 @@ describe("ORD Build Integration Tests", () => {
 
         test("should exit with code 0", () => {
             expect(buildResult.code).toBe(0);
+        });
+
+        test("should match snapshot", () => {
+            expect(ordDocument).toMatchSnapshot();
         });
 
         test("should merge custom.ord.json patches to IntegrationDependency", () => {

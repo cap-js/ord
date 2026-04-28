@@ -1,5 +1,8 @@
 {
     "ord": {
+        "describedSystemVersion": {
+            "version": "1.0.0"
+        },
         "integrationDependency": {
             "title": "Custom External Dependencies",
             "version": "2.0.0",

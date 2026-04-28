@@ -1,5 +1,12 @@
 const defaults = require("../../lib/defaults");
-const { AUTHENTICATION_TYPE } = require("../../lib/constants");
+const { AUTHENTICATION_TYPE, DOCUMENT_PERSPECTIVES } = require("../../lib/constants");
+const cds = require("@sap/cds");
+
+jest.mock("fs", () => {
+    return {
+        readFileSync: () => (JSON.stringify({version:  "1.0.0"})),
+    };
+});
 
 describe("defaults", () => {
     describe("$schema", () => {
@@ -171,6 +178,7 @@ describe("defaults", () => {
             expect(defaults.consumptionBundles(testAppConfig)).toMatchSnapshot();
         });
     });
+
     describe("baseTemplate", () => {
         it("should return default value", () => {
             const authConfig = {
@@ -178,6 +186,31 @@ describe("defaults", () => {
                 accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
             };
             expect(defaults.baseTemplate(authConfig)).toMatchSnapshot();
+        });
+    });
+
+    describe("resolveDocumentPerspectiveExtension", () => {
+        it("should return correct value when loading version from .cdsrc.json", () => {
+            cds.env.ord = { describedSystemVersion: { version: "0.1.0" } };
+
+            expect(defaults.resolveDocumentPerspectiveExtension()).toEqual({
+                perspective: DOCUMENT_PERSPECTIVES.SystemVersion,
+                describedSystemVersion: {
+                    version: "0.1.0",
+                },
+            });
+        });
+
+        it("should return correct value when loading version from package.json", () => {
+            cds.env.ord = undefined;
+            cds.root = "."
+
+            expect(defaults.resolveDocumentPerspectiveExtension()).toEqual({
+                perspective: DOCUMENT_PERSPECTIVES.SystemVersion,
+                describedSystemVersion: {
+                    version: "1.0.0",
+                },
+            });
         });
     });
 });

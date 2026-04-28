@@ -1,6 +1,6 @@
 const path = require("path");
-const { BUILD_DEFAULT_PATH } = require("../../lib/constants");
 const index = require("../../lib/index");
+const { BUILD_DEFAULT_PATH, DOCUMENT_PERSPECTIVES } = require("../../lib/constants");
 
 // Setup cds.build.Plugin mock BEFORE requiring build.js
 const cds = require("@sap/cds");
@@ -84,6 +84,7 @@ jest.mock("cli-progress", () => {
 describe("Build", () => {
     beforeAll(() => {
         process.env.DEBUG = "true";
+        cds.env.ord = { describedSystemVersion: { version: "0.0.1" } };
     });
 
     afterEach(() => {
@@ -213,7 +214,9 @@ describe("Build", () => {
         jest.spyOn(OrdBuildPlugin.prototype, "_createWorkerPool").mockImplementation(() => {
             return new (class {
                 close() {}
-                run() { return Promise.reject(new Error()) }
+                run() {
+                    return Promise.reject(new Error());
+                }
             })();
         });
 
@@ -257,7 +260,11 @@ describe("Build", () => {
                 },
             ],
         };
+
         const updatedOrdDocument = buildClass._postProcess(ordDocument);
+
+        expect(updatedOrdDocument.perspective).toBe(DOCUMENT_PERSPECTIVES.SystemVersion);
+        expect(updatedOrdDocument.describedSystemVersion).toEqual({ version: "0.0.1" });
         expect(updatedOrdDocument.apiResources[0].resourceDefinitions[0].url).toBe(
             path.join("customer.sample_apiResource_ProcessorService_v1", "ProcessorService.oas3.json"),
         );
