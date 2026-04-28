@@ -57,7 +57,7 @@ CSN Model → _propagateORDVisibility → Triage Definitions → Generate Resour
 2. **CSN Analysis**: `_triageCsnDefinitions()` categorizes services, entities, events, actions/functions.
 3. **Resource Generation**: Creates API resources, event resources, entity types, integration dependencies.
 4. **Template Application**: `lib/templates.js` applies ORD-compliant formatting.
-5. **Custom Merge**: `extendCustomORDContentIfExists()` overlays `custom.ord.json` by `ordId`.
+5. **Custom Merge**: `getCustomORDContent()` loads the custom file, then `compareAndHandleCustomORDContentWithExistingContent()` overlays it by `ordId`. Runtime extensions (via `cds.on("ord.extension.publish")`) are merged first, followed by the config-based custom file.
 6. **Package Pruning**: `_filterUnusedPackages()` removes packages not referenced by any resource.
 
 ### 3. Protocol Resolution Pattern
@@ -265,7 +265,7 @@ Resource Generation
     ↓
 ORD Document Assembly (createDefaultORDDocument)
     ↓
-Custom Content Overlay (extendCustomORDContentIfExists)
+Custom Content Overlay (getCustomORDContent + compareAndHandleCustomORDContentWithExistingContent)
     ↓
 Package Pruning (_filterUnusedPackages)
     ↓
