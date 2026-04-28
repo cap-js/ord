@@ -1,4 +1,7 @@
 {
+    "requires": {
+        "toggles": true
+    },
     "ord": {
         "authentication": {
             "basic": {

@@ -169,37 +169,134 @@ describe("defaults", () => {
     });
 
     describe("baseTemplate", () => {
-        it("should return default value", () => {
+        it("should return correct value when no tenant is given and toggles & extensions are disabled", () => {
+            cds.env.requires.toggles = false;
+            cds.env.requires.extensibility = false;
             const authConfig = {
                 types: [AUTHENTICATION_TYPE.Open],
                 accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
             };
-            expect(defaults.baseTemplate(authConfig)).toMatchSnapshot();
+            expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
+        });
+
+        it("should return correct value when tenant is not given and only toggles are enabled", () => {
+            cds.env.requires.toggles = true;
+            cds.env.requires.extensibility = false;
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
+        });
+
+        it("should return correct value when tenant is not given and only extensions are enabled", () => {
+            cds.env.requires.toggles = false;
+            cds.env.requires.extensibility = true;
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
+        });
+
+        it("should return correct value when no tenant is given and toggles & extensions are enabled", () => {
+            cds.env.requires.toggles = true;
+            cds.env.requires.extensibility = true;
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
+        });
+
+        it("should return correct value when tenant is given and only toggles are enabled", () => {
+            cds.env.requires.toggles = true;
+            cds.env.requires.extensibility = false;
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            expect(defaults.baseTemplate(authConfig, "dummy-tenant")).toMatchSnapshot();
+        });
+
+        it("should return correct value when tenant is given and extensions are enabled", () => {
+            cds.env.requires.toggles = false;
+            cds.env.requires.extensibility = true;
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            expect(defaults.baseTemplate(authConfig, "dummy-tenant")).toMatchSnapshot();
+        });
+
+        it("should return correct value when tenant is given and toggles & extensions are enabled", () => {
+            cds.env.requires.toggles = true;
+            cds.env.requires.extensibility = true;
+            const authConfig = {
+                types: [AUTHENTICATION_TYPE.Open],
+                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+            };
+            expect(defaults.baseTemplate(authConfig, "dummy-tenant")).toMatchSnapshot();
         });
     });
 
-    describe("resolveDocumentPerspectiveExtension", () => {
-        it("should return correct value when loading version from .cdsrc.json", () => {
-            cds.env.ord = { describedSystemVersion: { version: "0.1.0" } };
-
-            expect(defaults.resolveDocumentPerspectiveExtension()).toEqual({
-                perspective: DOCUMENT_PERSPECTIVES.SystemVersion,
-                describedSystemVersion: {
-                    version: "0.1.0",
-                },
-            });
+    describe("adjustForPerspective", () => {
+        it("should return correct value when system-instance-perspective is given", () => {
+            expect(
+                defaults.adjustForPerspective(
+                    {
+                        apiResources: [
+                            {
+                                resourceDefinitions: [
+                                    {
+                                        url: "dummy/dummy.oas3.json",
+                                    },
+                                ],
+                            },
+                        ],
+                        eventResources: [
+                            {
+                                resourceDefinitions: [
+                                    {
+                                        url: "dummy/dummy.asyncapi2.json",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    DOCUMENT_PERSPECTIVES.SystemInstance,
+                ),
+            ).toMatchSnapshot();
         });
 
-        it("should return correct value when loading version from package.json", () => {
-            cds.env.ord = undefined;
-            cds.root = ".";
+        it("should return correct value when system-instance-version is given", () => {
+            cds.env.ord = { describedSystemVersion: { version: "1.0" } };
 
-            expect(defaults.resolveDocumentPerspectiveExtension()).toEqual({
-                perspective: DOCUMENT_PERSPECTIVES.SystemVersion,
-                describedSystemVersion: {
-                    version: "1.0.0",
-                },
-            });
+            expect(
+                defaults.adjustForPerspective(
+                    {
+                        apiResources: [
+                            {
+                                resourceDefinitions: [
+                                    {
+                                        url: "dummy/dummy.oas3.json",
+                                    },
+                                ],
+                            },
+                        ],
+                        eventResources: [
+                            {
+                                resourceDefinitions: [
+                                    {
+                                        url: "dummy/dummy.asyncapi2.json",
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                    DOCUMENT_PERSPECTIVES.SystemVersion,
+                ),
+            ).toMatchSnapshot();
         });
     });
 });

@@ -2,7 +2,193 @@
 
 exports[`defaults $schema should return default value 1`] = `"https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json"`;
 
-exports[`defaults baseTemplate should return default value 1`] = `
+exports[`defaults adjustForPerspective should return correct value when system-instance-perspective is given 1`] = `
+{
+  "apiResources": [
+    {
+      "resourceDefinitions": [
+        {
+          "url": "dummy/dummy.oas3.json?perspective=system-instance",
+        },
+      ],
+    },
+  ],
+  "eventResources": [
+    {
+      "resourceDefinitions": [
+        {
+          "url": "dummy/dummy.asyncapi2.json?perspective=system-instance",
+        },
+      ],
+    },
+  ],
+  "perspective": "system-instance",
+}
+`;
+
+exports[`defaults adjustForPerspective should return correct value when system-instance-version is given 1`] = `
+{
+  "apiResources": [
+    {
+      "resourceDefinitions": [
+        {
+          "url": "dummy/dummy.oas3.json",
+        },
+      ],
+    },
+  ],
+  "describedSystemVersion": {
+    "version": "1.0",
+  },
+  "eventResources": [
+    {
+      "resourceDefinitions": [
+        {
+          "url": "dummy/dummy.asyncapi2.json",
+        },
+      ],
+    },
+  ],
+  "perspective": "system-version",
+}
+`;
+
+exports[`defaults baseTemplate should return correct value when no tenant is given and toggles & extensions are disabled 1`] = `
+{
+  "openResourceDiscoveryV1": {
+    "documents": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "perspective": "system-version",
+        "url": "/ord/v1/documents/ord-document",
+      },
+    ],
+  },
+}
+`;
+
+exports[`defaults baseTemplate should return correct value when no tenant is given and toggles & extensions are enabled 1`] = `
+{
+  "openResourceDiscoveryV1": {
+    "documents": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "perspective": "system-version",
+        "url": "/ord/v1/documents/ord-document",
+      },
+    ],
+  },
+}
+`;
+
+exports[`defaults baseTemplate should return correct value when tenant is given and extensions are enabled 1`] = `
+{
+  "openResourceDiscoveryV1": {
+    "documents": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "perspective": "system-version",
+        "url": "/ord/v1/documents/ord-document",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "perspective": "system-instance",
+        "url": "/ord/v1/documents/ord-document?perspective=system-instance",
+      },
+    ],
+  },
+}
+`;
+
+exports[`defaults baseTemplate should return correct value when tenant is given and only toggles are enabled 1`] = `
+{
+  "openResourceDiscoveryV1": {
+    "documents": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "perspective": "system-version",
+        "url": "/ord/v1/documents/ord-document",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "perspective": "system-instance",
+        "url": "/ord/v1/documents/ord-document?perspective=system-instance",
+      },
+    ],
+  },
+}
+`;
+
+exports[`defaults baseTemplate should return correct value when tenant is given and toggles & extensions are enabled 1`] = `
+{
+  "openResourceDiscoveryV1": {
+    "documents": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "perspective": "system-version",
+        "url": "/ord/v1/documents/ord-document",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "perspective": "system-instance",
+        "url": "/ord/v1/documents/ord-document?perspective=system-instance",
+      },
+    ],
+  },
+}
+`;
+
+exports[`defaults baseTemplate should return correct value when tenant is not given and only extensions are enabled 1`] = `
+{
+  "openResourceDiscoveryV1": {
+    "documents": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "perspective": "system-version",
+        "url": "/ord/v1/documents/ord-document",
+      },
+    ],
+  },
+}
+`;
+
+exports[`defaults baseTemplate should return correct value when tenant is not given and only toggles are enabled 1`] = `
 {
   "openResourceDiscoveryV1": {
     "documents": [
