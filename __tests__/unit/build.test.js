@@ -257,7 +257,10 @@ describe("Build", () => {
                 },
             ],
         };
+
         const updatedOrdDocument = buildClass._postProcess(ordDocument);
+
+        expect(updatedOrdDocument.perspective).toBe("system-version");
         expect(updatedOrdDocument.apiResources[0].resourceDefinitions[0].url).toBe(
             path.join("customer.sample_apiResource_ProcessorService_v1", "ProcessorService.oas3.json"),
         );
