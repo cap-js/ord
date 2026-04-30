@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.6.0 (2026-04-30)
+
+## What's Changed
+
+- chore: Refactor 'metaData.js' by @mlakov in https://github.com/cap-js/ord/pull/382
+- chore: Move CDS services to 'lib/services' by @mlakov in https://github.com/cap-js/ord/pull/396
+- chore: Use consistent naming convention by @mlakov in https://github.com/cap-js/ord/pull/394
+- fix: Ensure to call 'registerCompileTargets' for all registered plugins for compiler thread by @mlakov in https://github.com/cap-js/ord/pull/395
+- feat: Introduce MTX ORD provider service by @mlakov in https://github.com/cap-js/ord/pull/398
+- chore: Introduce consistent handling for compile target registration by @mlakov in https://github.com/cap-js/ord/pull/405
+- chore(deps): update dependency prettier to v3.8.2 by @rennovate in https://github.com/cap-js/ord/pull/406
+- chore(deps): update dependency @sap/cds-compiler to v6.8.0 by @rennovate in https://github.com/cap-js/ord/pull/380
+- chore: update node engines to >=20 <25 by @zongqichen in https://github.com/cap-js/ord/pull/407
+- feat: Allow for custom ORD document extensions by @mlakov in https://github.com/cap-js/ord/pull/402
+- chore: Update example Java app to CDS version 4.9.0 by @mlakov in https://github.com/cap-js/ord/pull/403
+- chore(deps): update dependency prettier to v3.8.3 by @rennovate in https://github.com/cap-js/ord/pull/408
+- chore(deps): update dependency @sap/cds-compiler to v6.9.0 by @rennovate in https://github.com/cap-js/ord/pull/410
+- fix(deps): update spring boot to v3.5.14 by @rennovate in https://github.com/cap-js/ord/pull/411
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.5.0...v1.6.0
+
 ## 1.5.0 (2026-03-11)
 
 ## What's Changed
