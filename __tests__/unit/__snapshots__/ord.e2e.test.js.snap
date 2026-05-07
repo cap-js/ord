@@ -972,7 +972,7 @@ exports[`Tests for Data Product definition Check interop CSN annotation mapping 
       "title": "Test Service",
     },
   ],
-  "openResourceDiscovery": "1.12",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for cap js ord.",
@@ -2229,7 +2229,7 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
       "title": "Simple Service",
     },
   ],
-  "openResourceDiscovery": "1.12",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for cap js ord.",
@@ -2354,7 +2354,7 @@ exports[`Tests for eventResource and apiResource should block MTXServices when m
       "title": "My Service",
     },
   ],
-  "openResourceDiscovery": "1.12",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire bookshop ord sample.",
@@ -2479,7 +2479,7 @@ exports[`Tests for eventResource and apiResource should block OpenResourceDiscov
       "title": "My Service",
     },
   ],
-  "openResourceDiscovery": "1.12",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire bookshop ord sample.",
@@ -2604,7 +2604,7 @@ exports[`Tests for eventResource and apiResource should exclude external service
       "title": "My Service",
     },
   ],
-  "openResourceDiscovery": "1.12",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire bookshop ord sample.",
@@ -2729,7 +2729,7 @@ exports[`Tests for eventResource and apiResource should exclude service when it 
       "title": "My Service",
     },
   ],
-  "openResourceDiscovery": "1.12",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire bookshop ord sample.",
@@ -2994,7 +2994,7 @@ exports[`Tests for products and packages should not contain products property if
       "title": "v1 Service",
     },
   ],
-  "openResourceDiscovery": "1.12",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire bookshop ord sample.",
@@ -3251,7 +3251,7 @@ exports[`Tests for products and packages should raise error log when custom prod
       "title": "v1 Service",
     },
   ],
-  "openResourceDiscovery": "1.12",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire bookshop ord sample.",
@@ -3516,7 +3516,7 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "title": "v1 Service",
     },
   ],
-  "openResourceDiscovery": "1.12",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire bookshop ord sample.",

@@ -289,7 +289,7 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
 
             const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
 
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.14");
         });
     });
 
@@ -305,7 +305,7 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
             const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
 
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.14");
         });
 
         test("should return ORD config without authentication (endpoint is always open)", async () => {
@@ -418,7 +418,7 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
         });
 
         test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
             expect(ordDocument).toHaveProperty("description");
             expect(Array.isArray(ordDocument.apiResources)).toBe(true);
             expect(Array.isArray(ordDocument.eventResources)).toBe(true);
@@ -587,7 +587,7 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
             const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
 
             // Success means fetchMtlsCertInfo worked correctly
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.14");
         });
 
         test("should reject requests with cert info not matching fetched config", async () => {
@@ -624,7 +624,7 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
             const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set(mtlsHeaders).expect(200);
 
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.14");
         });
 
         test("should return ORD config without authentication (endpoint is always open)", async () => {
@@ -699,7 +699,7 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
         });
 
         test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
             expect(ordDocument).toHaveProperty("description");
             expect(Array.isArray(ordDocument.apiResources)).toBe(true);
             expect(Array.isArray(ordDocument.eventResources)).toBe(true);

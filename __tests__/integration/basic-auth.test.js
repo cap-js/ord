@@ -153,7 +153,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 .expect(200);
 
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.14");
         });
 
         test("should return ORD document with standard Authorization header", async () => {
@@ -162,7 +162,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 .set("Authorization", VALID_AUTH) // standard case
                 .expect(200);
 
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(response.body).toHaveProperty("openResourceDiscovery", "1.14");
         });
 
         test("should reject invalid password", async () => {
@@ -223,7 +223,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.12");
+            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
             expect(ordDocument).toHaveProperty("description");
             expect(Array.isArray(ordDocument.apiResources)).toBe(true);
             expect(Array.isArray(ordDocument.eventResources)).toBe(true);
