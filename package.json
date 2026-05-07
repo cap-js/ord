@@ -25,7 +25,8 @@
         "test:integration:mtls": "jest __tests__/integration/mtls-auth.test.js --testPathIgnorePatterns=/node_modules/ --forceExit",
         "test:integration:build": "jest __tests__/integration/cds-build.test.js --testPathIgnorePatterns=/node_modules/ --forceExit",
         "update-snapshot": "jest --ci --updateSnapshot",
-        "cds:version": "cds v -i"
+        "cds:version": "cds v -i",
+        "test:all": "npm run test && npm run test:integration:basic && npm run test:integration:mtls && npm run test:integration:build"
     },
     "devDependencies": {
         "@cap-js/graphql": "^0.14.0",
