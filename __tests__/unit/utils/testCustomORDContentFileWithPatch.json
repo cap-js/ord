@@ -18,13 +18,9 @@
             "partOfPackage": "sap.sm:package:smDataProducts:v1",
             "entryPoints": ["/odata/v4/admin"],
             "extensible": null,
-            "entityTypeMappings": [
+            "exposedEntityTypes": [
                 {
-                    "entityTypeTargets": [
-                        {
-                            "ordId": "sap.odm:entityType:BusinessPartner:v1"
-                        }
-                    ]
+                    "ordId": "sap.odm:entityType:BusinessPartner:v1"
                 }
             ]
         }

@@ -31,7 +31,7 @@ describe("templates", () => {
                     {
                         ordId: "sap.sm:apiResource:SomeAPI:v1",
                         visibility: "private",
-                        entityTypeMappings: [{ entityTypeTargets: [{ ordId: entity.ordId }] }],
+                        exposedEntityTypes: [{ ordId: entity.ordId }],
                     },
                 ],
             };
@@ -55,7 +55,7 @@ describe("templates", () => {
                     {
                         ordId: "sap.sm:apiResource:SomeAPI:v1",
                         visibility: "public",
-                        entityTypeMappings: [{ entityTypeTargets: [{ ordId: entity.ordId }] }],
+                        exposedEntityTypes: [{ ordId: entity.ordId }],
                     },
                 ],
             };

@@ -41,7 +41,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     });
 
     describe("Tests for ORD document when there no events or entities in service definitions", () => {
-        test("Successfully create ORD Document: no entityTypeMappings field in apiResource", () => {
+        test("Successfully create ORD Document: no exposedEntityTypes field in apiResource", () => {
             cds.env = {};
             const csn = require("../__mocks__/noEntitiesInServiceDefinitionCsn.json");
             const document = ord(csn);
@@ -53,8 +53,8 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         });
     });
 
-    describe("Tests for ORD document checking if entityTypes and entityTypeMappings are generated correctly", () => {
-        test("Successfully create ORD Document: entityTypes with local entities and entityTypeMappings containing referenced entities", () => {
+    describe("Tests for ORD document checking if entityTypes and exposedEntityTypes are generated correctly", () => {
+        test("Successfully create ORD Document: entityTypes with local entities and exposedEntityTypes containing referenced entities", () => {
             cds.env.ord.policyLevels = ["none"];
             const csn = require("../__mocks__/localAndNonODMReferencedEntitiesCsn.json");
             const document = ord(csn);
@@ -65,7 +65,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             );
             expect(document.entityTypes[0].ordId).toEqual("sap.sm:entityType:SomeAribaDummyEntity:v1");
             expect(document.entityTypes[0].level).toEqual(expect.stringContaining("root-entity"));
-            expect(document.apiResources[0].entityTypeMappings[0].entityTypeTargets).toEqual(
+            expect(document.apiResources[0].exposedEntityTypes).toEqual(
                 expect.arrayContaining([
                     { ordId: "sap.odm:entityType:SomeODMEntity:v1" },
                     { ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1" },

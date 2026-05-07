@@ -61,17 +61,13 @@ exports[`extendOrdWithCustom extend-ord-with-custom should should patch the exis
 {
   "apiResources": [
     {
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [
-            {
-              "ordId": "sap.odm:entityType:BusinessPartner:v1",
-            },
-          ],
-        },
-      ],
       "entryPoints": [
         "/odata/v4/admin",
+      ],
+      "exposedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:BusinessPartner:v1",
+        },
       ],
       "ordId": "sap.sm:apiResource:SupplierService:v1",
       "partOfGroups": [
@@ -80,11 +76,7 @@ exports[`extendOrdWithCustom extend-ord-with-custom should should patch the exis
       "partOfPackage": "sap.sm:package:smDataProducts:v1",
     },
     {
-      "entityTypeMappings": [
-        {
-          "entityTypeTargets": [],
-        },
-      ],
+      "exposedEntityTypes": [],
       "ordId": "sap.sm:apiResource:orginalService:v2",
       "partOfGroups": [
         "sap.cds:service:sap.test.cdsrc.sample:originalService",

@@ -7,19 +7,12 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
     {
       "apiProtocol": "odata-v4",
       "description": "Description for AdminService",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "entryPoints": [
         "/odata/v4/admin",
       ],
       "exposedEntityTypes": [
         {
-          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
         },
       ],
       "extensible": {
@@ -160,16 +153,9 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
-      "entityTypeMappings": {
-        "entityTypeTargets": [
-          {
-            "ordId": "sap.odm:entityType:test-from-extension:v1",
-          },
-        ],
-      },
       "exposedEntityTypes": [
         {
-          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+          "ordId": "sap.odm:entityType:test-from-extension:v1",
         },
       ],
       "extensible": {
@@ -303,7 +289,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
 }
 `;
 
-exports[`Tests for ORD document generated out of mocked csn files Tests for ORD document when there no events or entities in service definitions Successfully create ORD Document: no entityTypeMappings field in apiResource 1`] = `
+exports[`Tests for ORD document generated out of mocked csn files Tests for ORD document when there no events or entities in service definitions Successfully create ORD Document: no exposedEntityTypes field in apiResource 1`] = `
 {
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [

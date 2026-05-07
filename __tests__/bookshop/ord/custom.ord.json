@@ -21,13 +21,9 @@
         {
             "partOfGroups": null,
             "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
-            "entityTypeMappings": [
+            "exposedEntityTypes": [
                 {
-                    "entityTypeTargets": [
-                        {
-                            "ordId": "sap.odm:entityType:BusinessPartner:v1"
-                        }
-                    ]
+                    "ordId": "sap.odm:entityType:BusinessPartner:v1"
                 }
             ],
             "extensible": {
