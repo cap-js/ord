@@ -5,10 +5,10 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
-      "apiProtocol": "odata-v4",
+      "apiProtocol": "odata-v2",
       "description": "Description for AdminService",
       "entryPoints": [
-        "/odata/v4/admin",
+        "/odata/v2/admin",
       ],
       "exposedEntityTypes": [
         {
@@ -23,16 +23,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "openapi-v3",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.oas3.json",
-        },
         {
           "accessStrategies": [
             {
@@ -317,10 +307,10 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
-      "apiProtocol": "odata-v4",
+      "apiProtocol": "odata-v2",
       "description": "Description for AdminService",
       "entryPoints": [
-        "/odata/v4/admin",
+        "/odata/v2/admin",
       ],
       "exposedEntityTypes": [
         {
@@ -335,16 +325,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "openapi-v3",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.oas3.json",
-        },
         {
           "accessStrategies": [
             {
@@ -629,10 +609,10 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
-      "apiProtocol": "odata-v4",
+      "apiProtocol": "odata-v2",
       "description": "Description for AdminService",
       "entryPoints": [
-        "/odata/v4/admin",
+        "/odata/v2/admin",
       ],
       "exposedEntityTypes": [
         {
@@ -647,16 +627,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "openapi-v3",
-          "url": "/ord/v1/sap.test.cdsrc.sample:apiResource:AdminService:v1/AdminService.oas3.json",
-        },
         {
           "accessStrategies": [
             {
@@ -2792,10 +2762,10 @@ exports[`Tests for products and packages should not contain products property if
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
-      "apiProtocol": "odata-v4",
+      "apiProtocol": "odata-v2",
       "description": "Description for AdminService",
       "entryPoints": [
-        "/odata/v4/admin",
+        "/odata/v2/admin",
       ],
       "exposedEntityTypes": [
         {
@@ -2813,16 +2783,6 @@ exports[`Tests for products and packages should not contain products property if
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "openapi-v3",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v1/AdminService.oas3.json",
-        },
         {
           "accessStrategies": [
             {
@@ -3059,10 +3019,10 @@ exports[`Tests for products and packages should raise error log when custom prod
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
-      "apiProtocol": "odata-v4",
+      "apiProtocol": "odata-v2",
       "description": "Description for AdminService",
       "entryPoints": [
-        "/odata/v4/admin",
+        "/odata/v2/admin",
       ],
       "exposedEntityTypes": [
         {
@@ -3080,16 +3040,6 @@ exports[`Tests for products and packages should raise error log when custom prod
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "openapi-v3",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v1/AdminService.oas3.json",
-        },
         {
           "accessStrategies": [
             {
@@ -3334,10 +3284,10 @@ exports[`Tests for products and packages should use valid custom products ordId 
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
   "apiResources": [
     {
-      "apiProtocol": "odata-v4",
+      "apiProtocol": "odata-v2",
       "description": "Description for AdminService",
       "entryPoints": [
-        "/odata/v4/admin",
+        "/odata/v2/admin",
       ],
       "exposedEntityTypes": [
         {
@@ -3355,16 +3305,6 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "resourceDefinitions": [
-        {
-          "accessStrategies": [
-            {
-              "type": "open",
-            },
-          ],
-          "mediaType": "application/json",
-          "type": "openapi-v3",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v1/AdminService.oas3.json",
-        },
         {
           "accessStrategies": [
             {
