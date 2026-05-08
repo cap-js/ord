@@ -110,7 +110,6 @@ describe("namespace local and global", () => {
     });
 
     it("should strip internalNamespace and handle leading dot for sub-namespaces", () => {
-        // Same substring(1) / startsWith(".") behavior as ordNamespace stripping
         const appConfig = {
             ordNamespace: "sap.sourcing",
             internalNamespace: "com.sap.sourcing",
@@ -132,7 +131,7 @@ describe("namespace local and global", () => {
         expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:nested.SourcingService:v1");
     });
 
-    it("should prefer ordNamespace over internalNamespace when both could match", () => {
+    it("should prefer internalNamespace over ordNamespace when both could match", () => {
         const appConfig = {
             ordNamespace: "sap.sourcing",
             internalNamespace: "sap.sourcing.internal",
@@ -141,17 +140,60 @@ describe("namespace local and global", () => {
         };
         const serviceName = "BillingService";
         const model = cds.linked(`
-            namespace sap.sourcing.nested;
+            namespace sap.sourcing.internal;
             service BillingService {
                 entity Invoices { key ID: UUID; }
             };
             annotate BillingService with @ORD.Extensions : { visibility : 'public' };
         `);
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
-        const srvDefinition = model.definitions["sap.sourcing.nested.BillingService"];
+        const srvDefinition = model.definitions["sap.sourcing.internal.BillingService"];
 
         const apiResult = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
-        expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:nested.BillingService:v1");
+        expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:BillingService:v1");
+    });
+
+    it("should not strip a partial ordNamespace match (dot-boundary guard)", () => {
+        const appConfig = {
+            ordNamespace: "sap.sourcing",
+            appName: "testAppName",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+        };
+        const serviceName = "SomeService";
+        const model = cds.linked(`
+            namespace sap.sourcingExtra;
+            service SomeService {
+                entity Foo { key ID: UUID; }
+            };
+            annotate SomeService with @ORD.Extensions : { visibility : 'public' };
+        `);
+        const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
+        const srvDefinition = model.definitions["sap.sourcingExtra.SomeService"];
+
+        const apiResult = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:sap.sourcingExtra.SomeService:v1");
+    });
+
+    it("should not strip a partial internalNamespace match (dot-boundary guard)", () => {
+        const appConfig = {
+            ordNamespace: "sap.sourcing",
+            internalNamespace: "com.sap.sourcing",
+            appName: "testAppName",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+        };
+        const serviceName = "SomeService";
+        const model = cds.linked(`
+            namespace com.sap.sourcingExtra;
+            service SomeService {
+                entity Foo { key ID: UUID; }
+            };
+            annotate SomeService with @ORD.Extensions : { visibility : 'public' };
+        `);
+        const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
+        const srvDefinition = model.definitions["com.sap.sourcingExtra.SomeService"];
+
+        const apiResult = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:com.sap.sourcingExtra.SomeService:v1");
     });
 
     it("should not strip when neither ordNamespace nor internalNamespace matches", () => {
