@@ -290,6 +290,7 @@ describe("templates", () => {
             const appConfigWithSAPPolicy = {
                 ...appConfig,
                 policyLevels: ["sap:core:v1"],
+                hasSAPPolicyLevel: true,
             };
 
             const entityType = createEntityTypeTemplate(appConfigWithSAPPolicy, packageIds, someEntity);
