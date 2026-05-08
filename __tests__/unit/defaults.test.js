@@ -4,7 +4,7 @@ const cds = require("@sap/cds");
 
 jest.mock("fs", () => {
     return {
-        readFileSync: () => (JSON.stringify({version:  "1.0.0"})),
+        readFileSync: () => JSON.stringify({ version: "1.0.0" }),
     };
 });
 
@@ -55,6 +55,7 @@ describe("defaults", () => {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
                 policyLevels: ["sap:policy"],
+                hasSAPPolicyLevel: true,
             };
             expect(defaults.packages(appConfig)).toMatchSnapshot();
         });
@@ -72,12 +73,6 @@ describe("defaults", () => {
             appConfig = {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
-                products: [
-                    {
-                        ordId: "customer:product:eb.bm.tests:",
-                        vendor: "sap:vendor:SAP:",
-                    },
-                ],
                 env: {
                     packages: [
                         {
@@ -88,19 +83,15 @@ describe("defaults", () => {
                 },
                 policyLevels: ["policy"],
             };
-            expect(defaults.packages(appConfig)).toMatchSnapshot();
+            expect(
+                defaults.packages(appConfig, [{ ordId: "customer:product:eb.bm.tests:", vendor: "sap:vendor:SAP:" }]),
+            ).toMatchSnapshot();
         });
 
         it("should return only custom value if user definitions in .cdsrc.json are done correctly", () => {
             appConfig = {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
-                products: [
-                    {
-                        ordId: "customer:product:eb.bm.tests:",
-                        vendor: "sap:vendor:SAP:",
-                    },
-                ],
                 env: {
                     packages: [
                         {
@@ -114,7 +105,9 @@ describe("defaults", () => {
                 },
                 policyLevels: ["policy"],
             };
-            expect(defaults.packages(appConfig)).toMatchSnapshot();
+            expect(
+                defaults.packages(appConfig, [{ ordId: "customer:product:eb.bm.tests:", vendor: "sap:vendor:SAP:" }]),
+            ).toMatchSnapshot();
         });
 
         it("should use existingProductId if provided in .cdsrc.json", () => {
@@ -132,15 +125,11 @@ describe("defaults", () => {
                 appName: testGetPackageDataName,
                 ordNamespace: testGetPackageOrdNamespace,
                 existingProductORDId: "sap:product:SAPServiceCloudV2:",
-                products: [
-                    {
-                        ordId: "customer:product:eb.bm.tests:",
-                        vendor: "sap:vendor:SAP:",
-                    },
-                ],
                 policyLevels: ["policy"],
             };
-            expect(defaults.packages(appConfig)).toMatchSnapshot();
+            expect(
+                defaults.packages(appConfig, [{ ordId: "customer:product:eb.bm.tests:", vendor: "sap:vendor:SAP:" }]),
+            ).toMatchSnapshot();
         });
 
         it("should use custom vendor if it defined in .cdsrc.json", () => {
@@ -203,7 +192,7 @@ describe("defaults", () => {
 
         it("should return correct value when loading version from package.json", () => {
             cds.env.ord = undefined;
-            cds.root = "."
+            cds.root = ".";
 
             expect(defaults.resolveDocumentPerspectiveExtension()).toEqual({
                 perspective: DOCUMENT_PERSPECTIVES.SystemVersion,
