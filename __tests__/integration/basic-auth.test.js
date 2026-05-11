@@ -2,6 +2,8 @@ const request = require("supertest");
 const { spawn } = require("child_process");
 const path = require("path");
 
+const utils = require("../utils");
+
 const BASE_URL = "http://localhost:4004";
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
 const ORD_DOCUMENT_ENDPOINT = "/ord/v1/documents/ord-document";
@@ -125,7 +127,17 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 .expect(200);
 
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toHaveProperty("openResourceDiscoveryV1");
+            expect(response.body).toEqual({
+                openResourceDiscoveryV1: {
+                    documents: [
+                        {
+                            url: "/ord/v1/documents/ord-document",
+                            accessStrategies: [{ type: "basic-auth" }],
+                            perspective: "system-version",
+                        },
+                    ],
+                },
+            });
         });
 
         test("should return ORD config with standard Authorization header", async () => {
@@ -134,14 +146,15 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 .set("Authorization", VALID_AUTH) // standard case
                 .expect(200);
 
-            expect(response.body).toHaveProperty("openResourceDiscoveryV1");
+            expect(response.headers["content-type"]).toMatch(/application\/json/);
+            expect(response.body).toMatchSnapshot();
         });
 
         test("should return ORD config without authentication", async () => {
             const response = await request(BASE_URL).get(ORD_CONFIG_ENDPOINT).expect(200);
 
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toHaveProperty("openResourceDiscoveryV1");
+            expect(response.body).toMatchSnapshot();
         });
     });
 
@@ -153,7 +166,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 .expect(200);
 
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.14");
+            expect(utils.pinLastUpdateForStableTest(response.body)).toMatchSnapshot();
         });
 
         test("should return ORD document with standard Authorization header", async () => {
@@ -162,7 +175,8 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 .set("Authorization", VALID_AUTH) // standard case
                 .expect(200);
 
-            expect(response.body).toHaveProperty("openResourceDiscovery", "1.14");
+            expect(response.headers["content-type"]).toMatch(/application\/json/);
+            expect(utils.pinLastUpdateForStableTest(response.body)).toMatchSnapshot();
         });
 
         test("should reject invalid password", async () => {
@@ -208,9 +222,44 @@ describe("ORD Integration Tests - Basic Authentication", () => {
 
             expect(response.text).toContain("Authentication required");
         });
+
+        test("should return bad request when requesting document with invalid perspective", async () => {
+            await request(BASE_URL)
+                .get(ORD_DOCUMENT_ENDPOINT + "?perspective=invalid")
+                .set("authorization", VALID_AUTH) // lowercase
+                .expect(400);
+        });
+
+        test("should return bad request when requesting document with system-instance perspective and no tenant", async () => {
+            await request(BASE_URL)
+                .get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance")
+                .set("authorization", VALID_AUTH) // lowercase
+                .expect(400);
+        });
+
+        test("should return ORD document with valid basic auth for system-version perspective", async () => {
+            const response = await request(BASE_URL)
+                .get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-version")
+                .set("authorization", VALID_AUTH) // lowercase
+                .expect(200);
+
+            expect(response.headers["content-type"]).toMatch(/application\/json/);
+            expect(utils.pinLastUpdateForStableTest(response.body)).toMatchSnapshot();
+        });
+
+        test("should return ORD document with valid basic auth for system-instance perspective", async () => {
+            const response = await request(BASE_URL)
+                .get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance")
+                .set("Authorization", VALID_AUTH) // lowercase
+                .set("Local-Tenant-Id", "12-34-56") // lowercase
+                .expect(200);
+
+            expect(response.headers["content-type"]).toMatch(/application\/json/);
+            expect(utils.pinLastUpdateForStableTest(response.body)).toMatchSnapshot();
+        });
     });
 
-    describe("ORD Document Structure Validation", () => {
+    describe("ORD Document Structure Validation for system-version perspective", () => {
         let ordDocument;
 
         beforeAll(async () => {
@@ -219,7 +268,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 .set("Authorization", VALID_AUTH)
                 .expect(200);
 
-            ordDocument = response.body;
+            ordDocument = utils.pinLastUpdateForStableTest(response.body);
         });
 
         test("should have required ORD structure", () => {
@@ -227,23 +276,113 @@ describe("ORD Integration Tests - Basic Authentication", () => {
             expect(ordDocument).toHaveProperty("description");
             expect(Array.isArray(ordDocument.apiResources)).toBe(true);
             expect(Array.isArray(ordDocument.eventResources)).toBe(true);
+            expect(ordDocument.perspective).toBe("system-version");
+            expect(ordDocument.describedSystemVersion).toEqual({ version: "0.1.0" });
         });
 
         test("should include TestService with correct properties", () => {
             const testService = ordDocument.apiResources.find(
                 (api) => api.title === "Test Service for Integration Testing",
             );
-            expect(testService).toMatchObject({
-                shortDescription: "Minimal service for ORD integration tests",
-                version: "1.0.0",
-                visibility: "public",
-            });
+
+            expect(testService).toMatchSnapshot();
         });
 
         test("should contain expected resources", () => {
             expect(ordDocument.apiResources).toHaveLength(2);
             expect(ordDocument.eventResources).toHaveLength(1);
             expect(ordDocument.packages).toHaveLength(1);
+        });
+
+        test("should have correct query params for all resource definitions", () => {
+            ordDocument.apiResources.forEach((apiResource) => {
+                apiResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.url).toMatch(/(.*)\.(edmx|oas3\.json)$/);
+                });
+            });
+
+            ordDocument.eventResources.forEach((eventResource) => {
+                eventResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.url).toMatch(/(.*)\.asyncapi2\.json$/);
+                });
+            });
+        });
+
+        test("should have 'basic-auth' accessStrategies in all resources", () => {
+            // Verify API resources have 'basic-auth' accessStrategies
+            ordDocument.apiResources.forEach((apiResource) => {
+                apiResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "basic-auth" }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === "basic-auth")).toBe(true);
+                });
+            });
+
+            // Verify Event resources have 'basic-auth' accessStrategies
+            ordDocument.eventResources.forEach((eventResource) => {
+                eventResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "basic-auth" }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === "basic-auth")).toBe(true);
+                });
+            });
+
+            // Verify no resource has 'open' accessStrategy
+            [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
+                resource.resourceDefinitions.forEach((resDef) => {
+                    const hasOpen = resDef.accessStrategies.some((s) => s.type === "open");
+                    expect(hasOpen).toBe(false);
+                });
+            });
+        });
+    });
+
+    describe("ORD Document Structure Validation for system-instance perspective", () => {
+        let ordDocument;
+
+        beforeAll(async () => {
+            const response = await request(BASE_URL)
+                .get("/ord/v1/documents/ord-document?perspective=system-instance")
+                .set("Authorization", VALID_AUTH)
+                .set("Local-Tenant-Id", "12-34-56")
+                .expect(200);
+
+            ordDocument = utils.pinLastUpdateForStableTest(response.body);
+        });
+
+        test("should have required ORD structure", () => {
+            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
+            expect(ordDocument).toHaveProperty("description");
+            expect(Array.isArray(ordDocument.apiResources)).toBe(true);
+            expect(Array.isArray(ordDocument.eventResources)).toBe(true);
+            expect(ordDocument.perspective).toBe("system-instance");
+            expect(ordDocument.describedSystemVersion).toEqual(undefined);
+        });
+
+        test("should include TestService with correct properties", () => {
+            const testService = ordDocument.apiResources.find(
+                (api) => api.title === "Test Service for Integration Testing",
+            );
+
+            expect(testService).toMatchSnapshot();
+        });
+
+        test("should contain expected resources", () => {
+            expect(ordDocument.apiResources).toHaveLength(2);
+            expect(ordDocument.eventResources).toHaveLength(1);
+            expect(ordDocument.packages).toHaveLength(1);
+        });
+
+        test("should have correct query params for all resource definitions", () => {
+            ordDocument.apiResources.forEach((apiResource) => {
+                apiResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.url).toMatch(/(.*)\?perspective=system-instance$/);
+                });
+            });
+
+            ordDocument.eventResources.forEach((eventResource) => {
+                eventResource.resourceDefinitions.forEach((resDef) => {
+                    expect(resDef.url).toMatch(/(.*)\?perspective=system-instance$/);
+                });
+            });
         });
 
         test("should have 'basic-auth' accessStrategies in all resources", () => {
