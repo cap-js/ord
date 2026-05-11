@@ -2,7 +2,7 @@ const {
     createApiResources,
     mergeResourceProperties,
     buildResourceDefinitions,
-} = require("../../../lib/model/api-resource");
+} = require("../../../lib/model/apiResource");
 const { RESOURCE_VISIBILITY } = require("../../../lib/constants");
 
 beforeAll(() => {

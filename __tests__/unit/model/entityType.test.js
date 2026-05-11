@@ -1,4 +1,4 @@
-const { createEntityTypes, hasSAPPolicyLevel } = require("../../../lib/model/entity-type");
+const { createEntityTypes, hasSAPPolicyLevel } = require("../../../lib/model/entityType");
 
 describe("entity-type", () => {
     const baseConfig = {

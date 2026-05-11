@@ -1,4 +1,4 @@
-const { createEventResources } = require("../../../lib/model/event-resource");
+const { createEventResources } = require("../../../lib/model/eventResource");
 
 beforeAll(() => {
     const authentication = require("../../../lib/auth/authentication");
