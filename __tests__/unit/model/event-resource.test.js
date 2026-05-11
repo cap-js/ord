@@ -1,4 +1,4 @@
-const { createEventResource } = require("../../../lib/model/event-resource");
+const { createEventResources } = require("../../../lib/model/event-resource");
 
 beforeAll(() => {
     const authentication = require("../../../lib/auth/authentication");
@@ -21,14 +21,14 @@ describe("event-resource", () => {
 
     const packageIds = ["customer.app:package:test-event:v1"];
 
-    describe("createEventResource", () => {
+    describe("createEventResources", () => {
         test("creates event resource for public service", () => {
             const service = {
                 name: "customer.app.NotificationService",
                 definition: { name: "customer.app.NotificationService" },
                 extensions: {},
             };
-            const resources = createEventResource(service, baseConfig, packageIds, [{ type: "open" }]);
+            const resources = createEventResources(service, baseConfig, packageIds, [{ type: "open" }]);
             expect(resources).toHaveLength(1);
             expect(resources[0].ordId).toContain("eventResource");
             expect(resources[0].ordId).toContain("NotificationService");
@@ -40,7 +40,7 @@ describe("event-resource", () => {
                 definition: { name: "customer.app.EventService" },
                 extensions: {},
             };
-            const resources = createEventResource(service, baseConfig, packageIds, [{ type: "open" }]);
+            const resources = createEventResources(service, baseConfig, packageIds, [{ type: "open" }]);
             expect(resources[0].resourceDefinitions).toHaveLength(1);
             expect(resources[0].resourceDefinitions[0].type).toBe("asyncapi-v2");
             expect(resources[0].resourceDefinitions[0].url).toContain("asyncapi2.json");
@@ -52,7 +52,7 @@ describe("event-resource", () => {
                 definition: { name: "customer.app.PrivateEvents" },
                 extensions: { visibility: "private" },
             };
-            expect(createEventResource(service, baseConfig, packageIds, [{ type: "open" }])).toHaveLength(0);
+            expect(createEventResources(service, baseConfig, packageIds, [{ type: "open" }])).toHaveLength(0);
         });
 
         test("returns empty for non-public/non-internal visibility", () => {
@@ -61,7 +61,7 @@ describe("event-resource", () => {
                 definition: { name: "customer.app.WeirdService" },
                 extensions: { visibility: "some-other-value" },
             };
-            expect(createEventResource(service, baseConfig, packageIds, [{ type: "open" }])).toHaveLength(0);
+            expect(createEventResources(service, baseConfig, packageIds, [{ type: "open" }])).toHaveLength(0);
         });
 
         test("does not override existing resourceDefinitions from extensions", () => {
@@ -71,7 +71,7 @@ describe("event-resource", () => {
                 definition: { name: "customer.app.CustomEvent" },
                 extensions: { resourceDefinitions: customDef },
             };
-            const resources = createEventResource(service, baseConfig, packageIds, [{ type: "open" }]);
+            const resources = createEventResources(service, baseConfig, packageIds, [{ type: "open" }]);
             expect(resources[0].resourceDefinitions).toEqual(customDef);
         });
     });
