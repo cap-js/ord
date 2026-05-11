@@ -3,24 +3,12 @@ const path = require("path");
 const fs = require("fs");
 const os = require("os");
 
+const utils = require("../utils");
+
 const TEST_APP_ROOT = path.join(__dirname, "integration-test-app");
 const GEN_DIR = path.join(TEST_APP_ROOT, "gen");
 const ORD_GEN_DIR = path.join(GEN_DIR, "srv");
 const ORD_DOC_PATH = path.join(ORD_GEN_DIR, "ord-document.json");
-
-function fixLastUpdateForStableTest(ord) {
-    (ord.consumptionBundles || []).find((cb) => {
-        cb.lastUpdate = "2026-05-04T13:45:01+01:00";
-    });
-    (ord.eventResources || []).find((er) => {
-        er.lastUpdate = "2026-05-04T13:45:01+01:00";
-    });
-    (ord.apiResources || []).find((ar) => {
-        ar.lastUpdate = "2026-05-04T13:45:01+01:00";
-    });
-
-    return ord;
-}
 
 /**
  * Execute cds build command and return result
@@ -90,7 +78,7 @@ describe("ORD Build Integration Tests", () => {
         test("should generate ord-document.json", () => {
             expect(fs.existsSync(ORD_DOC_PATH)).toBe(true);
             expect(fs.statSync(ORD_DOC_PATH).size).toBeGreaterThan(0);
-            expect(fixLastUpdateForStableTest(JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8")))).toMatchSnapshot();
+            expect(utils.pinLastUpdateForStableTest(JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8")))).toMatchSnapshot();
         });
 
         test("should have correct ORD document structure", () => {
@@ -110,7 +98,7 @@ describe("ORD Build Integration Tests", () => {
                 expect(apiResource.resourceDefinitions.length).toBeGreaterThan(0);
 
                 for (const resDef of apiResource.resourceDefinitions) {
-                    const filePath = path.join(ORD_GEN_DIR, resDef.url);
+                    const filePath = path.join(ORD_GEN_DIR, URL.parse(resDef.url, "http://localhost").pathname);
                     expect(fs.existsSync(filePath)).toBe(true);
                     expect(fs.statSync(filePath).size).toBeGreaterThan(0);
                 }
@@ -125,7 +113,7 @@ describe("ORD Build Integration Tests", () => {
                 expect(eventResource.resourceDefinitions.length).toBeGreaterThan(0);
 
                 for (const resDef of eventResource.resourceDefinitions) {
-                    const filePath = path.join(ORD_GEN_DIR, resDef.url);
+                    const filePath = path.join(ORD_GEN_DIR, URL.parse(resDef.url, "http://localhost").pathname);
                     expect(fs.existsSync(filePath)).toBe(true);
                     expect(fs.statSync(filePath).size).toBeGreaterThan(0);
                 }
@@ -136,10 +124,12 @@ describe("ORD Build Integration Tests", () => {
             const testServiceApi = ordDocument.apiResources.find((api) => api.ordId.includes("TestService"));
             expect(testServiceApi).toBeDefined();
 
-            const openApiDef = testServiceApi.resourceDefinitions.find((def) => def.url.endsWith(".oas3.json"));
+            const openApiDef = testServiceApi.resourceDefinitions.find((def) =>
+                URL.parse(def.url, "http://localhost").pathname.endsWith(".oas3.json"),
+            );
             expect(openApiDef).toBeDefined();
 
-            const openApiPath = path.join(ORD_GEN_DIR, openApiDef.url);
+            const openApiPath = path.join(ORD_GEN_DIR, URL.parse(openApiDef.url, "http://localhost").pathname);
             const openApiContent = JSON.parse(fs.readFileSync(openApiPath, "utf-8"));
 
             expect(openApiContent.servers).toBeDefined();
@@ -190,7 +180,7 @@ describe("ORD Build Integration Tests", () => {
             cleanupDir(GEN_DIR);
             buildResult = await runCdsBuild(TEST_APP_ROOT, CDSRC_CONFIG);
             if (fs.existsSync(ORD_DOC_PATH)) {
-                ordDocument = fixLastUpdateForStableTest(JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8")));
+                ordDocument = utils.pinLastUpdateForStableTest(JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8")));
             }
         }, 60000);
 
@@ -237,7 +227,7 @@ describe("ORD Build Integration Tests", () => {
             cleanupDir(GEN_DIR);
             buildResult = await runCdsBuild(TEST_APP_ROOT, CDSRC_CONFIG);
             if (fs.existsSync(ORD_DOC_PATH)) {
-                ordDocument = fixLastUpdateForStableTest(JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8")));
+                ordDocument = utils.pinLastUpdateForStableTest(JSON.parse(fs.readFileSync(ORD_DOC_PATH, "utf-8")));
             }
         }, 60000);
 

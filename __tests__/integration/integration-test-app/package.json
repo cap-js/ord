@@ -1,12 +1,13 @@
 {
     "name": "@capire/ord-integration-test",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "private": true,
     "scripts": {
         "start": "cds-serve"
     },
     "dependencies": {
         "@cap-js/ord": "*",
+        "@sap/cds-mtxs": "^3",
         "test-sai-supplier-v1": "file:./srv/imported/test-sai-supplier-v1",
         "test-s4-supplier-v1": "file:./srv/imported/test-s4-supplier-v1"
     },
