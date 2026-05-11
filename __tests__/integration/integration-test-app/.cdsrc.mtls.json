@@ -1,5 +1,11 @@
 {
+    "requires": {
+        "toggles": true
+    },
     "ord": {
+        "describedSystemVersion": {
+            "version": "0.0.1"
+        },
         "authentication": {
             "cfMtls": {
                 "certs": [],
