@@ -14,6 +14,8 @@
 5. [Authentication](#authentication)
     - [CF mTLS Authentication](#cf-mtls-authentication)
 6. [Parameters](#parameters)
+    - [defaultVisibility](#defaultvisibility)
+    - [internalNamespace](#internalnamespace)
 7. [ORD Root Properties](#ord-root-property)
 8. [External Data Products](#external-data-products)
 
@@ -371,6 +373,32 @@ If not specified, the plugin uses its built-in default.
 
 ---
 
+### `internalNamespace`
+
+Use `internalNamespace` when your CAP model's internal CDS namespace differs from the configured ORD `namespace`. The plugin strips the `internalNamespace` prefix from fully-qualified service names when building ORD IDs and group IDs, keeping them concise.
+
+**Example:**
+
+```json
+{
+    "ord": {
+        "namespace": "sap.sourcing",
+        "internalNamespace": "com.sap.sourcing.api.v1"
+    }
+}
+```
+
+With this configuration, a service declared in namespace `com.sap.sourcing.api.v1` produces:
+
+|                             | ORD ID                                                                               |
+| --------------------------- | ------------------------------------------------------------------------------------ |
+| Without `internalNamespace` | `sap.sourcing:apiResource:com.sap.sourcing.api.v1.SourcingMasterDataAPIServiceV1:v1` |
+| With `internalNamespace`    | `sap.sourcing:apiResource:SourcingMasterDataAPIServiceV1:v1`                         |
+
+> **Note:** If a service name already starts with the configured `namespace`, that prefix takes priority and `internalNamespace` is not consulted.
+
+---
+
 ## ORD Root Property
 
 More information, see [ORD Document specification](https://pages.github.tools.sap/CentralEngineering/open-resource-discovery-specification/spec-v1/interfaces/document)
@@ -391,9 +419,9 @@ When your application consumes external Data Products, the plugin auto-generates
 
 ```json
 {
-  "dependencies": {
-    "sap-sai-supplier-v1": "<package-source>"
-  }
+    "dependencies": {
+        "sap-sai-supplier-v1": "<package-source>"
+    }
 }
 ```
 
@@ -410,14 +438,15 @@ annotate sap.sai.Supplier.v1 with @ORD.Extensions: {
 
 ## Summary
 
-| Scenario                         | Approach                                                                |
-| -------------------------------- | ----------------------------------------------------------------------- |
-| Global Metadata                  | Define in `.cdsrc.json` under `ord`                                     |
-| Service Metadata                 | Use `@ORD.Extensions` annotations in `.cds` files                       |
-| OpenAPI Servers                  | Use `@OpenAPI.servers` annotation                                       |
-| Custom ORD Content               | Use `customOrdContentFile`                                              |
-| Linking to Existing SAP Products | Use `existingProductORDId`                                              |
-| Defining Custom Products         | Add `products` section manually                                         |
-| Basic Authentication             | Configure `ord.authentication.basic`                                    |
-| CF mTLS Authentication           | Set `ord.authentication.cfMtls: true` + `CF_MTLS_TRUSTED_CERTS` env var |
+| Scenario                         | Approach                                                                                         |
+| -------------------------------- | ------------------------------------------------------------------------------------------------ |
+| Global Metadata                  | Define in `.cdsrc.json` under `ord`                                                              |
+| Service Metadata                 | Use `@ORD.Extensions` annotations in `.cds` files                                                |
+| OpenAPI Servers                  | Use `@OpenAPI.servers` annotation                                                                |
+| Custom ORD Content               | Use `customOrdContentFile`                                                                       |
+| Linking to Existing SAP Products | Use `existingProductORDId`                                                                       |
+| Defining Custom Products         | Add `products` section manually                                                                  |
+| Basic Authentication             | Configure `ord.authentication.basic`                                                             |
+| CF mTLS Authentication           | Set `ord.authentication.cfMtls: true` + `CF_MTLS_TRUSTED_CERTS` env var                          |
+| CDS/ORD Namespace Mismatch       | Set `internalNamespace` to strip the CDS namespace prefix from ORD IDs                           |
 | External Data Products           | Services with `@cds.external`, `@data.product`, `@cds.dp.ordId` generate IntegrationDependencies |
