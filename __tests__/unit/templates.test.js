@@ -380,6 +380,186 @@ describe("templates", () => {
             expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toEqual([]);
         });
 
+        describe("multi-protocol unique ordId", () => {
+            it("should generate unique ordIds for multi-protocol services", () => {
+                jest.resetModules();
+
+                jest.doMock("../../lib/protocol-resolver", () => ({
+                    resolveApiResourceProtocol: jest.fn().mockReturnValue([
+                        {
+                            apiProtocol: "odata-v4",
+                            entryPoints: ["/odata/v4/TestService"],
+                            hasResourceDefinitions: true,
+                        },
+                        {
+                            apiProtocol: "rest",
+                            entryPoints: ["/rest/TestService"],
+                            hasResourceDefinitions: true,
+                        },
+                    ]),
+                }));
+
+                const { createAPIResourceTemplate: createAPIResourceTemplateMocked } = require("../../lib/templates");
+
+                const serviceName = "TestService";
+                const model = cds.linked(`
+                    service TestService {
+                       entity Items {
+                           key ID: UUID;
+                           name: String;
+                       }
+                    };
+                `);
+                const srvDefinition = model.definitions["TestService"];
+                const packageIds = ["sap.test.cdsrc.sample:package:test-api:v1"];
+                const accessStrategies = [{ type: "open" }];
+
+                const result = createAPIResourceTemplateMocked(
+                    serviceName,
+                    srvDefinition,
+                    appConfig,
+                    packageIds,
+                    accessStrategies,
+                );
+
+                expect(result).toHaveLength(2);
+                expect(result[0].ordId).toBe("customer.testNamespace:apiResource:TestService:v1");
+                expect(result[0].apiProtocol).toBe("odata-v4");
+                expect(result[1].ordId).toBe("customer.testNamespace:apiResource:TestService:v1-rest");
+                expect(result[1].apiProtocol).toBe("rest");
+
+                const ordIds = result.map((r) => r.ordId);
+                expect(new Set(ordIds).size).toBe(ordIds.length);
+
+                jest.dontMock("../../lib/protocol-resolver");
+                jest.resetModules();
+            });
+
+            it("should generate unique ordIds for odata-v4 + mcp", () => {
+                jest.resetModules();
+
+                jest.doMock("../../lib/protocol-resolver", () => ({
+                    resolveApiResourceProtocol: jest.fn().mockReturnValue([
+                        {
+                            apiProtocol: "odata-v4",
+                            entryPoints: ["/odata/v4/TestService"],
+                            hasResourceDefinitions: true,
+                        },
+                        {
+                            apiProtocol: "mcp",
+                            entryPoints: ["/mcp/TestService"],
+                            hasResourceDefinitions: true,
+                        },
+                    ]),
+                }));
+
+                const { createAPIResourceTemplate: createAPIResourceTemplateMocked } = require("../../lib/templates");
+
+                const serviceName = "TestService";
+                const model = cds.linked(`
+                    service TestService {
+                       entity Items {
+                           key ID: UUID;
+                           name: String;
+                       }
+                    };
+                `);
+                const srvDefinition = model.definitions["TestService"];
+                const packageIds = ["sap.test.cdsrc.sample:package:test-api:v1"];
+                const accessStrategies = [{ type: "open" }];
+
+                const result = createAPIResourceTemplateMocked(
+                    serviceName,
+                    srvDefinition,
+                    appConfig,
+                    packageIds,
+                    accessStrategies,
+                );
+
+                expect(result).toHaveLength(2);
+                expect(result[0].ordId).toBe("customer.testNamespace:apiResource:TestService:v1");
+                expect(result[0].apiProtocol).toBe("odata-v4");
+                expect(result[1].ordId).toBe("customer.testNamespace:apiResource:TestService:v1-mcp");
+                expect(result[1].apiProtocol).toBe("mcp");
+
+                jest.dontMock("../../lib/protocol-resolver");
+                jest.resetModules();
+            });
+
+            it("should not suffix ordId for single-protocol services", () => {
+                const serviceName = "MyService";
+                const model = cds.linked(`
+                    service MyService {
+                       entity Books {
+                           key ID: UUID;
+                           title: String;
+                       }
+                    };
+                `);
+                const srvDefinition = model.definitions["MyService"];
+                const packageIds = ["sap.test.cdsrc.sample:package:test-api:v1"];
+                const accessStrategies = [{ type: "open" }];
+
+                const result = createAPIResourceTemplate(
+                    serviceName,
+                    srvDefinition,
+                    appConfig,
+                    packageIds,
+                    accessStrategies,
+                );
+
+                expect(result).toHaveLength(1);
+                expect(result[0].ordId).toBe("customer.testNamespace:apiResource:MyService:v1");
+                expect(result[0].ordId).not.toMatch(/-odata-v4$/);
+            });
+
+            it("should log warning when multiple protocols detected", () => {
+                jest.resetModules();
+
+                const mockWarn = jest.fn();
+                jest.doMock("../../lib/logger", () => ({
+                    warn: mockWarn,
+                    info: jest.fn(),
+                    error: jest.fn(),
+                }));
+
+                jest.doMock("../../lib/protocol-resolver", () => ({
+                    resolveApiResourceProtocol: jest.fn().mockReturnValue([
+                        {
+                            apiProtocol: "odata-v4",
+                            entryPoints: ["/odata/v4/Svc"],
+                            hasResourceDefinitions: true,
+                        },
+                        {
+                            apiProtocol: "rest",
+                            entryPoints: ["/rest/Svc"],
+                            hasResourceDefinitions: true,
+                        },
+                    ]),
+                }));
+
+                const { createAPIResourceTemplate: createAPIResourceTemplateMocked } = require("../../lib/templates");
+
+                const serviceName = "Svc";
+                const model = cds.linked(`
+                    service Svc {
+                       entity Items { key ID: UUID; }
+                    };
+                `);
+                const srvDefinition = model.definitions["Svc"];
+                const packageIds = ["sap.test.cdsrc.sample:package:test-api:v1"];
+                const accessStrategies = [{ type: "open" }];
+
+                createAPIResourceTemplateMocked(serviceName, srvDefinition, appConfig, packageIds, accessStrategies);
+
+                expect(mockWarn).toHaveBeenCalledWith(expect.stringContaining("exposes multiple protocols"));
+
+                jest.dontMock("../../lib/protocol-resolver");
+                jest.dontMock("../../lib/logger");
+                jest.resetModules();
+            });
+        });
+
         describe("MCP protocol resource definitions", () => {
             const { MCP_RESOURCE_DEFINITION_TYPE } = require("../../lib/constants");
 
