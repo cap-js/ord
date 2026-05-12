@@ -4,6 +4,26 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.7.0 (2026-05-12)
+
+## What's Changed
+
+- feat: Introduce 'perspective: system-version' for static files by @mlakov in https://github.com/cap-js/ord/pull/412
+- chore(deps): update dependency @sap/cds-compiler to v6.9.1 by @rennovate in https://github.com/cap-js/ord/pull/417
+- chore: Exclude deprecated property 'entityTypeMappings' from ORD document generation by @mlakov in https://github.com/cap-js/ord/pull/418
+- chore: Bump ORD spec version to 1.14 by @mlakov in https://github.com/cap-js/ord/pull/421
+- fix: Do not generate OpenAPI resources for ODataV2 services by @mlakov in https://github.com/cap-js/ord/pull/422
+- chore: Extract app configuration to a dedicated class by @mlakov in https://github.com/cap-js/ord/pull/423
+- chore: Fix IDE warnings by @mlakov in https://github.com/cap-js/ord/pull/425
+- feat: ODMPLANNING-1151 - Correctly handle static / tenant-specific metadata by @mlakov in https://github.com/cap-js/ord/pull/413
+- chore(deps): update dependency @sap/cds-compiler to v6.9.2 by @rennovate in https://github.com/cap-js/ord/pull/427
+- feat: Support internalNamespace config for ORD ID generation by @swennemers in https://github.com/cap-js/ord/pull/424
+- chore: Simplify generation of ORD documents by @mlakov in https://github.com/cap-js/ord/pull/429
+- fix: Only register well-known compile targets by @mlakov in https://github.com/cap-js/ord/pull/428
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.6.0...v1.7.0
+
+
 ## 1.6.0 (2026-04-30)
 
 ## What's Changed
