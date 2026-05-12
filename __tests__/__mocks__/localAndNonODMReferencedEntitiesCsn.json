@@ -56,6 +56,32 @@
                 }
             }
         },
+        "LocalService.DummyEntityC": {
+            "@ODM.entityName": "SomeOtherAribaEntity",
+            "@EntityRelationship.entityType": "sap.sm:SomeOtherAribaEntity",
+            "@ObjectModel.compositionRoot": true,
+            "@ORD.Extensions.ordId": "sap.sm:entityType:CustomizedSomeOtherAribaEntity:v1",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "propertyC": {
+                    "length": 10,
+                    "type": "cds.String"
+                },
+                "propertyD": {
+                    "length": 20,
+                    "type": "cds.String"
+                }
+            },
+            "kind": "entity",
+            "projection": {
+                "from": {
+                    "ref": ["sap.cds.demo.SomeOtherAribaEntity"]
+                }
+            }
+        },
         "LocalService.TitleChange2": {
             "elements": {
                 "ID": {
@@ -91,6 +117,25 @@
         },
         "sap.cds.demo.SomeAribaEntity": {
             "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity",
+            "@ObjectModel.compositionRoot": true,
+            "@title": "Dummy title of Ariba entity",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "propertyC": {
+                    "length": 10,
+                    "type": "cds.String"
+                },
+                "propertyD": {
+                    "length": 20,
+                    "type": "cds.String"
+                }
+            },
+            "kind": "entity"
+        },
+        "sap.cds.demo.SomeOtherAribaEntity": {
             "@ObjectModel.compositionRoot": true,
             "@title": "Dummy title of Ariba entity",
             "elements": {

@@ -59,16 +59,23 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/localAndNonODMReferencedEntitiesCsn.json");
             const document = ord(csn);
 
-            expect(document.entityTypes).toHaveLength(1);
-            expect(document.entityTypes[0].partOfPackage).toEqual(
-                "sap.test.cdsrc.sample:package:capirebookshopordsample:v1", //for customer, no package by type
-            );
+            expect(document.entityTypes).toHaveLength(2);
+            expect(document.entityTypes[0]).toMatchObject({
+                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1",
+                partOfPackage: "sap.test.cdsrc.sample:package:capirebookshopordsample:v1", //for customer, no package by type
+            });
+            expect(document.entityTypes[1]).toMatchObject({
+                ordId: "sap.sm:entityType:CustomizedSomeOtherAribaEntity:v1",
+                partOfPackage: "sap.test.cdsrc.sample:package:capirebookshopordsample:v1", //for customer, no package by type
+            });
             expect(document.entityTypes[0].ordId).toEqual("sap.sm:entityType:SomeAribaDummyEntity:v1");
             expect(document.entityTypes[0].level).toEqual(expect.stringContaining("root-entity"));
             expect(document.apiResources[0].exposedEntityTypes).toEqual(
                 expect.arrayContaining([
                     { ordId: "sap.odm:entityType:SomeODMEntity:v1" },
                     { ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1" },
+                    { ordId: "sap.odm:entityType:SomeOtherAribaEntity:v1" },
+                    { ordId: "sap.sm:entityType:CustomizedSomeOtherAribaEntity:v1" },
                 ]),
             );
         });
