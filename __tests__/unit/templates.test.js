@@ -485,6 +485,7 @@ describe("templates", () => {
                     entity Books as projection on MyBooks;
                 }
                 annotate MyService with @ORD.Extensions : {
+                    ordId           : 'customer.testNamespace:apiResource:CustomizedMyService:v1',
                     title           : 'This is test MyService apiResource title',
                     shortDescription: 'short description for test MyService apiResource',
                     visibility : 'public',
