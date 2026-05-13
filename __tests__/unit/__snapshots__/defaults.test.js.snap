@@ -206,19 +206,6 @@ exports[`defaults baseTemplate should return correct value when tenant is not gi
 }
 `;
 
-exports[`defaults consumptionBundles should return default value 1`] = `
-[
-  {
-    "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-    "lastUpdate": "2024-06-20T14:04:01+01:00",
-    "ordId": "sapxref:consumptionBundle:noAuth:v1",
-    "shortDescription": "If we have another protected API then it will be another object",
-    "title": "Unprotected resources",
-    "version": "1.0.0",
-  },
-]
-`;
-
 exports[`defaults description should return default value 1`] = `"this is an application description"`;
 
 exports[`defaults groupTypeId should return default value 1`] = `"sap.cds:service"`;

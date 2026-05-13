@@ -123,16 +123,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "visibility": "internal",
     },
   ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
-    },
-  ],
   "dataProducts": [
     {
       "category": "business-object",
@@ -423,16 +413,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "title": "sap.capdpprod.DPBooks.v1",
       "version": "1.0.0",
       "visibility": "internal",
-    },
-  ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
     },
   ],
   "dataProducts": [
@@ -727,16 +707,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "visibility": "internal",
     },
   ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
-    },
-  ],
   "dataProducts": [
     {
       "category": "business-object",
@@ -952,16 +922,6 @@ exports[`Tests for Data Product definition Check interop CSN annotation mapping 
       "title": "Test Service Title",
       "version": "1.0.0",
       "visibility": "public",
-    },
-  ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capjsord:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
     },
   ],
   "description": "this is an application description",
@@ -2207,16 +2167,6 @@ exports[`Tests for Data Product definition Check interop CSN service name parsin
       "visibility": "public",
     },
   ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capjsord:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
-    },
-  ],
   "description": "this is an application description",
   "groups": [
     {
@@ -2304,16 +2254,6 @@ exports[`Tests for eventResource and apiResource should block MTXServices when m
       "title": "cds.xt.MyService",
       "version": "1.0.0",
       "visibility": "internal",
-    },
-  ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
     },
   ],
   "description": "this is an application description",
@@ -2431,16 +2371,6 @@ exports[`Tests for eventResource and apiResource should block OpenResourceDiscov
       "visibility": "internal",
     },
   ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
-    },
-  ],
   "description": "this is an application description",
   "eventResources": [
     {
@@ -2556,16 +2486,6 @@ exports[`Tests for eventResource and apiResource should exclude external service
       "visibility": "internal",
     },
   ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
-    },
-  ],
   "description": "this is an application description",
   "eventResources": [
     {
@@ -2679,16 +2599,6 @@ exports[`Tests for eventResource and apiResource should exclude service when it 
       "title": "MyService",
       "version": "1.0.0",
       "visibility": "internal",
-    },
-  ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
     },
   ],
   "description": "this is an application description",
@@ -2882,16 +2792,6 @@ exports[`Tests for products and packages should not contain products property if
       "title": "sap.capdpprod.DPBooks.v1",
       "version": "1.0.0",
       "visibility": "internal",
-    },
-  ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
     },
   ],
   "description": "this is an application description",
@@ -3139,16 +3039,6 @@ exports[`Tests for products and packages should raise error log when custom prod
       "title": "sap.capdpprod.DPBooks.v1",
       "version": "1.0.0",
       "visibility": "internal",
-    },
-  ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
     },
   ],
   "description": "this is an application description",
@@ -3404,16 +3294,6 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "title": "sap.capdpprod.DPBooks.v1",
       "version": "1.0.0",
       "visibility": "internal",
-    },
-  ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "capirebookshopordsample:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
     },
   ],
   "description": "this is an application description",
