@@ -92,7 +92,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
         {
-          "ordId": "customer.foo:entityType:Authors:v1",
+          "ordId": "customer.foo:entityType:Authors:v2",
         },
       ],
       "extensible": {
@@ -394,7 +394,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
         {
-          "ordId": "customer.foo:entityType:Authors:v1",
+          "ordId": "customer.foo:entityType:Authors:v2",
         },
       ],
       "extensible": {
@@ -696,7 +696,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
         {
-          "ordId": "customer.foo:entityType:Authors:v1",
+          "ordId": "customer.foo:entityType:Authors:v2",
         },
       ],
       "extensible": {
@@ -1012,6 +1012,7 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
     "sap.capdpprod.DPBooks.v1.Authors": {
       "@EntityRelationship.entityType": "customer.foo:Authors",
       "@ODM.entityName": "odm.bookshop.Authors",
+      "@ORD.Extensions.version": "2.0.0",
       "elements": {
         "ID": {
           "key": true,
@@ -2852,7 +2853,7 @@ exports[`Tests for products and packages should not contain products property if
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
         {
-          "ordId": "customer.foo:entityType:Authors:v1",
+          "ordId": "customer.foo:entityType:Authors:v2",
         },
       ],
       "extensible": {
@@ -2903,12 +2904,12 @@ exports[`Tests for products and packages should not contain products property if
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "level": "sub-entity",
       "localId": "Authors",
-      "ordId": "customer.foo:entityType:Authors:v1",
+      "ordId": "customer.foo:entityType:Authors:v2",
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "shortDescription": "Short description of Authors",
       "title": "Authors",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "visibility": "public",
     },
   ],
@@ -3109,7 +3110,7 @@ exports[`Tests for products and packages should raise error log when custom prod
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
         {
-          "ordId": "customer.foo:entityType:Authors:v1",
+          "ordId": "customer.foo:entityType:Authors:v2",
         },
       ],
       "extensible": {
@@ -3160,12 +3161,12 @@ exports[`Tests for products and packages should raise error log when custom prod
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "level": "sub-entity",
       "localId": "Authors",
-      "ordId": "customer.foo:entityType:Authors:v1",
+      "ordId": "customer.foo:entityType:Authors:v2",
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "shortDescription": "Short description of Authors",
       "title": "Authors",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "visibility": "public",
     },
   ],
@@ -3374,7 +3375,7 @@ exports[`Tests for products and packages should use valid custom products ordId 
           "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
         },
         {
-          "ordId": "customer.foo:entityType:Authors:v1",
+          "ordId": "customer.foo:entityType:Authors:v2",
         },
       ],
       "extensible": {
@@ -3425,12 +3426,12 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "level": "sub-entity",
       "localId": "Authors",
-      "ordId": "customer.foo:entityType:Authors:v1",
+      "ordId": "customer.foo:entityType:Authors:v2",
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "shortDescription": "Short description of Authors",
       "title": "Authors",
-      "version": "1.0.0",
+      "version": "2.0.0",
       "visibility": "public",
     },
   ],

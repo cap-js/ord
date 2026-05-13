@@ -18,6 +18,7 @@ entity Books : managed {
         currency : Currency;
 }
 
+@ORD.Extensions.version: '2.0.0'
 @ODM.entityName: 'odm.bookshop.Authors'
 @EntityRelationship.entityType: 'customer.foo:Authors'
 entity Authors : managed {
