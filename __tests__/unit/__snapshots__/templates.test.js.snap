@@ -182,7 +182,7 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
       "supported": "yes",
     },
     "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "ordId": "customer.testNamespace:apiResource:CustomizedMyService:v1",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
     ],
@@ -197,7 +197,7 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:CustomizedMyService:v1/MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -207,7 +207,7 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:CustomizedMyService:v1/MyService.edmx",
       },
     ],
     "shortDescription": "short description for test MyService apiResource",
