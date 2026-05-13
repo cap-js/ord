@@ -158,16 +158,6 @@ describe("defaults", () => {
         });
     });
 
-    describe("consumptionBundles", () => {
-        const testAppConfig = {
-            appName: "sap.xref",
-            lastUpdate: "2024-06-20T14:04:01+01:00",
-        };
-        it("should return default value", () => {
-            expect(defaults.consumptionBundles(testAppConfig)).toMatchSnapshot();
-        });
-    });
-
     describe("baseTemplate", () => {
         it("should return correct value when no tenant is given and toggles & extensions are disabled", () => {
             cds.env.requires.toggles = false;

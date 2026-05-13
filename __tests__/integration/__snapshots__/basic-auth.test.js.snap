@@ -127,16 +127,6 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "visibility": "public",
     },
   ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2026-05-04T13:45:01+01:00",
-      "ordId": "capireordintegrationtest:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
-    },
-  ],
   "describedSystemVersion": {
     "version": "0.1.0",
   },
@@ -337,16 +327,6 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "title": "SupplierService",
       "version": "1.0.0",
       "visibility": "public",
-    },
-  ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2026-05-04T13:45:01+01:00",
-      "ordId": "capireordintegrationtest:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
     },
   ],
   "describedSystemVersion": {
@@ -551,16 +531,6 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "visibility": "public",
     },
   ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2026-05-04T13:45:01+01:00",
-      "ordId": "capireordintegrationtest:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
-    },
-  ],
   "description": "this is an application description",
   "eventResources": [
     {
@@ -758,16 +728,6 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "title": "SupplierService",
       "version": "1.0.0",
       "visibility": "public",
-    },
-  ],
-  "consumptionBundles": [
-    {
-      "description": "This Consumption Bundle contains all resources of the reference app which are unprotected and do not require authentication",
-      "lastUpdate": "2026-05-04T13:45:01+01:00",
-      "ordId": "capireordintegrationtest:consumptionBundle:noAuth:v1",
-      "shortDescription": "If we have another protected API then it will be another object",
-      "title": "Unprotected resources",
-      "version": "1.0.0",
     },
   ],
   "describedSystemVersion": {

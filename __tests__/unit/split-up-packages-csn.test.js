@@ -42,7 +42,6 @@ describe("ORD Generation for Business Accelerator Hub", () => {
             expect(document).not.toBeUndefined();
             document.apiResources.forEach((api) => delete api.lastUpdate);
             document.eventResources.forEach((event) => delete event.lastUpdate);
-            document.consumptionBundles.forEach((con) => delete con.lastUpdate);
             expect(document).toMatchSnapshot();
             expect(document.openResourceDiscovery).toBe("1.10");
             expect(document.policyLevels).toEqual(["sap:core:v1"]);
