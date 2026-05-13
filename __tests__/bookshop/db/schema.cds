@@ -29,8 +29,7 @@ entity Authors : managed {
 }
 
 /** Hierarchically organized Code List for Genres */
-@ORD.Extensions.version: '2.0.0'
-@EntityRelationship.entityType: 'customer.foo:Genres:v2'
+@EntityRelationship.entityType: 'customer.foo:Genres'
 entity Genres : sap.common.CodeList {
     key ID       : Integer;
         parent   : Association to Genres;

@@ -47,7 +47,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       ],
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -100,7 +100,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           "ordId": "customer.foo:entityType:Authors:v2",
         },
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -197,7 +197,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "description": "CAP Event resource describing events / messages.",
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -352,7 +352,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       ],
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -405,7 +405,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           "ordId": "customer.foo:entityType:Authors:v2",
         },
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -502,7 +502,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "description": "CAP Event resource describing events / messages.",
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -657,7 +657,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       ],
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -710,7 +710,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
           "ordId": "customer.foo:entityType:Authors:v2",
         },
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -807,7 +807,7 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "description": "CAP Event resource describing events / messages.",
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -1406,8 +1406,7 @@ exports[`Tests for Data Product definition Check interop CSN content 1`] = `
       "kind": "entity",
     },
     "sap.capdpprod.DPBooks.v1.Genres": {
-      "@EntityRelationship.entityType": "customer.foo:Genres:v2",
-      "@ORD.Extensions.version": "2.0.0",
+      "@EntityRelationship.entityType": "customer.foo:Genres",
       "@UI.Identification": [
         {
           "Value": {
@@ -2759,7 +2758,7 @@ exports[`Tests for products and packages should not contain products property if
       ],
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -2812,7 +2811,7 @@ exports[`Tests for products and packages should not contain products property if
           "ordId": "customer.foo:entityType:Authors:v2",
         },
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -2869,12 +2868,12 @@ exports[`Tests for products and packages should not contain products property if
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "level": "sub-entity",
       "localId": "Genres",
-      "ordId": "customer.foo:entityType:Genres:v2",
+      "ordId": "customer.foo:entityType:Genres:v1",
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "shortDescription": "Short description of Genres",
       "title": "Genres",
-      "version": "2.0.0",
+      "version": "1.0.0",
       "visibility": "public",
     },
   ],
@@ -2917,7 +2916,7 @@ exports[`Tests for products and packages should not contain products property if
       "description": "CAP Event resource describing events / messages.",
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -3035,7 +3034,7 @@ exports[`Tests for products and packages should raise error log when custom prod
       ],
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -3088,7 +3087,7 @@ exports[`Tests for products and packages should raise error log when custom prod
           "ordId": "customer.foo:entityType:Authors:v2",
         },
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -3145,12 +3144,12 @@ exports[`Tests for products and packages should raise error log when custom prod
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "level": "sub-entity",
       "localId": "Genres",
-      "ordId": "customer.foo:entityType:Genres:v2",
+      "ordId": "customer.foo:entityType:Genres:v1",
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "shortDescription": "Short description of Genres",
       "title": "Genres",
-      "version": "2.0.0",
+      "version": "1.0.0",
       "visibility": "public",
     },
   ],
@@ -3193,7 +3192,7 @@ exports[`Tests for products and packages should raise error log when custom prod
       "description": "CAP Event resource describing events / messages.",
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -3319,7 +3318,7 @@ exports[`Tests for products and packages should use valid custom products ordId 
       ],
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -3372,7 +3371,7 @@ exports[`Tests for products and packages should use valid custom products ordId 
           "ordId": "customer.foo:entityType:Authors:v2",
         },
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -3429,12 +3428,12 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "lastUpdate": "2024-11-04T14:33:25+01:00",
       "level": "sub-entity",
       "localId": "Genres",
-      "ordId": "customer.foo:entityType:Genres:v2",
+      "ordId": "customer.foo:entityType:Genres:v1",
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
       "releaseStatus": "active",
       "shortDescription": "Short description of Genres",
       "title": "Genres",
-      "version": "2.0.0",
+      "version": "1.0.0",
       "visibility": "public",
     },
   ],
@@ -3477,7 +3476,7 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "description": "CAP Event resource describing events / messages.",
       "exposedEntityTypes": [
         {
-          "ordId": "customer.foo:entityType:Genres:v2",
+          "ordId": "customer.foo:entityType:Genres:v1",
         },
       ],
       "extensible": {
@@ -3545,8 +3544,6 @@ exports[`Tests for products and packages should use valid custom products ordId 
   "products": [
     {
       "ordId": "customer:product:eb.bm.tests:",
-      "shortDescription": "Short description of capire bookshop ord sample",
-      "title": "capire bookshop ord sample",
       "vendor": "sap:vendor:SAP:",
     },
   ],
