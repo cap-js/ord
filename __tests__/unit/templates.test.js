@@ -558,6 +558,58 @@ describe("templates", () => {
                 jest.dontMock("../../lib/logger");
                 jest.resetModules();
             });
+
+            it("should use explicit ordId for first protocol and auto-generate for others", () => {
+                jest.resetModules();
+
+                jest.doMock("../../lib/protocol-resolver", () => ({
+                    resolveApiResourceProtocol: jest.fn().mockReturnValue([
+                        {
+                            apiProtocol: "odata-v4",
+                            entryPoints: ["/odata/v4/Svc"],
+                            hasResourceDefinitions: true,
+                        },
+                        {
+                            apiProtocol: "rest",
+                            entryPoints: ["/rest/Svc"],
+                            hasResourceDefinitions: true,
+                        },
+                    ]),
+                }));
+
+                const { createAPIResourceTemplate: createAPIResourceTemplateMocked } = require("../../lib/templates");
+
+                const serviceName = "Svc";
+                const model = cds.linked(`
+                    @ORD.Extensions.ordId: 'custom:apiResource:MySvc:v1'
+                    service Svc {
+                       entity Items { key ID: UUID; }
+                    };
+                `);
+                const srvDefinition = model.definitions["Svc"];
+                const packageIds = ["sap.test.cdsrc.sample:package:test-api:v1"];
+                const accessStrategies = [{ type: "open" }];
+
+                const result = createAPIResourceTemplateMocked(
+                    serviceName,
+                    srvDefinition,
+                    appConfig,
+                    packageIds,
+                    accessStrategies,
+                );
+
+                expect(result).toHaveLength(2);
+                expect(result[0].ordId).toBe("custom:apiResource:MySvc:v1");
+                expect(result[0].apiProtocol).toBe("odata-v4");
+                expect(result[1].ordId).toBe("customer.testNamespace:apiResource:Svc-rest:v1");
+                expect(result[1].apiProtocol).toBe("rest");
+
+                const ordIds = result.map((r) => r.ordId);
+                expect(new Set(ordIds).size).toBe(ordIds.length);
+
+                jest.dontMock("../../lib/protocol-resolver");
+                jest.resetModules();
+            });
         });
 
         describe("MCP protocol resource definitions", () => {
