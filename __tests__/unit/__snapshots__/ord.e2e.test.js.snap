@@ -3544,6 +3544,8 @@ exports[`Tests for products and packages should use valid custom products ordId 
   "products": [
     {
       "ordId": "customer:product:eb.bm.tests:",
+      "shortDescription": "Short description of capire bookshop ord sample",
+      "title": "capire bookshop ord sample",
       "vendor": "sap:vendor:SAP:",
     },
   ],
