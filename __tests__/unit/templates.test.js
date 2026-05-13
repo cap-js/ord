@@ -425,7 +425,7 @@ describe("templates", () => {
                 expect(result).toHaveLength(2);
                 expect(result[0].ordId).toBe("customer.testNamespace:apiResource:TestService:v1");
                 expect(result[0].apiProtocol).toBe("odata-v4");
-                expect(result[1].ordId).toBe("customer.testNamespace:apiResource:TestService:v1-rest");
+                expect(result[1].ordId).toBe("customer.testNamespace:apiResource:TestService-rest:v1");
                 expect(result[1].apiProtocol).toBe("rest");
 
                 const ordIds = result.map((r) => r.ordId);
@@ -479,7 +479,7 @@ describe("templates", () => {
                 expect(result).toHaveLength(2);
                 expect(result[0].ordId).toBe("customer.testNamespace:apiResource:TestService:v1");
                 expect(result[0].apiProtocol).toBe("odata-v4");
-                expect(result[1].ordId).toBe("customer.testNamespace:apiResource:TestService:v1-mcp");
+                expect(result[1].ordId).toBe("customer.testNamespace:apiResource:TestService-mcp:v1");
                 expect(result[1].apiProtocol).toBe("mcp");
 
                 jest.dontMock("../../lib/protocol-resolver");
