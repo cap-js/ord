@@ -20,7 +20,7 @@ entity Books : managed {
 
 @ORD.Extensions.version: '2.0.0'
 @ODM.entityName: 'odm.bookshop.Authors'
-@EntityRelationship.entityType: 'customer.foo:Authors'
+@EntityRelationship.entityType: 'customer.foo:Authors:v2'
 entity Authors : managed {
     key ID    : Integer;
         name  : String(111);
@@ -29,6 +29,8 @@ entity Authors : managed {
 }
 
 /** Hierarchically organized Code List for Genres */
+@ORD.Extensions.version: '2.0.0'
+@EntityRelationship.entityType: 'customer.foo:Genres:v2'
 entity Genres : sap.common.CodeList {
     key ID       : Integer;
         parent   : Association to Genres;
