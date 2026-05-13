@@ -19,7 +19,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:apiResource:AdminService:v1",
+      "ordId": "customer.capirebookshopordsample:apiResource:AdminService:v2",
       "partOfGroups": [
         "sap.cds:service:customer.capirebookshopordsample:AdminService",
       ],
@@ -34,7 +34,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v1/AdminService.oas3.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v2/AdminService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -44,7 +44,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v1/AdminService.edmx",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:AdminService:v2/AdminService.edmx",
         },
       ],
       "shortDescription": "short description for test AdminService",
@@ -62,7 +62,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
         "supported": "yes",
       },
       "lastUpdate": "2024-11-04T14:33:25+01:00",
-      "ordId": "customer.capirebookshopordsample:apiResource:CatalogService:v1",
+      "ordId": "customer.capirebookshopordsample:apiResource:CatalogService:v2",
       "partOfGroups": [
         "sap.cds:service:customer.capirebookshopordsample:CatalogService",
       ],
@@ -77,7 +77,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CatalogService:v1/CatalogService.oas3.json",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CatalogService:v2/CatalogService.oas3.json",
         },
         {
           "accessStrategies": [
@@ -87,7 +87,7 @@ exports[`Tests for ORD document generated out of mocked csn files Tests for ORD 
           ],
           "mediaType": "application/xml",
           "type": "edmx",
-          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CatalogService:v1/CatalogService.edmx",
+          "url": "/ord/v1/customer.capirebookshopordsample:apiResource:CatalogService:v2/CatalogService.edmx",
         },
       ],
       "shortDescription": "short description for test CatalogService",
