@@ -18,7 +18,7 @@
     - [internalNamespace](#internalnamespace)
 7. [ORD Root Properties](#ord-root-property)
 8. [External Data Products](#external-data-products)
-
+9. [Consumption Bundles](#consumption-bundles)
 ---
 
 ## Introduction
@@ -431,6 +431,37 @@ When your application consumes external Data Products, the plugin auto-generates
 annotate sap.sai.Supplier.v1 with @ORD.Extensions: {
     title      : 'SAI Supplier API',
     description: 'Integration with SAP Analytics Intelligence Supplier Data Product'
+};
+```
+
+---
+
+## Consumption Bundles
+
+Consumption bundles can be defined via `.cdsrc.json/package.json`(section `ord`, property `consumptionBundles`) and the contents of your `customOrdContentFile`.
+CDS services can be linked to consumption bundles via the `@ORD.Extensions.partOfConsumptionBundles` annotation.
+
+**Example: Configure consumption bundles via `.cdsrc.json`:**
+
+```json
+{
+    "ord": {
+        "consumptionBundles": [
+            {
+                "ordId": "capjsorddemo:consumptionBundle:public:v1",
+                "title": "Public API resources",
+                "version": "1.0.0"
+            }
+        ]
+    }
+}
+```
+
+**Example: Assign service to consumption bundle via `@ORD.Extensions` annotation:**
+
+```cds
+annotate sap.sai.Supplier with @ORD.Extensions: {
+    partOfConsumptionBundles: ['capjsorddemo:consumptionBundle:public:v1']
 };
 ```
 
