@@ -182,7 +182,7 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
       "supported": "yes",
     },
     "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "ordId": "customer.testNamespace:apiResource:MyService:v2",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
     ],
@@ -197,7 +197,7 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -207,7 +207,7 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.edmx",
       },
     ],
     "shortDescription": "short description for test MyService apiResource",
@@ -272,7 +272,7 @@ exports[`templates ordExtension should find association on nested entities for r
       "supported": "yes",
     },
     "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "ordId": "customer.testNamespace:apiResource:MyService:v2",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
     ],
@@ -287,7 +287,7 @@ exports[`templates ordExtension should find association on nested entities for r
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -297,7 +297,7 @@ exports[`templates ordExtension should find association on nested entities for r
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.edmx",
       },
     ],
     "shortDescription": "short description for test MyService apiResource",
@@ -328,7 +328,7 @@ exports[`templates ordExtension should find composition and association entities
       "supported": "yes",
     },
     "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "ordId": "customer.testNamespace:apiResource:MyService:v2",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
     ],
@@ -343,7 +343,7 @@ exports[`templates ordExtension should find composition and association entities
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -353,7 +353,7 @@ exports[`templates ordExtension should find composition and association entities
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.edmx",
       },
     ],
     "shortDescription": "short description for test MyService apiResource",
@@ -384,7 +384,7 @@ exports[`templates ordExtension should find composition on nested entities for r
       "supported": "yes",
     },
     "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "ordId": "customer.testNamespace:apiResource:MyService:v2",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
     ],
@@ -399,7 +399,7 @@ exports[`templates ordExtension should find composition on nested entities for r
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -409,7 +409,7 @@ exports[`templates ordExtension should find composition on nested entities for r
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.edmx",
       },
     ],
     "shortDescription": "short description for test MyService apiResource",
@@ -440,7 +440,7 @@ exports[`templates ordExtension should find ordId on circular relations 1`] = `
       "supported": "yes",
     },
     "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "ordId": "customer.testNamespace:apiResource:MyService:v2",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
     ],
@@ -455,7 +455,7 @@ exports[`templates ordExtension should find ordId on circular relations 1`] = `
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -465,7 +465,7 @@ exports[`templates ordExtension should find ordId on circular relations 1`] = `
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.edmx",
       },
     ],
     "shortDescription": "short description for test MyService apiResource",
@@ -493,7 +493,7 @@ exports[`templates ordExtension should include internal API resources but ensure
       "supported": "yes",
     },
     "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "ordId": "customer.testNamespace:apiResource:MyService:v2",
     "partOfGroups": [
       "sap.cds:service:customer.testNamespace:MyService",
     ],
@@ -508,7 +508,7 @@ exports[`templates ordExtension should include internal API resources but ensure
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -518,7 +518,7 @@ exports[`templates ordExtension should include internal API resources but ensure
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v2/MyService.edmx",
       },
     ],
     "shortDescription": "short description for test MyService apiResource",
