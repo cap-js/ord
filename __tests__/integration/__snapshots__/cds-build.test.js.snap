@@ -166,7 +166,7 @@ exports[`ORD Build Integration Tests IntegrationDependency with cdsrc customizat
       ],
       "description": "Custom description from cdsrc",
       "mandatory": false,
-      "ordId": "customer.capireordintegrationtest:integrationDependency:externalDependencies:v1",
+      "ordId": "customer.capireordintegrationtest:integrationDependency:externalDependencies:v2",
       "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
       "releaseStatus": "beta",
       "title": "Custom External Dependencies",
