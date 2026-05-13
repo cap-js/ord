@@ -20,7 +20,7 @@
     "apiResources": [
         {
             "partOfGroups": null,
-            "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v1",
+            "ordId": "sap.test.cdsrc.sample:apiResource:AdminService:v2",
             "exposedEntityTypes": [
                 {
                     "ordId": "sap.odm:entityType:BusinessPartner:v1"
