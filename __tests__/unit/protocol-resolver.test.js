@@ -1,32 +1,10 @@
 const cds = require("@sap/cds");
 const { ORD_API_PROTOCOL } = require("../../lib/constants");
-const { resolveApiResourceProtocol, _getExplicitProtocol } = require("../../lib/protocol-resolver");
+const { resolveApiResourceProtocol } = require("../../lib/protocol-resolver");
 const { isPrimaryDataProductService } = require("../../lib/templates");
 const Logger = require("../../lib/logger");
 
 describe("protocol-resolver", () => {
-    describe("_getExplicitProtocol", () => {
-        it("should return empty list when no @protocol annotation", () => {
-            const srvDefinition = { name: "MyService" };
-            expect(_getExplicitProtocol(srvDefinition)).toEqual([]);
-        });
-
-        it("should return single-item array when @protocol is string", () => {
-            const srvDefinition = { "name": "MyService", "@protocol": "rest" };
-            expect(_getExplicitProtocol(srvDefinition)).toEqual(["rest"]);
-        });
-
-        it("should return entire array", () => {
-            const srvDefinition = { "name": "MyService", "@protocol": ["odata", "rest"] };
-            expect(_getExplicitProtocol(srvDefinition)).toEqual(["odata", "rest"]);
-        });
-
-        it("should handle single-item array", () => {
-            const srvDefinition = { "name": "MyService", "@protocol": ["graphql"] };
-            expect(_getExplicitProtocol(srvDefinition)).toEqual(["graphql"]);
-        });
-    });
-
     describe("resolveApiResourceProtocol", () => {
         let loggerWarnSpy;
 

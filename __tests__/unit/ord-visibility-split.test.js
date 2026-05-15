@@ -104,7 +104,7 @@ describe("templates", () => {
         ];
 
         it("should assign the correct partOfPackage for public API", () => {
-            const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": "PublicAPI" };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": "PublicAPI", "kind": "service" };
 
             const apiResource = createAPIResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 
@@ -113,7 +113,7 @@ describe("templates", () => {
         });
 
         it("should assign the correct partOfPackage for internal API", () => {
-            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": "InternalAPI" };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": "InternalAPI", "kind": "service" };
 
             const apiResource = createAPIResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 

@@ -230,6 +230,7 @@ describe("Version Suffix Extraction for Data Product Services", () => {
         test("should use current behavior for non-data product service with valid version suffix", () => {
             const serviceDefinition = {
                 name: "RegularService.v2",
+                kind: 'service'
                 // No DATA_PRODUCT_ANNOTATION - this is a regular service
             };
 
@@ -249,6 +250,7 @@ describe("Version Suffix Extraction for Data Product Services", () => {
         test("should use current behavior for non-primary data product service", () => {
             const serviceDefinition = {
                 name: "DataService.v2",
+                kind: 'service',
                 [DATA_PRODUCT_ANNOTATION]: "secondary", // Not primary
             };
 
@@ -335,6 +337,7 @@ describe("Version Suffix Extraction for Data Product Services", () => {
         test("should use current behavior when @data.product is false", () => {
             const serviceDefinition = {
                 name: "DataService.v2",
+                kind: 'service',
                 [DATA_PRODUCT_SIMPLE_ANNOTATION]: false,
             };
 
