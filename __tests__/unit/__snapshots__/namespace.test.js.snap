@@ -4,7 +4,7 @@ exports[`namespace local and global should not strip a different local namespace
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "Description for MyService",
+    "description": "Description for other.namespace.MyService",
     "entryPoints": [
       "/odata/v4/my",
     ],
@@ -27,7 +27,7 @@ exports[`namespace local and global should not strip a different local namespace
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:other.namespace.MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:other.namespace.MyService:v1/other.namespace.MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -37,11 +37,11 @@ exports[`namespace local and global should not strip a different local namespace
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:other.namespace.MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:other.namespace.MyService:v1/other.namespace.MyService.edmx",
       },
     ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
+    "shortDescription": "Short description of other.namespace.MyService",
+    "title": "other.namespace.MyService",
     "version": "1.0.0",
     "visibility": "public",
   },
@@ -71,10 +71,10 @@ exports[`namespace local and global should not strip a different local namespace
         ],
         "mediaType": "application/json",
         "type": "asyncapi-v2",
-        "url": "/ord/v1/customer.testNamespace:eventResource:other.namespace.MyService:v1/MyService.asyncapi2.json",
+        "url": "/ord/v1/customer.testNamespace:eventResource:other.namespace.MyService:v1/other.namespace.MyService.asyncapi2.json",
       },
     ],
-    "shortDescription": "MyService event resource",
+    "shortDescription": "other.namespace.MyService event resource",
     "title": "ODM testAppName Events",
     "version": "1.0.0",
     "visibility": "public",
@@ -86,7 +86,7 @@ exports[`namespace local and global should strip application namespace from loca
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "Description for MyService",
+    "description": "Description for customer.testNamespace.nested.MyService",
     "entryPoints": [
       "/odata/v4/my",
     ],
@@ -109,7 +109,7 @@ exports[`namespace local and global should strip application namespace from loca
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/customer.testNamespace.nested.MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -119,11 +119,11 @@ exports[`namespace local and global should strip application namespace from loca
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/customer.testNamespace.nested.MyService.edmx",
       },
     ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
+    "shortDescription": "Short description of customer.testNamespace.nested.MyService",
+    "title": "customer.testNamespace.nested.MyService",
     "version": "1.0.0",
     "visibility": "public",
   },
@@ -153,10 +153,10 @@ exports[`namespace local and global should strip application namespace from loca
         ],
         "mediaType": "application/json",
         "type": "asyncapi-v2",
-        "url": "/ord/v1/customer.testNamespace:eventResource:nested.MyService:v1/MyService.asyncapi2.json",
+        "url": "/ord/v1/customer.testNamespace:eventResource:nested.MyService:v1/customer.testNamespace.nested.MyService.asyncapi2.json",
       },
     ],
-    "shortDescription": "MyService event resource",
+    "shortDescription": "customer.testNamespace.nested.MyService event resource",
     "title": "ODM testAppName Events",
     "version": "1.0.0",
     "visibility": "public",
@@ -168,7 +168,7 @@ exports[`namespace local and global should strip application namespace if its th
 [
   {
     "apiProtocol": "odata-v4",
-    "description": "Description for MyService",
+    "description": "Description for customer.testNamespace.MyService",
     "entryPoints": [
       "/odata/v4/my",
     ],
@@ -191,7 +191,7 @@ exports[`namespace local and global should strip application namespace if its th
         ],
         "mediaType": "application/json",
         "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/customer.testNamespace.MyService.oas3.json",
       },
       {
         "accessStrategies": [
@@ -201,11 +201,11 @@ exports[`namespace local and global should strip application namespace if its th
         ],
         "mediaType": "application/xml",
         "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/customer.testNamespace.MyService.edmx",
       },
     ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
+    "shortDescription": "Short description of customer.testNamespace.MyService",
+    "title": "customer.testNamespace.MyService",
     "version": "1.0.0",
     "visibility": "public",
   },
@@ -235,10 +235,10 @@ exports[`namespace local and global should strip application namespace if its th
         ],
         "mediaType": "application/json",
         "type": "asyncapi-v2",
-        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
+        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/customer.testNamespace.MyService.asyncapi2.json",
       },
     ],
-    "shortDescription": "MyService event resource",
+    "shortDescription": "customer.testNamespace.MyService event resource",
     "title": "ODM testAppName Events",
     "version": "1.0.0",
     "visibility": "public",

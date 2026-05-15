@@ -16,12 +16,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
     describe("Positive Test Cases - Valid v<number> patterns", () => {
         test("should handle .v0 suffix correctly", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v0",
+                name: "DataService.v0",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v0",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -36,12 +35,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should handle .v1 suffix correctly", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v1",
+                name: "DataService.v1",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v1",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -56,12 +54,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should handle .v2 suffix correctly", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v2",
+                name: "DataService.v2",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v2",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -76,12 +73,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should handle .v10 suffix correctly", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v10",
+                name: "DataService.v10",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v10",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -96,12 +92,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should handle complex service names with .v1 suffix", () => {
             const serviceDefinition = {
-                name: "sap.test.complex.DataProductService.v1",
+                name: "complex.DataProductService.v1",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "complex.DataProductService.v1",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -118,12 +113,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
     describe("Negative Test Cases - Invalid patterns", () => {
         test("should use current behavior for .v1.1 suffix (invalid pattern)", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v1.1",
+                name: "DataService.v1.1",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v1.1",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -138,12 +132,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should use current behavior for .v1.0 suffix (invalid pattern)", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v1.0",
+                name: "DataService.v1.0",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v1.0",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -158,12 +151,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should use current behavior for .version1 suffix (invalid pattern)", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.version1",
+                name: "DataService.version1",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.version1",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -178,12 +170,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should use current behavior for .beta suffix (invalid pattern)", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.beta",
+                name: "DataService.beta",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.beta",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -198,12 +189,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should use current behavior for .v suffix (invalid pattern)", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v",
+                name: "DataService.v",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -220,12 +210,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
     describe("Edge Case Tests", () => {
         test("should use current behavior for data product service without version suffix", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService",
+                name: "DataService",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -240,12 +229,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should use current behavior for non-data product service with valid version suffix", () => {
             const serviceDefinition = {
-                name: "sap.test.RegularService.v2",
+                name: "RegularService.v2",
                 // No DATA_PRODUCT_ANNOTATION - this is a regular service
             };
 
             const result = createAPIResourceTemplate(
-                "RegularService.v2",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -260,12 +248,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should use current behavior for non-primary data product service", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v2",
+                name: "DataService.v2",
                 [DATA_PRODUCT_ANNOTATION]: "secondary", // Not primary
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v2",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -282,12 +269,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
     describe("Data Product Specific Properties", () => {
         test("should maintain data product specific properties with version extraction", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v2",
+                name: "DataService.v2",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v2",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -308,12 +294,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
     describe("Tests with @data.product annotation", () => {
         test("should handle .v1 suffix correctly with @data.product annotation", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v1",
+                name: "DataService.v1",
                 [DATA_PRODUCT_SIMPLE_ANNOTATION]: true,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v1",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -330,12 +315,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should handle .v2 suffix correctly with @data.product annotation", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v2",
+                name: "DataService.v2",
                 [DATA_PRODUCT_SIMPLE_ANNOTATION]: "yes",
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v2",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -350,12 +334,11 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should use current behavior when @data.product is false", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v2",
+                name: "DataService.v2",
                 [DATA_PRODUCT_SIMPLE_ANNOTATION]: false,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v2",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -370,13 +353,12 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should prioritize @DataIntegration.dataProduct.type over @data.product for version extraction", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v3",
+                name: "DataService.v3",
                 [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 [DATA_PRODUCT_SIMPLE_ANNOTATION]: false,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v3",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,
@@ -391,13 +373,12 @@ describe("Version Suffix Extraction for Data Product Services", () => {
 
         test("should apply @data.product when @DataIntegration.dataProduct.type is not primary", () => {
             const serviceDefinition = {
-                name: "sap.test.DataService.v2",
+                name: "DataService.v2",
                 [DATA_PRODUCT_ANNOTATION]: "secondary",
                 [DATA_PRODUCT_SIMPLE_ANNOTATION]: true,
             };
 
             const result = createAPIResourceTemplate(
-                "DataService.v2",
                 serviceDefinition,
                 mockAppConfig,
                 mockPackageIds,

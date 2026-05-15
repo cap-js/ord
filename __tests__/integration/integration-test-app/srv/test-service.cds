@@ -35,6 +35,8 @@ annotate TestService with @OpenAPI.servers: [
 ];
 
 // Service consuming external Data Products
+@rest
+@odata
 service SupplierService {
     entity SaiSuppliers as projection on SaiSupplier.Supplier;
     entity S4Suppliers  as projection on S4Supplier.Supplier;

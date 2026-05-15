@@ -104,30 +104,27 @@ describe("templates", () => {
         ];
 
         it("should assign the correct partOfPackage for public API", () => {
-            const serviceName = "PublicAPI";
-            const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": serviceName };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": "PublicAPI" };
 
-            const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, appConfig, packageIds, {});
+            const apiResource = createAPIResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 
             expect(apiResource).not.toBeNull();
             expect(apiResource[0].partOfPackage).toBe("sap.test.cdsrc.sample:package:test-api:v1");
         });
 
         it("should assign the correct partOfPackage for internal API", () => {
-            const serviceName = "InternalAPI";
-            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": serviceName };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": "InternalAPI" };
 
-            const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, appConfig, packageIds, {});
+            const apiResource = createAPIResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 
             expect(apiResource).not.toBeNull();
             expect(apiResource[0].partOfPackage).toBe("sap.test.cdsrc.sample:package:test-api-internal:v1");
         });
 
         it("should return null for private API", () => {
-            const serviceName = "PrivateAPI";
-            const serviceDefinition = { "@ORD.Extensions.visibility": "private", "entities": [], "name": serviceName };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "private", "entities": [], "name": "PrivateAPI" };
 
-            const apiResource = createAPIResourceTemplate(serviceName, serviceDefinition, appConfig, packageIds, {});
+            const apiResource = createAPIResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 
             expect(apiResource).toHaveLength(0);
         });
@@ -141,11 +138,9 @@ describe("templates", () => {
         ];
 
         it("should assign the correct partOfPackage for public Event", () => {
-            const serviceName = "PublicEvent";
-            const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": serviceName };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": "PublicEvent" };
 
             const eventResource = createEventResourceTemplate(
-                serviceName,
                 serviceDefinition,
                 appConfig,
                 packageIds,
@@ -157,11 +152,9 @@ describe("templates", () => {
         });
 
         it("should assign the correct partOfPackage for internal Event", () => {
-            const serviceName = "InternalEvent";
-            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": serviceName };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": "InternalEvent" };
 
             const eventResource = createEventResourceTemplate(
-                serviceName,
                 serviceDefinition,
                 appConfig,
                 packageIds,
@@ -173,11 +166,9 @@ describe("templates", () => {
         });
 
         it("should return an empty array for private Event", () => {
-            const serviceName = "PrivateEvent";
-            const serviceDefinition = { "@ORD.Extensions.visibility": "private", "entities": [], "name": serviceName };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "private", "entities": [], "name": "PrivateEvent" };
 
             const eventResource = createEventResourceTemplate(
-                serviceName,
                 serviceDefinition,
                 appConfig,
                 packageIds,
