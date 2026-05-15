@@ -6,7 +6,7 @@ describe("ord", () => {
 
     beforeAll(() => {
         cds.root = path.join(__dirname, "../bookshop");
-        jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+        jest.spyOn(require("../../lib/common/utils"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
     });
 
     beforeEach(() => {

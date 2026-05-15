@@ -14,7 +14,7 @@ beforeAll(() => {
     mockAuthenticationModule(authentication);
 
     // Mock date function once for all tests
-    jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+    jest.spyOn(require("../../lib/common/utils"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
 });
 
 // Global cleanup - runs once after all test suites
@@ -301,7 +301,7 @@ describe("Tests for Data Product definition", () => {
         let document;
         await jest.isolateModules(() => {
             const cds = require("@sap/cds");
-            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../../lib/common/utils"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             const ordLocal = require("../../lib/ord");
 
             const linkedModel = cds.linked(`
@@ -330,7 +330,7 @@ describe("Tests for Data Product definition", () => {
         let document;
         await jest.isolateModules(() => {
             const cds = require("@sap/cds");
-            jest.spyOn(require("../../lib/date"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../../lib/common/utils"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
             const ordLocal = require("../../lib/ord");
 
             const linkedModel = cds.linked(`
