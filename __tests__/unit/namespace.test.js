@@ -8,8 +8,6 @@ describe("namespace local and global", () => {
             appName: "testAppName",
             lastUpdate: "2022-12-19T15:47:04+00:00",
         };
-        const serviceName = "MyService";
-        const testNamespace = "customer.testNamespace.nested.";
         const model = cds.linked(`
                 namespace customer.testNamespace.nested;
 
@@ -24,9 +22,9 @@ describe("namespace local and global", () => {
                 };
             `);
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
-        const srvDefinition = model.definitions[testNamespace + serviceName];
-        expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        const srvDefinition = model.definitions["customer.testNamespace.nested.MyService"];
+        expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(srvDefinition.name, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
     it("should strip application namespace if its the same as local namespace", () => {
@@ -35,8 +33,6 @@ describe("namespace local and global", () => {
             appName: "testAppName",
             lastUpdate: "2022-12-19T15:47:04+00:00",
         };
-        const serviceName = "MyService";
-        const testNamespace = "customer.testNamespace.";
         const model = cds.linked(`
                 namespace customer.testNamespace;
 
@@ -51,9 +47,9 @@ describe("namespace local and global", () => {
                 };
             `);
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
-        const srvDefinition = model.definitions[testNamespace + serviceName];
-        expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        const srvDefinition = model.definitions["customer.testNamespace.MyService"];
+        expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(srvDefinition.name, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
     it("should not strip a different local namespace", () => {
@@ -62,8 +58,6 @@ describe("namespace local and global", () => {
             appName: "testAppName",
             lastUpdate: "2022-12-19T15:47:04+00:00",
         };
-        const serviceName = "MyService";
-        const testNamespace = "other.namespace.";
         const model = cds.linked(`
                 namespace other.namespace;
 
@@ -78,9 +72,9 @@ describe("namespace local and global", () => {
                 };
             `);
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
-        const srvDefinition = model.definitions[testNamespace + serviceName];
-        expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        const srvDefinition = model.definitions["other.namespace.MyService"];
+        expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(srvDefinition.name, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
     it("should strip internalNamespace when it differs from ordNamespace", () => {
@@ -90,7 +84,6 @@ describe("namespace local and global", () => {
             appName: "testAppName",
             lastUpdate: "2022-12-19T15:47:04+00:00",
         };
-        const serviceName = "SourcingService";
         const model = cds.linked(`
             namespace com.sap.sourcing.api.v1;
             service SourcingService {
@@ -101,11 +94,11 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["com.sap.sourcing.api.v1.SourcingService"];
 
-        const apiResult = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        const apiResult = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
         expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:SourcingService:v1");
         expect(apiResult[0].partOfGroups[0]).toBe("sap.cds:service:sap.sourcing:SourcingService");
 
-        const eventResult = createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        const eventResult = createEventResourceTemplate(srvDefinition.name, srvDefinition, appConfig, packageIds);
         expect(eventResult[0].ordId).toBe("sap.sourcing:eventResource:SourcingService:v1");
     });
 
@@ -116,7 +109,6 @@ describe("namespace local and global", () => {
             appName: "testAppName",
             lastUpdate: "2022-12-19T15:47:04+00:00",
         };
-        const serviceName = "SourcingService";
         const model = cds.linked(`
             namespace com.sap.sourcing.nested;
             service SourcingService {
@@ -127,7 +119,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["com.sap.sourcing.nested.SourcingService"];
 
-        const apiResult = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        const apiResult = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
         expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:nested.SourcingService:v1");
     });
 
@@ -138,7 +130,6 @@ describe("namespace local and global", () => {
             appName: "testAppName",
             lastUpdate: "2022-12-19T15:47:04+00:00",
         };
-        const serviceName = "BillingService";
         const model = cds.linked(`
             namespace sap.sourcing.internal;
             service BillingService {
@@ -149,7 +140,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["sap.sourcing.internal.BillingService"];
 
-        const apiResult = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        const apiResult = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
         expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:BillingService:v1");
     });
 
@@ -159,7 +150,6 @@ describe("namespace local and global", () => {
             appName: "testAppName",
             lastUpdate: "2022-12-19T15:47:04+00:00",
         };
-        const serviceName = "SomeService";
         const model = cds.linked(`
             namespace sap.sourcingExtra;
             service SomeService {
@@ -170,7 +160,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["sap.sourcingExtra.SomeService"];
 
-        const apiResult = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        const apiResult = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
         expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:sap.sourcingExtra.SomeService:v1");
     });
 
@@ -181,7 +171,6 @@ describe("namespace local and global", () => {
             appName: "testAppName",
             lastUpdate: "2022-12-19T15:47:04+00:00",
         };
-        const serviceName = "SomeService";
         const model = cds.linked(`
             namespace com.sap.sourcingExtra;
             service SomeService {
@@ -192,7 +181,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["com.sap.sourcingExtra.SomeService"];
 
-        const apiResult = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        const apiResult = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
         expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:com.sap.sourcingExtra.SomeService:v1");
     });
 
@@ -203,7 +192,6 @@ describe("namespace local and global", () => {
             appName: "testAppName",
             lastUpdate: "2022-12-19T15:47:04+00:00",
         };
-        const serviceName = "MyService";
         const model = cds.linked(`
             namespace other.namespace;
             service MyService {
@@ -214,7 +202,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["other.namespace.MyService"];
 
-        const apiResult = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        const apiResult = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
         expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:other.namespace.MyService:v1");
     });
 });
