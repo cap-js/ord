@@ -126,6 +126,39 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "version": "1.0.0",
       "visibility": "public",
     },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for SupplierService",
+      "entryPoints": [
+        "/rest/supplier",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:SupplierService-rest:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "basic-auth",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService-rest:v1/SupplierService.oas3.json",
+        },
+      ],
+      "shortDescription": "Short description of SupplierService",
+      "title": "SupplierService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
   ],
   "describedSystemVersion": {
     "version": "0.1.0",
@@ -321,6 +354,39 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
           "mediaType": "application/xml",
           "type": "edmx",
           "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService:v1/SupplierService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of SupplierService",
+      "title": "SupplierService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for SupplierService",
+      "entryPoints": [
+        "/rest/supplier",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:SupplierService-rest:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "basic-auth",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService-rest:v1/SupplierService.oas3.json",
         },
       ],
       "shortDescription": "Short description of SupplierService",
@@ -530,6 +596,39 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "version": "1.0.0",
       "visibility": "public",
     },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for SupplierService",
+      "entryPoints": [
+        "/rest/supplier",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:SupplierService-rest:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "basic-auth",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService-rest:v1/SupplierService.oas3.json?perspective=system-instance",
+        },
+      ],
+      "shortDescription": "Short description of SupplierService",
+      "title": "SupplierService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
   ],
   "description": "this is an application description",
   "eventResources": [
@@ -722,6 +821,39 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
           "mediaType": "application/xml",
           "type": "edmx",
           "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService:v1/SupplierService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of SupplierService",
+      "title": "SupplierService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for SupplierService",
+      "entryPoints": [
+        "/rest/supplier",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:SupplierService-rest:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "basic-auth",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService-rest:v1/SupplierService.oas3.json",
         },
       ],
       "shortDescription": "Short description of SupplierService",
