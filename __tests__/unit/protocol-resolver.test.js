@@ -45,7 +45,7 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["MyService"];
-            const result = resolveApiResourceProtocol("MyService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
@@ -60,7 +60,7 @@ describe("protocol-resolver", () => {
                 "name": "MyService",
                 "@protocol": "unknown-protocol",
             };
-            const result = resolveApiResourceProtocol("MyService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
@@ -75,7 +75,7 @@ describe("protocol-resolver", () => {
                 "name": "INAService",
                 "@protocol": "ina",
             };
-            const result = resolveApiResourceProtocol("INAService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
@@ -90,7 +90,7 @@ describe("protocol-resolver", () => {
                 "name": "GraphQLService",
                 "@protocol": "graphql",
             };
-            const result = resolveApiResourceProtocol("GraphQLService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
@@ -103,7 +103,7 @@ describe("protocol-resolver", () => {
                 "name": "DataProductService",
                 "@DataIntegration.dataProduct.type": "primary",
             };
-            const result = resolveApiResourceProtocol("DataProductService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
@@ -121,7 +121,7 @@ describe("protocol-resolver", () => {
             ];
 
             testCases.forEach((srvDefinition) => {
-                const result = resolveApiResourceProtocol(srvDefinition.name, srvDefinition, {
+                const result = resolveApiResourceProtocol(srvDefinition, {
                     isPrimaryDataProduct: isPrimaryDataProductService,
                 });
                 result.forEach((r) => {
@@ -136,7 +136,7 @@ describe("protocol-resolver", () => {
                 "name": "CustomService",
                 "@protocol": "custom-protocol",
             };
-            const result = resolveApiResourceProtocol("CustomService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
@@ -152,7 +152,7 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["DefaultService"];
-            const result = resolveApiResourceProtocol("DefaultService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
@@ -168,7 +168,7 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["MyService"];
-            const result = resolveApiResourceProtocol("MultiProtocolService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
@@ -186,7 +186,7 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["MyService"];
-            const result = resolveApiResourceProtocol("MixedProtocolService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
 
@@ -208,7 +208,7 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["MyService"];
-            const result = resolveApiResourceProtocol("ComplexService", srvDefinition, {
+            const result = resolveApiResourceProtocol(srvDefinition, {
                 isPrimaryDataProduct: isPrimaryDataProductService,
             });
             expect(result).toHaveLength(2);
@@ -236,7 +236,7 @@ describe("protocol-resolver", () => {
                     }
                 `);
                 const srvDefinition = model.definitions["GraphQLService"];
-                const result = resolveApiResourceProtocol("GraphQLService", srvDefinition, {
+                const result = resolveApiResourceProtocol(srvDefinition, {
                     isPrimaryDataProduct: isPrimaryDataProductService,
                 });
 
@@ -254,7 +254,7 @@ describe("protocol-resolver", () => {
                     }
                 `);
                 const srvDefinition = model.definitions["MyService"];
-                const result = resolveApiResourceProtocol("MixedProtocolService", srvDefinition, {
+                const result = resolveApiResourceProtocol(srvDefinition, {
                     isPrimaryDataProduct: isPrimaryDataProductService,
                 });
 
@@ -275,7 +275,7 @@ describe("protocol-resolver", () => {
                     }
                 `);
                 const srvDefinition = model.definitions["MyService"];
-                const result = resolveApiResourceProtocol("ComplexService", srvDefinition, {
+                const result = resolveApiResourceProtocol(srvDefinition, {
                     isPrimaryDataProduct: isPrimaryDataProductService,
                 });
                 expect(result).toHaveLength(3);
