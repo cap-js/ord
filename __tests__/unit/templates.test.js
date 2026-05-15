@@ -342,7 +342,7 @@ describe("templates", () => {
         it("should return api resource with correct title from annotation '@EndUserText.label'", () => {
             const model = cds.linked(`service MyService @(EndUserText.label: 'This is MyService title' ) { }`);
 
-            const apiResources = createAPIResourceTemplate("MyService", model.definitions["MyService"], appConfig, [
+            const apiResources = createAPIResourceTemplate(model.definitions["MyService"], appConfig, [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ]);

@@ -24,7 +24,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["customer.testNamespace.nested.MyService"];
         expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(srvDefinition, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
     it("should strip application namespace if its the same as local namespace", () => {
@@ -49,7 +49,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["customer.testNamespace.MyService"];
         expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(srvDefinition, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
     it("should not strip a different local namespace", () => {
@@ -74,7 +74,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["other.namespace.MyService"];
         expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(srvDefinition, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
     it("should strip internalNamespace when it differs from ordNamespace", () => {
