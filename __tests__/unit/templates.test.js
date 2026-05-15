@@ -339,6 +339,54 @@ describe("templates", () => {
     });
 
     describe("createAPIResourceTemplate", () => {
+        it("should create API resource template correctly for multi-protocol services", () => {
+            const model = cds.linked(`
+                @rest
+                @odata
+                service MyService {}
+            `);
+
+            expect(
+                createAPIResourceTemplate(model.definitions["MyService"], appConfig, [
+                    "sap.test.cdsrc.sample:package:test-event:v1",
+                    "sap.test.cdsrc.sample:package:test-api:v1",
+                ]),
+            ).toMatchSnapshot();
+        });
+
+        it("should create API resource template correctly for multi-protocol services when ordId is overridden for specific protocol", () => {
+            const model = cds.linked(`
+                @rest
+                @odata
+                @![protocol('rest')].ORD.Extensions.ordId: 'customer.testNamespace:apiResource:MyService-customized-rest:v1'
+                service MyService {}
+            `);
+
+            expect(
+                createAPIResourceTemplate(model.definitions["MyService"], appConfig, [
+                    "sap.test.cdsrc.sample:package:test-event:v1",
+                    "sap.test.cdsrc.sample:package:test-api:v1",
+                ]),
+            ).toMatchSnapshot();
+        });
+
+        it("should create API resource template correctly for multi-protocol services when ordId is overridden", () => {
+            const model = cds.linked(`
+                @rest
+                @odata
+                @ORD.Extensions.ordId: 'customer.testNamespace:apiResource:MyService-customized-odata-v4:v1'
+                @![protocol('rest')].ORD.Extensions.ordId: 'customer.testNamespace:apiResource:MyService-customized-rest:v1'
+                service MyService {}
+            `);
+
+            expect(
+                createAPIResourceTemplate(model.definitions["MyService"], appConfig, [
+                    "sap.test.cdsrc.sample:package:test-event:v1",
+                    "sap.test.cdsrc.sample:package:test-api:v1",
+                ]),
+            ).toMatchSnapshot();
+        });
+
         it("should return api resource with correct title from annotation '@EndUserText.label'", () => {
             const model = cds.linked(`service MyService @(EndUserText.label: 'This is MyService title' ) { }`);
 
