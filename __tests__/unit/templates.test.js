@@ -347,7 +347,7 @@ describe("templates", () => {
             `);
 
             expect(
-                createAPIResourceTemplate("MyService", model.definitions["MyService"], appConfig, [
+                createAPIResourceTemplate(model.definitions["MyService"], appConfig, [
                     "sap.test.cdsrc.sample:package:test-event:v1",
                     "sap.test.cdsrc.sample:package:test-api:v1",
                 ]),
@@ -363,7 +363,7 @@ describe("templates", () => {
             `);
 
             expect(
-                createAPIResourceTemplate("MyService", model.definitions["MyService"], appConfig, [
+                createAPIResourceTemplate(model.definitions["MyService"], appConfig, [
                     "sap.test.cdsrc.sample:package:test-event:v1",
                     "sap.test.cdsrc.sample:package:test-api:v1",
                 ]),
@@ -380,7 +380,7 @@ describe("templates", () => {
             `);
 
             expect(
-                createAPIResourceTemplate("MyService", model.definitions["MyService"], appConfig, [
+                createAPIResourceTemplate(model.definitions["MyService"], appConfig, [
                     "sap.test.cdsrc.sample:package:test-event:v1",
                     "sap.test.cdsrc.sample:package:test-api:v1",
                 ]),
