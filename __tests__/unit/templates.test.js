@@ -252,6 +252,18 @@ describe("templates", () => {
 
     describe("createEntityTypeTemplate", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-entityType:v1"];
+
+        it("should return entity type with correct title from annotation '@EndUserText.label'", () => {
+            const entityType = createEntityTypeTemplate(appConfig, packageIds, {
+                "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v3",
+                "entityName": "SomeAribaDummyEntity",
+                "@EndUserText.label": "Title of SomeAribaDummyEntity",
+            });
+
+            expect(entityType).toBeDefined();
+            expect(entityType.title).toEqual("Title of SomeAribaDummyEntity");
+        });
+
         it("should return entity type with incorrect version, title and level:root-entity", () => {
             const entityWithVersion = {
                 "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v3b",
@@ -339,6 +351,19 @@ describe("templates", () => {
     });
 
     describe("createAPIResourceTemplate", () => {
+        it("should return api resource with correct title from annotation '@EndUserText.label'", () => {
+            const model = cds.linked(`service MyService @(EndUserText.label: 'This is MyService title' ) { }`);
+
+            const apiResources = createAPIResourceTemplate("MyService", model.definitions["MyService"], appConfig, [
+                "sap.test.cdsrc.sample:package:test-event:v1",
+                "sap.test.cdsrc.sample:package:test-api:v1",
+            ]);
+
+            expect(apiResources).toBeInstanceOf(Array);
+            expect(apiResources.length).toEqual(1);
+            expect(apiResources[0].title).toEqual("This is MyService title");
+        });
+
         it("should create API resource template correctly", () => {
             const serviceName = "MyService";
             const model = cds.linked(`
@@ -569,6 +594,23 @@ describe("templates", () => {
             expect(apiResourceTemplate).toBeInstanceOf(Array);
             expect(apiResourceTemplate).toMatchSnapshot();
             expect(apiResourceTemplate).toEqual([]);
+        });
+
+        it("should return event resource with correct title from annotation '@EndUserText.label'", () => {
+            const serviceName = "MyService";
+            linkedModel = cds.linked(`
+                @EndUserText.label: 'This is test MyService event title'
+                service MyService { }
+            `);
+            const eventResourceTemplate = createEventResourceTemplate(
+                serviceName,
+                linkedModel.definitions[serviceName],
+                appConfig,
+                ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"],
+            );
+
+            expect(eventResourceTemplate).toBeInstanceOf(Array);
+            expect(eventResourceTemplate[0].title).toEqual("This is test MyService event title");
         });
 
         it('should add events with ORD Extension "visibility=public"', () => {
