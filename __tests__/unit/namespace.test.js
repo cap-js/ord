@@ -26,7 +26,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions[testNamespace + serviceName];
         expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
     it("should strip application namespace if its the same as local namespace", () => {
@@ -53,7 +53,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions[testNamespace + serviceName];
         expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
     it("should not strip a different local namespace", () => {
@@ -80,7 +80,7 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions[testNamespace + serviceName];
         expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+        expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
     });
 
     it("should strip internalNamespace when it differs from ordNamespace", () => {
@@ -105,7 +105,7 @@ describe("namespace local and global", () => {
         expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:SourcingService:v1");
         expect(apiResult[0].partOfGroups[0]).toBe("sap.cds:service:sap.sourcing:SourcingService");
 
-        const eventResult = createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+        const eventResult = createEventResourceTemplate(srvDefinition, appConfig, packageIds);
         expect(eventResult[0].ordId).toBe("sap.sourcing:eventResource:SourcingService:v1");
     });
 
