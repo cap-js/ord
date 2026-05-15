@@ -589,7 +589,6 @@ describe("templates", () => {
                 service MyService { }
             `);
             const eventResourceTemplate = createEventResourceTemplate(
-                serviceName,
                 linkedModel.definitions[serviceName],
                 appConfig,
                 ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"],
