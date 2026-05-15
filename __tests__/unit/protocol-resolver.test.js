@@ -1,8 +1,8 @@
 const cds = require("@sap/cds");
+
+const Logger = require("../../lib/logger");
 const { ORD_API_PROTOCOL } = require("../../lib/constants");
 const { resolveApiResourceProtocol } = require("../../lib/protocol-resolver");
-const { isPrimaryDataProductService } = require("../../lib/templates");
-const Logger = require("../../lib/logger");
 
 describe("protocol-resolver", () => {
     describe("resolveApiResourceProtocol", () => {
@@ -23,9 +23,7 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["MyService"];
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
 
             expect(result).toHaveLength(1);
             expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.ODATA_V4);
@@ -38,9 +36,7 @@ describe("protocol-resolver", () => {
                 "name": "MyService",
                 "@protocol": "unknown-protocol",
             };
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
 
             expect(result).toEqual([]);
             expect(loggerWarnSpy).toHaveBeenCalledWith(
@@ -53,9 +49,7 @@ describe("protocol-resolver", () => {
                 "name": "INAService",
                 "@protocol": "ina",
             };
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
 
             expect(result).toHaveLength(1);
             expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.SAP_INA);
@@ -68,9 +62,7 @@ describe("protocol-resolver", () => {
                 "name": "GraphQLService",
                 "@protocol": "graphql",
             };
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
 
             expect(result).toEqual([]);
             expect(loggerWarnSpy).not.toHaveBeenCalled();
@@ -81,9 +73,7 @@ describe("protocol-resolver", () => {
                 "name": "DataProductService",
                 "@DataIntegration.dataProduct.type": "primary",
             };
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
 
             expect(result).toHaveLength(1);
             expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.SAP_DATA_SUBSCRIPTION);
@@ -99,9 +89,7 @@ describe("protocol-resolver", () => {
             ];
 
             testCases.forEach((srvDefinition) => {
-                const result = resolveApiResourceProtocol(srvDefinition, {
-                    isPrimaryDataProduct: isPrimaryDataProductService,
-                });
+                const result = resolveApiResourceProtocol(srvDefinition);
                 result.forEach((r) => {
                     expect(r.entryPoints).not.toContain(null);
                     expect(r.entryPoints).not.toContain(undefined);
@@ -114,9 +102,7 @@ describe("protocol-resolver", () => {
                 "name": "CustomService",
                 "@protocol": "custom-protocol",
             };
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
 
             expect(result).toEqual([]);
             const hasOData = result.some((r) => r.apiProtocol === ORD_API_PROTOCOL.ODATA_V4);
@@ -130,9 +116,7 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["DefaultService"];
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
 
             expect(result).toHaveLength(1);
             expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.ODATA_V4);
@@ -146,9 +130,7 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["MyService"];
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
 
             expect(result).toHaveLength(2);
             const protocols = result.map((r) => r.apiProtocol);
@@ -164,15 +146,11 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["MyService"];
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
 
             expect(result).toHaveLength(1);
             expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.REST);
-            expect(loggerWarnSpy).not.toHaveBeenCalledWith(
-                expect.stringContaining("Unknown protocol 'graphql'"),
-            );
+            expect(loggerWarnSpy).not.toHaveBeenCalledWith(expect.stringContaining("Unknown protocol 'graphql'"));
             expect(loggerWarnSpy).toHaveBeenCalledWith(
                 expect.stringContaining("Unknown protocol 'unknown-protocol' is not supported"),
             );
@@ -186,9 +164,7 @@ describe("protocol-resolver", () => {
                 }
             `);
             const srvDefinition = model.definitions["MyService"];
-            const result = resolveApiResourceProtocol(srvDefinition, {
-                isPrimaryDataProduct: isPrimaryDataProductService,
-            });
+            const result = resolveApiResourceProtocol(srvDefinition);
             expect(result).toHaveLength(2);
             const inaProtocol = result.find((r) => r.apiProtocol === ORD_API_PROTOCOL.SAP_INA);
             expect(inaProtocol).toBeDefined();
@@ -214,9 +190,7 @@ describe("protocol-resolver", () => {
                     }
                 `);
                 const srvDefinition = model.definitions["GraphQLService"];
-                const result = resolveApiResourceProtocol(srvDefinition, {
-                    isPrimaryDataProduct: isPrimaryDataProductService,
-                });
+                const result = resolveApiResourceProtocol(srvDefinition);
 
                 expect(result).toHaveLength(1);
                 expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.GRAPHQL);
@@ -232,9 +206,7 @@ describe("protocol-resolver", () => {
                     }
                 `);
                 const srvDefinition = model.definitions["MyService"];
-                const result = resolveApiResourceProtocol(srvDefinition, {
-                    isPrimaryDataProduct: isPrimaryDataProductService,
-                });
+                const result = resolveApiResourceProtocol(srvDefinition);
 
                 expect(result).toHaveLength(2);
                 const protocols = result.map((r) => r.apiProtocol);
@@ -253,9 +225,7 @@ describe("protocol-resolver", () => {
                     }
                 `);
                 const srvDefinition = model.definitions["MyService"];
-                const result = resolveApiResourceProtocol(srvDefinition, {
-                    isPrimaryDataProduct: isPrimaryDataProductService,
-                });
+                const result = resolveApiResourceProtocol(srvDefinition);
                 expect(result).toHaveLength(3);
                 const protocols = result.map((r) => r.apiProtocol);
                 expect(protocols).toContain(ORD_API_PROTOCOL.REST);
