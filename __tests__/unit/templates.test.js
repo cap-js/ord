@@ -110,23 +110,21 @@ describe("visibility handling", () => {
     });
 
     it("returns undefined if ORD.Extensions.visibility is private", () => {
-        const serviceName = "customer.testNamespace.MyService";
         const serviceDefinition = {
-            "name": serviceName,
+            "name": "customer.testNamespace.MyService",
             "@ORD.Extensions.visibility": "private",
         };
-        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
-        expect(group).toBeUndefined();
+
+        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toBeUndefined();
     });
 
     it("returns group object if ORD.Extensions.visibility is internal", () => {
-        const serviceName = "customer.testNamespace.MyService";
         const serviceDefinition = {
-            "name": serviceName,
+            "name": "customer.testNamespace.MyService",
             "@ORD.Extensions.visibility": "internal",
         };
-        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
-        expect(group).toEqual({
+
+        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
             groupId: "sap.cds:service:customer.testNamespace:MyService",
             groupTypeId: "sap.cds:service",
             title: "My Service",
@@ -134,10 +132,9 @@ describe("visibility handling", () => {
     });
 
     it("returns group object if ORD.Extensions.visibility is not set", () => {
-        const serviceName = "customer.testNamespace.MyService";
-        const serviceDefinition = { name: serviceName };
-        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
-        expect(group).toEqual({
+        const serviceDefinition = { name: "customer.testNamespace.MyService" };
+
+        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
             groupId: "sap.cds:service:customer.testNamespace:MyService",
             groupTypeId: "sap.cds:service",
             title: "My Service",
@@ -325,28 +322,19 @@ describe("templates", () => {
         });
 
         it("should return default value when groupIds do not have groupId", () => {
-            const testServiceName = "testServiceName";
-            const testResult = {
+            expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
                 groupId: "sap.cds:service:customer.testNamespace:testServiceName",
                 groupTypeId: "sap.cds:service",
                 title: "test Service",
-            };
-            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
+            });
         });
 
         it('should return default value with a proper Service title when "Service" keyword is missing', () => {
-            const testServiceName = "testServName";
-            const testResult = {
-                groupId: "sap.cds:service:customer.testNamespace:testServiceName",
+            expect(createGroupsTemplateForService({ ...serviceDefinition, name: "testServName" }, appConfig)).toEqual({
+                groupId: "sap.cds:service:customer.testNamespace:testServName",
                 groupTypeId: "sap.cds:service",
                 title: "testServName Service",
-            };
-            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
-        });
-
-        it("should return undefined when no service definition", () => {
-            const testServiceName = "testServiceName";
-            expect(createGroupsTemplateForService(testServiceName, null, appConfig)).not.toBeDefined();
+            });
         });
     });
 
