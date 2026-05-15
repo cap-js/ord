@@ -110,23 +110,21 @@ describe("visibility handling", () => {
     });
 
     it("returns undefined if ORD.Extensions.visibility is private", () => {
-        const serviceName = "customer.testNamespace.MyService";
         const serviceDefinition = {
-            "name": serviceName,
+            "name": "customer.testNamespace.MyService",
             "@ORD.Extensions.visibility": "private",
         };
-        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
-        expect(group).toBeUndefined();
+
+        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toBeUndefined();
     });
 
     it("returns group object if ORD.Extensions.visibility is internal", () => {
-        const serviceName = "customer.testNamespace.MyService";
         const serviceDefinition = {
-            "name": serviceName,
+            "name": "customer.testNamespace.MyService",
             "@ORD.Extensions.visibility": "internal",
         };
-        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
-        expect(group).toEqual({
+
+        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
             groupId: "sap.cds:service:customer.testNamespace:MyService",
             groupTypeId: "sap.cds:service",
             title: "My Service",
@@ -134,10 +132,9 @@ describe("visibility handling", () => {
     });
 
     it("returns group object if ORD.Extensions.visibility is not set", () => {
-        const serviceName = "customer.testNamespace.MyService";
-        const serviceDefinition = { name: serviceName };
-        const group = createGroupsTemplateForService(serviceName, serviceDefinition, appConfig);
-        expect(group).toEqual({
+        const serviceDefinition = { name: "customer.testNamespace.MyService" };
+
+        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
             groupId: "sap.cds:service:customer.testNamespace:MyService",
             groupTypeId: "sap.cds:service",
             title: "My Service",
@@ -252,6 +249,18 @@ describe("templates", () => {
 
     describe("createEntityTypeTemplate", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-entityType:v1"];
+
+        it("should return entity type with correct title from annotation '@EndUserText.label'", () => {
+            const entityType = createEntityTypeTemplate(appConfig, packageIds, {
+                "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v3",
+                "entityName": "SomeAribaDummyEntity",
+                "@EndUserText.label": "Title of SomeAribaDummyEntity",
+            });
+
+            expect(entityType).toBeDefined();
+            expect(entityType.title).toEqual("Title of SomeAribaDummyEntity");
+        });
+
         it("should return entity type with incorrect version, title and level:root-entity", () => {
             const entityWithVersion = {
                 "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v3b",
@@ -313,28 +322,19 @@ describe("templates", () => {
         });
 
         it("should return default value when groupIds do not have groupId", () => {
-            const testServiceName = "testServiceName";
-            const testResult = {
+            expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
                 groupId: "sap.cds:service:customer.testNamespace:testServiceName",
                 groupTypeId: "sap.cds:service",
                 title: "test Service",
-            };
-            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
+            });
         });
 
         it('should return default value with a proper Service title when "Service" keyword is missing', () => {
-            const testServiceName = "testServName";
-            const testResult = {
-                groupId: "sap.cds:service:customer.testNamespace:testServiceName",
+            expect(createGroupsTemplateForService({ ...serviceDefinition, name: "testServName" }, appConfig)).toEqual({
+                groupId: "sap.cds:service:customer.testNamespace:testServName",
                 groupTypeId: "sap.cds:service",
                 title: "testServName Service",
-            };
-            expect(createGroupsTemplateForService(testServiceName, serviceDefinition, appConfig)).toEqual(testResult);
-        });
-
-        it("should return undefined when no service definition", () => {
-            const testServiceName = "testServiceName";
-            expect(createGroupsTemplateForService(testServiceName, null, appConfig)).not.toBeDefined();
+            });
         });
     });
 
@@ -387,8 +387,20 @@ describe("templates", () => {
             ).toMatchSnapshot();
         });
 
+        it("should return api resource with correct title from annotation '@EndUserText.label'", () => {
+            const model = cds.linked(`service MyService @(EndUserText.label: 'This is MyService title' ) { }`);
+
+            const apiResources = createAPIResourceTemplate(model.definitions["MyService"], appConfig, [
+                "sap.test.cdsrc.sample:package:test-event:v1",
+                "sap.test.cdsrc.sample:package:test-api:v1",
+            ]);
+
+            expect(apiResources).toBeInstanceOf(Array);
+            expect(apiResources.length).toEqual(1);
+            expect(apiResources[0].title).toEqual("This is MyService title");
+        });
+
         it("should create API resource template correctly", () => {
-            const serviceName = "MyService";
             const model = cds.linked(`
                 service MyService {
                    entity Books {
@@ -402,12 +414,10 @@ describe("templates", () => {
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
-            expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+            expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
 
         it("should not create API resource template when the visibility is private", () => {
-            const serviceName = "MyService";
-            const testNamespace = "customer.testNamespace.";
             const model = cds.linked(`
                 namespace customer.testNamespace;
                 service MyService {
@@ -424,8 +434,8 @@ describe("templates", () => {
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
-            const srvDefinition = model.definitions[testNamespace + serviceName];
-            expect(createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toEqual([]);
+            const srvDefinition = model.definitions["customer.testNamespace.MyService"];
+            expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toEqual([]);
         });
 
         describe("MCP protocol resource definitions", () => {
@@ -449,7 +459,6 @@ describe("templates", () => {
 
                 const { createAPIResourceTemplate: createAPIResourceTemplateMocked } = require("../../lib/templates");
 
-                const serviceName = "McpService";
                 const model = cds.linked(`
                     service McpService {
                        entity Items {
@@ -463,7 +472,6 @@ describe("templates", () => {
                 const accessStrategies = [{ type: "open" }];
 
                 const apiResourceTemplate = createAPIResourceTemplateMocked(
-                    serviceName,
                     srvDefinition,
                     appConfig,
                     packageIds,
@@ -486,7 +494,6 @@ describe("templates", () => {
 
     describe("createEventResourceTemplate", () => {
         it("should create event resource template correctly", () => {
-            const serviceName = "MyService";
             const model = cds.linked(`
                 service MyService {
                    entity Books {
@@ -500,11 +507,10 @@ describe("templates", () => {
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
-            expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+            expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
 
         it("should create event resource template correctly with packageIds including namespace", () => {
-            const serviceName = "MyService";
             const model = cds.linked(`
                 service MyService {
                    entity Books {
@@ -515,13 +521,12 @@ describe("templates", () => {
             `);
             const srvDefinition = model.definitions["MyService"];
             const packageIds = ["customer.testNamespace:package:test:v1"];
-            expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+            expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
 
     describe("ordExtension", () => {
         it('should add apiResources with ORD Extension "visibility=public"', () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 @ODM.entityName: 'testOdmEntity'
                 entity MyBooks {
@@ -544,17 +549,16 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
             const packageIds = ["customer.testNamespace:package:test:v1"];
-            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
 
             expect(apiResourceTemplate).toBeInstanceOf(Array);
             expect(apiResourceTemplate).toMatchSnapshot();
         });
 
         it("should include internal API resources but ensure they appear in a separate package", () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 @ODM.entityName: 'testOdmEntity'
                 entity MyBooks {
@@ -576,10 +580,10 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
             const packageIds = ["customer.testNamespace:package:test:v1"];
-            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
 
             expect(apiResourceTemplate).toBeInstanceOf(Array);
             expect(apiResourceTemplate).toMatchSnapshot();
@@ -587,7 +591,6 @@ describe("templates", () => {
         });
 
         it('should not add apiResources with ORD Extension "visibility=private"', () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 @ODM.entityName: 'testOdmEntity'
                 entity MyBooks {
@@ -609,18 +612,33 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
             const packageIds = ["customer.testNamespace:package:test:v1"];
-            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
 
             expect(apiResourceTemplate).toBeInstanceOf(Array);
             expect(apiResourceTemplate).toMatchSnapshot();
             expect(apiResourceTemplate).toEqual([]);
         });
 
-        it('should add events with ORD Extension "visibility=public"', () => {
+        it("should return event resource with correct title from annotation '@EndUserText.label'", () => {
             const serviceName = "MyService";
+            linkedModel = cds.linked(`
+                @EndUserText.label: 'This is test MyService event title'
+                service MyService { }
+            `);
+            const eventResourceTemplate = createEventResourceTemplate(
+                linkedModel.definitions[serviceName],
+                appConfig,
+                ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"],
+            );
+
+            expect(eventResourceTemplate).toBeInstanceOf(Array);
+            expect(eventResourceTemplate[0].title).toEqual("This is test MyService event title");
+        });
+
+        it('should add events with ORD Extension "visibility=public"', () => {
             linkedModel = cds.linked(`
                 service MyService {
                     entity Books {
@@ -638,13 +656,12 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
             const eventResourceTemplate = createEventResourceTemplate(
-                serviceName,
                 srvDefinition,
                 appConfig,
                 packageIds,
@@ -655,7 +672,6 @@ describe("templates", () => {
         });
 
         it("should include internal events but ensure they appear in a separate package", () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 service MyService {
                     entity Books {
@@ -673,13 +689,12 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event-internal:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
             const eventResourceTemplate = createEventResourceTemplate(
-                serviceName,
                 srvDefinition,
                 appConfig,
                 packageIds,
@@ -692,7 +707,6 @@ describe("templates", () => {
         });
 
         it('should not add events with ORD Extension "visibility=private"', () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 service MyService {
                     entity Books {
@@ -710,13 +724,12 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
             const eventResourceTemplate = createEventResourceTemplate(
-                serviceName,
                 srvDefinition,
                 appConfig,
                 packageIds,
@@ -728,7 +741,6 @@ describe("templates", () => {
         });
 
         it("should find composition and association entities for related service", () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 entity AppCustomers {
                     key ID         : String;
@@ -760,16 +772,15 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
             const packageIds = ["customer.testNamespace:package:test:v1"];
-            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
 
             expect(apiResourceTemplate).toMatchSnapshot();
         });
 
         it("should find association on nested entities for related service", () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 entity SecureApps {
                     key ID          : String;
@@ -801,16 +812,15 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
             const packageIds = ["customer.testNamespace:package:test:v1"];
-            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
 
             expect(apiResourceTemplate).toMatchSnapshot();
         });
 
         it("should find composition on nested entities for related service", () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 entity SecureApps {
                     key ID          : String;
@@ -842,16 +852,15 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
             const packageIds = ["customer.testNamespace:package:test:v1"];
-            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
 
             expect(apiResourceTemplate).toMatchSnapshot();
         });
 
         it("should find ordId on circular relations", () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 entity SecureApps {
                     key ID          : String;
@@ -891,10 +900,10 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
             const packageIds = ["customer.testNamespace:package:test:v1"];
-            const apiResourceTemplate = createAPIResourceTemplate(serviceName, srvDefinition, appConfig, packageIds);
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
 
             expect(apiResourceTemplate).toMatchSnapshot();
         });
