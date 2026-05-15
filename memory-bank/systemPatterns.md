@@ -113,7 +113,7 @@ Priority Order (highest to lowest):
 const createAPIResourceTemplate = (serviceName, serviceDefinition, appConfig, packageIds, accessStrategies) => {
     const ordExtensions = readORDExtensions(serviceDefinition); // reads @ORD.Extensions.*
     const visibility = _handleVisibility(ordExtensions, serviceDefinition, appConfig.env?.defaultVisibility);
-    const protocolResults = resolveApiResourceProtocol(serviceName, serviceDefinition, options);
+    const protocolResults = resolveApiResourceProtocol(serviceDefinition, options);
     // build one resource object per protocol result
     // spread ordExtensions last to allow annotation overrides
     return apiResources;
