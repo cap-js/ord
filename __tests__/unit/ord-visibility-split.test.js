@@ -141,11 +141,9 @@ describe("templates", () => {
         ];
 
         it("should assign the correct partOfPackage for public Event", () => {
-            const serviceName = "PublicEvent";
-            const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": serviceName };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": "PublicEvent" };
 
             const eventResource = createEventResourceTemplate(
-                serviceName,
                 serviceDefinition,
                 appConfig,
                 packageIds,
@@ -157,11 +155,9 @@ describe("templates", () => {
         });
 
         it("should assign the correct partOfPackage for internal Event", () => {
-            const serviceName = "InternalEvent";
-            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": serviceName };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": "InternalEvent" };
 
             const eventResource = createEventResourceTemplate(
-                serviceName,
                 serviceDefinition,
                 appConfig,
                 packageIds,
@@ -173,11 +169,9 @@ describe("templates", () => {
         });
 
         it("should return an empty array for private Event", () => {
-            const serviceName = "PrivateEvent";
-            const serviceDefinition = { "@ORD.Extensions.visibility": "private", "entities": [], "name": serviceName };
+            const serviceDefinition = { "@ORD.Extensions.visibility": "private", "entities": [], "name": "PrivateEvent" };
 
             const eventResource = createEventResourceTemplate(
-                serviceName,
                 serviceDefinition,
                 appConfig,
                 packageIds,

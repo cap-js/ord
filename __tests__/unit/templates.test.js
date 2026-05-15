@@ -451,7 +451,6 @@ describe("templates", () => {
 
     describe("createEventResourceTemplate", () => {
         it("should create event resource template correctly", () => {
-            const serviceName = "MyService";
             const model = cds.linked(`
                 service MyService {
                    entity Books {
@@ -465,11 +464,10 @@ describe("templates", () => {
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
-            expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+            expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
 
         it("should create event resource template correctly with packageIds including namespace", () => {
-            const serviceName = "MyService";
             const model = cds.linked(`
                 service MyService {
                    entity Books {
@@ -480,7 +478,7 @@ describe("templates", () => {
             `);
             const srvDefinition = model.definitions["MyService"];
             const packageIds = ["customer.testNamespace:package:test:v1"];
-            expect(createEventResourceTemplate(serviceName, srvDefinition, appConfig, packageIds)).toMatchSnapshot();
+            expect(createEventResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
         });
     });
 
@@ -591,7 +589,6 @@ describe("templates", () => {
                 service MyService { }
             `);
             const eventResourceTemplate = createEventResourceTemplate(
-                serviceName,
                 linkedModel.definitions[serviceName],
                 appConfig,
                 ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"],
@@ -602,7 +599,6 @@ describe("templates", () => {
         });
 
         it('should add events with ORD Extension "visibility=public"', () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 service MyService {
                     entity Books {
@@ -620,13 +616,12 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
             const eventResourceTemplate = createEventResourceTemplate(
-                serviceName,
                 srvDefinition,
                 appConfig,
                 packageIds,
@@ -637,7 +632,6 @@ describe("templates", () => {
         });
 
         it("should include internal events but ensure they appear in a separate package", () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 service MyService {
                     entity Books {
@@ -655,13 +649,12 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event-internal:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
             const eventResourceTemplate = createEventResourceTemplate(
-                serviceName,
                 srvDefinition,
                 appConfig,
                 packageIds,
@@ -674,7 +667,6 @@ describe("templates", () => {
         });
 
         it('should not add events with ORD Extension "visibility=private"', () => {
-            const serviceName = "MyService";
             linkedModel = cds.linked(`
                 service MyService {
                     entity Books {
@@ -692,13 +684,12 @@ describe("templates", () => {
                     }
                 };
             `);
-            const srvDefinition = linkedModel.definitions[serviceName];
+            const srvDefinition = linkedModel.definitions["MyService"];
             const packageIds = [
                 "sap.test.cdsrc.sample:package:test-event:v1",
                 "sap.test.cdsrc.sample:package:test-api:v1",
             ];
             const eventResourceTemplate = createEventResourceTemplate(
-                serviceName,
                 srvDefinition,
                 appConfig,
                 packageIds,
