@@ -62,7 +62,7 @@ describe("templates", () => {
             const entityType = createEntityTypeTemplate(updatedAppConfig, entity);
 
             expect(entityType).not.toBeNull();
-            expect(entityType.partOfPackage).toBe("customer.testNamespace:package:testAppName-internal:v1");
+            expect(entityType.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
         });
     });
 

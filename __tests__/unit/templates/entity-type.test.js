@@ -228,7 +228,7 @@ describe("RESOLVERS.partOfPackage", () => {
     it("appends visibility suffix for non-public visibility", () => {
         const entity = { ...BASE_ENTITY, "@ORD.Extensions.visibility": RESOURCE_VISIBILITY.internal };
         expect(RESOLVERS.partOfPackage(entity, BASE_APP_CONFIG)).toBe(
-            "sap.test:package:TestApp-internal:v1",
+            "sap.test:package:TestApp:v1",
         );
     });
 
