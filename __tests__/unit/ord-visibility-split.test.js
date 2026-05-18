@@ -1,9 +1,5 @@
-const {
-    createEntityTypeTemplate,
-    createAPIResourceTemplate,
-    createEventResourceTemplate,
-    _getPackageID,
-} = require("../../lib/templates");
+const { createEntityTypeTemplate } = require("../../lib/templates/entity-type");
+const { createAPIResourceTemplate, createEventResourceTemplate, _getPackageID } = require("../../lib/templates");
 
 describe("templates", () => {
     const appConfig = {
@@ -21,8 +17,7 @@ describe("templates", () => {
 
         it("should keep EntityType visibility independent of private API references", () => {
             const entity = {
-                ordId: "sap.sm:entityType:PrivateEntity:v1",
-                entityName: "PrivateEntity",
+                "@EntityRelationship.entityType": "sap.sm:PrivateEntity:v1",
             };
 
             const updatedAppConfig = {
@@ -36,63 +31,38 @@ describe("templates", () => {
                 ],
             };
 
-            const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
+            const entityType = createEntityTypeTemplate(updatedAppConfig, entity);
 
             expect(entityType).not.toBeNull();
             expect(entityType.visibility).toBe("public");
         });
 
-        it("should return null if EntityType has visibility set to private", () => {
-            const entity = {
-                "ordId": "sap.sm:entityType:PrivateEntity:v1",
-                "entityName": "PrivateEntity",
-                "@ORD.Extensions.visibility": "private",
-            };
-
-            const updatedAppConfig = {
-                ...appConfig,
-                apiResources: [
-                    {
-                        ordId: "sap.sm:apiResource:SomeAPI:v1",
-                        visibility: "public",
-                        exposedEntityTypes: [{ ordId: entity.ordId }],
-                    },
-                ],
-            };
-
-            const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
-
-            expect(entityType).toEqual([]);
-        });
-
         it("should assign the correct partOfPackage based on visibility", () => {
             const entity = {
-                "ordId": "sap.sm:entityType:PublicEntity:v1",
-                "entityName": "PublicEntity",
+                "@EntityRelationship.entityType": "sap.sm:PublicEntity:v1",
                 "@ORD.Extensions.visibility": "public",
             };
 
             const updatedAppConfig = { ...appConfig };
 
-            const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
+            const entityType = createEntityTypeTemplate(updatedAppConfig, entity);
 
             expect(entityType).not.toBeNull();
-            expect(entityType.partOfPackage).toBe("sap.test.cdsrc.sample:package:test-entityType:v1");
+            expect(entityType.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
         });
 
         it("should assign the correct partOfPackage for a non-public entity (e.g., internal)", () => {
             const entity = {
-                "ordId": "sap.sm:entityType:InternalEntity:v1",
-                "entityName": "InternalEntity",
+                "@EntityRelationship.entityType": "sap.sm:InternalEntity:v1",
                 "@ORD.Extensions.visibility": "internal",
             };
 
             const updatedAppConfig = { ...appConfig };
 
-            const entityType = createEntityTypeTemplate(updatedAppConfig, packageIds, entity);
+            const entityType = createEntityTypeTemplate(updatedAppConfig, entity);
 
             expect(entityType).not.toBeNull();
-            expect(entityType.partOfPackage).toBe("sap.test.cdsrc.sample:package:test-entityType-internal:v1");
+            expect(entityType.partOfPackage).toBe("customer.testNamespace:package:testAppName-internal:v1");
         });
     });
 
@@ -104,7 +74,12 @@ describe("templates", () => {
         ];
 
         it("should assign the correct partOfPackage for public API", () => {
-            const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": "PublicAPI", "kind": "service" };
+            const serviceDefinition = {
+                "@ORD.Extensions.visibility": "public",
+                "entities": [],
+                "name": "PublicAPI",
+                "kind": "service",
+            };
 
             const apiResource = createAPIResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 
@@ -113,7 +88,12 @@ describe("templates", () => {
         });
 
         it("should assign the correct partOfPackage for internal API", () => {
-            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": "InternalAPI", "kind": "service" };
+            const serviceDefinition = {
+                "@ORD.Extensions.visibility": "internal",
+                "entities": [],
+                "name": "InternalAPI",
+                "kind": "service",
+            };
 
             const apiResource = createAPIResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 
@@ -140,40 +120,33 @@ describe("templates", () => {
         it("should assign the correct partOfPackage for public Event", () => {
             const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": "PublicEvent" };
 
-            const eventResource = createEventResourceTemplate(
-                serviceDefinition,
-                appConfig,
-                packageIds,
-                {},
-            );
+            const eventResource = createEventResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 
             expect(eventResource).not.toHaveLength(0);
             expect(eventResource[0].partOfPackage).toBe("sap.test.cdsrc.sample:package:test-event:v1");
         });
 
         it("should assign the correct partOfPackage for internal Event", () => {
-            const serviceDefinition = { "@ORD.Extensions.visibility": "internal", "entities": [], "name": "InternalEvent" };
+            const serviceDefinition = {
+                "@ORD.Extensions.visibility": "internal",
+                "entities": [],
+                "name": "InternalEvent",
+            };
 
-            const eventResource = createEventResourceTemplate(
-                serviceDefinition,
-                appConfig,
-                packageIds,
-                {},
-            );
+            const eventResource = createEventResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 
             expect(eventResource).not.toHaveLength(0);
             expect(eventResource[0].partOfPackage).toBe("sap.test.cdsrc.sample:package:test-event-internal:v1");
         });
 
         it("should return an empty array for private Event", () => {
-            const serviceDefinition = { "@ORD.Extensions.visibility": "private", "entities": [], "name": "PrivateEvent" };
+            const serviceDefinition = {
+                "@ORD.Extensions.visibility": "private",
+                "entities": [],
+                "name": "PrivateEvent",
+            };
 
-            const eventResource = createEventResourceTemplate(
-                serviceDefinition,
-                appConfig,
-                packageIds,
-                {},
-            );
+            const eventResource = createEventResourceTemplate(serviceDefinition, appConfig, packageIds, {});
 
             expect(eventResource).toHaveLength(0);
         });

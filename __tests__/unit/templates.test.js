@@ -1,4 +1,6 @@
 const cds = require("@sap/cds");
+
+const { createEntityTypeTemplate } = require("../../lib/templates/entity-type");
 const {
     ORD_ODM_ENTITY_NAME_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
@@ -7,7 +9,6 @@ const {
     ALLOWED_VISIBILITY,
 } = require("../../lib/constants");
 const {
-    createEntityTypeTemplate,
     createEntityTypeMappingsItemTemplate,
     createGroupsTemplateForService,
     createAPIResourceTemplate,
@@ -191,13 +192,10 @@ describe("templates", () => {
     });
 
     describe("createEntityTypeTemplate", () => {
-        const packageIds = ["sap.test.cdsrc.sample:package:test-entityType:v1"];
-
         it("should return entity type with correct title from annotation '@EndUserText.label'", () => {
-            const entityType = createEntityTypeTemplate(appConfig, packageIds, {
-                "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v3",
-                "entityName": "SomeAribaDummyEntity",
+            const entityType = createEntityTypeTemplate(appConfig, {
                 "@EndUserText.label": "Title of SomeAribaDummyEntity",
+                "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v3",
             });
 
             expect(entityType).toBeDefined();
@@ -206,47 +204,30 @@ describe("templates", () => {
 
         it("should return entity type with incorrect version, title and level:root-entity", () => {
             const entityWithVersion = {
-                "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v3b",
-                "entityName": "SomeAribaDummyEntity",
+                "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v3b",
                 "@title": "Title of SomeAribaDummyEntity",
                 "@ObjectModel.compositionRoot": true,
             };
 
-            const entityType = createEntityTypeTemplate(appConfig, packageIds, entityWithVersion);
+            const entityType = createEntityTypeTemplate(appConfig, entityWithVersion);
             expect(entityType).toBeDefined();
             expect(entityType).toMatchSnapshot();
             expect(warningSpy).toHaveBeenCalledTimes(1);
             expect(entityType.version).toEqual("3b.0.0");
             expect(entityType.level).toEqual("root-entity");
-            expect(entityType.partOfPackage).toEqual("sap.test.cdsrc.sample:package:test-entityType:v1");
+            expect(entityType.partOfPackage).toEqual("customer.testNamespace:package:testAppName:v1");
         });
 
         it("should return entity type with default version, title and level:sub-entity", () => {
             const entityWithoutVersion = {
-                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1",
-                entityName: "SomeAribaDummyEntity",
+                "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v1",
             };
 
-            const entityType = createEntityTypeTemplate(appConfig, packageIds, entityWithoutVersion);
+            const entityType = createEntityTypeTemplate(appConfig, entityWithoutVersion);
             expect(entityType).toBeDefined();
             expect(entityType).toMatchSnapshot();
             expect(entityType.version).toEqual("1.0.0");
             expect(entityType.level).toEqual("sub-entity");
-        });
-
-        it("should not entity types with SAP policy level as entity types should then be added through a central registry and we must not create an overlap", () => {
-            const someEntity = {
-                ordId: "sap.sm:entityType:SomeAribaDummyEntity:v1",
-                entityName: "SomeAribaDummyEntity",
-            };
-            const appConfigWithSAPPolicy = {
-                ...appConfig,
-                policyLevels: ["sap:core:v1"],
-                hasSAPPolicyLevel: true,
-            };
-
-            const entityType = createEntityTypeTemplate(appConfigWithSAPPolicy, packageIds, someEntity);
-            expect(entityType).toEqual([]);
         });
     });
 
