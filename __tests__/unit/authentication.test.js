@@ -281,7 +281,10 @@ describe("authentication", () => {
 
             const authConfig = createAuthConfig();
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
-            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
+            expect(authConfig.accessStrategies).toEqual([
+                { type: ORD_ACCESS_STRATEGY.CmpMtls },
+                { type: ORD_ACCESS_STRATEGY.BahMtls },
+            ]);
             // Validator should be null (lazy loading)
             expect(authConfig.cfMtlsValidator).toBeNull();
             expect(authConfig._cfMtlsInitPromise).toBeNull();
@@ -524,7 +527,8 @@ describe("authentication", () => {
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls]);
             expect(authConfig.accessStrategies).toEqual([
                 { type: ORD_ACCESS_STRATEGY.Basic },
-                { type: ORD_ACCESS_STRATEGY.CfMtls },
+                { type: ORD_ACCESS_STRATEGY.CmpMtls },
+                { type: ORD_ACCESS_STRATEGY.BahMtls },
             ]);
         });
 
@@ -540,7 +544,10 @@ describe("authentication", () => {
             const authConfig = createAuthConfig();
 
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.CfMtls]);
-            expect(authConfig.accessStrategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
+            expect(authConfig.accessStrategies).toEqual([
+                { type: ORD_ACCESS_STRATEGY.CmpMtls },
+                { type: ORD_ACCESS_STRATEGY.BahMtls },
+            ]);
         });
 
         it("should automatically filter out Open when all three auth types are combined", () => {
@@ -557,7 +564,8 @@ describe("authentication", () => {
             expect(authConfig.types).toEqual([AUTHENTICATION_TYPE.Basic, AUTHENTICATION_TYPE.CfMtls]);
             expect(authConfig.accessStrategies).toEqual([
                 { type: ORD_ACCESS_STRATEGY.Basic },
-                { type: ORD_ACCESS_STRATEGY.CfMtls },
+                { type: ORD_ACCESS_STRATEGY.CmpMtls },
+                { type: ORD_ACCESS_STRATEGY.BahMtls },
             ]);
         });
     });

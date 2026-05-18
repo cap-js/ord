@@ -45,7 +45,7 @@ describe("access-strategies", () => {
             const authConfig = { types: [AUTHENTICATION_TYPE.CfMtls] };
             const strategies = getAccessStrategiesFromAuthConfig(authConfig);
 
-            expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CfMtls }]);
+            expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CmpMtls }, { type: ORD_ACCESS_STRATEGY.BahMtls }]);
         });
 
         it("should map Open auth type to open strategy", () => {
@@ -61,7 +61,11 @@ describe("access-strategies", () => {
             };
             const strategies = getAccessStrategiesFromAuthConfig(authConfig);
 
-            expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }]);
+            expect(strategies).toEqual([
+                { type: ORD_ACCESS_STRATEGY.Basic },
+                { type: ORD_ACCESS_STRATEGY.CmpMtls },
+                { type: ORD_ACCESS_STRATEGY.BahMtls },
+            ]);
         });
 
         it("should handle unknown auth types gracefully", () => {
@@ -78,7 +82,11 @@ describe("access-strategies", () => {
             };
             const strategies = getAccessStrategiesFromAuthConfig(authConfig);
 
-            expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }]);
+            expect(strategies).toEqual([
+                { type: ORD_ACCESS_STRATEGY.Basic },
+                { type: ORD_ACCESS_STRATEGY.CmpMtls },
+                { type: ORD_ACCESS_STRATEGY.BahMtls },
+            ]);
         });
 
         it("should handle invalid authConfig.types gracefully", () => {
@@ -109,7 +117,7 @@ describe("access-strategies", () => {
         });
 
         it("should return true for CF mTLS strategy", () => {
-            const strategies = [{ type: ORD_ACCESS_STRATEGY.CfMtls }];
+            const strategies = [{ type: ORD_ACCESS_STRATEGY.CmpMtls }];
             expect(hasNonOpenStrategies(strategies)).toBe(true);
         });
 
@@ -130,7 +138,7 @@ describe("access-strategies", () => {
         });
 
         it("should not throw for only non-open strategies", () => {
-            const strategies = [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }];
+            const strategies = [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CmpMtls }];
             expect(() => ensureNoOpenWhenNonOpenPresent(strategies)).not.toThrow();
         });
 
@@ -140,7 +148,7 @@ describe("access-strategies", () => {
         });
 
         it("should throw when open coexists with CF mTLS", () => {
-            const strategies = [{ type: ORD_ACCESS_STRATEGY.Open }, { type: ORD_ACCESS_STRATEGY.CfMtls }];
+            const strategies = [{ type: ORD_ACCESS_STRATEGY.Open }, { type: ORD_ACCESS_STRATEGY.CmpMtls }];
             expect(() => ensureNoOpenWhenNonOpenPresent(strategies)).toThrow(/cannot coexist/);
         });
 
@@ -148,7 +156,7 @@ describe("access-strategies", () => {
             const strategies = [
                 { type: ORD_ACCESS_STRATEGY.Basic },
                 { type: ORD_ACCESS_STRATEGY.Open },
-                { type: ORD_ACCESS_STRATEGY.CfMtls },
+                { type: ORD_ACCESS_STRATEGY.CmpMtls },
             ];
             expect(() => ensureNoOpenWhenNonOpenPresent(strategies)).toThrow(/cannot coexist/);
         });
@@ -186,7 +194,7 @@ describe("access-strategies", () => {
             });
 
             it("should validate and return valid strategies", () => {
-                const strategies = [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }];
+                const strategies = [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CmpMtls }];
                 const result = ensureAccessStrategies(strategies, { resourceName: "TestAPI" });
 
                 expect(result).toEqual(strategies);
@@ -258,7 +266,7 @@ describe("access-strategies", () => {
             });
 
             it("should allow multiple non-open strategies", () => {
-                const strategies = [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }];
+                const strategies = [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CmpMtls }];
 
                 const result = ensureAccessStrategies(strategies, { resourceName: "TestAPI" });
 
@@ -291,12 +299,12 @@ describe("access-strategies", () => {
         });
 
         it("should return true for valid CF mTLS strategy", () => {
-            const strategies = [{ type: ORD_ACCESS_STRATEGY.CfMtls }];
+            const strategies = [{ type: ORD_ACCESS_STRATEGY.CmpMtls }];
             expect(isValidAccessStrategies(strategies)).toBe(true);
         });
 
         it("should return true for multiple valid strategies", () => {
-            const strategies = [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }];
+            const strategies = [{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CmpMtls }];
             expect(isValidAccessStrategies(strategies)).toBe(true);
         });
 
@@ -325,7 +333,11 @@ describe("access-strategies", () => {
             const strategies = getAccessStrategiesFromAuthConfig(authConfig);
             const validated = ensureAccessStrategies(strategies, { resourceName: "TestAPI" });
 
-            expect(validated).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CfMtls }]);
+            expect(validated).toEqual([
+                { type: ORD_ACCESS_STRATEGY.Basic },
+                { type: ORD_ACCESS_STRATEGY.CmpMtls },
+                { type: ORD_ACCESS_STRATEGY.BahMtls },
+            ]);
             expect(hasNonOpenStrategies(validated)).toBe(true);
             expect(isValidAccessStrategies(validated)).toBe(true);
         });
