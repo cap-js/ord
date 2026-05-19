@@ -101,17 +101,17 @@ describe("access-strategies", () => {
         });
 
         it("should return true for basic strategy", () => {
-            const strategies = [ORD_ACCESS_STRATEGY.Basic];
+            const strategies = [{type: ORD_ACCESS_STRATEGY.Basic}];
             expect(hasNonOpenStrategies(strategies)).toBe(true);
         });
 
         it("should return true for CF mTLS strategy", () => {
-            const strategies = [ORD_ACCESS_STRATEGY.CmpMtls];
+            const strategies = [{type: ORD_ACCESS_STRATEGY.CmpMtls}];
             expect(hasNonOpenStrategies(strategies)).toBe(true);
         });
 
         it("should return true for mixed strategies including non-open", () => {
-            const strategies = [ORD_ACCESS_STRATEGY.Open, ORD_ACCESS_STRATEGY.Basic];
+            const strategies = [{type: ORD_ACCESS_STRATEGY.Open}, {type: ORD_ACCESS_STRATEGY.Basic}];
             expect(hasNonOpenStrategies(strategies)).toBe(true);
         });
     });
@@ -122,12 +122,12 @@ describe("access-strategies", () => {
         });
 
         it("should not throw for only open strategy", () => {
-            const strategies = [ORD_ACCESS_STRATEGY.Open];
+            const strategies = [{type: ORD_ACCESS_STRATEGY.Open}];
             expect(() => ensureNoOpenWhenNonOpenPresent(strategies)).not.toThrow();
         });
 
         it("should not throw for only non-open strategies", () => {
-            const strategies = [ORD_ACCESS_STRATEGY.Basic, ORD_ACCESS_STRATEGY.CmpMtls ];
+            const strategies = [{type: ORD_ACCESS_STRATEGY.Basic}, {type: ORD_ACCESS_STRATEGY.CmpMtls} ];
             expect(() => ensureNoOpenWhenNonOpenPresent(strategies)).not.toThrow();
         });
 
@@ -158,7 +158,7 @@ describe("access-strategies", () => {
             });
 
             it("should return strategies if provided", () => {
-                const strategies = [ORD_ACCESS_STRATEGY.Basic];
+                const strategies = [{type: ORD_ACCESS_STRATEGY.Basic }];
                 const result = ensureAccessStrategies(strategies, { resourceName: "TestAPI" });
 
                 expect(result).toEqual(strategies);
@@ -183,7 +183,7 @@ describe("access-strategies", () => {
             });
 
             it("should validate and return valid strategies", () => {
-                const strategies = [ORD_ACCESS_STRATEGY.Basic, ORD_ACCESS_STRATEGY.CmpMtls];
+                const strategies = [{type: ORD_ACCESS_STRATEGY.Basic}, {type: ORD_ACCESS_STRATEGY.CmpMtls}];
                 const result = ensureAccessStrategies(strategies, { resourceName: "TestAPI" });
 
                 expect(result).toEqual(strategies);
@@ -196,7 +196,7 @@ describe("access-strategies", () => {
             });
 
             it("should return strategies if provided", () => {
-                const strategies = [ORD_ACCESS_STRATEGY.Basic];
+                const strategies = [{type: ORD_ACCESS_STRATEGY.Basic}];
                 const result = ensureAccessStrategies(strategies, { resourceName: "TestAPI" });
 
                 expect(result).toEqual(strategies);
@@ -255,7 +255,7 @@ describe("access-strategies", () => {
             });
 
             it("should allow multiple non-open strategies", () => {
-                const strategies = [ORD_ACCESS_STRATEGY.Basic, ORD_ACCESS_STRATEGY.CmpMtls];
+                const strategies = [{type: ORD_ACCESS_STRATEGY.Basic}, {type: ORD_ACCESS_STRATEGY.CmpMtls}];
 
                 const result = ensureAccessStrategies(strategies, { resourceName: "TestAPI" });
 
