@@ -202,13 +202,14 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
         // 2. Prepare mTLS config via environment variable
         // This is the recommended production setup: cfMtls: true in config + env var for certs
         const mtlsConfig = {
+            rootCaDn: [MOCK_ROOT_CA_DN],
+            accessStrategies: ["sap:cmp-mtls:v1", "sap.businesshub:mtls:v1"],
             certs: [
                 {
                     issuer: MOCK_CERT_CONFIG_RESPONSE.certIssuer,
                     subject: MOCK_CERT_CONFIG_RESPONSE.certSubject,
                 },
             ],
-            rootCaDn: [MOCK_ROOT_CA_DN],
         };
 
         // 3. Start CDS with cfMtls: true config and CF_MTLS_TRUSTED_CERTS env var

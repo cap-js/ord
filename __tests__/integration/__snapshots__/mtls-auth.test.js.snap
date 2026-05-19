@@ -26,9 +26,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
             {
               "type": "sap:cmp-mtls:v1",
             },
-            {
-              "type": "sap.businesshub:mtls:v1",
-            },
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
@@ -38,9 +35,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
-            },
-            {
-              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/xml",
@@ -75,9 +69,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
             {
               "type": "sap:cmp-mtls:v1",
             },
-            {
-              "type": "sap.businesshub:mtls:v1",
-            },
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
@@ -87,9 +78,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
-            },
-            {
-              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/xml",
@@ -123,9 +111,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
-            },
-            {
-              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/json",
@@ -161,9 +146,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
-            },
-            {
-              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/json",
@@ -279,9 +261,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
             {
               "type": "sap:cmp-mtls:v1",
             },
-            {
-              "type": "sap.businesshub:mtls:v1",
-            },
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
@@ -291,9 +270,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
-            },
-            {
-              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/xml",
@@ -328,9 +304,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
             {
               "type": "sap:cmp-mtls:v1",
             },
-            {
-              "type": "sap.businesshub:mtls:v1",
-            },
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
@@ -340,9 +313,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
-            },
-            {
-              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/xml",
@@ -376,9 +346,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
-            },
-            {
-              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/json",
@@ -414,9 +381,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
-            },
-            {
-              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/json",
@@ -514,9 +478,6 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
         "accessStrategies": [
           {
             "type": "sap:cmp-mtls:v1",
-          },
-          {
-            "type": "sap.businesshub:mtls:v1",
           },
         ],
         "perspective": "system-version",
