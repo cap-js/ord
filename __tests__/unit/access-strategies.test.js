@@ -15,8 +15,7 @@ describe("access-strategies", () => {
 
     describe("getAccessStrategiesFromAuthConfig", () => {
         it("should return open strategy for empty auth config", () => {
-            const authConfig = { accessStrategies: [] };
-            const strategies = getAccessStrategiesFromAuthConfig(authConfig);
+            const strategies = getAccessStrategiesFromAuthConfig([]);
 
             expect(strategies).toEqual([{type: ORD_ACCESS_STRATEGY.Open}]);
         });
@@ -46,8 +45,7 @@ describe("access-strategies", () => {
         });
 
         it("should map Open auth type to open strategy", () => {
-            const authConfig = { accessStrategies: [ORD_ACCESS_STRATEGY.Open] };
-            const strategies = getAccessStrategiesFromAuthConfig(authConfig);
+            const strategies = getAccessStrategiesFromAuthConfig([ORD_ACCESS_STRATEGY.Open]);
 
             expect(strategies).toEqual([{type: ORD_ACCESS_STRATEGY.Open}]);
         });
@@ -62,8 +60,7 @@ describe("access-strategies", () => {
         });
 
         it("should handle unknown auth types gracefully", () => {
-            const authConfig = { types: ["unknown-type"] };
-            const strategies = getAccessStrategiesFromAuthConfig(authConfig);
+            const strategies = getAccessStrategiesFromAuthConfig(["unknown-type"]);
 
             // Should fallback to open since no valid types found
             expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Open }]);
@@ -82,9 +79,8 @@ describe("access-strategies", () => {
             ]);
         });
 
-        it("should handle invalid authConfig.types gracefully", () => {
-            const authConfig = { types: "not-an-array" };
-            const strategies = getAccessStrategiesFromAuthConfig(authConfig);
+        it("should handle invalid accessStrategies gracefully", () => {
+            const strategies = getAccessStrategiesFromAuthConfig("not-an-array");
 
             expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Open }]);
         });
@@ -281,9 +277,7 @@ describe("access-strategies", () => {
         });
 
         it("should handle open-only configuration", () => {
-            const authConfig = { accessStrategies: [ORD_ACCESS_STRATEGY.Open] };
-
-            const strategies = getAccessStrategiesFromAuthConfig(authConfig);
+            const strategies = getAccessStrategiesFromAuthConfig([ORD_ACCESS_STRATEGY.Open]);
             const validated = ensureAccessStrategies(strategies, { resourceName: "TestAPI" });
 
             expect(validated).toEqual([{type:ORD_ACCESS_STRATEGY.Open}]);

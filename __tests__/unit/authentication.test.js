@@ -9,7 +9,7 @@ jest.mock("../../lib/logger", () => ({
 const cds = require("@sap/cds");
 const express = require("express");
 const request = require("supertest");
-const { AUTHENTICATION_TYPE, ORD_ACCESS_STRATEGY, CF_MTLS_HEADERS } = require("../../lib/constants");
+const { ORD_ACCESS_STRATEGY, CF_MTLS_HEADERS } = require("../../lib/constants");
 const { createAuthMiddleware, createAuthConfig } = require("../../lib/auth/authentication");
 const Logger = require("../../lib/logger");
 
@@ -20,7 +20,7 @@ describe("authentication", () => {
     // The bcrypt hash decrypted is: secret
     const mockValidUser = { admin: "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW" };
     const defaultAuthConfig = {
-        accessStrategies: [ AUTHENTICATION_TYPE.Open ],
+        accessStrategies: [ ORD_ACCESS_STRATEGY.Open ],
     };
 
     beforeEach(() => {
@@ -181,7 +181,7 @@ describe("authentication", () => {
 
         it("should not authenticate because of wrongly configured unsupported authentication type", async () => {
             const authConfig = {
-                types: "UnsupportedAuthType",
+                accessStrategies: "UnsupportedAuthType",
             };
 
             await request(createTestApp(authConfig)).get(TEST_ENDPOINT).expect(401).expect("Not authorized");

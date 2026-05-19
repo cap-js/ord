@@ -25,8 +25,7 @@ describe("ord", () => {
             // Mock createAuthConfig to return an error
             const authentication = require("../../lib/auth/authentication");
             jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
-                types: ["open"],
-                accessStrategies: [{ type: "open" }],
+                accessStrategies: ["open"],
                 error: "Invalid bcrypt hash provided",
             });
 
@@ -40,8 +39,7 @@ describe("ord", () => {
             // Mock createAuthConfig to return valid config without error
             const authentication = require("../../lib/auth/authentication");
             jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
-                types: ["open"],
-                accessStrategies: [{ type: "open" }],
+                accessStrategies: ["open"],
             });
 
             ord = require("../../lib/ord");
