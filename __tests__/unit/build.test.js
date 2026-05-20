@@ -266,16 +266,10 @@ describe("Build", () => {
         expect(updatedOrdDocument.perspective).toBe(DOCUMENT_PERSPECTIVES.SystemVersion);
         expect(updatedOrdDocument.describedSystemVersion).toEqual({ version: "0.0.1" });
         expect(updatedOrdDocument.apiResources[0].resourceDefinitions[0].url).toBe(
-            path.join(
-                "customer.sample_apiResource_ProcessorService_v1",
-                "ProcessorService.oas3.json",
-            ),
+            "customer.sample_apiResource_ProcessorService_v1/ProcessorService.oas3.json",
         );
         expect(updatedOrdDocument.eventResources[0].resourceDefinitions[0].url).toBe(
-            path.join(
-                "customer.sample_eventResource_ProcessorService_v1",
-                "ProcessorService.asyncapi2.json",
-            ),
+            "customer.sample_eventResource_ProcessorService_v1/ProcessorService.asyncapi2.json",
         );
     });
 });
