@@ -10,11 +10,6 @@ describe("templates", () => {
     };
 
     describe("createEntityTypeTemplate", () => {
-        const packageIds = [
-            "sap.test.cdsrc.sample:package:test-entityType:v1",
-            "sap.test.cdsrc.sample:package:test-entityType-internal:v1",
-        ];
-
         it("should keep EntityType visibility independent of private API references", () => {
             const entity = {
                 "@EntityRelationship.entityType": "sap.sm:PrivateEntity:v1",

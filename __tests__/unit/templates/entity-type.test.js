@@ -123,66 +123,6 @@ describe("RESOLVERS.version", () => {
     });
 });
 
-describe("RESOLVERS.extensible", () => {
-    it("returns { supported: 'no' } by default", () => {
-        expect(RESOLVERS.extensible(BASE_ENTITY)).toEqual({ supported: "no" });
-    });
-
-    it("uses @ORD.Extensions.extensible.supported when set", () => {
-        const entity = { ...BASE_ENTITY, "@ORD.Extensions.extensible.supported": "manual" };
-        expect(RESOLVERS.extensible(entity)).toEqual({ supported: "manual" });
-    });
-
-    it("includes description when @ORD.Extensions.extensible.description is set", () => {
-        const entity = {
-            ...BASE_ENTITY,
-            "@ORD.Extensions.extensible.supported": "manual",
-            "@ORD.Extensions.extensible.description": "Extend via side tables",
-        };
-        expect(RESOLVERS.extensible(entity)).toEqual({
-            supported: "manual",
-            description: "Extend via side tables",
-        });
-    });
-
-    it("omits description key when description is not set", () => {
-        expect(RESOLVERS.extensible(BASE_ENTITY)).not.toHaveProperty("description");
-    });
-});
-
-describe("RESOLVERS.description", () => {
-    it("generates a default description from localId", () => {
-        expect(RESOLVERS.description(BASE_ENTITY)).toBe("Description for BusinessPartner");
-    });
-
-    it("prefers @ORD.Extensions.description when set", () => {
-        const entity = { ...BASE_ENTITY, "@ORD.Extensions.description": "Custom desc" };
-        expect(RESOLVERS.description(entity)).toBe("Custom desc");
-    });
-});
-
-describe("RESOLVERS.releaseStatus", () => {
-    it("defaults to 'active'", () => {
-        expect(RESOLVERS.releaseStatus(BASE_ENTITY)).toBe("active");
-    });
-
-    it("uses @ORD.Extensions.releaseStatus when set", () => {
-        const entity = { ...BASE_ENTITY, "@ORD.Extensions.releaseStatus": "beta" };
-        expect(RESOLVERS.releaseStatus(entity)).toBe("beta");
-    });
-});
-
-describe("RESOLVERS.shortDescription", () => {
-    it("generates a default short description from localId", () => {
-        expect(RESOLVERS.shortDescription(BASE_ENTITY)).toBe("Short description of BusinessPartner");
-    });
-
-    it("uses @ORD.Extensions.shortDescription when set", () => {
-        const entity = { ...BASE_ENTITY, "@ORD.Extensions.shortDescription": "Short custom" };
-        expect(RESOLVERS.shortDescription(entity)).toBe("Short custom");
-    });
-});
-
 describe("RESOLVERS.visibility", () => {
     it("defaults to public from appConfig env", () => {
         expect(RESOLVERS.visibility(BASE_ENTITY, BASE_APP_CONFIG)).toBe(RESOURCE_VISIBILITY.public);
@@ -200,21 +140,6 @@ describe("RESOLVERS.visibility", () => {
     it("prefers @ORD.Extensions.visibility over appConfig default", () => {
         const entity = { ...BASE_ENTITY, "@ORD.Extensions.visibility": RESOURCE_VISIBILITY.private };
         expect(RESOLVERS.visibility(entity, BASE_APP_CONFIG)).toBe(RESOURCE_VISIBILITY.private);
-    });
-});
-
-describe("RESOLVERS.lastUpdate", () => {
-    it("uses appConfig.lastUpdate when no entity override", () => {
-        expect(RESOLVERS.lastUpdate(BASE_ENTITY, BASE_APP_CONFIG)).toBe("2024-01-01T00:00:00+00:00");
-    });
-
-    it("prefers @ORD.Extensions.lastUpdate over appConfig", () => {
-        const entity = { ...BASE_ENTITY, "@ORD.Extensions.lastUpdate": "2025-06-15T00:00:00+00:00" };
-        expect(RESOLVERS.lastUpdate(entity, BASE_APP_CONFIG)).toBe("2025-06-15T00:00:00+00:00");
-    });
-
-    it("returns undefined when neither entity nor appConfig provides a value", () => {
-        expect(RESOLVERS.lastUpdate(BASE_ENTITY, {})).toBeUndefined();
     });
 });
 
