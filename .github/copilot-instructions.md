@@ -49,11 +49,10 @@ When altering merge or template logic: add/adjust a focused assertion in e2e rat
 
 ## 10. Safe Change Checklist (always)
 
-1. Read memory bank (`memory-bank/*.md`) for active context & architectural constraints.
-2. If modifying model-related logic: inspect relevant template/helper in `templates.js` & invocation in `ord.js`.
-3. Run `npm test` (do not skip; many conditions are covered indirectly).
-4. Avoid introducing duplicate logic—extend existing template helpers instead.
-5. Preserve `apiProtocol` when merging custom overrides; never silently drop `resourceDefinitions`.
+1. If modifying model-related logic: inspect relevant template/helper in `templates.js` & invocation in `ord.js`.
+2. Run `npm test` (do not skip; many conditions are covered indirectly).
+3. Avoid introducing duplicate logic—extend existing template helpers instead.
+4. Preserve `apiProtocol` when merging custom overrides; never silently drop `resourceDefinitions`.
 
 ## 11. Common Pitfalls
 
