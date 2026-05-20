@@ -37,7 +37,7 @@ const net = require("net");
 const fs = require("fs");
 
 const utils = require("../utils");
-const { CF_MTLS_HEADERS } = require("../../lib/constants");
+const { CF_MTLS_HEADERS, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
 const ORD_DOCUMENT_ENDPOINT = "/ord/v1/documents/ord-document";
@@ -203,7 +203,7 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
         // This is the recommended production setup: cfMtls: true in config + env var for certs
         const mtlsConfig = {
             rootCaDn: [MOCK_ROOT_CA_DN],
-            accessStrategies: ["sap:cmp-mtls:v1", "sap.businesshub:mtls:v1"],
+            accessStrategies: [ORD_ACCESS_STRATEGY.CmpMtls, ORD_ACCESS_STRATEGY.BahMtls],
             certs: [
                 {
                     issuer: MOCK_CERT_CONFIG_RESPONSE.certIssuer,
@@ -477,23 +477,25 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
             // Verify API resources have 'sap:cmp-mtls:v1' accessStrategies
             ordDocument.apiResources.forEach((apiResource) => {
                 apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
                 });
             });
 
             // Verify Event resources have 'sap:cmp-mtls:v1' accessStrategies
             ordDocument.eventResources.forEach((eventResource) => {
                 eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(
+                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
+                    );
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
                 });
             });
 
             // Verify no resource has 'open' accessStrategy
             [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
                 resource.resourceDefinitions.forEach((resDef) => {
-                    const hasOpen = resDef.accessStrategies.some((s) => s.type === "open");
+                    const hasOpen = resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Open);
                     expect(hasOpen).toBe(false);
                 });
             });
@@ -560,23 +562,27 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
             // Verify API resources have 'sap:cmp-mtls:v1' accessStrategies
             ordDocument.apiResources.forEach((apiResource) => {
                 apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(
+                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
+                    );
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
                 });
             });
 
             // Verify Event resources have 'sap:cmp-mtls:v1' accessStrategies
             ordDocument.eventResources.forEach((eventResource) => {
                 eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(
+                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
+                    );
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
                 });
             });
 
             // Verify no resource has 'open' accessStrategy
             [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
                 resource.resourceDefinitions.forEach((resDef) => {
-                    const hasOpen = resDef.accessStrategies.some((s) => s.type === "open");
+                    const hasOpen = resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Open);
                     expect(hasOpen).toBe(false);
                 });
             });
@@ -826,16 +832,20 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
             // Verify API resources have 'sap:cmp-mtls:v1' accessStrategies
             ordDocument.apiResources.forEach((apiResource) => {
                 apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(
+                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
+                    );
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
                 });
             });
 
             // Verify Event resources have 'sap:cmp-mtls:v1' accessStrategies
             ordDocument.eventResources.forEach((eventResource) => {
                 eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "sap:cmp-mtls:v1" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "sap:cmp-mtls:v1")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(
+                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
+                    );
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
                 });
             });
         });
