@@ -4,6 +4,29 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.8.0 (2026-05-15)
+
+## What's Changed
+
+- chore: Remove generation of default consumption bundle by @mlakov in https://github.com/cap-js/ord/pull/431
+- fix: Correctly generate exposed entity types when '@ORD.Extensions.ordId' is used on entity by @mlakov in https://github.com/cap-js/ord/pull/436
+- fix: Improve generation of API resource ORD IDs when '@ORD.Extensions.version' is specified by @mlakov in https://github.com/cap-js/ord/pull/437
+- fix: Improve generation of entity type ORD IDs when '@ORD.Extensions.version' is specified by @mlakov in https://github.com/cap-js/ord/pull/438
+- fix: Improve generation of event resource ORD IDs when '@ORD.Extensions.version' is specified by @mlakov in https://github.com/cap-js/ord/pull/439
+- fix: Improve generation of integration dependency ORD ID when version is overridden via .cdsrc.json/package.json by @mlakov in https://github.com/cap-js/ord/pull/440
+- fix: Correctly generate resource definition URLs when '@ORD.Extensions.ordId' is used by @mlakov in https://github.com/cap-js/ord/pull/435
+- feat: Consider annotation '@EndUserText.label' when resolving ORD entity titles by @mlakov in https://github.com/cap-js/ord/pull/442
+- fix: Correctly generate API resources for multi-protocol CDS services by @mlakov in https://github.com/cap-js/ord/pull/445
+- chore: Remove redundant service name arg from 'createGroupsTemplateForService' by @mlakov in https://github.com/cap-js/ord/pull/446
+- chore: Remove redundant group type id arg from '_getGroupID' by @mlakov in https://github.com/cap-js/ord/pull/447
+- chore: Remove redundant service name arg from 'createAPIResourceTemplate' by @mlakov in https://github.com/cap-js/ord/pull/448
+- chore: Remove redundant service name arg from 'createEventResourceTemplate' by @mlakov in https://github.com/cap-js/ord/pull/449
+- chore: Remove redundant service name arg from 'resolveApiResourceProtocol' by @mlakov in https://github.com/cap-js/ord/pull/450
+- Update dependency express to v5 by @rennovate in https://github.com/cap-js/ord/pull/451
+- Update Node.js to v24 by @rennovate in https://github.com/cap-js/ord/pull/452
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.7.0...v1.8.0
+
 ## 1.7.0 (2026-05-12)
 
 ## What's Changed
@@ -22,7 +45,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - fix: Only register well-known compile targets by @mlakov in https://github.com/cap-js/ord/pull/428
 
 **Full Changelog**: https://github.com/cap-js/ord/compare/v1.6.0...v1.7.0
-
 
 ## 1.6.0 (2026-04-30)
 
