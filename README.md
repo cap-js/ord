@@ -114,7 +114,7 @@ This will output something like `admin:$2y$05$...` - use only the hash part (sta
 
 #### CF mTLS Authentication
 
-Configure Cloud Foundry mutual TLS authentication for SAP BTP Cloud Foundry environments.
+Configure Cloud Foundry mutual TLS authentication for SAP BTP Cloud Foundry environments. Possible values include 'sap:cmp-mtls:v1' and 'sap.businesshub:mtls:v1'.
 
 **Production Configuration with UCL (Recommended)**
 
@@ -131,9 +131,11 @@ For SAP UCL (Unified Customer Landscape) integration, enable mTLS in `.cdsrc.jso
 ```
 
 ```bash
+# Example configuration of the CF_MTLS_TRUSTED_CERTS environment variable
 export CF_MTLS_TRUSTED_CERTS='{
   "configEndpoints": ["https://your-ucl-endpoint/v1/info"],
-  "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"]
+  "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"],
+  "accessStrategies": ["sap:cmp-mtls:v1", "sap.businesshub:mtls:v1"]
 }'
 ```
 
@@ -142,9 +144,11 @@ export CF_MTLS_TRUSTED_CERTS='{
 For custom certificates without UCL:
 
 ```bash
+# Example configuration of the CF_MTLS_TRUSTED_CERTS environment variable
 export CF_MTLS_TRUSTED_CERTS='{
   "certs": [{"issuer": "CN=My CA,O=MyOrg", "subject": "CN=my-service,O=MyOrg"}],
-  "rootCaDn": ["CN=My Root CA,O=MyOrg"]
+  "rootCaDn": ["CN=My Root CA,O=MyOrg"],
+  "accessStrategies": ["sap:cmp-mtls:v1", "sap.businesshub:mtls:v1"]
 }'
 ```
 
@@ -157,13 +161,14 @@ For local development, configure the full mTLS settings directly in `.cdsrc.json
     "ord": {
         "authentication": {
             "cfMtls": {
+                "rootCaDn": ["CN=Test Root CA,O=MyOrg,C=DE"],
+                "accessStrategies": ["sap:cmp-mtls:v1","sap.businesshub:mtls:v1"],
                 "certs": [
                     {
                         "issuer": "CN=Test CA,O=MyOrg,C=DE",
                         "subject": "CN=test-client,O=MyOrg,C=DE"
                     }
-                ],
-                "rootCaDn": ["CN=Test Root CA,O=MyOrg,C=DE"]
+                ]
             }
         }
     }
