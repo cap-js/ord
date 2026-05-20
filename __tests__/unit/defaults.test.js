@@ -1,5 +1,5 @@
 const defaults = require("../../lib/defaults");
-const { AUTHENTICATION_TYPE, DOCUMENT_PERSPECTIVES } = require("../../lib/constants");
+const { DOCUMENT_PERSPECTIVES, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 const cds = require("@sap/cds");
 
 jest.mock("fs", () => {
@@ -163,8 +163,7 @@ describe("defaults", () => {
             cds.env.requires.toggles = false;
             cds.env.requires.extensibility = false;
             const authConfig = {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
             expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
         });
@@ -173,8 +172,7 @@ describe("defaults", () => {
             cds.env.requires.toggles = true;
             cds.env.requires.extensibility = false;
             const authConfig = {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
             expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
         });
@@ -183,8 +181,7 @@ describe("defaults", () => {
             cds.env.requires.toggles = false;
             cds.env.requires.extensibility = true;
             const authConfig = {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
             expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
         });
@@ -193,8 +190,7 @@ describe("defaults", () => {
             cds.env.requires.toggles = true;
             cds.env.requires.extensibility = true;
             const authConfig = {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
             expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
         });
@@ -203,8 +199,7 @@ describe("defaults", () => {
             cds.env.requires.toggles = true;
             cds.env.requires.extensibility = false;
             const authConfig = {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
             expect(defaults.baseTemplate(authConfig, "dummy-tenant")).toMatchSnapshot();
         });
@@ -213,8 +208,7 @@ describe("defaults", () => {
             cds.env.requires.toggles = false;
             cds.env.requires.extensibility = true;
             const authConfig = {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
             expect(defaults.baseTemplate(authConfig, "dummy-tenant")).toMatchSnapshot();
         });
@@ -223,8 +217,7 @@ describe("defaults", () => {
             cds.env.requires.toggles = true;
             cds.env.requires.extensibility = true;
             const authConfig = {
-                types: [AUTHENTICATION_TYPE.Open],
-                accessStrategies: [{ type: AUTHENTICATION_TYPE.Open }],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
             expect(defaults.baseTemplate(authConfig, "dummy-tenant")).toMatchSnapshot();
         });

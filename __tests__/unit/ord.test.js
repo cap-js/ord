@@ -1,5 +1,6 @@
 const cds = require("@sap/cds");
 const path = require("path");
+const { ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 
 describe("ord", () => {
     let ord;
@@ -25,8 +26,7 @@ describe("ord", () => {
             // Mock createAuthConfig to return an error
             const authentication = require("../../lib/auth/authentication");
             jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
-                types: ["open"],
-                accessStrategies: [{ type: "open" }],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
                 error: "Invalid bcrypt hash provided",
             });
 
@@ -40,8 +40,7 @@ describe("ord", () => {
             // Mock createAuthConfig to return valid config without error
             const authentication = require("../../lib/auth/authentication");
             jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
-                types: ["open"],
-                accessStrategies: [{ type: "open" }],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             });
 
             ord = require("../../lib/ord");

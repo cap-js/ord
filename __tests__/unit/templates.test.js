@@ -4,7 +4,7 @@ const {
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_EXTENSIONS_PREFIX,
     RESOURCE_VISIBILITY,
-    ALLOWED_VISIBILITY,
+    ALLOWED_VISIBILITY, ORD_ACCESS_STRATEGY,
 } = require("../../lib/constants");
 const {
     createEntityTypeTemplate,
@@ -412,7 +412,7 @@ describe("templates", () => {
                 `);
                 const srvDefinition = model.definitions["McpService"];
                 const packageIds = ["sap.test.cdsrc.sample:package:test-api:v1"];
-                const accessStrategies = [{ type: "open" }];
+                const accessStrategies = [{ type: ORD_ACCESS_STRATEGY.Open }];
 
                 const apiResourceTemplate = createAPIResourceTemplateMocked(
                     srvDefinition,
