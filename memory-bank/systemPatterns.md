@@ -138,9 +138,10 @@ isPrimaryDataProduct → "internal"
 
 ```javascript
 const AUTH_STRATEGIES = {
-    [AUTHENTICATION_TYPE.Basic]:  basicAuthStrategy,   // bcrypt compare
-    [AUTHENTICATION_TYPE.CfMtls]: cfMtlsAuthStrategy,  // lazy-init CF mTLS validator
-    [AUTHENTICATION_TYPE.Open]:   openAuthStrategy,    // always success
+    [ORD_ACCESS_STRATEGY.Open]:   openAuthStrategy,    // always success
+    [ORD_ACCESS_STRATEGY.Basic]:  basicAuthStrategy,   // bcrypt compare
+    [ORD_ACCESS_STRATEGY.CmpMtls]: cfMtlsAuthStrategy,  // lazy-init CF mTLS validator
+    [ORD_ACCESS_STRATEGY.BahMtls]: cfMtlsAuthStrategy,  // lazy-init CF mTLS validator
 };
 
 function createAuthMiddleware(authConfig) {

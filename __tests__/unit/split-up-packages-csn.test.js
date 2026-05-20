@@ -14,7 +14,7 @@ describe("ORD Generation for Business Accelerator Hub", () => {
 
         // Mock the createAuthConfig to return a default open configuration
         jest.spyOn(authentication, "createAuthConfig").mockReturnValue({
-            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+            accessStrategies: [ORD_ACCESS_STRATEGY.Open],
         });
 
         jest.spyOn(require("../../lib/common/utils"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");

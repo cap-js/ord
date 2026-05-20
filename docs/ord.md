@@ -251,6 +251,7 @@ CF (Cloud Foundry) mTLS authentication provides secure machine-to-machine commun
 For SAP UCL (Unified Customer Landscape) integration:
 
 ```bash
+# Example configuration of the CF_MTLS_TRUSTED_CERTS environment variable
 export CF_MTLS_TRUSTED_CERTS='{
   "configEndpoints": ["https://your-ucl-endpoint/v1/info"],
   "rootCaDn": ["CN=SAP Cloud Root CA,O=SAP SE,L=Walldorf,C=DE"]
@@ -262,11 +263,14 @@ export CF_MTLS_TRUSTED_CERTS='{
 For custom certificates without UCL:
 
 ```bash
+# Example configuration of the CF_MTLS_TRUSTED_CERTS environment variable
 export CF_MTLS_TRUSTED_CERTS='{
   "certs": [{"issuer": "CN=My CA,O=MyOrg", "subject": "CN=my-service,O=MyOrg"}],
   "rootCaDn": ["CN=My Root CA,O=MyOrg"]
 }'
 ```
+
+Via CF_MTLS_TRUSTED_CERTS you can set the `accessStrategies` property, in order to explicitly define an array of mTLS access strategies to be used. The current list of supported values includes `sap:cmp-mtls:v1` (for UCL) and `sap.businesshub:mtls:v1` (for BAH). If not configured, the plugin defaults to `["sap:cmp-mtls:v1"]`.
 
 ---
 

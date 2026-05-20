@@ -3,6 +3,7 @@ const { spawn } = require("child_process");
 const path = require("path");
 
 const utils = require("../utils");
+const { ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 
 const BASE_URL = "http://localhost:4004";
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
@@ -132,7 +133,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                     documents: [
                         {
                             url: "/ord/v1/documents/ord-document",
-                            accessStrategies: [{ type: "basic-auth" }],
+                            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                             perspective: "system-version",
                         },
                     ],
@@ -312,23 +313,25 @@ describe("ORD Integration Tests - Basic Authentication", () => {
             // Verify API resources have 'basic-auth' accessStrategies
             ordDocument.apiResources.forEach((apiResource) => {
                 apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "basic-auth" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "basic-auth")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.Basic }]));
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Basic)).toBe(true);
                 });
             });
 
             // Verify Event resources have 'basic-auth' accessStrategies
             ordDocument.eventResources.forEach((eventResource) => {
                 eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "basic-auth" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "basic-auth")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(
+                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.Basic }]),
+                    );
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Basic)).toBe(true);
                 });
             });
 
             // Verify no resource has 'open' accessStrategy
             [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
                 resource.resourceDefinitions.forEach((resDef) => {
-                    const hasOpen = resDef.accessStrategies.some((s) => s.type === "open");
+                    const hasOpen = resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Open);
                     expect(hasOpen).toBe(false);
                 });
             });
@@ -389,23 +392,27 @@ describe("ORD Integration Tests - Basic Authentication", () => {
             // Verify API resources have 'basic-auth' accessStrategies
             ordDocument.apiResources.forEach((apiResource) => {
                 apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "basic-auth" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "basic-auth")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(
+                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.Basic }]),
+                    );
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Basic)).toBe(true);
                 });
             });
 
             // Verify Event resources have 'basic-auth' accessStrategies
             ordDocument.eventResources.forEach((eventResource) => {
                 eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: "basic-auth" }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === "basic-auth")).toBe(true);
+                    expect(resDef.accessStrategies).toEqual(
+                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.Basic }]),
+                    );
+                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Basic)).toBe(true);
                 });
             });
 
             // Verify no resource has 'open' accessStrategy
             [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
                 resource.resourceDefinitions.forEach((resDef) => {
-                    const hasOpen = resDef.accessStrategies.some((s) => s.type === "open");
+                    const hasOpen = resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Open);
                     expect(hasOpen).toBe(false);
                 });
             });

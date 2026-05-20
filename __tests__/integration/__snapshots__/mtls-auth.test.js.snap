@@ -511,6 +511,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) ORD Documen
         {
           "type": "sap:cmp-mtls:v1",
         },
+        {
+          "type": "sap.businesshub:mtls:v1",
+        },
       ],
       "mediaType": "application/json",
       "type": "openapi-v3",
@@ -520,6 +523,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) ORD Documen
       "accessStrategies": [
         {
           "type": "sap:cmp-mtls:v1",
+        },
+        {
+          "type": "sap.businesshub:mtls:v1",
         },
       ],
       "mediaType": "application/xml",
@@ -557,6 +563,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) ORD Documen
         {
           "type": "sap:cmp-mtls:v1",
         },
+        {
+          "type": "sap.businesshub:mtls:v1",
+        },
       ],
       "mediaType": "application/json",
       "type": "openapi-v3",
@@ -566,6 +575,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) ORD Documen
       "accessStrategies": [
         {
           "type": "sap:cmp-mtls:v1",
+        },
+        {
+          "type": "sap.businesshub:mtls:v1",
         },
       ],
       "mediaType": "application/xml",
@@ -606,6 +618,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) Production 
             {
               "type": "sap:cmp-mtls:v1",
             },
+            {
+              "type": "sap.businesshub:mtls:v1",
+            },
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
@@ -615,6 +630,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) Production 
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
+            },
+            {
+              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/xml",
@@ -649,6 +667,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) Production 
             {
               "type": "sap:cmp-mtls:v1",
             },
+            {
+              "type": "sap.businesshub:mtls:v1",
+            },
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
@@ -658,6 +679,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) Production 
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
+            },
+            {
+              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/xml",
@@ -691,6 +715,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) Production 
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
+            },
+            {
+              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/json",
@@ -726,6 +753,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) Production 
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
+            },
+            {
+              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/json",
@@ -841,6 +871,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
             {
               "type": "sap:cmp-mtls:v1",
             },
+            {
+              "type": "sap.businesshub:mtls:v1",
+            },
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
@@ -850,6 +883,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
+            },
+            {
+              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/xml",
@@ -884,6 +920,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
             {
               "type": "sap:cmp-mtls:v1",
             },
+            {
+              "type": "sap.businesshub:mtls:v1",
+            },
           ],
           "mediaType": "application/json",
           "type": "openapi-v3",
@@ -893,6 +932,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
+            },
+            {
+              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/xml",
@@ -926,6 +968,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
+            },
+            {
+              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/json",
@@ -961,6 +1006,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
           "accessStrategies": [
             {
               "type": "sap:cmp-mtls:v1",
+            },
+            {
+              "type": "sap.businesshub:mtls:v1",
             },
           ],
           "mediaType": "application/json",
@@ -1059,6 +1107,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
           {
             "type": "sap:cmp-mtls:v1",
           },
+          {
+            "type": "sap.businesshub:mtls:v1",
+          },
         ],
         "perspective": "system-version",
         "url": "/ord/v1/documents/ord-document",
@@ -1067,6 +1118,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
         "accessStrategies": [
           {
             "type": "sap:cmp-mtls:v1",
+          },
+          {
+            "type": "sap.businesshub:mtls:v1",
           },
         ],
         "perspective": "system-instance",
@@ -1085,6 +1139,9 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
         "accessStrategies": [
           {
             "type": "sap:cmp-mtls:v1",
+          },
+          {
+            "type": "sap.businesshub:mtls:v1",
           },
         ],
         "perspective": "system-version",
