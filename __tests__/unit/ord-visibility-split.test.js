@@ -116,7 +116,7 @@ describe("templates", () => {
 
             const eventResource = createEventResourceTemplate(serviceDefinition, appConfig);
 
-            expect(eventResource.partOfPackage).toBe("sap.test.cdsrc.sample:package:test-event:v1");
+            expect(eventResource.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
         });
 
         it("should assign the correct partOfPackage for internal Event", () => {
@@ -128,7 +128,7 @@ describe("templates", () => {
 
             const eventResource = createEventResourceTemplate(serviceDefinition, appConfig);
 
-            expect(eventResource.partOfPackage).toBe("sap.test.cdsrc.sample:package:test-event-internal:v1");
+            expect(eventResource.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
         });
     });
     describe("_getPackageID", () => {
