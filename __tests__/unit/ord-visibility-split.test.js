@@ -1,5 +1,7 @@
+const { ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 const { createEntityTypeTemplate } = require("../../lib/templates/entity-type");
-const { createAPIResourceTemplate, createEventResourceTemplate, _getPackageID } = require("../../lib/templates");
+const { createAPIResourceTemplate, _getPackageID } = require("../../lib/templates");
+const { createEventResourceTemplate } = require("../../lib/templates/event-resource");
 
 describe("templates", () => {
     const appConfig = {
@@ -7,6 +9,9 @@ describe("templates", () => {
         appName: "testAppName",
         lastUpdate: "2022-12-19T15:47:04+00:00",
         policyLevels: ["none"],
+        authConfig: {
+            accessStrategies: [ORD_ACCESS_STRATEGY.Open],
+        },
     };
 
     describe("createEntityTypeTemplate", () => {
@@ -106,19 +111,12 @@ describe("templates", () => {
     });
 
     describe("createEventResourceTemplate", () => {
-        const packageIds = [
-            "sap.test.cdsrc.sample:package:test-event:v1",
-            "sap.test.cdsrc.sample:package:test-event-private:v1",
-            "sap.test.cdsrc.sample:package:test-event-internal:v1",
-        ];
-
         it("should assign the correct partOfPackage for public Event", () => {
             const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": "PublicEvent" };
 
-            const eventResource = createEventResourceTemplate(serviceDefinition, appConfig, packageIds, {});
+            const eventResource = createEventResourceTemplate(serviceDefinition, appConfig);
 
-            expect(eventResource).not.toHaveLength(0);
-            expect(eventResource[0].partOfPackage).toBe("sap.test.cdsrc.sample:package:test-event:v1");
+            expect(eventResource.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
         });
 
         it("should assign the correct partOfPackage for internal Event", () => {
@@ -128,22 +126,9 @@ describe("templates", () => {
                 "name": "InternalEvent",
             };
 
-            const eventResource = createEventResourceTemplate(serviceDefinition, appConfig, packageIds, {});
+            const eventResource = createEventResourceTemplate(serviceDefinition, appConfig);
 
-            expect(eventResource).not.toHaveLength(0);
-            expect(eventResource[0].partOfPackage).toBe("sap.test.cdsrc.sample:package:test-event-internal:v1");
-        });
-
-        it("should return an empty array for private Event", () => {
-            const serviceDefinition = {
-                "@ORD.Extensions.visibility": "private",
-                "entities": [],
-                "name": "PrivateEvent",
-            };
-
-            const eventResource = createEventResourceTemplate(serviceDefinition, appConfig, packageIds, {});
-
-            expect(eventResource).toHaveLength(0);
+            expect(eventResource.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
         });
     });
     describe("_getPackageID", () => {
