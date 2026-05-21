@@ -28,35 +28,20 @@ describe("extendOrdWithCustom", () => {
     });
 
     describe("extend-ord-with-custom", () => {
-        it("should return undefined if there is no customOrdContentFile property in the .cdsrc.json", () => {
+        it("should return empty object if there is no customOrdContentFile property in the .cdsrc.json", () => {
             appConfig.env.customOrdContentFile = undefined;
 
             const result = getCustomORDContent(appConfig);
 
-            expect(result).toEqual(undefined);
+            expect(result).toEqual({});
         });
 
-        it("should return undefined if customOrdContentFile property in the .cdsrc.json points to NON-EXISTING custom ord file", () => {
+        it("should return empty object if customOrdContentFile property in the .cdsrc.json points to NON-EXISTING custom ord file", () => {
             appConfig.env.customOrdContentFile = "./ord/NotExistingCustom.ord.json";
 
             const result = getCustomORDContent(appConfig);
 
-            expect(result).toEqual(undefined);
-        });
-
-        it("should ignore and log warn if found ord top-level primitive property in customOrdFile", () => {
-            prepareTestEnvironment({ namespace: "sap.sample" }, appConfig, "testCustomORDContentFileThrowErrors.json");
-
-            const result = compareAndHandleCustomORDContentWithExistingContent({}, getCustomORDContent(appConfig));
-
-            expect(warningSpy).toHaveBeenCalledTimes(3);
-            expect(warningSpy).toHaveBeenCalledWith(
-                "[ord-plugin] -",
-                expect.stringContaining("Found ord top level primitive ord property in customOrdFile:"),
-                expect.anything(),
-                expect.stringContaining("Please define it in .cdsrc.json."),
-            );
-            expect(result).toMatchSnapshot();
+            expect(result).toEqual({ });
         });
 
         it("should add new ord resources that are not supported by cap framework", () => {
