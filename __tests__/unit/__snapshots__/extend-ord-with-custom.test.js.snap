@@ -35,12 +35,12 @@ exports[`extendOrdWithCustom extend-ord-with-custom should enhance the list of g
 {
   "packages": [
     {
-      "localId": "smDataProductsV2",
-      "ordId": "sap.sm:package:smDataProducts:v2",
-    },
-    {
       "localId": "smDataProductsV1",
       "ordId": "sap.sm:package:smDataProducts:v1",
+    },
+    {
+      "localId": "smDataProductsV2",
+      "ordId": "sap.sm:package:smDataProducts:v2",
     },
   ],
 }

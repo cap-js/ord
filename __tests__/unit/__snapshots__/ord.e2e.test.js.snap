@@ -248,16 +248,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "openResourceDiscovery": "1.10",
   "packages": [
     {
-      "description": "This package contains public Events for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "1.0.1",
-    },
-    {
       "description": "This package contains public APIs for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "partOfProducts": [
@@ -278,6 +268,16 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
+    },
+    {
+      "description": "This package contains public Events for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.1",
     },
     {
       "description": "This package contains internal Events for capire bookshop ord sample.",
@@ -553,16 +553,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "openResourceDiscovery": "1.10",
   "packages": [
     {
-      "description": "This package contains public Events for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "1.0.1",
-    },
-    {
       "description": "This package contains public APIs for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "partOfProducts": [
@@ -583,6 +573,16 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
+    },
+    {
+      "description": "This package contains public Events for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.1",
     },
     {
       "description": "This package contains internal Events for capire bookshop ord sample.",
@@ -858,16 +858,6 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
   "openResourceDiscovery": "1.10",
   "packages": [
     {
-      "description": "This package contains public Events for capire bookshop ord sample.",
-      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
-      "partOfProducts": [
-        "customer:product:capire.bookshop.ord.sample:",
-      ],
-      "title": "capire bookshop ord sample",
-      "vendor": "customer:vendor:Customer:",
-      "version": "1.0.1",
-    },
-    {
       "description": "This package contains public APIs for capire bookshop ord sample.",
       "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
       "partOfProducts": [
@@ -888,6 +878,16 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
+    },
+    {
+      "description": "This package contains public Events for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-event:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.1",
     },
     {
       "description": "This package contains internal Events for capire bookshop ord sample.",
