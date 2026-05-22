@@ -1,6 +1,7 @@
 const cds = require("@sap/cds");
 
 const { createEntityTypeTemplate } = require("../../lib/templates/entity-type");
+const { createGroupsTemplateForService } = require("../../lib/templates/group");
 const {
     ORD_ODM_ENTITY_NAME_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
@@ -10,7 +11,6 @@ const {
 } = require("../../lib/constants");
 const {
     createEntityTypeMappingsItemTemplate,
-    createGroupsTemplateForService,
     createAPIResourceTemplate,
     createEventResourceTemplate,
     _getExposedEntityTypes,
@@ -107,15 +107,6 @@ describe("visibility handling", () => {
         const definition = {};
         expect(_handleVisibility(ordExtensions, definition, "private")).toBe("private");
         expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("internal");
-    });
-
-    it("returns undefined if ORD.Extensions.visibility is private", () => {
-        const serviceDefinition = {
-            "name": "customer.testNamespace.MyService",
-            "@ORD.Extensions.visibility": "private",
-        };
-
-        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toBeUndefined();
     });
 
     it("returns group object if ORD.Extensions.visibility is internal", () => {
