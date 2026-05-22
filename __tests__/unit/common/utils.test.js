@@ -155,7 +155,7 @@ describe("resolveServiceName", () => {
     });
 
     it("prefers internalNamespace over ordNamespace when both match", () => {
-        const appConfig = { internalNamespace: "sap.internal", ordNamespace: "sap.internal" };
+        const appConfig = { internalNamespace: "sap.internal", ordNamespace: "sap" };
         expect(resolveServiceName(appConfig, { name: "sap.internal.MyService" })).toBe("MyService");
     });
 
