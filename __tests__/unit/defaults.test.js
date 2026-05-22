@@ -165,7 +165,7 @@ describe("defaults", () => {
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
-            expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
+            expect(defaults.baseTemplate(authConfig, {})).toMatchSnapshot();
         });
 
         it("should return correct value when tenant is not given and only toggles are enabled", () => {
@@ -174,7 +174,7 @@ describe("defaults", () => {
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
-            expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
+            expect(defaults.baseTemplate(authConfig, {})).toMatchSnapshot();
         });
 
         it("should return correct value when tenant is not given and only extensions are enabled", () => {
@@ -183,7 +183,7 @@ describe("defaults", () => {
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
-            expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
+            expect(defaults.baseTemplate(authConfig, {})).toMatchSnapshot();
         });
 
         it("should return correct value when no tenant is given and toggles & extensions are enabled", () => {
@@ -192,7 +192,7 @@ describe("defaults", () => {
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
-            expect(defaults.baseTemplate(authConfig, undefined)).toMatchSnapshot();
+            expect(defaults.baseTemplate(authConfig, {})).toMatchSnapshot();
         });
 
         it("should return correct value when tenant is given and only toggles are enabled", () => {
@@ -201,7 +201,7 @@ describe("defaults", () => {
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
-            expect(defaults.baseTemplate(authConfig, "dummy-tenant")).toMatchSnapshot();
+            expect(defaults.baseTemplate(authConfig, {}, {})).toMatchSnapshot();
         });
 
         it("should return correct value when tenant is given and extensions are enabled", () => {
@@ -210,7 +210,7 @@ describe("defaults", () => {
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
-            expect(defaults.baseTemplate(authConfig, "dummy-tenant")).toMatchSnapshot();
+            expect(defaults.baseTemplate(authConfig, {}, {})).toMatchSnapshot();
         });
 
         it("should return correct value when tenant is given and toggles & extensions are enabled", () => {
@@ -219,7 +219,7 @@ describe("defaults", () => {
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
             };
-            expect(defaults.baseTemplate(authConfig, "dummy-tenant")).toMatchSnapshot();
+            expect(defaults.baseTemplate(authConfig, {}, {})).toMatchSnapshot();
         });
     });
 
