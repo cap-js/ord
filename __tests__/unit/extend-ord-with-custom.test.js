@@ -16,11 +16,9 @@ describe("MERGE_STRATEGIES", () => {
 
 describe("extendOrdWithCustom", () => {
     let appConfig = {};
-    let warningSpy;
 
     beforeAll(() => {
         cds.env = {};
-        warningSpy = jest.spyOn(console, "warn");
     });
 
     beforeEach(() => {

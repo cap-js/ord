@@ -437,7 +437,7 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
         });
 
         test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
+            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.15");
             expect(ordDocument).toHaveProperty("description");
             expect(Array.isArray(ordDocument.apiResources)).toBe(true);
             expect(Array.isArray(ordDocument.eventResources)).toBe(true);
@@ -522,7 +522,7 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
         });
 
         test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
+            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.15");
             expect(ordDocument).toHaveProperty("description");
             expect(Array.isArray(ordDocument.apiResources)).toBe(true);
             expect(Array.isArray(ordDocument.eventResources)).toBe(true);
@@ -822,7 +822,7 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
         });
 
         test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
+            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.15");
             expect(ordDocument).toHaveProperty("description");
             expect(Array.isArray(ordDocument.apiResources)).toBe(true);
             expect(Array.isArray(ordDocument.eventResources)).toBe(true);
