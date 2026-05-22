@@ -1,9 +1,18 @@
 const cds = require("@sap/cds");
 const path = require("path");
 const {
+    MERGE_STRATEGIES,
     getCustomORDContent,
     compareAndHandleCustomORDContentWithExistingContent,
 } = require("../../lib/extend-ord-with-custom");
+
+describe("MERGE_STRATEGIES", () => {
+    it("ensure that all known document properties have a merge strategy", () => {
+        const schema = require("@open-resource-discovery/specification/dist/generated/spec/v1/schemas/Document.schema.json");
+
+        expect(Object.keys(MERGE_STRATEGIES).sort()).toEqual(Object.keys(schema.properties).sort());
+    });
+});
 
 describe("extendOrdWithCustom", () => {
     let appConfig = {};
@@ -41,7 +50,7 @@ describe("extendOrdWithCustom", () => {
 
             const result = getCustomORDContent(appConfig);
 
-            expect(result).toEqual({ });
+            expect(result).toEqual({});
         });
 
         it("should add new ord resources that are not supported by cap framework", () => {
