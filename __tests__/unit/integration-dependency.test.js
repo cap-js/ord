@@ -1,8 +1,6 @@
 const {
-    getIntegrationDependencies,
-    collectExternalServices,
     createIntegrationDependency,
-} = require("../../lib/integration-dependency");
+} = require("../../lib/templates/integration-dependency");
 const { RESOURCE_VISIBILITY } = require("../../lib/constants");
 
 describe("integrationDependency", () => {
@@ -16,89 +14,6 @@ describe("integrationDependency", () => {
         "customer.testapp:package:testapp-integrationDependency:v1",
         "customer.testapp:package:testapp-api:v1",
     ];
-
-    describe("collectExternalServices", () => {
-        it("should return empty array when no external services exist", () => {
-            const csn = {
-                definitions: {
-                    MyService: { kind: "service" },
-                },
-            };
-            const result = collectExternalServices(csn);
-            expect(result).toEqual([]);
-        });
-
-        it("should collect external services with @cds.dp.ordId annotation", () => {
-            const csn = {
-                definitions: {
-                    "sap.sai.Supplier.v1": {
-                        "kind": "service",
-                        "@cds.external": true,
-                        "@data.product": true,
-                        "@cds.dp.ordId": "sap.sai:apiResource:Supplier:v1",
-                    },
-                },
-            };
-            const result = collectExternalServices(csn);
-            expect(result).toHaveLength(1);
-            expect(result[0]).toEqual({
-                serviceName: "sap.sai.Supplier.v1",
-                ordId: "sap.sai:apiResource:Supplier:v1",
-                minVersion: "1.0.0",
-                definition: csn.definitions["sap.sai.Supplier.v1"],
-            });
-        });
-
-        it("should collect multiple external services", () => {
-            const csn = {
-                definitions: {
-                    "sap.sai.Supplier.v1": {
-                        "kind": "service",
-                        "@cds.external": true,
-                        "@data.product": true,
-                        "@cds.dp.ordId": "sap.sai:apiResource:Supplier:v1",
-                    },
-                    "sap.sai.Invoice.v2": {
-                        "kind": "service",
-                        "@cds.external": true,
-                        "@data.product": true,
-                        "@cds.dp.ordId": "sap.sai:apiResource:Invoice:v2",
-                    },
-                },
-            };
-            const result = collectExternalServices(csn);
-            expect(result).toHaveLength(2);
-        });
-
-        it("should skip eventResource types (only apiResource supported for now)", () => {
-            const csn = {
-                definitions: {
-                    "sap.sai.SupplierEvents.v1": {
-                        "kind": "service",
-                        "@cds.external": true,
-                        "@data.product": true,
-                        "@cds.dp.ordId": "sap.sai:eventResource:SupplierEvents:v1",
-                    },
-                },
-            };
-            const result = collectExternalServices(csn);
-            expect(result).toHaveLength(0);
-        });
-
-        it("should skip services without @cds.external annotation", () => {
-            const csn = {
-                definitions: {
-                    "sap.sai.Supplier.v1": {
-                        "kind": "service",
-                        "@data.product": true,
-                        "@cds.dp.ordId": "sap.sai:apiResource:Supplier:v1",
-                    },
-                },
-            };
-            const result = collectExternalServices(csn);
-            expect(result).toHaveLength(0);
-        });
-    });
 
     describe("createIntegrationDependency", () => {
         it("should create a single IntegrationDependency with correct structure", () => {
@@ -248,45 +163,6 @@ describe("integrationDependency", () => {
             expect(result.visibility).toBe(RESOURCE_VISIBILITY.internal);
             expect(result.description).toBe("Custom integration dependency description");
             expect(result.shortDescription).toBe("Custom short description");
-        });
-    });
-
-    describe("getIntegrationDependencies", () => {
-        it("should return empty array when no external services exist", () => {
-            const csn = {
-                definitions: {
-                    MyService: { kind: "service" },
-                },
-            };
-
-            const result = getIntegrationDependencies(csn, mockAppConfig, mockPackageIds);
-
-            expect(result).toEqual([]);
-        });
-
-        it("should return array with single IntegrationDependency", () => {
-            const csn = {
-                definitions: {
-                    "sap.sai.Supplier.v1": {
-                        "kind": "service",
-                        "@cds.external": true,
-                        "@data.product": true,
-                        "@cds.dp.ordId": "sap.sai:apiResource:Supplier:v1",
-                    },
-                    "sap.sai.Invoice.v1": {
-                        "kind": "service",
-                        "@cds.external": true,
-                        "@data.product": true,
-                        "@cds.dp.ordId": "sap.sai:apiResource:Invoice:v1",
-                    },
-                },
-            };
-
-            const result = getIntegrationDependencies(csn, mockAppConfig, mockPackageIds);
-
-            expect(result).toHaveLength(1);
-            expect(result[0].ordId).toBe("customer.testapp:integrationDependency:externalDependencies:v1");
-            expect(result[0].aspects).toHaveLength(2);
         });
     });
 });
