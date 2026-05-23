@@ -206,7 +206,7 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -441,7 +441,7 @@ exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with confi
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -816,7 +816,7 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) Production 
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -1069,7 +1069,7 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.14",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",

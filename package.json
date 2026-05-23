@@ -37,7 +37,7 @@
         "jest": "^30.0.0",
         "prettier": "3.8.3",
         "supertest": "^7.0.0",
-        "@open-resource-discovery/specification": "1.15.0"
+        "@open-resource-discovery/specification": "1.14.5"
     },
     "peerDependencies": {
         "@sap/cds": ">=8.9.4"
