@@ -330,71 +330,67 @@ exports[`templates createEntityTypeTemplate should return entity type with incor
 `;
 
 exports[`templates createEventResourceTemplate should create event resource template correctly 1`] = `
-[
-  {
-    "description": "CAP Event resource describing events / messages.",
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:eventResource:MyService:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "asyncapi-v2",
-        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
-      },
-    ],
-    "shortDescription": "MyService event resource",
-    "title": "ODM testAppName Events",
-    "version": "1.0.0",
-    "visibility": "public",
+{
+  "description": "CAP Event resource describing events / messages.",
+  "extensible": {
+    "supported": "no",
   },
-]
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "ordId": "customer.testNamespace:eventResource:MyService:v1",
+  "partOfGroups": [
+    "sap.cds:service:customer.testNamespace:MyService",
+  ],
+  "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+  "releaseStatus": "active",
+  "resourceDefinitions": [
+    {
+      "accessStrategies": [
+        {
+          "type": "open",
+        },
+      ],
+      "mediaType": "application/json",
+      "type": "asyncapi-v2",
+      "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
+    },
+  ],
+  "shortDescription": "MyService event resource",
+  "title": "ODM testAppName Events",
+  "version": "1.0.0",
+  "visibility": "public",
+}
 `;
 
 exports[`templates createEventResourceTemplate should create event resource template correctly with packageIds including namespace 1`] = `
-[
-  {
-    "description": "CAP Event resource describing events / messages.",
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:eventResource:MyService:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "customer.testNamespace:package:test:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "asyncapi-v2",
-        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
-      },
-    ],
-    "shortDescription": "MyService event resource",
-    "title": "ODM testAppName Events",
-    "version": "1.0.0",
-    "visibility": "public",
+{
+  "description": "CAP Event resource describing events / messages.",
+  "extensible": {
+    "supported": "no",
   },
-]
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "ordId": "customer.testNamespace:eventResource:MyService:v1",
+  "partOfGroups": [
+    "sap.cds:service:customer.testNamespace:MyService",
+  ],
+  "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+  "releaseStatus": "active",
+  "resourceDefinitions": [
+    {
+      "accessStrategies": [
+        {
+          "type": "open",
+        },
+      ],
+      "mediaType": "application/json",
+      "type": "asyncapi-v2",
+      "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v1/MyService.asyncapi2.json",
+    },
+  ],
+  "shortDescription": "MyService event resource",
+  "title": "ODM testAppName Events",
+  "version": "1.0.0",
+  "visibility": "public",
+}
 `;
 
 exports[`templates getExposedEntityTypes should clean up duplicates 1`] = `
@@ -462,37 +458,35 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
 `;
 
 exports[`templates ordExtension should add events with ORD Extension "visibility=public" 1`] = `
-[
-  {
-    "description": "CAP Event resource describing events / messages.",
-    "extensible": {
-      "supported": "yes",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:eventResource:MyService:v2",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-event:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "asyncapi-v2",
-        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v2/MyService.asyncapi2.json",
-      },
-    ],
-    "shortDescription": "short description for test MyService event",
-    "title": "This is test MyService event title",
-    "version": "2.0.0",
-    "visibility": "public",
+{
+  "description": "CAP Event resource describing events / messages.",
+  "extensible": {
+    "supported": "yes",
   },
-]
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "ordId": "customer.testNamespace:eventResource:MyService:v2",
+  "partOfGroups": [
+    "sap.cds:service:customer.testNamespace:MyService",
+  ],
+  "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+  "releaseStatus": "active",
+  "resourceDefinitions": [
+    {
+      "accessStrategies": [
+        {
+          "type": "open",
+        },
+      ],
+      "mediaType": "application/json",
+      "type": "asyncapi-v2",
+      "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v2/MyService.asyncapi2.json",
+    },
+  ],
+  "shortDescription": "short description for test MyService event",
+  "title": "This is test MyService event title",
+  "version": "2.0.0",
+  "visibility": "public",
+}
 `;
 
 exports[`templates ordExtension should find association on nested entities for related service 1`] = `
@@ -773,39 +767,35 @@ exports[`templates ordExtension should include internal API resources but ensure
 `;
 
 exports[`templates ordExtension should include internal events but ensure they appear in a separate package 1`] = `
-[
-  {
-    "description": "CAP Event resource describing events / messages.",
-    "extensible": {
-      "supported": "yes",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:eventResource:MyService:v2",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-event-internal:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "asyncapi-v2",
-        "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v2/MyService.asyncapi2.json",
-      },
-    ],
-    "shortDescription": "short description for test MyService event",
-    "title": "This is test MyService event title",
-    "version": "2.0.0",
-    "visibility": "internal",
+{
+  "description": "CAP Event resource describing events / messages.",
+  "extensible": {
+    "supported": "yes",
   },
-]
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "ordId": "customer.testNamespace:eventResource:MyService:v2",
+  "partOfGroups": [
+    "sap.cds:service:customer.testNamespace:MyService",
+  ],
+  "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+  "releaseStatus": "active",
+  "resourceDefinitions": [
+    {
+      "accessStrategies": [
+        {
+          "type": "open",
+        },
+      ],
+      "mediaType": "application/json",
+      "type": "asyncapi-v2",
+      "url": "/ord/v1/customer.testNamespace:eventResource:MyService:v2/MyService.asyncapi2.json",
+    },
+  ],
+  "shortDescription": "short description for test MyService event",
+  "title": "This is test MyService event title",
+  "version": "2.0.0",
+  "visibility": "internal",
+}
 `;
 
 exports[`templates ordExtension should not add apiResources with ORD Extension "visibility=private" 1`] = `[]`;
-
-exports[`templates ordExtension should not add events with ORD Extension "visibility=private" 1`] = `[]`;
