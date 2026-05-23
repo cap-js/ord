@@ -8,7 +8,6 @@ const {
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_EXTENSIONS_PREFIX,
     RESOURCE_VISIBILITY,
-    ALLOWED_VISIBILITY,
     ORD_ACCESS_STRATEGY,
 } = require("../../lib/constants");
 const {
@@ -16,7 +15,6 @@ const {
     createAPIResourceTemplate,
     _getExposedEntityTypes,
     _propagateORDVisibility,
-    _handleVisibility,
 } = require("../../lib/templates");
 
 const Logger = require("../../lib/logger");
