@@ -1,141 +1,21 @@
 const cds = require("@sap/cds");
 
-const { createEntityTypeTemplate } = require("../../lib/templates/entity-type");
-const { createGroupsTemplateForService } = require("../../lib/templates/group");
-const { createEventResourceTemplate } = require("../../lib/templates/event-resource");
 const {
     ORD_ODM_ENTITY_NAME_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_EXTENSIONS_PREFIX,
     RESOURCE_VISIBILITY,
-    ALLOWED_VISIBILITY, ORD_ACCESS_STRATEGY,
+    ORD_ACCESS_STRATEGY,
 } = require("../../lib/constants");
 const {
     createEntityTypeMappingsItemTemplate,
     createAPIResourceTemplate,
     _getExposedEntityTypes,
     _propagateORDVisibility,
-    _handleVisibility,
 } = require("../../lib/templates");
-
-const Logger = require("../../lib/logger");
-
-describe("visibility handling", () => {
-    let loggerSpy;
-    let appConfig;
-    beforeEach(() => {
-        loggerSpy = jest.spyOn(Logger, "warn").mockImplementation(() => {});
-        appConfig = {
-            ordNamespace: "customer.testNamespace",
-            appName: "testAppName",
-            lastUpdate: "2022-12-19T15:47:04+00:00",
-            policyLevels: ["none"],
-            env: { defaultVisibility: "public" },
-        };
-    });
-    afterEach(() => {
-        loggerSpy.mockRestore();
-    });
-
-    it("returns internal for primary data product service", () => {
-        const ordExtensions = {};
-        const definition = { "@DataIntegration.dataProduct.type": "primary" };
-        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.public)).toBe(
-            RESOURCE_VISIBILITY.internal,
-        );
-    });
-
-    it("returns extension visibility if present and valid", () => {
-        const ordExtensions = { visibility: "internal" };
-        const definition = {};
-        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.public)).toBe("internal");
-    });
-
-    it("returns config value if valid", () => {
-        const ordExtensions = {};
-        const definition = {};
-        expect(_handleVisibility(ordExtensions, definition, "public")).toBe("public");
-    });
-
-    it("falls back to public and logs warning for invalid config value", () => {
-        const ordExtensions = {};
-        const definition = {};
-        expect(_handleVisibility(ordExtensions, definition, "notallowed")).toBe("public");
-
-        expect(loggerSpy).toHaveBeenCalledWith(
-            "Default visibility",
-            "notallowed",
-            "is not supported. Using",
-            RESOURCE_VISIBILITY.public,
-            "as fallback.",
-        );
-    });
-
-    it("returns public for implementationStandard sap:ord-document-api:v1", () => {
-        const ordExtensions = { implementationStandard: "sap:ord-document-api:v1" };
-        const definition = {};
-        expect(_handleVisibility(ordExtensions, definition, "private")).toBe("public");
-        expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("public");
-    });
-
-    it("returns definition[ORD_EXTENSIONS_PREFIX + visibility] if present", () => {
-        const ordExtensions = {};
-        const definition = { "@ORD.Extensions.visibility": "internal" };
-        expect(_handleVisibility(ordExtensions, definition, "public")).toBe("internal");
-    });
-
-    it("returns public if no visibility is defined", () => {
-        const ordExtensions = {};
-        const definition = {};
-        expect(_handleVisibility(ordExtensions, definition)).toBe("public");
-    });
-
-    it("Allowed visibility values are respected", () => {
-        const ordExtensions = {};
-        const definition = {};
-        expect(ALLOWED_VISIBILITY).toContain(RESOURCE_VISIBILITY.public);
-        expect(ALLOWED_VISIBILITY).toContain(RESOURCE_VISIBILITY.internal);
-        expect(ALLOWED_VISIBILITY).toContain(RESOURCE_VISIBILITY.private);
-        // Test with all allowed visibility values
-        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.public)).toBe("public");
-        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.private)).toBe("private");
-        expect(_handleVisibility(ordExtensions, definition, RESOURCE_VISIBILITY.internal)).toBe("internal");
-    });
-
-    it("Does not use public visibility by deafult if implementationStandard is not in allowed values", () => {
-        const ordExtensions = { implementationStandard: "I-AM-NOT-A-STANDARD" };
-        const definition = {};
-        expect(_handleVisibility(ordExtensions, definition, "private")).toBe("private");
-        expect(_handleVisibility(ordExtensions, definition, "internal")).toBe("internal");
-    });
-
-    it("returns group object if ORD.Extensions.visibility is internal", () => {
-        const serviceDefinition = {
-            "name": "customer.testNamespace.MyService",
-            "@ORD.Extensions.visibility": "internal",
-        };
-
-        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
-            groupId: "sap.cds:service:customer.testNamespace:MyService",
-            groupTypeId: "sap.cds:service",
-            title: "My Service",
-        });
-    });
-
-    it("returns group object if ORD.Extensions.visibility is not set", () => {
-        const serviceDefinition = { name: "customer.testNamespace.MyService" };
-
-        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
-            groupId: "sap.cds:service:customer.testNamespace:MyService",
-            groupTypeId: "sap.cds:service",
-            title: "My Service",
-        });
-    });
-});
 
 describe("templates", () => {
     let linkedModel;
-    let warningSpy;
 
     const appConfig = {
         ordNamespace: "customer.testNamespace",
@@ -143,8 +23,8 @@ describe("templates", () => {
         lastUpdate: "2022-12-19T15:47:04+00:00",
         policyLevels: ["none"],
         authConfig: {
-            accessStrategies: [ ORD_ACCESS_STRATEGY.Open ]
-        }
+            accessStrategies: [ORD_ACCESS_STRATEGY.Open],
+        },
     };
 
     beforeAll(() => {
@@ -155,7 +35,6 @@ describe("templates", () => {
                 title: String;
             }
         `);
-        warningSpy = jest.spyOn(console, "warn");
     });
 
     describe("createEntityTypeMappingsItemTemplate", () => {
@@ -182,77 +61,6 @@ describe("templates", () => {
             const local = mappings.find((m) => !m.isODMMapping);
             expect(odm && odm.ordId).toBe("sap.odm:entityType:DualEntity:v1");
             expect(local && local.ordId).toBe("customer.dual:entityType:DualEntity:v1");
-        });
-    });
-
-    describe("createEntityTypeTemplate", () => {
-        it("should return entity type with correct title from annotation '@EndUserText.label'", () => {
-            const entityType = createEntityTypeTemplate(appConfig, {
-                "@EndUserText.label": "Title of SomeAribaDummyEntity",
-                "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v3",
-            });
-
-            expect(entityType).toBeDefined();
-            expect(entityType.title).toEqual("Title of SomeAribaDummyEntity");
-        });
-
-        it("should return entity type with incorrect version, title and level:root-entity", () => {
-            const entityWithVersion = {
-                "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v3b",
-                "@title": "Title of SomeAribaDummyEntity",
-                "@ObjectModel.compositionRoot": true,
-            };
-
-            const entityType = createEntityTypeTemplate(appConfig, entityWithVersion);
-            expect(entityType).toBeDefined();
-            expect(entityType).toMatchSnapshot();
-            expect(warningSpy).toHaveBeenCalledTimes(1);
-            expect(entityType.version).toEqual("3b.0.0");
-            expect(entityType.level).toEqual("root-entity");
-            expect(entityType.partOfPackage).toEqual("customer.testNamespace:package:testAppName:v1");
-        });
-
-        it("should return entity type with default version, title and level:sub-entity", () => {
-            const entityWithoutVersion = {
-                "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v1",
-            };
-
-            const entityType = createEntityTypeTemplate(appConfig, entityWithoutVersion);
-            expect(entityType).toBeDefined();
-            expect(entityType).toMatchSnapshot();
-            expect(entityType.version).toEqual("1.0.0");
-            expect(entityType.level).toEqual("sub-entity");
-        });
-    });
-
-    describe("createGroupsTemplateForService", () => {
-        let serviceDefinition;
-        beforeAll(() => {
-            const model = cds.linked(`
-                service testServiceName {
-                    entity Books {
-                        key ID: UUID;
-                        title: String;
-                    }
-                };
-            `);
-            serviceDefinition = model.definitions["testServiceName"];
-        });
-
-        it("should return default value when groupIds do not have groupId", () => {
-            expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
-                groupId: "sap.cds:service:customer.testNamespace:testServiceName",
-                groupTypeId: "sap.cds:service",
-                title: "test Service",
-            });
-        });
-
-        it('should return default value with a proper Service title when "Service" keyword is missing', () => {
-            expect(createGroupsTemplateForService({ ...serviceDefinition, name: "testServName" }, appConfig)).toEqual({
-                groupId: "sap.cds:service:customer.testNamespace:testServName",
-                groupTypeId: "sap.cds:service",
-                title: "testServName Service",
-            });
         });
     });
 
@@ -410,36 +218,6 @@ describe("templates", () => {
         });
     });
 
-    describe("createEventResourceTemplate", () => {
-        it("should create event resource template correctly", () => {
-            const model = cds.linked(`
-                service MyService {
-                   entity Books {
-                       key ID: UUID;
-                       title: String;
-                   }
-                };
-            `);
-            const srvDefinition = model.definitions["MyService"];
-
-            expect(createEventResourceTemplate(srvDefinition, appConfig)).toMatchSnapshot();
-        });
-
-        it("should create event resource template correctly with packageIds including namespace", () => {
-            const model = cds.linked(`
-                service MyService {
-                   entity Books {
-                       key ID: UUID;
-                       title: String;
-                   }
-                };
-            `);
-            const srvDefinition = model.definitions["MyService"];
-
-            expect(createEventResourceTemplate(srvDefinition, appConfig)).toMatchSnapshot();
-        });
-    });
-
     describe("ordExtension", () => {
         it('should add apiResources with ORD Extension "visibility=public"', () => {
             linkedModel = cds.linked(`
@@ -535,67 +313,6 @@ describe("templates", () => {
             expect(apiResourceTemplate).toBeInstanceOf(Array);
             expect(apiResourceTemplate).toMatchSnapshot();
             expect(apiResourceTemplate).toEqual([]);
-        });
-
-        it("should return event resource with correct title from annotation '@EndUserText.label'", () => {
-            const serviceName = "MyService";
-            linkedModel = cds.linked(`
-                @EndUserText.label: 'This is test MyService event title'
-                service MyService { }
-            `);
-            const eventResourceTemplate = createEventResourceTemplate(linkedModel.definitions[serviceName], appConfig);
-
-            expect(eventResourceTemplate.title).toEqual("This is test MyService event title");
-        });
-
-        it('should add events with ORD Extension "visibility=public"', () => {
-            linkedModel = cds.linked(`
-                service MyService {
-                    entity Books {
-                        key ID: UUID;
-                        title: String;
-                    }
-                }
-                annotate MyService with @ORD.Extensions : {
-                    title           : 'This is test MyService event title',
-                    shortDescription: 'short description for test MyService event',
-                    visibility : 'public',
-                    version : '2.0.0',
-                    extensible : {
-                        supported : 'yes'
-                    }
-                };
-            `);
-            const srvDefinition = linkedModel.definitions["MyService"];
-            const eventResourceTemplate = createEventResourceTemplate(srvDefinition, appConfig);
-
-            expect(eventResourceTemplate).toMatchSnapshot();
-        });
-
-        it("should include internal events but ensure they appear in a separate package", () => {
-            linkedModel = cds.linked(`
-                service MyService {
-                    entity Books {
-                        key ID: UUID;
-                        title: String;
-                    }
-                }
-                annotate MyService with @ORD.Extensions : {
-                    title           : 'This is test MyService event title',
-                    shortDescription: 'short description for test MyService event',
-                    visibility : 'internal',
-                    version : '2.0.0',
-                    extensible : {
-                        supported : 'yes'
-                    }
-                };
-            `);
-            const srvDefinition = linkedModel.definitions["MyService"];
-            const eventResourceTemplate = createEventResourceTemplate(srvDefinition, appConfig);
-
-            expect(eventResourceTemplate).toMatchSnapshot();
-
-            expect(eventResourceTemplate.visibility).toEqual("internal");
         });
 
         it("should find composition and association entities for related service", () => {

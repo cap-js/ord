@@ -1,6 +1,11 @@
-const { createEntityTypeTemplate, RESOLVERS } = require("../../../lib/templates/entity-type");
-const { ENTITY_RELATIONSHIP_ANNOTATION, LEVEL, RESOURCE_VISIBILITY } = require("../../../lib/constants");
 const Logger = require("../../../lib/logger");
+const { createEntityTypeTemplate, RESOLVERS } = require("../../../lib/templates/entity-type");
+const {
+    LEVEL,
+    RESOURCE_VISIBILITY,
+    ORD_ACCESS_STRATEGY,
+    ENTITY_RELATIONSHIP_ANNOTATION,
+} = require("../../../lib/constants");
 
 const BASE_ENTITY = {
     [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:BusinessPartner:v1",
@@ -145,23 +150,17 @@ describe("RESOLVERS.visibility", () => {
 
 describe("RESOLVERS.partOfPackage", () => {
     it("builds public package id without suffix", () => {
-        expect(RESOLVERS.partOfPackage(BASE_ENTITY, BASE_APP_CONFIG)).toBe(
-            "sap.test:package:TestApp:v1",
-        );
+        expect(RESOLVERS.partOfPackage(BASE_ENTITY, BASE_APP_CONFIG)).toBe("sap.test:package:TestApp:v1");
     });
 
     it("appends visibility suffix for non-public visibility", () => {
         const entity = { ...BASE_ENTITY, "@ORD.Extensions.visibility": RESOURCE_VISIBILITY.internal };
-        expect(RESOLVERS.partOfPackage(entity, BASE_APP_CONFIG)).toBe(
-            "sap.test:package:TestApp:v1",
-        );
+        expect(RESOLVERS.partOfPackage(entity, BASE_APP_CONFIG)).toBe("sap.test:package:TestApp:v1");
     });
 
     it("strips non-alphanumeric characters from appName", () => {
         const appConfig = { ...BASE_APP_CONFIG, appName: "My App-Name!" };
-        expect(RESOLVERS.partOfPackage(BASE_ENTITY, appConfig)).toBe(
-            "sap.test:package:MyAppName:v1",
-        );
+        expect(RESOLVERS.partOfPackage(BASE_ENTITY, appConfig)).toBe("sap.test:package:MyAppName:v1");
     });
 
     it("prefers @ORD.Extensions.partOfPackage when set", () => {
@@ -172,6 +171,16 @@ describe("RESOLVERS.partOfPackage", () => {
 
 describe("createEntityTypeTemplate", () => {
     let warnSpy;
+    const appConfig = {
+        ordNamespace: "customer.testNamespace",
+        appName: "testAppName",
+        lastUpdate: "2022-12-19T15:47:04+00:00",
+        policyLevels: ["none"],
+        authConfig: {
+            accessStrategies: [ORD_ACCESS_STRATEGY.Open],
+        },
+    };
+
     beforeEach(() => {
         warnSpy = jest.spyOn(Logger, "warn").mockImplementation(() => {});
     });
@@ -206,5 +215,93 @@ describe("createEntityTypeTemplate", () => {
         const result = createEntityTypeTemplate(BASE_APP_CONFIG, entity);
         expect(result.title).toBe("My Entity");
         expect(result.releaseStatus).toBe("beta");
+    });
+
+    it("should return entity type with correct title from annotation '@EndUserText.label'", () => {
+        const entityType = createEntityTypeTemplate(appConfig, {
+            "@EndUserText.label": "Title of SomeAribaDummyEntity",
+            "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v3",
+        });
+
+        expect(entityType).toBeDefined();
+        expect(entityType.title).toEqual("Title of SomeAribaDummyEntity");
+    });
+
+    it("should return entity type with incorrect version, title and level:root-entity", () => {
+        const entityWithVersion = {
+            "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v3b",
+            "@title": "Title of SomeAribaDummyEntity",
+            "@ObjectModel.compositionRoot": true,
+        };
+
+        const entityType = createEntityTypeTemplate(appConfig, entityWithVersion);
+        expect(entityType).toBeDefined();
+        expect(entityType).toMatchSnapshot();
+        expect(warnSpy).toHaveBeenCalledTimes(1);
+        expect(entityType.version).toEqual("3b.0.0");
+        expect(entityType.level).toEqual("root-entity");
+        expect(entityType.partOfPackage).toEqual("customer.testNamespace:package:testAppName:v1");
+    });
+
+    it("should return entity type with default version, title and level:sub-entity", () => {
+        const entityWithoutVersion = {
+            "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v1",
+        };
+
+        const entityType = createEntityTypeTemplate(appConfig, entityWithoutVersion);
+        expect(entityType).toBeDefined();
+        expect(entityType).toMatchSnapshot();
+        expect(entityType.version).toEqual("1.0.0");
+        expect(entityType.level).toEqual("sub-entity");
+    });
+
+    it("should keep EntityType visibility independent of private API references", () => {
+        const entity = {
+            "@EntityRelationship.entityType": "sap.sm:PrivateEntity:v1",
+        };
+
+        const updatedAppConfig = {
+            ...appConfig,
+            apiResources: [
+                {
+                    ordId: "sap.sm:apiResource:SomeAPI:v1",
+                    visibility: "private",
+                    exposedEntityTypes: [{ ordId: entity.ordId }],
+                },
+            ],
+        };
+
+        const entityType = createEntityTypeTemplate(updatedAppConfig, entity);
+
+        expect(entityType).not.toBeNull();
+        expect(entityType.visibility).toBe("public");
+    });
+
+    it("should assign the correct partOfPackage based on visibility", () => {
+        const entity = {
+            "@EntityRelationship.entityType": "sap.sm:PublicEntity:v1",
+            "@ORD.Extensions.visibility": "public",
+        };
+
+        const updatedAppConfig = { ...appConfig };
+
+        const entityType = createEntityTypeTemplate(updatedAppConfig, entity);
+
+        expect(entityType).not.toBeNull();
+        expect(entityType.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
+    });
+
+    it("should assign the correct partOfPackage for a non-public entity (e.g., internal)", () => {
+        const entity = {
+            "@EntityRelationship.entityType": "sap.sm:InternalEntity:v1",
+            "@ORD.Extensions.visibility": "internal",
+        };
+
+        const updatedAppConfig = { ...appConfig };
+
+        const entityType = createEntityTypeTemplate(updatedAppConfig, entity);
+
+        expect(entityType).not.toBeNull();
+        expect(entityType.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
     });
 });
