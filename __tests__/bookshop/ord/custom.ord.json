@@ -1,6 +1,4 @@
 {
-    "namespace": "should not update since has conflict with cdsrc.json",
-    "openResourceDiscovery": "should not update since not defined in cdsrc.json",
     "packages": [
         {
             "description": "Description for capire bookshop ord sample version 2",
