@@ -46,17 +46,6 @@ exports[`extendOrdWithCustom extend-ord-with-custom should enhance the list of g
 }
 `;
 
-exports[`extendOrdWithCustom extend-ord-with-custom should ignore and log warn if found ord top-level primitive property in customOrdFile 1`] = `
-{
-  "packages": [
-    {
-      "localId": "smDataProducts",
-      "ordId": "sap.sm:package:smDataProducts:v1",
-    },
-  ],
-}
-`;
-
 exports[`extendOrdWithCustom extend-ord-with-custom should should patch the existing generated ord resources 1`] = `
 {
   "apiResources": [

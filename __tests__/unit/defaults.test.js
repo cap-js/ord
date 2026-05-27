@@ -1,6 +1,8 @@
+const path = require("path");
+const cds = require("@sap/cds");
+
 const defaults = require("../../lib/defaults");
 const { DOCUMENT_PERSPECTIVES, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
-const cds = require("@sap/cds");
 
 jest.mock("fs", () => {
     return {
@@ -17,7 +19,14 @@ describe("defaults", () => {
 
     describe("openResourceDiscovery", () => {
         it("should return default value", () => {
+            const packageJson = require(path.join(__dirname, "..", "..", "package.json"));
+
             expect(defaults.openResourceDiscovery).toMatchSnapshot();
+            expect(
+                packageJson.devDependencies["@open-resource-discovery/specification"].startsWith(
+                    defaults.openResourceDiscovery,
+                ),
+            ).toBe(true);
         });
     });
 

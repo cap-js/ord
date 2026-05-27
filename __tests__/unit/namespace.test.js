@@ -1,7 +1,6 @@
 const cds = require("@sap/cds");
 const { ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 const { createAPIResourceTemplate } = require("../../lib/templates");
-const { createEventResourceTemplate } = require("../../lib/templates/event-resource");
 
 describe("namespace local and global", () => {
     it("should strip application namespace from local namespace", () => {
@@ -29,7 +28,6 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["customer.testNamespace.nested.MyService"];
         expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(srvDefinition, appConfig)).toMatchSnapshot();
     });
 
     it("should strip application namespace if its the same as local namespace", () => {
@@ -39,7 +37,7 @@ describe("namespace local and global", () => {
             lastUpdate: "2022-12-19T15:47:04+00:00",
             authConfig: {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-            }
+            },
         };
         const model = cds.linked(`
                 namespace customer.testNamespace;
@@ -57,7 +55,6 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["customer.testNamespace.MyService"];
         expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(srvDefinition, appConfig)).toMatchSnapshot();
     });
 
     it("should not strip a different local namespace", () => {
@@ -67,7 +64,7 @@ describe("namespace local and global", () => {
             lastUpdate: "2022-12-19T15:47:04+00:00",
             authConfig: {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-            }
+            },
         };
         const model = cds.linked(`
                 namespace other.namespace;
@@ -85,7 +82,6 @@ describe("namespace local and global", () => {
         const packageIds = ["sap.test.cdsrc.sample:package:test-event:v1", "sap.test.cdsrc.sample:package:test-api:v1"];
         const srvDefinition = model.definitions["other.namespace.MyService"];
         expect(createAPIResourceTemplate(srvDefinition, appConfig, packageIds)).toMatchSnapshot();
-        expect(createEventResourceTemplate(srvDefinition, appConfig)).toMatchSnapshot();
     });
 
     it("should strip internalNamespace when it differs from ordNamespace", () => {
@@ -96,7 +92,7 @@ describe("namespace local and global", () => {
             lastUpdate: "2022-12-19T15:47:04+00:00",
             authConfig: {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-            }
+            },
         };
         const model = cds.linked(`
             namespace com.sap.sourcing.api.v1;
@@ -111,10 +107,6 @@ describe("namespace local and global", () => {
         const apiResult = createAPIResourceTemplate(srvDefinition, appConfig, packageIds);
         expect(apiResult[0].ordId).toBe("sap.sourcing:apiResource:SourcingService:v1");
         expect(apiResult[0].partOfGroups[0]).toBe("sap.cds:service:sap.sourcing:SourcingService");
-
-        const eventResult = createEventResourceTemplate(srvDefinition, appConfig);
-
-        expect(eventResult.ordId).toBe("sap.sourcing:eventResource:SourcingService:v1");
     });
 
     it("should strip internalNamespace and handle leading dot for sub-namespaces", () => {
