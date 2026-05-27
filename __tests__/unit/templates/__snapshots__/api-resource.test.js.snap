@@ -1,297 +1,6 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`templates createAPIResourceTemplate should create API resource template correctly 1`] = `
-[
-  {
-    "apiProtocol": "odata-v4",
-    "description": "Description for MyService",
-    "entryPoints": [
-      "/odata/v4/my",
-    ],
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
-      },
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/xml",
-        "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
-      },
-    ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
-    "version": "1.0.0",
-    "visibility": "public",
-  },
-]
-`;
-
-exports[`templates createAPIResourceTemplate should create API resource template correctly for multi-protocol services 1`] = `
-[
-  {
-    "apiProtocol": "odata-v4",
-    "description": "Description for MyService",
-    "entryPoints": [
-      "/odata/v4/my",
-    ],
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
-      },
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/xml",
-        "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
-      },
-    ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
-    "version": "1.0.0",
-    "visibility": "public",
-  },
-  {
-    "apiProtocol": "rest",
-    "description": "Description for MyService",
-    "entryPoints": [
-      "/rest/my",
-    ],
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService-rest:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-rest:v1/MyService.oas3.json",
-      },
-    ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
-    "version": "1.0.0",
-    "visibility": "public",
-  },
-]
-`;
-
-exports[`templates createAPIResourceTemplate should create API resource template correctly for multi-protocol services when ordId is overridden 1`] = `
-[
-  {
-    "apiProtocol": "odata-v4",
-    "description": "Description for MyService",
-    "entryPoints": [
-      "/odata/v4/my",
-    ],
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService-customized-odata-v4:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-customized-odata-v4:v1/MyService.oas3.json",
-      },
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/xml",
-        "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-customized-odata-v4:v1/MyService.edmx",
-      },
-    ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
-    "version": "1.0.0",
-    "visibility": "public",
-  },
-  {
-    "apiProtocol": "rest",
-    "description": "Description for MyService",
-    "entryPoints": [
-      "/rest/my",
-    ],
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService-customized-rest:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-customized-rest:v1/MyService.oas3.json",
-      },
-    ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
-    "version": "1.0.0",
-    "visibility": "public",
-  },
-]
-`;
-
-exports[`templates createAPIResourceTemplate should create API resource template correctly for multi-protocol services when ordId is overridden for specific protocol 1`] = `
-[
-  {
-    "apiProtocol": "odata-v4",
-    "description": "Description for MyService",
-    "entryPoints": [
-      "/odata/v4/my",
-    ],
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
-      },
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/xml",
-        "type": "edmx",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
-      },
-    ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
-    "version": "1.0.0",
-    "visibility": "public",
-  },
-  {
-    "apiProtocol": "rest",
-    "description": "Description for MyService",
-    "entryPoints": [
-      "/rest/my",
-    ],
-    "extensible": {
-      "supported": "no",
-    },
-    "lastUpdate": "2022-12-19T15:47:04+00:00",
-    "ordId": "customer.testNamespace:apiResource:MyService-customized-rest:v1",
-    "partOfGroups": [
-      "sap.cds:service:customer.testNamespace:MyService",
-    ],
-    "partOfPackage": "sap.test.cdsrc.sample:package:test-api:v1",
-    "releaseStatus": "active",
-    "resourceDefinitions": [
-      {
-        "accessStrategies": [
-          {
-            "type": "open",
-          },
-        ],
-        "mediaType": "application/json",
-        "type": "openapi-v3",
-        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-customized-rest:v1/MyService.oas3.json",
-      },
-    ],
-    "shortDescription": "Short description of MyService",
-    "title": "MyService",
-    "version": "1.0.0",
-    "visibility": "public",
-  },
-]
-`;
-
-exports[`templates getExposedEntityTypes should clean up duplicates 1`] = `
+exports[`createAPIResourceTemplate getExposedEntityTypes should clean up duplicates 1`] = `
 [
   {
     "ordId": "sap.odm:entityType:Something:v1",
@@ -302,7 +11,151 @@ exports[`templates getExposedEntityTypes should clean up duplicates 1`] = `
 ]
 `;
 
-exports[`templates ordExtension should add apiResources with ORD Extension "visibility=public" 1`] = `
+exports[`createAPIResourceTemplate namespace local and global should not strip a different local namespace 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for other.namespace.MyService",
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:other.namespace.MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:other.namespace.MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:other.namespace.MyService:v1/other.namespace.MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:other.namespace.MyService:v1/other.namespace.MyService.edmx",
+      },
+    ],
+    "shortDescription": "Short description of other.namespace.MyService",
+    "title": "other.namespace.MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`createAPIResourceTemplate namespace local and global should strip application namespace from local namespace 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for customer.testNamespace.nested.MyService",
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:nested.MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:nested.MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/customer.testNamespace.nested.MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:nested.MyService:v1/customer.testNamespace.nested.MyService.edmx",
+      },
+    ],
+    "shortDescription": "Short description of customer.testNamespace.nested.MyService",
+    "title": "customer.testNamespace.nested.MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`createAPIResourceTemplate namespace local and global should strip application namespace if its the same as local namespace 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for customer.testNamespace.MyService",
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/customer.testNamespace.MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/customer.testNamespace.MyService.edmx",
+      },
+    ],
+    "shortDescription": "Short description of customer.testNamespace.MyService",
+    "title": "customer.testNamespace.MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`createAPIResourceTemplate should add apiResources with ORD Extension "visibility=public" 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
@@ -355,7 +208,298 @@ exports[`templates ordExtension should add apiResources with ORD Extension "visi
 ]
 `;
 
-exports[`templates ordExtension should find association on nested entities for related service 1`] = `
+exports[`createAPIResourceTemplate should create API resource template correctly 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "Short description of MyService",
+    "title": "MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`createAPIResourceTemplate should create API resource template correctly for multi-protocol services 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "Short description of MyService",
+    "title": "MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+  {
+    "apiProtocol": "rest",
+    "description": "Description for MyService",
+    "entryPoints": [
+      "/rest/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService-rest:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-rest:v1/MyService.oas3.json",
+      },
+    ],
+    "shortDescription": "Short description of MyService",
+    "title": "MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`createAPIResourceTemplate should create API resource template correctly for multi-protocol services when ordId is overridden 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService-customized-odata-v4:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-customized-odata-v4:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-customized-odata-v4:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "Short description of MyService",
+    "title": "MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+  {
+    "apiProtocol": "rest",
+    "description": "Description for MyService",
+    "entryPoints": [
+      "/rest/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService-customized-rest:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-customized-rest:v1/MyService.oas3.json",
+      },
+    ],
+    "shortDescription": "Short description of MyService",
+    "title": "MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`createAPIResourceTemplate should create API resource template correctly for multi-protocol services when ordId is overridden for specific protocol 1`] = `
+[
+  {
+    "apiProtocol": "odata-v4",
+    "description": "Description for MyService",
+    "entryPoints": [
+      "/odata/v4/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/xml",
+        "type": "edmx",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+      },
+    ],
+    "shortDescription": "Short description of MyService",
+    "title": "MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+  {
+    "apiProtocol": "rest",
+    "description": "Description for MyService",
+    "entryPoints": [
+      "/rest/my",
+    ],
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2022-12-19T15:47:04+00:00",
+    "ordId": "customer.testNamespace:apiResource:MyService-customized-rest:v1",
+    "partOfGroups": [
+      "sap.cds:service:customer.testNamespace:MyService",
+    ],
+    "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+    "releaseStatus": "active",
+    "resourceDefinitions": [
+      {
+        "accessStrategies": [
+          {
+            "type": "open",
+          },
+        ],
+        "mediaType": "application/json",
+        "type": "openapi-v3",
+        "url": "/ord/v1/customer.testNamespace:apiResource:MyService-customized-rest:v1/MyService.oas3.json",
+      },
+    ],
+    "shortDescription": "Short description of MyService",
+    "title": "MyService",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`createAPIResourceTemplate should find association on nested entities for related service 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
@@ -411,7 +555,7 @@ exports[`templates ordExtension should find association on nested entities for r
 ]
 `;
 
-exports[`templates ordExtension should find composition and association entities for related service 1`] = `
+exports[`createAPIResourceTemplate should find composition and association entities for related service 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
@@ -467,7 +611,7 @@ exports[`templates ordExtension should find composition and association entities
 ]
 `;
 
-exports[`templates ordExtension should find composition on nested entities for related service 1`] = `
+exports[`createAPIResourceTemplate should find composition on nested entities for related service 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
@@ -523,7 +667,7 @@ exports[`templates ordExtension should find composition on nested entities for r
 ]
 `;
 
-exports[`templates ordExtension should find ordId on circular relations 1`] = `
+exports[`createAPIResourceTemplate should find ordId on circular relations 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
@@ -579,7 +723,7 @@ exports[`templates ordExtension should find ordId on circular relations 1`] = `
 ]
 `;
 
-exports[`templates ordExtension should include internal API resources but ensure they appear in a separate package 1`] = `
+exports[`createAPIResourceTemplate should include internal API resources but ensure they appear in a separate package 1`] = `
 [
   {
     "apiProtocol": "odata-v4",
@@ -632,4 +776,4 @@ exports[`templates ordExtension should include internal API resources but ensure
 ]
 `;
 
-exports[`templates ordExtension should not add apiResources with ORD Extension "visibility=private" 1`] = `[]`;
+exports[`createAPIResourceTemplate should not add apiResources with ORD Extension "visibility=private" 1`] = `[]`;

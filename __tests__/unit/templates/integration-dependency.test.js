@@ -118,20 +118,21 @@ describe("RESOLVERS.partOfPackage", () => {
 });
 
 describe("RESOLVERS.aspects", () => {
-    it("returns an empty array when externalServiceNames is empty", () => {
-        const result = RESOLVERS.aspects({ externalServiceNames: [] }, cds.linked("service OrdersService {};"));
+    it("returns an empty array when no external services", () => {
+        const result = RESOLVERS.aspects({ csn: cds.linked("service OrdersService {};") });
 
         expect(result).toEqual([]);
     });
 
     it("builds one aspect per external service", () => {
-        const result = RESOLVERS.aspects(
-            { externalServiceNames: ["OrdersService"] },
-            cds.linked(`
+        const result = RESOLVERS.aspects({
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Orders:v2'
                 service OrdersService {};
             `),
-        );
+        });
 
         expect(result).toHaveLength(1);
         expect(result[0]).toEqual({
@@ -142,13 +143,14 @@ describe("RESOLVERS.aspects", () => {
     });
 
     it("derives minVersion from the last colon-separated segment of the ordId", () => {
-        const result = RESOLVERS.aspects(
-            { externalServiceNames: ["ProductsService"] },
-            cds.linked(`
+        const result = RESOLVERS.aspects({
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:ProductsService:v3'
                 service ProductsService {};
             `),
-        );
+        });
 
         expect(result).toHaveLength(1);
         expect(result[0].apiResources).toHaveLength(1);
@@ -156,43 +158,48 @@ describe("RESOLVERS.aspects", () => {
     });
 
     it("falls back to minVersion '1.0.0' when the ordId has no version segment", () => {
-        const result = RESOLVERS.aspects(
-            { externalServiceNames: ["ThingsService"] },
-            cds.linked(`
+        const result = RESOLVERS.aspects({
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Things'
                 service ThingsService {};
             `),
-        );
+        });
 
         expect(result).toHaveLength(1);
         expect(result[0].apiResources[0].minVersion).toBe("1.0.0");
     });
 
     it("builds aspects for multiple external services", () => {
-        const result = RESOLVERS.aspects(
-            { externalServiceNames: ["OrdersService", "ProductsService"] },
-            cds.linked(`
+        const result = RESOLVERS.aspects({
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Orders:v1'
                 service OrdersService {};
 
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Products:v2'
                 service ProductsService {};
             `),
-        );
+        });
 
         expect(result).toHaveLength(2);
         expect(result.map((a) => a.title)).toEqual(["OrdersService", "ProductsService"]);
     });
 
     it("merges @ORD.Extensions annotations onto the aspect", () => {
-        const result = RESOLVERS.aspects(
-            { externalServiceNames: ["OrdersService"] },
-            cds.linked(`
+        const result = RESOLVERS.aspects({
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @ORD.Extensions.mandatory: true
                 @cds.dp.ordId: 'sap.ext:apiResource:Orders:v1'
                 service OrdersService {};
             `),
-        );
+        });
 
         expect(result).toHaveLength(1);
         expect(result[0].mandatory).toBe(true);
@@ -201,18 +208,17 @@ describe("RESOLVERS.aspects", () => {
 
 describe("createIntegrationDependency", () => {
     it("produces a complete integration dependency object with defaults", () => {
-        const result = createIntegrationDependency(
-            cds.linked(`
+        const result = createIntegrationDependency({
+            env: {},
+            appName: "TestApp",
+            ordNamespace: "sap.test",
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Orders:v1'
                 service OrdersService {};
             `),
-            {
-                env: {},
-                appName: "TestApp",
-                ordNamespace: "sap.test",
-                externalServiceNames: ["OrdersService"],
-            },
-        );
+        });
 
         expect(result).toEqual({
             mandatory: false,
@@ -233,18 +239,17 @@ describe("createIntegrationDependency", () => {
     });
 
     it("merges env.integrationDependency properties onto the result", () => {
-        const result = createIntegrationDependency(
-            cds.linked(`
+        const result = createIntegrationDependency({
+            appName: "TestApp",
+            ordNamespace: "sap.test",
+            env: { integrationDependency: { releaseStatus: "beta", version: "2.0.0" } },
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Orders:v1'
                 service OrdersService {};
             `),
-            {
-                appName: "TestApp",
-                ordNamespace: "sap.test",
-                externalServiceNames: ["OrdersService"],
-                env: { integrationDependency: { releaseStatus: "beta", version: "2.0.0" } },
-            },
-        );
+        });
 
         expect(result.version).toBe("2.0.0");
         expect(result.releaseStatus).toBe("beta");
@@ -252,19 +257,18 @@ describe("createIntegrationDependency", () => {
     });
 
     it("should create a single IntegrationDependency with correct structure", () => {
-        const result = createIntegrationDependency(
-            cds.linked(`
+        const result = createIntegrationDependency({
+            env: {},
+            appName: "testapp",
+            hasSAPPolicyLevel: true,
+            ordNamespace: "customer.testapp",
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Supplier:v1'
                 service sap.sai.Supplier.v1 {};
             `),
-            {
-                env: {},
-                appName: "testapp",
-                hasSAPPolicyLevel: true,
-                ordNamespace: "customer.testapp",
-                externalServiceNames: ["sap.sai.Supplier.v1"],
-            },
-        );
+        });
 
         expect(result.ordId).toBe("customer.testapp:integrationDependency:externalDependencies:v1");
         expect(result.title).toBe("External Dependencies");
@@ -276,21 +280,22 @@ describe("createIntegrationDependency", () => {
     });
 
     it("should create one aspect per external service", () => {
-        const result = createIntegrationDependency(
-            cds.linked(`
+        const result = createIntegrationDependency({
+            env: {},
+            appName: "testapp",
+            ordNamespace: "customer.testapp",
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.sai:apiResource:Supplier:v1'
                 service sap.sai.Supplier.v1 {};
 
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.sai:apiResource:Invoice:v1'
                 service sap.sai.Invoice.v1 {};
             `),
-            {
-                env: {},
-                appName: "testapp",
-                ordNamespace: "customer.testapp",
-                externalServiceNames: ["sap.sai.Supplier.v1", "sap.sai.Invoice.v1"],
-            },
-        );
+        });
 
         expect(result.aspects).toHaveLength(2);
         expect(result.aspects[0].title).toBe("sap.sai.Supplier.v1");
@@ -302,21 +307,20 @@ describe("createIntegrationDependency", () => {
     });
 
     it("should apply @ORD.Extensions from service definition to aspect", () => {
-        const result = createIntegrationDependency(
-            cds.linked(`
+        const result = createIntegrationDependency({
+            env: {},
+            appName: "testapp",
+            ordNamespace: "customer.testapp",
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @ORD.Extensions.mandatory: false
                 @ORD.Extensions.title: 'Custom Supplier API'
                 @ORD.Extensions.description: 'Custom description'
                 @cds.dp.ordId: 'sap.ext:apiResource:Supplier:v1'
                 service sap.sai.Supplier.v1 {};
             `),
-            {
-                env: {},
-                appName: "testapp",
-                ordNamespace: "customer.testapp",
-                externalServiceNames: ["sap.sai.Supplier.v1"],
-            },
-        );
+        });
 
         expect(result.aspects[0].title).toBe("Custom Supplier API");
         expect(result.aspects[0].mandatory).toBe(false);
@@ -324,70 +328,67 @@ describe("createIntegrationDependency", () => {
     });
 
     it("should apply integrationDependency config from cdsrc", () => {
-        const result = createIntegrationDependency(
-            cds.linked(`
+        const result = createIntegrationDependency({
+            appName: "testapp",
+            ordNamespace: "customer.testapp",
+            env: {
+                integrationDependency: {
+                    title: "Custom Integration Title",
+                    mandatory: true,
+                },
+            },
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Supplier:v1'
                 service sap.sai.Supplier.v1 {};
             `),
-            {
-                appName: "testapp",
-                ordNamespace: "customer.testapp",
-                externalServiceNames: ["sap.sai.Supplier.v1"],
-                env: {
-                    integrationDependency: {
-                        title: "Custom Integration Title",
-                        mandatory: true,
-                    },
-                },
-            },
-        );
+        });
 
         expect(result.mandatory).toBe(true);
         expect(result.title).toBe("Custom Integration Title");
     });
 
     it("should allow cdsrc to override version and releaseStatus", () => {
-        const result = createIntegrationDependency(
-            cds.linked(`
+        const result = createIntegrationDependency({
+            appName: "testapp",
+            ordNamespace: "customer.testapp",
+            env: {
+                integrationDependency: {
+                    version: "2.0.0",
+                    releaseStatus: "beta",
+                },
+            },
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Supplier:v1'
                 service sap.sai.Supplier.v1 {};
             `),
-            {
-                appName: "testapp",
-                ordNamespace: "customer.testapp",
-                externalServiceNames: ["sap.sai.Supplier.v1"],
-                env: {
-                    integrationDependency: {
-                        version: "2.0.0",
-                        releaseStatus: "beta",
-                    },
-                },
-            },
-        );
+        });
 
         expect(result.version).toBe("2.0.0");
         expect(result.releaseStatus).toBe("beta");
     });
 
     it("should allow cdsrc to override visibility and add description", () => {
-        const result = createIntegrationDependency(
-            cds.linked(`
+        const result = createIntegrationDependency({
+            appName: "testapp",
+            ordNamespace: "customer.testapp",
+            env: {
+                integrationDependency: {
+                    visibility: RESOURCE_VISIBILITY.internal,
+                    shortDescription: "Custom short description",
+                    description: "Custom integration dependency description",
+                },
+            },
+            csn: cds.linked(`
+                @cds.external
+                @data.product
                 @cds.dp.ordId: 'sap.ext:apiResource:Supplier:v1'
                 service sap.sai.Supplier.v1 {};
             `),
-            {
-                appName: "testapp",
-                ordNamespace: "customer.testapp",
-                externalServiceNames: ["sap.sai.Supplier.v1"],
-                env: {
-                    integrationDependency: {
-                        visibility: RESOURCE_VISIBILITY.internal,
-                        shortDescription: "Custom short description",
-                        description: "Custom integration dependency description",
-                    },
-                },
-            },
-        );
+        });
 
         expect(result.visibility).toBe(RESOURCE_VISIBILITY.internal);
         expect(result.description).toBe("Custom integration dependency description");
