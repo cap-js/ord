@@ -132,7 +132,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                 openResourceDiscoveryV1: {
                     documents: [
                         {
-                            url: "/ord/v1/documents/ord-document",
+                            url: "/ord/v1/documents/ord-document?part=0",
                             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                             perspective: "system-version",
                         },
