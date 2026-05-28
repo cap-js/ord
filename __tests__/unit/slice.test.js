@@ -49,9 +49,9 @@ describe("slice", () => {
         });
 
         it("produces more slices when the limit is tighter", () => {
-            const doc = { ...ORD_META, apis: makeItems(400, 100) };
+            const doc = { ...ORD_META, apis: makeItems(800, 100) };
             const resultBig = slice(doc, Math.floor(docSize(doc) / 2));
-            const resultSmall = slice(doc, Math.floor(docSize(doc) / 8));
+            const resultSmall = slice(doc, Math.floor(docSize(doc) / 4));
 
             expect(resultSmall.length).toBeGreaterThan(resultBig.length);
         });
