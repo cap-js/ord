@@ -35,7 +35,7 @@ Data product services may carry a suffixed name `.vN`; `_extractVersionFromServi
 
 ## 7. Entity Type Mapping
 
-ODM or relationship annotations (`@ODM.entityName`, `@EntityRelationship.entityType`) generate entityTypeMappings/exposedEntityTypes. ODM mappings flagged `isODMMapping` are NOT emitted as entityTypes (only referenced). SAP policy levels (e.g. `sap:core:v1`) suppress entity type emission (central registry expectation).
+ODM or relationship annotations (`@ODM.entityName`, `@EntityRelationship.entityType`) generate entity type targets and `exposedEntityTypes` references. ODM targets flagged `isODMMapping` are NOT emitted as entityTypes (only referenced). SAP policy levels (e.g. `sap:core:v1`) suppress entity type emission (central registry expectation).
 
 ## 8. Authentication Layer
 

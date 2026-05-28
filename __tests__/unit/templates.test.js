@@ -8,7 +8,7 @@ const {
     ORD_ACCESS_STRATEGY,
 } = require("../../lib/constants");
 const {
-    createEntityTypeMappingsItemTemplate,
+    createEntityTypeTargetTemplate,
     createAPIResourceTemplate,
     _getExposedEntityTypes,
     _propagateORDVisibility,
@@ -37,10 +37,10 @@ describe("templates", () => {
         `);
     });
 
-    describe("createEntityTypeMappingsItemTemplate", () => {
+    describe("createEntityTypeTargetTemplate", () => {
         it("should return default value", () => {
             expect(
-                createEntityTypeMappingsItemTemplate(linkedModel.definitions["customer.testNamespace123.Books"]),
+                createEntityTypeTargetTemplate(linkedModel.definitions["customer.testNamespace123.Books"]),
             ).toBeUndefined();
         });
 
@@ -52,7 +52,7 @@ describe("templates", () => {
                     entity DualEntity { key ID: UUID; name: String; }
                 `);
             const entityDef = model.definitions["customer.dual.DualEntity"];
-            const mappings = createEntityTypeMappingsItemTemplate(entityDef);
+            const mappings = createEntityTypeTargetTemplate(entityDef);
             expect(mappings).toHaveLength(2);
             expect(mappings.map((m) => m.ordId)).toEqual(
                 expect.arrayContaining(["sap.odm:entityType:DualEntity:v1", "customer.dual:entityType:DualEntity:v1"]),
