@@ -21,11 +21,10 @@ describe("createAPIResourceTemplate", () => {
     const appConfig = {
         ordNamespace: "customer.testNamespace",
         appName: "testAppName",
+        packageName: "TestPackage",
         lastUpdate: "2022-12-19T15:47:04+00:00",
         policyLevels: ["none"],
-        authConfig: {
-            accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-        },
+        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
     };
 
     beforeAll(() => {
@@ -454,10 +453,9 @@ describe("createAPIResourceTemplate", () => {
             const appConfig = {
                 ordNamespace: "customer.testNamespace",
                 appName: "testAppName",
+                packageName: "TestPackage",
                 lastUpdate: "2022-12-19T15:47:04+00:00",
-                authConfig: {
-                    accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-                },
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
             };
             const model = cds.linked(`
                 namespace customer.testNamespace.nested;
@@ -480,10 +478,9 @@ describe("createAPIResourceTemplate", () => {
             const appConfig = {
                 ordNamespace: "customer.testNamespace",
                 appName: "testAppName",
+                packageName: "TestPackage",
                 lastUpdate: "2022-12-19T15:47:04+00:00",
-                authConfig: {
-                    accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-                },
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
             };
             const model = cds.linked(`
                 namespace customer.testNamespace;
@@ -506,10 +503,9 @@ describe("createAPIResourceTemplate", () => {
             const appConfig = {
                 ordNamespace: "customer.testNamespace",
                 appName: "testAppName",
+                packageName: "TestPackage",
                 lastUpdate: "2022-12-19T15:47:04+00:00",
-                authConfig: {
-                    accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-                },
+                accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
             };
             const model = cds.linked(`
                 namespace other.namespace;
@@ -533,6 +529,7 @@ describe("createAPIResourceTemplate", () => {
                 ordNamespace: "sap.sourcing",
                 internalNamespace: "com.sap.sourcing.api.v1",
                 appName: "testAppName",
+                packageName: "TestPackage",
                 lastUpdate: "2022-12-19T15:47:04+00:00",
                 authConfig: {
                     accessStrategies: [ORD_ACCESS_STRATEGY.Open],
@@ -557,6 +554,7 @@ describe("createAPIResourceTemplate", () => {
                 ordNamespace: "sap.sourcing",
                 internalNamespace: "com.sap.sourcing",
                 appName: "testAppName",
+                packageName: "TestPackage",
                 lastUpdate: "2022-12-19T15:47:04+00:00",
                 authConfig: { accessStrategies: [ORD_ACCESS_STRATEGY.Open] },
             };
@@ -578,6 +576,7 @@ describe("createAPIResourceTemplate", () => {
                 ordNamespace: "sap.sourcing",
                 internalNamespace: "sap.sourcing.internal",
                 appName: "testAppName",
+                packageName: "TestPackage",
                 lastUpdate: "2022-12-19T15:47:04+00:00",
                 authConfig: { accessStrategies: [ORD_ACCESS_STRATEGY.Open] },
             };
@@ -598,6 +597,7 @@ describe("createAPIResourceTemplate", () => {
             const appConfig = {
                 ordNamespace: "sap.sourcing",
                 appName: "testAppName",
+                packageName: "TestPackage",
                 lastUpdate: "2022-12-19T15:47:04+00:00",
                 authConfig: { accessStrategies: [ORD_ACCESS_STRATEGY.Open] },
             };
@@ -619,6 +619,7 @@ describe("createAPIResourceTemplate", () => {
                 ordNamespace: "sap.sourcing",
                 internalNamespace: "com.sap.sourcing",
                 appName: "testAppName",
+                packageName: "TestPackage",
                 lastUpdate: "2022-12-19T15:47:04+00:00",
                 authConfig: { accessStrategies: [ORD_ACCESS_STRATEGY.Open] },
             };
@@ -640,6 +641,7 @@ describe("createAPIResourceTemplate", () => {
                 ordNamespace: "sap.sourcing",
                 internalNamespace: "com.sap.sourcing.api.v1",
                 appName: "testAppName",
+                packageName: "TestPackage",
                 lastUpdate: "2022-12-19T15:47:04+00:00",
                 authConfig: { accessStrategies: [ORD_ACCESS_STRATEGY.Open] },
             };
@@ -693,6 +695,7 @@ describe("createAPIResourceTemplate", () => {
         const mockAppConfig = {
             ordNamespace: "sap.test",
             appName: "sap.test",
+            packageName: "TestPackage",
             lastUpdate: "2024-01-01T00:00:00Z",
             env: {
                 defaultVisibility: "public",

@@ -16,9 +16,10 @@ const BASE_SERVICE = {
 const BASE_APP_CONFIG = {
     ordNamespace: "sap.test",
     appName: "TestApp",
+    packageName: "TestPackage",
     lastUpdate: "2024-01-01T00:00:00+00:00",
     env: { defaultVisibility: RESOURCE_VISIBILITY.public },
-    authConfig: { accessStrategies: ["open"] },
+    accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
 };
 
 describe("RESOLVERS.version", () => {
@@ -234,7 +235,7 @@ describe("RESOLVERS.resourceDefinitions", () => {
     });
 
     it("includes accessStrategies from authConfig", () => {
-        const appConfig = { ...BASE_APP_CONFIG, authConfig: { accessStrategies: ["open"] } };
+        const appConfig = { ...BASE_APP_CONFIG, accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }] };
         const result = RESOLVERS.resourceDefinitions(BASE_SERVICE, appConfig);
         expect(result[0].accessStrategies).toEqual([{ type: "open" }]);
     });
@@ -244,11 +245,10 @@ describe("createEventResourceTemplate", () => {
     const appConfig = {
         ordNamespace: "customer.testNamespace",
         appName: "testAppName",
+        packageName: "TestPackage",
         lastUpdate: "2022-12-19T15:47:04+00:00",
         policyLevels: ["none"],
-        authConfig: {
-            accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-        },
+        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
     };
 
     it("produces a complete event resource object with defaults", () => {
@@ -416,10 +416,9 @@ describe("createEventResourceTemplate", () => {
         const appConfig = {
             ordNamespace: "customer.testNamespace",
             appName: "testAppName",
+            packageName: "TestPackage",
             lastUpdate: "2022-12-19T15:47:04+00:00",
-            authConfig: {
-                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-            },
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         };
         const model = cds.linked(`
                 namespace customer.testNamespace.nested;
@@ -444,10 +443,9 @@ describe("createEventResourceTemplate", () => {
         const appConfig = {
             ordNamespace: "customer.testNamespace",
             appName: "testAppName",
+            packageName: "TestPackage",
             lastUpdate: "2022-12-19T15:47:04+00:00",
-            authConfig: {
-                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-            },
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         };
         const model = cds.linked(`
                 namespace customer.testNamespace;
@@ -472,10 +470,9 @@ describe("createEventResourceTemplate", () => {
         const appConfig = {
             ordNamespace: "customer.testNamespace",
             appName: "testAppName",
+            packageName: "TestPackage",
             lastUpdate: "2022-12-19T15:47:04+00:00",
-            authConfig: {
-                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
-            },
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
         };
         const model = cds.linked(`
                 namespace other.namespace;
@@ -501,6 +498,7 @@ describe("createEventResourceTemplate", () => {
             ordNamespace: "sap.sourcing",
             internalNamespace: "com.sap.sourcing.api.v1",
             appName: "testAppName",
+            packageName: "TestPackage",
             lastUpdate: "2022-12-19T15:47:04+00:00",
             authConfig: {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Open],

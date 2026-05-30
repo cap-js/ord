@@ -14,6 +14,7 @@ const BASE_ENTITY = {
 const BASE_APP_CONFIG = {
     ordNamespace: "sap.test",
     appName: "TestApp",
+    packageName: "TestPackage",
     lastUpdate: "2024-01-01T00:00:00+00:00",
     env: { defaultVisibility: RESOURCE_VISIBILITY.public },
 };
@@ -174,6 +175,7 @@ describe("createEntityTypeTemplate", () => {
     const appConfig = {
         ordNamespace: "customer.testNamespace",
         appName: "testAppName",
+        packageName: "TestPackage",
         lastUpdate: "2022-12-19T15:47:04+00:00",
         policyLevels: ["none"],
         authConfig: {

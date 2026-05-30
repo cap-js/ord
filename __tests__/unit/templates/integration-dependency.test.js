@@ -66,6 +66,7 @@ describe("RESOLVERS.partOfPackage", () => {
         const result = RESOLVERS.partOfPackage({
             appName: "TestApp",
             ordNamespace: "sap.test",
+            packageName: "TestPackage",
             env: {},
         });
 
@@ -76,6 +77,7 @@ describe("RESOLVERS.partOfPackage", () => {
         const result = RESOLVERS.partOfPackage({
             appName: "TestApp",
             ordNamespace: "sap.test",
+            packageName: "TestPackage",
             env: {},
             hasSAPPolicyLevel: true,
         });
@@ -87,6 +89,7 @@ describe("RESOLVERS.partOfPackage", () => {
         const result = RESOLVERS.partOfPackage({
             appName: "TestApp",
             ordNamespace: "sap.test",
+            packageName: "TestPackage",
             hasSAPPolicyLevel: true,
             env: { integrationDependency: { visibility: RESOURCE_VISIBILITY.internal } },
         });
@@ -98,6 +101,7 @@ describe("RESOLVERS.partOfPackage", () => {
         const result = RESOLVERS.partOfPackage({
             appName: "My App-Name!",
             ordNamespace: "sap.test",
+            packageName: "TestPackage",
             env: {},
             hasSAPPolicyLevel: true,
         });
@@ -109,6 +113,7 @@ describe("RESOLVERS.partOfPackage", () => {
         const result = RESOLVERS.partOfPackage({
             appName: "TestApp",
             ordNamespace: "sap.test",
+            packageName: "TestPackage",
             hasSAPPolicyLevel: true,
             env: { integrationDependency: { partOfPackage: "sap.test:package:custom:v1" } },
         });
@@ -212,6 +217,7 @@ describe("createIntegrationDependency", () => {
             env: {},
             appName: "TestApp",
             ordNamespace: "sap.test",
+            packageName: "TestPackage",
             csn: cds.linked(`
                 @cds.external
                 @data.product
@@ -242,6 +248,7 @@ describe("createIntegrationDependency", () => {
         const result = createIntegrationDependency({
             appName: "TestApp",
             ordNamespace: "sap.test",
+            packageName: "TestPackage",
             env: { integrationDependency: { releaseStatus: "beta", version: "2.0.0" } },
             csn: cds.linked(`
                 @cds.external
@@ -261,6 +268,7 @@ describe("createIntegrationDependency", () => {
             env: {},
             appName: "testapp",
             hasSAPPolicyLevel: true,
+            packageName: "TestPackage",
             ordNamespace: "customer.testapp",
             csn: cds.linked(`
                 @cds.external
@@ -283,6 +291,7 @@ describe("createIntegrationDependency", () => {
         const result = createIntegrationDependency({
             env: {},
             appName: "testapp",
+            packageName: "TestPackage",
             ordNamespace: "customer.testapp",
             csn: cds.linked(`
                 @cds.external
@@ -310,6 +319,7 @@ describe("createIntegrationDependency", () => {
         const result = createIntegrationDependency({
             env: {},
             appName: "testapp",
+            packageName: "TestPackage",
             ordNamespace: "customer.testapp",
             csn: cds.linked(`
                 @cds.external
@@ -330,6 +340,7 @@ describe("createIntegrationDependency", () => {
     it("should apply integrationDependency config from cdsrc", () => {
         const result = createIntegrationDependency({
             appName: "testapp",
+            packageName: "TestPackage",
             ordNamespace: "customer.testapp",
             env: {
                 integrationDependency: {
@@ -352,6 +363,7 @@ describe("createIntegrationDependency", () => {
     it("should allow cdsrc to override version and releaseStatus", () => {
         const result = createIntegrationDependency({
             appName: "testapp",
+            packageName: "TestPackage",
             ordNamespace: "customer.testapp",
             env: {
                 integrationDependency: {
@@ -374,6 +386,7 @@ describe("createIntegrationDependency", () => {
     it("should allow cdsrc to override visibility and add description", () => {
         const result = createIntegrationDependency({
             appName: "testapp",
+            packageName: "TestPackage",
             ordNamespace: "customer.testapp",
             env: {
                 integrationDependency: {
