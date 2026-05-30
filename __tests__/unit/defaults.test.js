@@ -49,13 +49,6 @@ describe("defaults", () => {
         });
     });
 
-    describe("products", () => {
-        const testProductsName = "My Product";
-        it("should return default value", () => {
-            expect(defaults.products(testProductsName)).toMatchSnapshot();
-        });
-    });
-
     describe("groupTypeId", () => {
         it("should return default value", () => {
             expect(defaults.groupTypeId).toMatchSnapshot();

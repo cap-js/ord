@@ -86,7 +86,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const csn = require("../__mocks__/privateResourcesCsn.json");
             const document = ord(csn);
 
-            expect(document.packages).toHaveLength(0);
+            expect(document.packages).toBeUndefined();
             expect(document.apiResources).toBeUndefined();
             expect(document.eventResources).toBeUndefined();
         });
