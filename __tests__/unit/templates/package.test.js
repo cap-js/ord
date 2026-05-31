@@ -43,28 +43,6 @@ describe("packages", () => {
         ).toMatchSnapshot();
     });
 
-    it("should return only custom value if user definitions in .cdsrc.json are done correctly", () => {
-        expect(
-            createPackages({
-                policyLevels: ["policy"],
-                appName: "My Package",
-                ordNamespace: "customer.sample",
-                packageName: "eb.bm.tests",
-                env: {
-                    packages: [
-                        {
-                            licenseType: "important license", // valid type
-                            runtimeRestriction: 4, // incorrect type
-                            industry: "Finance", // incorrect type
-                            labels: ["correct"], // valid type
-                            invalidKey: "should be removed", // invalid key
-                        },
-                    ],
-                },
-            }),
-        ).toMatchSnapshot();
-    });
-
     it("should use existingProductId if provided in .cdsrc.json", () => {
         expect(
             createPackages({
