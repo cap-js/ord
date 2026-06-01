@@ -1,7 +1,7 @@
 const cds = require("@sap/cds");
 
 const { RESOURCE_VISIBILITY } = require("../../../lib/constants");
-const { createIntegrationDependency, RESOLVERS } = require("../../../lib/templates/integration-dependency");
+const { createIntegrationDependencies, createIntegrationDependency, RESOLVERS } = require("../../../lib/templates/integration-dependency");
 
 describe("RESOLVERS.version", () => {
     it("defaults to 1.0.0 when env has no integrationDependency config", () => {
@@ -406,5 +406,95 @@ describe("createIntegrationDependency", () => {
         expect(result.visibility).toBe(RESOURCE_VISIBILITY.internal);
         expect(result.description).toBe("Custom integration dependency description");
         expect(result.shortDescription).toBe("Custom short description");
+    });
+});
+
+describe("createIntegrationDependencies", () => {
+    const BASE_CONFIG = {
+        appName: "TestApp",
+        ordNamespace: "sap.test",
+        packageName: "TestPackage",
+        env: {},
+    };
+
+    it("returns an empty array when there are no external data product services", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: cds.linked(`service OrdersService { entity Orders { key ID: UUID; } };`),
+        };
+
+        expect(createIntegrationDependencies(appConfig)).toEqual([]);
+    });
+
+    it("returns an empty array when the CSN has no definitions at all", () => {
+        const appConfig = { ...BASE_CONFIG, csn: { definitions: {} } };
+
+        expect(createIntegrationDependencies(appConfig)).toEqual([]);
+    });
+
+    it("returns one integration dependency when at least one external data product exists", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: cds.linked(`
+                @cds.external
+                @data.product
+                @cds.dp.ordId: 'sap.ext:apiResource:Orders:v1'
+                service OrdersService {};
+            `),
+        };
+
+        const result = createIntegrationDependencies(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toBe("sap.test:integrationDependency:externalDependencies:v1");
+    });
+
+    it("the single returned dependency contains one aspect per external service", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: cds.linked(`
+                @cds.external
+                @data.product
+                @cds.dp.ordId: 'sap.ext:apiResource:Orders:v1'
+                service OrdersService {};
+
+                @cds.external
+                @data.product
+                @cds.dp.ordId: 'sap.ext:apiResource:Products:v2'
+                service ProductsService {};
+            `),
+        };
+
+        const result = createIntegrationDependencies(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].aspects).toHaveLength(2);
+        const titles = result[0].aspects.map((a) => a.title);
+        expect(titles).toContain("OrdersService");
+        expect(titles).toContain("ProductsService");
+    });
+
+    it("never returns more than one integration dependency regardless of how many external services exist", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: cds.linked(`
+                @cds.external @data.product @cds.dp.ordId: 'sap.ext:apiResource:A:v1' service SvcA {};
+                @cds.external @data.product @cds.dp.ordId: 'sap.ext:apiResource:B:v1' service SvcB {};
+                @cds.external @data.product @cds.dp.ordId: 'sap.ext:apiResource:C:v1' service SvcC {};
+            `),
+        };
+
+        expect(createIntegrationDependencies(appConfig)).toHaveLength(1);
+    });
+
+    it("ignores non-external regular services when deciding whether to return a dependency", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: cds.linked(`
+                service InternalService { entity Books { key ID: UUID; } }
+            `),
+        };
+
+        expect(createIntegrationDependencies(appConfig)).toEqual([]);
     });
 });

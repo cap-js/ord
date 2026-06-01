@@ -1,6 +1,7 @@
 const cds = require("@sap/cds");
 
 const {
+    createAPIResources,
     createAPIResourceTemplate,
     _getPackageID,
     _getExposedEntityTypes,
@@ -988,6 +989,94 @@ describe("createAPIResourceTemplate", () => {
                 expect(result[0].version).toBe("2.0.0");
                 expect(result[0].partOfGroups[0]).toBe("sap.cds:service:sap.test:DataService");
             });
+        });
+    });
+
+    describe("createAPIResources", () => {
+        const baseAppConfig = {
+            ordNamespace: "customer.testNamespace",
+            appName: "testAppName",
+            packageName: "TestPackage",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+            policyLevels: ["none"],
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        };
+
+        it("should return API resources for all valid, non-events-only services", () => {
+            const result = createAPIResources({
+                ...baseAppConfig,
+                csn: cds.linked(`
+                    service ServiceA { entity Books { key ID: UUID; } }
+                    service ServiceB { entity Orders { key ID: UUID; } }
+                `),
+            });
+
+            expect(result.length).toBeGreaterThanOrEqual(2);
+            expect(result.some((r) => r.ordId.includes("ServiceA"))).toBe(true);
+            expect(result.some((r) => r.ordId.includes("ServiceB"))).toBe(true);
+        });
+
+        it("should return an empty array when there are no service definitions", () => {
+            const result = createAPIResources({
+                ...baseAppConfig,
+                csn: cds.linked(`entity Books { key ID: UUID; }`),
+            });
+
+            expect(result).toEqual([]);
+        });
+
+        it("should exclude events-only services", () => {
+            const result = createAPIResources({
+                ...baseAppConfig,
+                csn: cds.linked(`
+                    service EventOnlyService { event OrderPlaced { ID: UUID; } }
+                    service RegularService { entity Orders { key ID: UUID; } }
+                `),
+            });
+
+            expect(result.some((r) => r.ordId.includes("RegularService"))).toBe(true);
+            expect(result.some((r) => r.ordId.includes("EventOnlyService"))).toBe(false);
+        });
+
+        it("should exclude services annotated with @protocol: 'none'", () => {
+            const result = createAPIResources({
+                ...baseAppConfig,
+                csn: cds.linked(`
+                    @protocol: 'none'
+                    service HiddenService { entity Items { key ID: UUID; } }
+                    service VisibleService { entity Items { key ID: UUID; } }
+                `),
+            });
+
+            expect(result.some((r) => r.ordId.includes("HiddenService"))).toBe(false);
+            expect(result.some((r) => r.ordId.includes("VisibleService"))).toBe(true);
+        });
+
+        it("should exclude private services from the output", () => {
+            const result = createAPIResources({
+                ...baseAppConfig,
+                csn: cds.linked(`
+                    namespace customer.testNamespace;
+                    service PrivateService { entity Items { key ID: UUID; } }
+                    service PublicService { entity Items { key ID: UUID; } }
+                    annotate PrivateService with @ORD.Extensions: { visibility: 'private' };
+                `),
+            });
+
+            expect(result.some((r) => r.ordId.includes("PublicService"))).toBe(true);
+            expect(result.some((r) => r.ordId.includes("PrivateService"))).toBe(false);
+        });
+
+        it("should return an empty array when all services are events-only", () => {
+            const result = createAPIResources({
+                ...baseAppConfig,
+                csn: cds.linked(`
+                    service EventsA { event Created { ID: UUID; } }
+                    service EventsB { event Updated { ID: UUID; } }
+                `),
+            });
+
+            expect(result).toEqual([]);
         });
     });
 

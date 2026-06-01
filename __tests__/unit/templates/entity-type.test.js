@@ -1,5 +1,5 @@
 const Logger = require("../../../lib/logger");
-const { createEntityTypeTemplate, RESOLVERS } = require("../../../lib/templates/entity-type");
+const { createEntityTypes, createEntityTypeTemplate, RESOLVERS } = require("../../../lib/templates/entity-type");
 const {
     LEVEL,
     RESOURCE_VISIBILITY,
@@ -305,5 +305,139 @@ describe("createEntityTypeTemplate", () => {
 
         expect(entityType).not.toBeNull();
         expect(entityType.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
+    });
+});
+
+describe("createEntityTypes", () => {
+    const BASE_CONFIG = {
+        ordNamespace: "sap.test",
+        appName: "TestApp",
+        packageName: "TestPackage",
+        lastUpdate: "2024-01-01T00:00:00+00:00",
+        policyLevels: ["none"],
+        hasSAPPolicyLevel: false,
+        env: { defaultVisibility: RESOURCE_VISIBILITY.public },
+    };
+
+    const makeEntity = (overrides = {}) => ({
+        kind: "entity",
+        name: "BusinessPartner",
+        [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:BusinessPartner:v1",
+        _service: { name: "MyService" },
+        ...overrides,
+    });
+
+    it("returns an empty array when hasSAPPolicyLevel is true", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            hasSAPPolicyLevel: true,
+            csn: { definitions: { BusinessPartner: makeEntity() } },
+        };
+
+        expect(createEntityTypes(appConfig)).toEqual([]);
+    });
+
+    it("returns entity types for exposed entities", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: { definitions: { BusinessPartner: makeEntity() } },
+        };
+
+        const result = createEntityTypes(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toBe("sap.test:entityType:BusinessPartner:v1");
+    });
+
+    it("excludes entities without ENTITY_RELATIONSHIP_ANNOTATION", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    Plain: { kind: "entity", name: "Plain", _service: { name: "MyService" } },
+                },
+            },
+        };
+
+        expect(createEntityTypes(appConfig)).toEqual([]);
+    });
+
+    it("excludes entities belonging to .texts sub-entities", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    "Books.texts": makeEntity({ name: "Books.texts" }),
+                },
+            },
+        };
+
+        expect(createEntityTypes(appConfig)).toEqual([]);
+    });
+
+    it("excludes private entities", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    PrivateEntity: makeEntity({ "@ORD.Extensions.visibility": RESOURCE_VISIBILITY.private }),
+                },
+            },
+        };
+
+        expect(createEntityTypes(appConfig)).toEqual([]);
+    });
+
+    it("deduplicates entities with the same ordId", () => {
+        const entity = makeEntity();
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    BPCopy1: entity,
+                    BPCopy2: { ...entity },
+                },
+            },
+        };
+
+        const result = createEntityTypes(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toBe("sap.test:entityType:BusinessPartner:v1");
+    });
+
+    it("returns multiple distinct entity types", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    BusinessPartner: makeEntity(),
+                    SalesOrder: makeEntity({
+                        name: "SalesOrder",
+                        [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:SalesOrder:v1",
+                    }),
+                },
+            },
+        };
+
+        const result = createEntityTypes(appConfig);
+
+        expect(result).toHaveLength(2);
+        const ordIds = result.map((r) => r.ordId);
+        expect(ordIds).toContain("sap.test:entityType:BusinessPartner:v1");
+        expect(ordIds).toContain("sap.test:entityType:SalesOrder:v1");
+    });
+
+    it("excludes entities from services with @protocol: 'none'", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    HiddenEntity: makeEntity({ _service: { name: "HiddenService", "@protocol": "none" } }),
+                },
+            },
+        };
+
+        expect(createEntityTypes(appConfig)).toEqual([]);
     });
 });
