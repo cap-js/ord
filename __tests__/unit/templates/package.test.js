@@ -64,6 +64,13 @@ describe("packages", () => {
                 existingProductORDId: "sap:product:SAPServiceCloudV2:",
                 policyLevels: ["policy"],
                 packageName: "TestPackage",
+                env: {
+                    products: [
+                        {
+                            ordId: "customer:product:demo.product.id",
+                        },
+                    ],
+                },
             }),
         ).toMatchSnapshot();
     });
@@ -80,17 +87,6 @@ describe("packages", () => {
                         },
                     ],
                 },
-                policyLevels: ["policy"],
-                packageName: "TestPackage",
-            }),
-        ).toMatchSnapshot();
-    });
-
-    it("should not contain partOfProducts if no productsOrdId found", () => {
-        expect(
-            createPackages({
-                appName: "My Package",
-                ordNamespace: "customer.sample",
                 policyLevels: ["policy"],
                 packageName: "TestPackage",
             }),

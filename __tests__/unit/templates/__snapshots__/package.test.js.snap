@@ -1,21 +1,5 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
-exports[`packages should not contain partOfProducts if no productsOrdId found 1`] = `
-[
-  {
-    "description": "This package contains public General for My Package.",
-    "ordId": "customer.sample:package:MyPackage:v1",
-    "partOfProducts": [
-      "customer:product:TestPackage:",
-    ],
-    "shortDescription": "Package containing public General",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-]
-`;
-
 exports[`packages should return custom value if user defined in .cdsrc.json 1`] = `
 [
   {
