@@ -193,9 +193,8 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
     // ========== ORD document structure ==========
     describe("ORD Document Structure with mTLS and system-version perspective", () => {
         test("should have required ORD structure", async () => {
-            const response = await testapp.get("/ord/v1/documents/ord-document?perspective=system-version", {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
                 headers: {
-                    "Local-Tenant-Id": "12-34-56",
                     ...utils.createMtlsHeaders(
                         MOCK_CERT_CONFIG_RESPONSE.certIssuer,
                         MOCK_CERT_CONFIG_RESPONSE.certSubject,
