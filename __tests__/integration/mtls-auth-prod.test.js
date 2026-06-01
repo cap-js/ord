@@ -42,13 +42,13 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
         test("should work with cfMtls: true when CF_MTLS_TRUSTED_CERTS provides cert config", async () => {
             // cfMtls: true in config file declares intent to use mTLS
             // CF_MTLS_TRUSTED_CERTS env var provides the actual cert configuration
-            const mtlsHeaders = utils.createMtlsHeaders(
-                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
-                MOCK_CERT_CONFIG_RESPONSE.certSubject,
-                MOCK_ROOT_CA_DN,
-            );
-
-            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, { headers: mtlsHeaders });
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
+                headers: utils.createMtlsHeaders(
+                    MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                    MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                    MOCK_ROOT_CA_DN,
+                ),
+            });
 
             expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
@@ -59,13 +59,13 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
     // ========== Valid mTLS scenarios ==========
     describe("mTLS Authentication - Valid Scenarios", () => {
         test("should accept valid mTLS headers for ORD document endpoint", async () => {
-            const mtlsHeaders = utils.createMtlsHeaders(
-                MOCK_CERT_CONFIG_RESPONSE.certIssuer,
-                MOCK_CERT_CONFIG_RESPONSE.certSubject,
-                MOCK_ROOT_CA_DN,
-            );
-
-            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, { headers: mtlsHeaders });
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
+                headers: utils.createMtlsHeaders(
+                    MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                    MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                    MOCK_ROOT_CA_DN,
+                ),
+            });
 
             expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
@@ -192,92 +192,25 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
 
     // ========== ORD document structure ==========
     describe("ORD Document Structure with mTLS and system-version perspective", () => {
-        let ordDocument;
-
-        beforeAll(async () => {
-            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
-                headers: utils.createMtlsHeaders(
-                    MOCK_CERT_CONFIG_RESPONSE.certIssuer,
-                    MOCK_CERT_CONFIG_RESPONSE.certSubject,
-                    MOCK_ROOT_CA_DN,
-                ),
+        test("should have required ORD structure", async () => {
+            const response = await testapp.get("/ord/v1/documents/ord-document?perspective=system-version", {
+                headers: {
+                    "Local-Tenant-Id": "12-34-56",
+                    ...utils.createMtlsHeaders(
+                        MOCK_CERT_CONFIG_RESPONSE.certIssuer,
+                        MOCK_CERT_CONFIG_RESPONSE.certSubject,
+                        MOCK_ROOT_CA_DN,
+                    ),
+                },
             });
 
-            ordDocument = utils.pinLastUpdateForStableTest(response.data);
-        });
-
-        test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
-            expect(ordDocument).toHaveProperty("description");
-            expect(Array.isArray(ordDocument.apiResources)).toBe(true);
-            expect(Array.isArray(ordDocument.eventResources)).toBe(true);
-            expect(ordDocument.perspective).toBe("system-version");
-            expect(ordDocument.describedSystemVersion).toEqual({ version: "0.0.1" });
-        });
-
-        test("should include TestService with correct properties", () => {
-            const testService = ordDocument.apiResources.find(
-                (api) => api.title === "Test Service for Integration Testing",
-            );
-
-            expect(testService).toMatchSnapshot();
-        });
-
-        test("should contain expected resources", () => {
-            expect(ordDocument.apiResources).toHaveLength(3);
-            expect(ordDocument.eventResources).toHaveLength(1);
-            expect(ordDocument.packages).toHaveLength(1);
-        });
-
-        test("should have correct query params for all resource definitions", () => {
-            ordDocument.apiResources.forEach((apiResource) => {
-                apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.url).toMatch(/(.*)\.(edmx|oas3\.json)$/);
-                });
-            });
-
-            ordDocument.eventResources.forEach((eventResource) => {
-                eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.url).toMatch(/(.*)\.asyncapi2.json$/);
-                });
-            });
-        });
-
-        test("should have 'sap:cmp-mtls:v1' accessStrategies in all resources", () => {
-            // Verify API resources have 'sap:cmp-mtls:v1' accessStrategies
-            ordDocument.apiResources.forEach((apiResource) => {
-                apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(
-                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
-                    );
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
-                });
-            });
-
-            // Verify Event resources have 'sap:cmp-mtls:v1' accessStrategies
-            ordDocument.eventResources.forEach((eventResource) => {
-                eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(
-                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
-                    );
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
-                });
-            });
-
-            // Verify no resource has 'open' accessStrategy
-            [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
-                resource.resourceDefinitions.forEach((resDef) => {
-                    const hasOpen = resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Open);
-                    expect(hasOpen).toBe(false);
-                });
-            });
+            expect(response.status).toBe(200);
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
     });
 
     describe("ORD Document Structure with mTLS and system-instance perspective", () => {
-        let ordDocument;
-
-        beforeAll(async () => {
+        test("should have required ORD structure", async () => {
             const response = await testapp.get("/ord/v1/documents/ord-document?perspective=system-instance", {
                 headers: {
                     "Local-Tenant-Id": "12-34-56",
@@ -289,74 +222,8 @@ describe("ORD Integration Tests - mTLS Production Mode (cfMtls: true)", () => {
                 },
             });
 
-            ordDocument = utils.pinLastUpdateForStableTest(response.data);
-        });
-
-        test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
-            expect(ordDocument).toHaveProperty("description");
-            expect(Array.isArray(ordDocument.apiResources)).toBe(true);
-            expect(Array.isArray(ordDocument.eventResources)).toBe(true);
-            expect(ordDocument.perspective).toBe("system-instance");
-            expect(ordDocument.describedSystemVersion).toEqual(undefined);
-        });
-
-        test("should include TestService with correct properties", () => {
-            const testService = ordDocument.apiResources.find(
-                (api) => api.title === "Test Service for Integration Testing",
-            );
-
-            expect(testService).toMatchSnapshot();
-        });
-
-        test("should contain expected resources", () => {
-            expect(ordDocument.apiResources).toHaveLength(3);
-            expect(ordDocument.eventResources).toHaveLength(1);
-            expect(ordDocument.packages).toHaveLength(1);
-        });
-
-        test("should have correct query params for all resource definitions", () => {
-            ordDocument.apiResources.forEach((apiResource) => {
-                apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.url).toMatch(/(.*)\?perspective=system-instance$/);
-                });
-            });
-
-            ordDocument.eventResources.forEach((eventResource) => {
-                eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.url).toMatch(/(.*)\?perspective=system-instance$/);
-                });
-            });
-        });
-
-        test("should have 'sap:cmp-mtls:v1' accessStrategies in all resources", () => {
-            // Verify API resources have 'sap:cmp-mtls:v1' accessStrategies
-            ordDocument.apiResources.forEach((apiResource) => {
-                apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(
-                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
-                    );
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
-                });
-            });
-
-            // Verify Event resources have 'sap:cmp-mtls:v1' accessStrategies
-            ordDocument.eventResources.forEach((eventResource) => {
-                eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(
-                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
-                    );
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
-                });
-            });
-
-            // Verify no resource has 'open' accessStrategy
-            [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
-                resource.resourceDefinitions.forEach((resDef) => {
-                    const hasOpen = resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Open);
-                    expect(hasOpen).toBe(false);
-                });
-            });
+            expect(response.status).toBe(200);
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
     });
 });

@@ -29,7 +29,8 @@ const DIFFERENT_ISSUER = "CN=Different CA,O=Other Org,C=US";
 const DIFFERENT_SUBJECT = "CN=different-service,O=Other Org,C=US";
 const UNTRUSTED_ROOT_CA = "CN=Untrusted Root CA,O=Untrusted Org,C=US";
 
-const mockserver = createMockServer(9999, MOCK_CERT_CONFIG_RESPONSE);
+createMockServer(9999, MOCK_CERT_CONFIG_RESPONSE);
+
 const testapp = createTestApp(path.join(__dirname, "integration-test-app"), {
     CDS_CONFIG: ".cdsrc.mtls.json",
 });
@@ -37,18 +38,6 @@ const testapp = createTestApp(path.join(__dirname, "integration-test-app"), {
 describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with configEndpoints)", () => {
     // ========== fetchMtlsCertInfo Integration Tests ==========
     describe("fetchMtlsCertInfo - Config Endpoint Fetch", () => {
-        test("should fetch cert info from mock endpoint during startup", async () => {
-            // Verify the mock endpoint is accessible and returns expected data
-            const response = await fetch(`${mockserver.schema}://${mockserver.host}:${mockserver.port}/v1/info`);
-
-            expect(response.ok).toBe(true);
-            expect(await response.json()).toMatchObject({
-                certIssuer: MOCK_CERT_CONFIG_RESPONSE.certIssuer,
-                certSubject: MOCK_CERT_CONFIG_RESPONSE.certSubject,
-                rootCA: expect.stringContaining("BEGIN CERTIFICATE"),
-            });
-        });
-
         test("should use fetched cert info to validate mTLS requests", async () => {
             // This verifies the complete flow:
             // 1. Plugin reads configEndpoint from .cdsrc.json
@@ -79,18 +68,6 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
             expect(response.status).toBe(403);
             expect(response.data).toContain("Invalid client certificate");
         });
-
-        test("should verify mock endpoint structure matches expected schema", async () => {
-            const response = await fetch(`${mockserver.schema}://${mockserver.host}:${mockserver.port}/v1/info`);
-            const data = await response.json();
-
-            // Verify structure matches what fetchMtlsCertInfo expects
-            expect(data).toHaveProperty("certIssuer");
-            expect(data).toHaveProperty("certSubject");
-            expect(data).toHaveProperty("rootCA");
-            expect(data.certIssuer).toContain("CN=SAP PKI Certificate Service Client CA");
-            expect(data.certSubject).toContain("CN=cmp-dev");
-        });
     });
 
     // ========== Valid mTLS scenarios (same as Suite 1) ==========
@@ -113,8 +90,8 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
             const response = await testapp.get(ORD_CONFIG_ENDPOINT);
 
             expect(response.status).toBe(200);
-            expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(response.data).toMatchSnapshot();
+            expect(response.headers["content-type"]).toMatch(/application\/json/);
         });
 
         test("should accept mTLS headers with DN components in different order", async () => {
@@ -142,6 +119,7 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
             });
 
             expect(response.status).toBe(401);
+            expect(response.data).toBe("Missing proxy verification of mTLS client certificate");
         });
 
         test("should reject certificate pair mismatch (valid issuer, wrong subject)", async () => {
@@ -155,7 +133,7 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
             });
 
             expect(response.status).toBe(403);
-            expect(response.data).toContain("Invalid client certificate");
+            expect(response.data).toBe("Forbidden: Invalid client certificate");
         });
 
         test("should reject untrusted root CA", async () => {
@@ -169,15 +147,13 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
             });
 
             expect(response.status).toBe(403);
-            expect(response.data).toContain("Untrusted certificate authority");
+            expect(response.data).toBe("Forbidden: Untrusted certificate authority");
         });
     });
 
     // ========== ORD document structure ==========
     describe("ORD Document Structure with mTLS", () => {
-        let ordDocument;
-
-        beforeAll(async () => {
+        test("should have required ORD structure", async () => {
             const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
                 headers: utils.createMtlsHeaders(
                     MOCK_CERT_CONFIG_RESPONSE.certIssuer,
@@ -186,36 +162,8 @@ describe("ORD Integration Tests - mTLS Development Mode (cfMtls object with conf
                 ),
             });
 
-            ordDocument = response.data;
-        });
-
-        test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
-            expect(ordDocument).toHaveProperty("description");
-            expect(Array.isArray(ordDocument.apiResources)).toBe(true);
-            expect(Array.isArray(ordDocument.eventResources)).toBe(true);
-        });
-
-        test("should have 'sap:cmp-mtls:v1' accessStrategies in all resources", () => {
-            // Verify API resources have 'sap:cmp-mtls:v1' accessStrategies
-            ordDocument.apiResources.forEach((apiResource) => {
-                apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(
-                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
-                    );
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
-                });
-            });
-
-            // Verify Event resources have 'sap:cmp-mtls:v1' accessStrategies
-            ordDocument.eventResources.forEach((eventResource) => {
-                eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(
-                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]),
-                    );
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.CmpMtls)).toBe(true);
-                });
-            });
+            expect(response.status).toBe(200);
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
     });
 });
