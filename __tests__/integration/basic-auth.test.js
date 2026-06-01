@@ -1,12 +1,12 @@
-process.env.CDS_CONFIG = ".cdsrc.basic.json";
-
-const cds = require("@sap/cds");
 const path = require("path");
 
 const utils = require("../utils");
+const createTestApp = require("../hooks/test-app");
 const { ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 
-const TEST = cds.test(path.join(__dirname, "integration-test-app"));
+const testapp = createTestApp(path.join(__dirname, "integration-test-app"), {
+    CDS_CONFIG: ".cdsrc.basic.json",
+});
 
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
 const ORD_DOCUMENT_ENDPOINT = "/ord/v1/documents/ord-document";
@@ -21,8 +21,9 @@ const INVALID_PASS_AUTH = "Basic YWRtaW46d3JvbmdwYXNzd29yZA=="; // admin:wrongpa
 describe("ORD Integration Tests - Basic Authentication", () => {
     describe("ORD Config Endpoint Tests", () => {
         test("should return ORD config with valid basic auth (lowercase header)", async () => {
-            const response = await TEST.get(ORD_CONFIG_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
+            const response = await testapp.get(ORD_CONFIG_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(response.data).toEqual({
                 openResourceDiscoveryV1: {
@@ -38,15 +39,17 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should return ORD config with standard Authorization header", async () => {
-            const response = await TEST.get(ORD_CONFIG_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
+            const response = await testapp.get(ORD_CONFIG_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(response.data).toMatchSnapshot();
         });
 
         test("should return ORD config without authentication", async () => {
-            const response = await TEST.get(ORD_CONFIG_ENDPOINT);
+            const response = await testapp.get(ORD_CONFIG_ENDPOINT);
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(response.data).toMatchSnapshot();
         });
@@ -54,21 +57,23 @@ describe("ORD Integration Tests - Basic Authentication", () => {
 
     describe("ORD Document Endpoint Tests", () => {
         test("should return ORD document with valid basic auth (lowercase header)", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
 
         test("should return ORD document with standard Authorization header", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
 
         test("should reject invalid password", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT, {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
                 validateStatus: () => true,
                 headers: { Authorization: INVALID_PASS_AUTH },
             });
@@ -78,7 +83,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should reject invalid username", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT, {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
                 validateStatus: () => true,
                 headers: { Authorization: INVALID_USER_AUTH },
             });
@@ -88,7 +93,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should require authentication when missing credentials", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT, { validateStatus: () => true });
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, { validateStatus: () => true });
 
             expect(response.status).toBe(401);
             expect(response.headers["www-authenticate"]).toBeDefined();
@@ -96,7 +101,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should reject Bearer token", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT, {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
                 validateStatus: () => true,
                 headers: { Authorization: BEARER_TOKEN },
             });
@@ -106,7 +111,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should reject malformed Authorization header", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT, {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
                 validateStatus: () => true,
                 headers: { Authorization: MALFORMED_AUTH },
             });
@@ -115,7 +120,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should reject empty Authorization header", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT, {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
                 validateStatus: () => true,
                 headers: { Authorization: "" },
             });
@@ -125,7 +130,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should return bad request when requesting document with invalid perspective", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT + "?perspective=invalid", {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT + "?perspective=invalid", {
                 validateStatus: () => true,
                 headers: { Authorization: VALID_AUTH },
             });
@@ -134,7 +139,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should return bad request when requesting document with system-instance perspective and no tenant", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance", {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance", {
                 validateStatus: () => true,
                 headers: { Authorization: VALID_AUTH },
             });
@@ -143,22 +148,24 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should return ORD document with valid basic auth for system-version perspective", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-version", {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-version", {
                 headers: { Authorization: VALID_AUTH },
             });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
 
         test("should return ORD document with valid basic auth for system-instance perspective", async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance", {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance", {
                 headers: {
                     "Authorization": VALID_AUTH,
                     "Local-Tenant-Id": "12-34-56",
                 },
             });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
             expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
@@ -168,7 +175,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         let ordDocument;
 
         beforeAll(async () => {
-            const response = await TEST.get(ORD_DOCUMENT_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
 
             ordDocument = utils.pinLastUpdateForStableTest(response.data);
         });
@@ -245,7 +252,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         let ordDocument;
 
         beforeAll(async () => {
-            const response = await TEST.get("/ord/v1/documents/ord-document?perspective=system-instance", {
+            const response = await testapp.get("/ord/v1/documents/ord-document?perspective=system-instance", {
                 headers: { "Authorization": VALID_AUTH, "Local-Tenant-Id": "12-34-56" },
             });
 

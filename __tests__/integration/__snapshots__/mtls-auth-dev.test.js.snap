@@ -1,0 +1,489 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with configEndpoints) fetchMtlsCertInfo - Config Endpoint Fetch should use fetched cert info to validate mTLS requests 1`] = `
+{
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
+  "apiResources": [
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for TestService",
+      "entryPoints": [
+        "/test",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:TestService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:TestService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:TestService:v1/TestService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:TestService:v1/TestService.edmx",
+        },
+      ],
+      "shortDescription": "Minimal service for ORD integration tests",
+      "title": "Test Service for Integration Testing",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for SupplierService",
+      "entryPoints": [
+        "/odata/v4/supplier",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:SupplierService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService:v1/SupplierService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService:v1/SupplierService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of SupplierService",
+      "title": "SupplierService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for SupplierService",
+      "entryPoints": [
+        "/rest/supplier",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:SupplierService-rest:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService-rest:v1/SupplierService.oas3.json",
+        },
+      ],
+      "shortDescription": "Short description of SupplierService",
+      "title": "SupplierService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "describedSystemVersion": {
+    "version": "0.0.1",
+  },
+  "description": "this is an application description",
+  "eventResources": [
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:eventResource:TestService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:TestService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capireordintegrationtest:eventResource:TestService:v1/TestService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "Minimal service for ORD integration tests",
+      "title": "Test Service for Integration Testing",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "groups": [
+    {
+      "groupId": "sap.cds:service:customer.capireordintegrationtest:TestService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Test Service for Integration Testing",
+    },
+    {
+      "groupId": "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Supplier Service",
+    },
+  ],
+  "integrationDependencies": [
+    {
+      "aspects": [
+        {
+          "apiResources": [
+            {
+              "minVersion": "1.0.0",
+              "ordId": "test.sai:apiResource:Supplier:v1",
+            },
+          ],
+          "description": "Integration with Test SAI Supplier Data Product",
+          "mandatory": false,
+          "title": "Test SAI Supplier API",
+        },
+        {
+          "apiResources": [
+            {
+              "minVersion": "1.0.0",
+              "ordId": "test.s4:apiResource:Supplier:v1",
+            },
+          ],
+          "description": "Integration with Test S4 Supplier Data Product",
+          "mandatory": false,
+          "title": "Test S4 Supplier API",
+        },
+      ],
+      "mandatory": false,
+      "ordId": "customer.capireordintegrationtest:integrationDependency:externalDependencies:v1",
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "title": "External Dependencies",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "openResourceDiscovery": "1.14",
+  "packages": [
+    {
+      "description": "This package contains public General for capire ord integration test.",
+      "ordId": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "partOfProducts": [
+        "customer:product:capire.ord.integration.test:",
+      ],
+      "shortDescription": "Package containing public General",
+      "title": "capire ord integration test",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+  ],
+  "perspective": "system-version",
+  "policyLevels": [
+    "none",
+  ],
+  "products": [
+    {
+      "ordId": "customer:product:capire.ord.integration.test:",
+      "shortDescription": "Short description of capire ord integration test",
+      "title": "capire ord integration test",
+      "vendor": "customer:vendor:Customer:",
+    },
+  ],
+}
+`;
+
+exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with configEndpoints) mTLS Authentication - Valid Scenarios should accept valid mTLS headers for ORD document endpoint 1`] = `
+{
+  "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",
+  "apiResources": [
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for TestService",
+      "entryPoints": [
+        "/test",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:TestService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:TestService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:TestService:v1/TestService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:TestService:v1/TestService.edmx",
+        },
+      ],
+      "shortDescription": "Minimal service for ORD integration tests",
+      "title": "Test Service for Integration Testing",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "odata-v4",
+      "description": "Description for SupplierService",
+      "entryPoints": [
+        "/odata/v4/supplier",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:SupplierService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService:v1/SupplierService.oas3.json",
+        },
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/xml",
+          "type": "edmx",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService:v1/SupplierService.edmx",
+        },
+      ],
+      "shortDescription": "Short description of SupplierService",
+      "title": "SupplierService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+    {
+      "apiProtocol": "rest",
+      "description": "Description for SupplierService",
+      "entryPoints": [
+        "/rest/supplier",
+      ],
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:apiResource:SupplierService-rest:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "openapi-v3",
+          "url": "/ord/v1/customer.capireordintegrationtest:apiResource:SupplierService-rest:v1/SupplierService.oas3.json",
+        },
+      ],
+      "shortDescription": "Short description of SupplierService",
+      "title": "SupplierService",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "describedSystemVersion": {
+    "version": "0.0.1",
+  },
+  "description": "this is an application description",
+  "eventResources": [
+    {
+      "description": "CAP Event resource describing events / messages.",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
+      "ordId": "customer.capireordintegrationtest:eventResource:TestService:v1",
+      "partOfGroups": [
+        "sap.cds:service:customer.capireordintegrationtest:TestService",
+      ],
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "resourceDefinitions": [
+        {
+          "accessStrategies": [
+            {
+              "type": "sap:cmp-mtls:v1",
+            },
+          ],
+          "mediaType": "application/json",
+          "type": "asyncapi-v2",
+          "url": "/ord/v1/customer.capireordintegrationtest:eventResource:TestService:v1/TestService.asyncapi2.json",
+        },
+      ],
+      "shortDescription": "Minimal service for ORD integration tests",
+      "title": "Test Service for Integration Testing",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "groups": [
+    {
+      "groupId": "sap.cds:service:customer.capireordintegrationtest:TestService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Test Service for Integration Testing",
+    },
+    {
+      "groupId": "sap.cds:service:customer.capireordintegrationtest:SupplierService",
+      "groupTypeId": "sap.cds:service",
+      "title": "Supplier Service",
+    },
+  ],
+  "integrationDependencies": [
+    {
+      "aspects": [
+        {
+          "apiResources": [
+            {
+              "minVersion": "1.0.0",
+              "ordId": "test.sai:apiResource:Supplier:v1",
+            },
+          ],
+          "description": "Integration with Test SAI Supplier Data Product",
+          "mandatory": false,
+          "title": "Test SAI Supplier API",
+        },
+        {
+          "apiResources": [
+            {
+              "minVersion": "1.0.0",
+              "ordId": "test.s4:apiResource:Supplier:v1",
+            },
+          ],
+          "description": "Integration with Test S4 Supplier Data Product",
+          "mandatory": false,
+          "title": "Test S4 Supplier API",
+        },
+      ],
+      "mandatory": false,
+      "ordId": "customer.capireordintegrationtest:integrationDependency:externalDependencies:v1",
+      "partOfPackage": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "releaseStatus": "active",
+      "title": "External Dependencies",
+      "version": "1.0.0",
+      "visibility": "public",
+    },
+  ],
+  "openResourceDiscovery": "1.14",
+  "packages": [
+    {
+      "description": "This package contains public General for capire ord integration test.",
+      "ordId": "customer.capireordintegrationtest:package:capireordintegrationtest:v1",
+      "partOfProducts": [
+        "customer:product:capire.ord.integration.test:",
+      ],
+      "shortDescription": "Package containing public General",
+      "title": "capire ord integration test",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+  ],
+  "perspective": "system-version",
+  "policyLevels": [
+    "none",
+  ],
+  "products": [
+    {
+      "ordId": "customer:product:capire.ord.integration.test:",
+      "shortDescription": "Short description of capire ord integration test",
+      "title": "capire ord integration test",
+      "vendor": "customer:vendor:Customer:",
+    },
+  ],
+}
+`;
+
+exports[`ORD Integration Tests - mTLS Development Mode (cfMtls object with configEndpoints) mTLS Authentication - Valid Scenarios should return ORD config without authentication (endpoint is always open) 1`] = `
+{
+  "openResourceDiscoveryV1": {
+    "documents": [
+      {
+        "accessStrategies": [
+          {
+            "type": "sap:cmp-mtls:v1",
+          },
+        ],
+        "perspective": "system-version",
+        "url": "/ord/v1/documents/ord-document?part=0",
+      },
+    ],
+  },
+}
+`;

@@ -22,14 +22,14 @@
         "lint": "npx eslint .",
         "test": "jest __tests__/unit --ci --collectCoverage",
         "test:integration:basic": "jest __tests__/integration/basic-auth.test.js --testPathIgnorePatterns=/node_modules/ --forceExit",
-        "test:integration:mtls": "jest __tests__/integration/mtls-auth.test.js --testPathIgnorePatterns=/node_modules/ --forceExit",
+        "test:integration:mtls": "jest __tests__/integration/mtls-auth-*.test.js --testPathIgnorePatterns=/node_modules/ --forceExit",
         "test:integration:build": "jest __tests__/integration/cds-build.test.js --testPathIgnorePatterns=/node_modules/ --forceExit",
         "update-snapshot": "jest --ci --updateSnapshot",
         "cds:version": "cds v -i",
         "test:all": "npm run test && npm run test:integration:basic && npm run test:integration:mtls && npm run test:integration:build"
     },
     "devDependencies": {
-        "@cap-js/cds-test": "^1.0.1",
+        "@cap-js/cds-test": "0.4.1",
         "@cap-js/graphql": "^0.14.0",
         "@cap-js/sqlite": "^2",
         "@open-resource-discovery/specification": "1.14.5",
@@ -41,7 +41,7 @@
         "supertest": "^7.0.0"
     },
     "peerDependencies": {
-        "@sap/cds": ">=9.8"
+        "@sap/cds": ">=8.9.4"
     },
     "dependencies": {
         "@cap-js/asyncapi": "^1.0.3",
