@@ -986,7 +986,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "extensible": {
         "supported": "no",
       },
-      "lastUpdate": "2026-06-01T21:46:47+01:00",
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
       "ordId": "customer.capireordintegrationtest:apiResource:TestService:v1",
       "partOfGroups": [
         "sap.cds:service:customer.capireordintegrationtest:TestService",
@@ -1029,7 +1029,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "extensible": {
         "supported": "no",
       },
-      "lastUpdate": "2026-06-01T21:46:47+01:00",
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
       "ordId": "customer.capireordintegrationtest:apiResource:SupplierService:v1",
       "partOfGroups": [
         "sap.cds:service:customer.capireordintegrationtest:SupplierService",
@@ -1072,7 +1072,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "extensible": {
         "supported": "no",
       },
-      "lastUpdate": "2026-06-01T21:46:47+01:00",
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
       "ordId": "customer.capireordintegrationtest:apiResource:SupplierService-rest:v1",
       "partOfGroups": [
         "sap.cds:service:customer.capireordintegrationtest:SupplierService",
@@ -1104,7 +1104,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "extensible": {
         "supported": "no",
       },
-      "lastUpdate": "2026-06-01T21:46:47+01:00",
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
       "ordId": "customer.capireordintegrationtest:eventResource:TestService:v1",
       "partOfGroups": [
         "sap.cds:service:customer.capireordintegrationtest:TestService",
@@ -1218,7 +1218,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "extensible": {
         "supported": "no",
       },
-      "lastUpdate": "2026-06-01T21:46:47+01:00",
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
       "ordId": "customer.capireordintegrationtest:apiResource:TestService:v1",
       "partOfGroups": [
         "sap.cds:service:customer.capireordintegrationtest:TestService",
@@ -1261,7 +1261,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "extensible": {
         "supported": "no",
       },
-      "lastUpdate": "2026-06-01T21:46:47+01:00",
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
       "ordId": "customer.capireordintegrationtest:apiResource:SupplierService:v1",
       "partOfGroups": [
         "sap.cds:service:customer.capireordintegrationtest:SupplierService",
@@ -1304,7 +1304,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "extensible": {
         "supported": "no",
       },
-      "lastUpdate": "2026-06-01T21:46:47+01:00",
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
       "ordId": "customer.capireordintegrationtest:apiResource:SupplierService-rest:v1",
       "partOfGroups": [
         "sap.cds:service:customer.capireordintegrationtest:SupplierService",
@@ -1339,7 +1339,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "extensible": {
         "supported": "no",
       },
-      "lastUpdate": "2026-06-01T21:46:47+01:00",
+      "lastUpdate": "2026-05-04T13:45:01+01:00",
       "ordId": "customer.capireordintegrationtest:eventResource:TestService:v1",
       "partOfGroups": [
         "sap.cds:service:customer.capireordintegrationtest:TestService",

@@ -178,7 +178,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
             });
 
             expect(response.status).toBe(200);
-            expect(response.data).toMatchSnapshot();
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
     });
 
@@ -189,7 +189,7 @@ describe("ORD Integration Tests - Basic Authentication", () => {
             });
 
             expect(response.status).toBe(200);
-            expect(response.data).toMatchSnapshot();
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
     });
 });
