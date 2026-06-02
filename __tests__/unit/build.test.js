@@ -1,4 +1,3 @@
-const path = require("path");
 const index = require("../../lib/index");
 const { BUILD_DEFAULT_PATH, DOCUMENT_PERSPECTIVES } = require("../../lib/constants");
 
