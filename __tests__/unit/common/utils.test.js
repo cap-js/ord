@@ -1,13 +1,16 @@
 const {
     getRFC3339Date,
-    isPrimaryDataProductService,
     resolveVisibility,
     resolveServiceName,
     flattenEntityGraph,
     readORDExtensions,
+    resolveAccessStrategies,
+    isPrimaryDataProductService,
+    isBlockedServiceName,
 } = require("../../../lib/common/utils");
-const { RESOURCE_VISIBILITY } = require("../../../lib/constants");
+const { RESOURCE_VISIBILITY, ORD_ACCESS_STRATEGY } = require("../../../lib/constants");
 const Logger = require("../../../lib/logger");
+const cds = require("@sap/cds");
 
 const RFC3339_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
 
@@ -211,7 +214,7 @@ describe("flattenEntityGraph", () => {
 
 describe("readORDExtensions", () => {
     it("returns an empty object when no @ORD.Extensions keys are present", () => {
-        expect(readORDExtensions({ "@title": "Test", name: "svc" })).toEqual({});
+        expect(readORDExtensions({ "@title": "Test", "name": "svc" })).toEqual({});
     });
 
     it("extracts a single extension key", () => {
@@ -235,5 +238,107 @@ describe("readORDExtensions", () => {
     it("respects a custom prefix", () => {
         const model = { "@Custom.foo": "bar", "@ORD.Extensions.ignored": "x" };
         expect(readORDExtensions(model, "@Custom.")).toEqual({ foo: "bar" });
+    });
+});
+
+describe("isBlockedServiceName", () => {
+    it("returns true for exact match 'cds.xt.MTXServices'", () => {
+        expect(isBlockedServiceName("cds.xt.MTXServices")).toBe(true);
+    });
+
+    it("returns true for exact match 'MtxOrdProviderService'", () => {
+        expect(isBlockedServiceName("MtxOrdProviderService")).toBe(true);
+    });
+
+    it("returns true for exact match 'OpenResourceDiscoveryService'", () => {
+        expect(isBlockedServiceName("OpenResourceDiscoveryService")).toBe(true);
+    });
+
+    it("returns true when a blocked name appears as a substring", () => {
+        expect(isBlockedServiceName("some.namespace.OpenResourceDiscoveryService")).toBe(true);
+    });
+
+    it("returns false for a regular service name", () => {
+        expect(isBlockedServiceName("my.app.CatalogService")).toBe(false);
+    });
+
+    it("returns false for an empty string", () => {
+        expect(isBlockedServiceName("")).toBe(false);
+    });
+
+    it("returns false for undefined", () => {
+        expect(isBlockedServiceName(undefined)).toBe(false);
+    });
+
+    it("returns false for null", () => {
+        expect(isBlockedServiceName(null)).toBe(false);
+    });
+});
+
+describe("resolveAccessStrategies", () => {
+    beforeEach(() => {
+        // Reset CDS environment
+        cds.env.ord = {};
+    });
+
+    it("should map Basic auth type to basic-auth strategy", () => {
+        const strategies = resolveAccessStrategies({ accessStrategies: [ORD_ACCESS_STRATEGY.Basic] });
+
+        expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }]);
+    });
+
+    it("should map CF mTLS auth type to sap:cmp-mtls:v1 strategy", () => {
+        const strategies = resolveAccessStrategies({ accessStrategies: [ORD_ACCESS_STRATEGY.CmpMtls] });
+
+        expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.CmpMtls }]);
+    });
+
+    it("should map Open auth type to open strategy", () => {
+        const strategies = resolveAccessStrategies({ accessStrategies: [ORD_ACCESS_STRATEGY.Open] });
+
+        expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Open }]);
+    });
+
+    it("should map multiple auth types correctly", () => {
+        const strategies = resolveAccessStrategies({
+            accessStrategies: [ORD_ACCESS_STRATEGY.Basic, ORD_ACCESS_STRATEGY.CmpMtls],
+        });
+
+        expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CmpMtls }]);
+    });
+
+    it("should handle unknown auth types gracefully", () => {
+        const strategies = resolveAccessStrategies({ accessStrategies: ["unknown-type"] });
+
+        // Should fallback to open since no valid types found
+        expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Open }]);
+    });
+
+    it("should filter out unknown types and keep valid ones", () => {
+        const strategies = resolveAccessStrategies({
+            accessStrategies: ["unknown-type", ORD_ACCESS_STRATEGY.Basic, ORD_ACCESS_STRATEGY.CmpMtls],
+        });
+
+        expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Basic }, { type: ORD_ACCESS_STRATEGY.CmpMtls }]);
+    });
+
+    it("should handle missing config with non-strict fallback", () => {
+        cds.env.ord = { strictAccessStrategies: false };
+
+        const strategies = resolveAccessStrategies({ accessStrategies: undefined });
+
+        expect(strategies).toEqual([{ type: ORD_ACCESS_STRATEGY.Open }]);
+    });
+
+    it("should throw on missing config when strict", () => {
+        cds.env.ord = { strictAccessStrategies: true };
+
+        expect(() => resolveAccessStrategies({ accessStrategies: undefined })).toThrow();
+    });
+
+    it("should throw when open is used with any other access strategy", () => {
+        expect(() =>
+            resolveAccessStrategies({ accessStrategies: [ORD_ACCESS_STRATEGY.Open, ORD_ACCESS_STRATEGY.Basic] }),
+        ).toThrow();
     });
 });
