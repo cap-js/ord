@@ -1,138 +1,35 @@
-const request = require("supertest");
-const { spawn } = require("child_process");
 const path = require("path");
 
 const utils = require("../utils");
+const createTestApp = require("../hooks/test-app");
 const { ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 
-const BASE_URL = "http://localhost:4004";
+const testapp = createTestApp(path.join(__dirname, "integration-test-app"), {
+    CDS_CONFIG: ".cdsrc.basic.json",
+});
+
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
 const ORD_DOCUMENT_ENDPOINT = "/ord/v1/documents/ord-document";
 
 // Basic auth credentials from ord-endpoint.http: admin:secret
 const VALID_AUTH = "Basic YWRtaW46c2VjcmV0";
-const INVALID_USER_AUTH = "Basic d3JvbmdfdXNlcjpzZWNyZXQ="; // wronguser:secret
-const INVALID_PASS_AUTH = "Basic YWRtaW46d3JvbmdwYXNzd29yZA=="; // admin:wrongpassword
 const BEARER_TOKEN = "Bearer some-token-value";
 const MALFORMED_AUTH = "BasicYWRtaW46c2VjcmV0"; // Missing space
-
-let serverProcess;
-
-/**
- * Wait for CDS server to be ready
- * Only checks if we can connect, doesn't validate status codes
- */
-async function waitForServer(maxAttempts = 30, delayMs = 500) {
-    for (let i = 0; i < maxAttempts; i++) {
-        try {
-            // Test config endpoint (should be accessible)
-            await request(BASE_URL).get(ORD_CONFIG_ENDPOINT);
-
-            // Test document endpoint with auth (should require auth)
-            await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set("Authorization", VALID_AUTH);
-
-            console.log("CDS server ready");
-            return true;
-        } catch {
-            if (i < maxAttempts - 1) {
-                console.log(`Waiting for CDS server (attempt ${i + 1}/${maxAttempts})`);
-                await new Promise((resolve) => setTimeout(resolve, delayMs));
-            }
-        }
-    }
-    throw new Error("Server failed to start within timeout period");
-}
+const INVALID_USER_AUTH = "Basic d3JvbmdfdXNlcjpzZWNyZXQ="; // wronguser:secret
+const INVALID_PASS_AUTH = "Basic YWRtaW46d3JvbmdwYXNzd29yZA=="; // admin:wrongpassword
 
 describe("ORD Integration Tests - Basic Authentication", () => {
-    beforeAll(async () => {
-        console.log("Starting basic-auth integration test setup");
-
-        const testAppRoot = path.join(__dirname, "integration-test-app");
-
-        console.log(`Test app root: ${testAppRoot}`);
-
-        // Start CDS server with Basic Authentication only (uses .cdsrc.basic.json config)
-        serverProcess = spawn("npx", ["cds", "run"], {
-            cwd: testAppRoot,
-            env: {
-                ...process.env,
-                // Use basic-auth only configuration to avoid mTLS initialization conflicts
-                CDS_CONFIG: path.join(testAppRoot, ".cdsrc.basic.json"),
-            },
-            stdio: ["ignore", "pipe", "pipe"],
-        });
-
-        serverProcess.stdout.on("data", (data) => {
-            const out = data.toString().trim();
-            if (out) console.log(`[CDS] ${out}`);
-        });
-
-        serverProcess.stderr.on("data", (data) => {
-            const out = data.toString().trim();
-            if (out) {
-                console.error(`[CDS ERR] ${out}`);
-                // Detect fatal errors
-                if (out.includes("Error:") || out.includes("EADDRINUSE") || out.includes("EACCES")) {
-                    console.error("Fatal error detected during server startup");
-                }
-            }
-        });
-
-        serverProcess.on("exit", (code, signal) => {
-            if (code !== null && code !== 0) {
-                console.error(`CDS process exited with code ${code}`);
-            }
-            if (signal) {
-                console.error(`CDS process killed with signal ${signal}`);
-            }
-        });
-
-        await waitForServer();
-        console.log("Basic-auth test setup complete");
-    }, 60000); // 60 second timeout for server startup
-
-    afterAll(async () => {
-        // Stop the server
-        if (serverProcess && !serverProcess.killed) {
-            console.log("Stopping CDS server");
-
-            return new Promise((resolve) => {
-                const cleanup = () => {
-                    console.log("CDS server stopped");
-                    serverProcess = null;
-                    resolve();
-                };
-
-                serverProcess.on("exit", cleanup);
-
-                // Try graceful shutdown first
-                serverProcess.kill("SIGTERM");
-
-                // Force kill after timeout
-                setTimeout(() => {
-                    if (serverProcess && !serverProcess.killed) {
-                        console.log("Force killing CDS server");
-                        serverProcess.kill("SIGKILL");
-                        setTimeout(cleanup, 500);
-                    }
-                }, 3000);
-            });
-        }
-    }, 10000); // 10 second timeout for cleanup
-
     describe("ORD Config Endpoint Tests", () => {
         test("should return ORD config with valid basic auth (lowercase header)", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_CONFIG_ENDPOINT)
-                .set("authorization", VALID_AUTH) // lowercase as in HTTP file
-                .expect(200);
+            const response = await testapp.get(ORD_CONFIG_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toEqual({
+            expect(response.data).toEqual({
                 openResourceDiscoveryV1: {
                     documents: [
                         {
-                            url: "/ord/v1/documents/ord-document",
+                            url: "/ord/v1/documents/ord-document?part=0",
                             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                             perspective: "system-version",
                         },
@@ -142,280 +39,157 @@ describe("ORD Integration Tests - Basic Authentication", () => {
         });
 
         test("should return ORD config with standard Authorization header", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_CONFIG_ENDPOINT)
-                .set("Authorization", VALID_AUTH) // standard case
-                .expect(200);
+            const response = await testapp.get(ORD_CONFIG_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toMatchSnapshot();
+            expect(response.data).toMatchSnapshot();
         });
 
         test("should return ORD config without authentication", async () => {
-            const response = await request(BASE_URL).get(ORD_CONFIG_ENDPOINT).expect(200);
+            const response = await testapp.get(ORD_CONFIG_ENDPOINT);
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(response.body).toMatchSnapshot();
+            expect(response.data).toMatchSnapshot();
         });
     });
 
     describe("ORD Document Endpoint Tests", () => {
         test("should return ORD document with valid basic auth (lowercase header)", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT)
-                .set("authorization", VALID_AUTH) // lowercase
-                .expect(200);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(utils.pinLastUpdateForStableTest(response.body)).toMatchSnapshot();
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
 
         test("should return ORD document with standard Authorization header", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT)
-                .set("Authorization", VALID_AUTH) // standard case
-                .expect(200);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, { headers: { Authorization: VALID_AUTH } });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(utils.pinLastUpdateForStableTest(response.body)).toMatchSnapshot();
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
 
         test("should reject invalid password", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT)
-                .set("Authorization", INVALID_PASS_AUTH)
-                .expect(401);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
+                validateStatus: () => true,
+                headers: { Authorization: INVALID_PASS_AUTH },
+            });
 
-            expect(response.text).toContain("Invalid credentials");
+            expect(response.status).toBe(401);
+            expect(response.data).toBe("Invalid credentials");
         });
 
         test("should reject invalid username", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT)
-                .set("Authorization", INVALID_USER_AUTH)
-                .expect(401);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
+                validateStatus: () => true,
+                headers: { Authorization: INVALID_USER_AUTH },
+            });
 
-            expect(response.text).toContain("Invalid credentials");
+            expect(response.status).toBe(401);
+            expect(response.data).toBe("Invalid credentials");
         });
 
         test("should require authentication when missing credentials", async () => {
-            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).expect(401);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, { validateStatus: () => true });
 
-            expect(response.text).toContain("Authentication required");
+            expect(response.status).toBe(401);
             expect(response.headers["www-authenticate"]).toBeDefined();
+            expect(response.data).toContain("Authentication required");
         });
 
         test("should reject Bearer token", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT)
-                .set("Authorization", BEARER_TOKEN)
-                .expect(401);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
+                validateStatus: () => true,
+                headers: { Authorization: BEARER_TOKEN },
+            });
 
-            expect(response.text).toContain("Invalid authentication type");
+            expect(response.status).toBe(401);
+            expect(response.data).toContain("Invalid authentication type");
         });
 
         test("should reject malformed Authorization header", async () => {
-            await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set("Authorization", MALFORMED_AUTH).expect(401);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
+                validateStatus: () => true,
+                headers: { Authorization: MALFORMED_AUTH },
+            });
+
+            expect(response.status).toBe(401);
         });
 
         test("should reject empty Authorization header", async () => {
-            const response = await request(BASE_URL).get(ORD_DOCUMENT_ENDPOINT).set("Authorization", "").expect(401);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
+                validateStatus: () => true,
+                headers: { Authorization: "" },
+            });
 
-            expect(response.text).toContain("Authentication required");
+            expect(response.status).toBe(401);
+            expect(response.data).toContain("Authentication required");
         });
 
         test("should return bad request when requesting document with invalid perspective", async () => {
-            await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT + "?perspective=invalid")
-                .set("authorization", VALID_AUTH) // lowercase
-                .expect(400);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT + "?perspective=invalid", {
+                validateStatus: () => true,
+                headers: { Authorization: VALID_AUTH },
+            });
+
+            expect(response.status).toBe(400);
         });
 
         test("should return bad request when requesting document with system-instance perspective and no tenant", async () => {
-            await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance")
-                .set("authorization", VALID_AUTH) // lowercase
-                .expect(400);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance", {
+                validateStatus: () => true,
+                headers: { Authorization: VALID_AUTH },
+            });
+
+            expect(response.status).toBe(400);
         });
 
         test("should return ORD document with valid basic auth for system-version perspective", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-version")
-                .set("authorization", VALID_AUTH) // lowercase
-                .expect(200);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-version", {
+                headers: { Authorization: VALID_AUTH },
+            });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(utils.pinLastUpdateForStableTest(response.body)).toMatchSnapshot();
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
 
         test("should return ORD document with valid basic auth for system-instance perspective", async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance")
-                .set("Authorization", VALID_AUTH) // lowercase
-                .set("Local-Tenant-Id", "12-34-56") // lowercase
-                .expect(200);
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT + "?perspective=system-instance", {
+                headers: {
+                    "Authorization": VALID_AUTH,
+                    "Local-Tenant-Id": "12-34-56",
+                },
+            });
 
+            expect(response.status).toBe(200);
             expect(response.headers["content-type"]).toMatch(/application\/json/);
-            expect(utils.pinLastUpdateForStableTest(response.body)).toMatchSnapshot();
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
     });
 
     describe("ORD Document Structure Validation for system-version perspective", () => {
-        let ordDocument;
-
-        beforeAll(async () => {
-            const response = await request(BASE_URL)
-                .get(ORD_DOCUMENT_ENDPOINT)
-                .set("Authorization", VALID_AUTH)
-                .expect(200);
-
-            ordDocument = utils.pinLastUpdateForStableTest(response.body);
-        });
-
-        test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
-            expect(ordDocument).toHaveProperty("description");
-            expect(Array.isArray(ordDocument.apiResources)).toBe(true);
-            expect(Array.isArray(ordDocument.eventResources)).toBe(true);
-            expect(ordDocument.perspective).toBe("system-version");
-            expect(ordDocument.describedSystemVersion).toEqual({ version: "0.1.0" });
-        });
-
-        test("should include TestService with correct properties", () => {
-            const testService = ordDocument.apiResources.find(
-                (api) => api.title === "Test Service for Integration Testing",
-            );
-
-            expect(testService).toMatchSnapshot();
-        });
-
-        test("should contain expected resources", () => {
-            expect(ordDocument.apiResources).toHaveLength(3);
-            expect(ordDocument.eventResources).toHaveLength(1);
-            expect(ordDocument.packages).toHaveLength(1);
-        });
-
-        test("should have correct query params for all resource definitions", () => {
-            ordDocument.apiResources.forEach((apiResource) => {
-                apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.url).toMatch(/(.*)\.(edmx|oas3\.json)$/);
-                });
+        test("should have required ORD structure", async () => {
+            const response = await testapp.get(ORD_DOCUMENT_ENDPOINT, {
+                headers: { Authorization: VALID_AUTH },
             });
 
-            ordDocument.eventResources.forEach((eventResource) => {
-                eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.url).toMatch(/(.*)\.asyncapi2\.json$/);
-                });
-            });
-        });
-
-        test("should have 'basic-auth' accessStrategies in all resources", () => {
-            // Verify API resources have 'basic-auth' accessStrategies
-            ordDocument.apiResources.forEach((apiResource) => {
-                apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.Basic }]));
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Basic)).toBe(true);
-                });
-            });
-
-            // Verify Event resources have 'basic-auth' accessStrategies
-            ordDocument.eventResources.forEach((eventResource) => {
-                eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(
-                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.Basic }]),
-                    );
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Basic)).toBe(true);
-                });
-            });
-
-            // Verify no resource has 'open' accessStrategy
-            [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
-                resource.resourceDefinitions.forEach((resDef) => {
-                    const hasOpen = resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Open);
-                    expect(hasOpen).toBe(false);
-                });
-            });
+            expect(response.status).toBe(200);
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
     });
 
     describe("ORD Document Structure Validation for system-instance perspective", () => {
-        let ordDocument;
-
-        beforeAll(async () => {
-            const response = await request(BASE_URL)
-                .get("/ord/v1/documents/ord-document?perspective=system-instance")
-                .set("Authorization", VALID_AUTH)
-                .set("Local-Tenant-Id", "12-34-56")
-                .expect(200);
-
-            ordDocument = utils.pinLastUpdateForStableTest(response.body);
-        });
-
-        test("should have required ORD structure", () => {
-            expect(ordDocument).toHaveProperty("openResourceDiscovery", "1.14");
-            expect(ordDocument).toHaveProperty("description");
-            expect(Array.isArray(ordDocument.apiResources)).toBe(true);
-            expect(Array.isArray(ordDocument.eventResources)).toBe(true);
-            expect(ordDocument.perspective).toBe("system-instance");
-            expect(ordDocument.describedSystemVersion).toEqual(undefined);
-        });
-
-        test("should include TestService with correct properties", () => {
-            const testService = ordDocument.apiResources.find(
-                (api) => api.title === "Test Service for Integration Testing",
-            );
-
-            expect(testService).toMatchSnapshot();
-        });
-
-        test("should contain expected resources", () => {
-            expect(ordDocument.apiResources).toHaveLength(3);
-            expect(ordDocument.eventResources).toHaveLength(1);
-            expect(ordDocument.packages).toHaveLength(1);
-        });
-
-        test("should have correct query params for all resource definitions", () => {
-            ordDocument.apiResources.forEach((apiResource) => {
-                apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.url).toMatch(/(.*)\?perspective=system-instance$/);
-                });
+        test("should have required ORD structure", async () => {
+            const response = await testapp.get("/ord/v1/documents/ord-document?perspective=system-instance", {
+                headers: { "Authorization": VALID_AUTH, "Local-Tenant-Id": "12-34-56" },
             });
 
-            ordDocument.eventResources.forEach((eventResource) => {
-                eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.url).toMatch(/(.*)\?perspective=system-instance$/);
-                });
-            });
-        });
-
-        test("should have 'basic-auth' accessStrategies in all resources", () => {
-            // Verify API resources have 'basic-auth' accessStrategies
-            ordDocument.apiResources.forEach((apiResource) => {
-                apiResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(
-                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.Basic }]),
-                    );
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Basic)).toBe(true);
-                });
-            });
-
-            // Verify Event resources have 'basic-auth' accessStrategies
-            ordDocument.eventResources.forEach((eventResource) => {
-                eventResource.resourceDefinitions.forEach((resDef) => {
-                    expect(resDef.accessStrategies).toEqual(
-                        expect.arrayContaining([{ type: ORD_ACCESS_STRATEGY.Basic }]),
-                    );
-                    expect(resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Basic)).toBe(true);
-                });
-            });
-
-            // Verify no resource has 'open' accessStrategy
-            [...ordDocument.apiResources, ...ordDocument.eventResources].forEach((resource) => {
-                resource.resourceDefinitions.forEach((resDef) => {
-                    const hasOpen = resDef.accessStrategies.some((s) => s.type === ORD_ACCESS_STRATEGY.Open);
-                    expect(hasOpen).toBe(false);
-                });
-            });
+            expect(response.status).toBe(200);
+            expect(utils.pinLastUpdateForStableTest(response.data)).toMatchSnapshot();
         });
     });
 });

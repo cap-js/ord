@@ -1,5 +1,7 @@
-const { createGroupsTemplateForService, RESOLVERS } = require("../../../lib/templates/group");
+const { createGroups, createGroupsTemplateForService, RESOLVERS } = require("../../../lib/templates/group");
 const defaults = require("../../../lib/defaults");
+const cds = require("@sap/cds");
+const { ORD_ACCESS_STRATEGY } = require("../../../lib/constants");
 
 const BASE_SERVICE = {
     name: "sap.test.BusinessPartnerService",
@@ -57,13 +59,34 @@ describe("RESOLVERS.groupId", () => {
     it("uses internalNamespace prefix when it matches service name", () => {
         const appConfig = { ...BASE_APP_CONFIG, internalNamespace: "sap.internal" };
         const service = { name: "sap.internal.MyService" };
-        expect(RESOLVERS.groupId(service, appConfig)).toBe(
-            `${defaults.groupTypeId}:sap.test:MyService`,
-        );
+        expect(RESOLVERS.groupId(service, appConfig)).toBe(`${defaults.groupTypeId}:sap.test:MyService`);
     });
 });
 
 describe("createGroupsTemplateForService", () => {
+    let serviceDefinition;
+    const appConfig = {
+        ordNamespace: "customer.testNamespace",
+        appName: "testAppName",
+        lastUpdate: "2022-12-19T15:47:04+00:00",
+        policyLevels: ["none"],
+        authConfig: {
+            accessStrategies: [ORD_ACCESS_STRATEGY.Open],
+        },
+    };
+
+    beforeAll(() => {
+        const model = cds.linked(`
+                service testServiceName {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+            `);
+        serviceDefinition = model.definitions["testServiceName"];
+    });
+
     it("produces a complete group object with defaults", () => {
         const result = createGroupsTemplateForService(BASE_SERVICE, BASE_APP_CONFIG);
         expect(result).toEqual({
@@ -82,5 +105,106 @@ describe("createGroupsTemplateForService", () => {
     it("always uses the canonical groupTypeId from defaults", () => {
         const result = createGroupsTemplateForService(BASE_SERVICE, BASE_APP_CONFIG);
         expect(result.groupTypeId).toBe(defaults.groupTypeId);
+    });
+
+    it("should return default value when groupIds do not have groupId", () => {
+        expect(createGroupsTemplateForService(serviceDefinition, appConfig)).toEqual({
+            groupId: "sap.cds:service:customer.testNamespace:testServiceName",
+            groupTypeId: "sap.cds:service",
+            title: "test Service",
+        });
+    });
+
+    it('should return default value with a proper Service title when "Service" keyword is missing', () => {
+        expect(createGroupsTemplateForService({ ...serviceDefinition, name: "testServName" }, appConfig)).toEqual({
+            groupId: "sap.cds:service:customer.testNamespace:testServName",
+            groupTypeId: "sap.cds:service",
+            title: "testServName Service",
+        });
+    });
+});
+
+describe("createGroups", () => {
+    const BASE_CONFIG = {
+        ordNamespace: "sap.test",
+        appName: "TestApp",
+        packageName: "TestPackage",
+        lastUpdate: "2024-01-01T00:00:00+00:00",
+        env: { defaultVisibility: "public" },
+    };
+
+    it("returns an empty array when there are no service definitions", () => {
+        const model = cds.linked(`entity Books { key ID: UUID; }`);
+        const appConfig = { ...BASE_CONFIG, csn: model };
+
+        expect(createGroups(appConfig)).toEqual([]);
+    });
+
+    it("returns one group per valid service", () => {
+        const model = cds.linked(`
+            service ServiceA { entity Orders { key ID: UUID; } }
+            service ServiceB { entity Items  { key ID: UUID; } }
+        `);
+        const appConfig = { ...BASE_CONFIG, csn: model };
+
+        const result = createGroups(appConfig);
+
+        expect(result).toHaveLength(2);
+        const groupIds = result.map((g) => g.groupId);
+        expect(groupIds.some((id) => id.includes("ServiceA"))).toBe(true);
+        expect(groupIds.some((id) => id.includes("ServiceB"))).toBe(true);
+    });
+
+    it("excludes services with @protocol: 'none'", () => {
+        const model = cds.linked(`
+            @protocol: 'none'
+            service HiddenService { entity Items { key ID: UUID; } }
+            service VisibleService { entity Items { key ID: UUID; } }
+        `);
+        const appConfig = { ...BASE_CONFIG, csn: model };
+
+        const result = createGroups(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].groupId).toContain("VisibleService");
+    });
+
+    it("excludes private services", () => {
+        const model = cds.linked(`
+            namespace sap.test;
+            service PublicService  { entity Items { key ID: UUID; } }
+            service PrivateService { entity Items { key ID: UUID; } }
+            annotate PrivateService with @ORD.Extensions: { visibility: 'private' };
+        `);
+        const appConfig = { ...BASE_CONFIG, csn: model };
+
+        const result = createGroups(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].groupId).toContain("PublicService");
+    });
+
+    it("includes internal services", () => {
+        const model = cds.linked(`
+            namespace sap.test;
+            service InternalService { entity Items { key ID: UUID; } }
+            annotate InternalService with @ORD.Extensions: { visibility: 'internal' };
+        `);
+        const appConfig = { ...BASE_CONFIG, csn: model };
+
+        const result = createGroups(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].groupId).toContain("InternalService");
+    });
+
+    it("each group carries the canonical groupTypeId", () => {
+        const model = cds.linked(`service MyService { entity Items { key ID: UUID; } }`);
+        const appConfig = { ...BASE_CONFIG, csn: model };
+
+        const result = createGroups(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].groupTypeId).toBe(defaults.groupTypeId);
     });
 });

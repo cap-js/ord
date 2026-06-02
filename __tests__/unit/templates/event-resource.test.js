@@ -1,5 +1,12 @@
-const { createEventResourceTemplate, RESOLVERS } = require("../../../lib/templates/event-resource");
-const { RESOURCE_VISIBILITY, ENTITY_RELATIONSHIP_ANNOTATION, ORD_ODM_ENTITY_NAME_ANNOTATION } = require("../../../lib/constants");
+const cds = require("@sap/cds");
+
+const { createEventResources, createEventResourceTemplate, RESOLVERS } = require("../../../lib/templates/event-resource");
+const {
+    RESOURCE_VISIBILITY,
+    ENTITY_RELATIONSHIP_ANNOTATION,
+    ORD_ODM_ENTITY_NAME_ANNOTATION,
+    ORD_ACCESS_STRATEGY,
+} = require("../../../lib/constants");
 
 const BASE_SERVICE = {
     name: "TestEventService",
@@ -9,9 +16,10 @@ const BASE_SERVICE = {
 const BASE_APP_CONFIG = {
     ordNamespace: "sap.test",
     appName: "TestApp",
+    packageName: "TestPackage",
     lastUpdate: "2024-01-01T00:00:00+00:00",
     env: { defaultVisibility: RESOURCE_VISIBILITY.public },
-    authConfig: { accessStrategies: ["open"] },
+    accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
 };
 
 describe("RESOLVERS.version", () => {
@@ -110,9 +118,7 @@ describe("RESOLVERS.exposedEntityTypes", () => {
                 BPEntity: { [ORD_ODM_ENTITY_NAME_ANNOTATION]: "BusinessPartner" },
             },
         };
-        expect(RESOLVERS.exposedEntityTypes(service)).toEqual([
-            { ordId: "sap.odm:entityType:BusinessPartner:v1" },
-        ]);
+        expect(RESOLVERS.exposedEntityTypes(service)).toEqual([{ ordId: "sap.odm:entityType:BusinessPartner:v1" }]);
     });
 
     it("includes entity type ordId when @EntityRelationship.entityType is set", () => {
@@ -122,9 +128,7 @@ describe("RESOLVERS.exposedEntityTypes", () => {
                 BPEntity: { [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:BusinessPartner:v1" },
             },
         };
-        expect(RESOLVERS.exposedEntityTypes(service)).toEqual([
-            { ordId: "sap.test:entityType:BusinessPartner:v1" },
-        ]);
+        expect(RESOLVERS.exposedEntityTypes(service)).toEqual([{ ordId: "sap.test:entityType:BusinessPartner:v1" }]);
     });
 
     it("deduplicates ordIds across entities", () => {
@@ -133,9 +137,7 @@ describe("RESOLVERS.exposedEntityTypes", () => {
             ...BASE_SERVICE,
             entities: { E1: entity, E2: entity },
         };
-        expect(RESOLVERS.exposedEntityTypes(service)).toEqual([
-            { ordId: "sap.odm:entityType:BusinessPartner:v1" },
-        ]);
+        expect(RESOLVERS.exposedEntityTypes(service)).toEqual([{ ordId: "sap.odm:entityType:BusinessPartner:v1" }]);
     });
 
     it("includes both ODM and entity relationship ordIds when both annotations are present", () => {
@@ -190,9 +192,7 @@ describe("RESOLVERS.partOfGroups", () => {
 
     it("strips namespace prefix from service name", () => {
         const service = { ...BASE_SERVICE, name: "sap.test.TestEventService" };
-        expect(RESOLVERS.partOfGroups(service, BASE_APP_CONFIG)).toEqual([
-            "sap.cds:service:sap.test:TestEventService",
-        ]);
+        expect(RESOLVERS.partOfGroups(service, BASE_APP_CONFIG)).toEqual(["sap.cds:service:sap.test:TestEventService"]);
     });
 });
 
@@ -235,13 +235,22 @@ describe("RESOLVERS.resourceDefinitions", () => {
     });
 
     it("includes accessStrategies from authConfig", () => {
-        const appConfig = { ...BASE_APP_CONFIG, authConfig: { accessStrategies: ["open"] } };
+        const appConfig = { ...BASE_APP_CONFIG, accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }] };
         const result = RESOLVERS.resourceDefinitions(BASE_SERVICE, appConfig);
         expect(result[0].accessStrategies).toEqual([{ type: "open" }]);
     });
 });
 
 describe("createEventResourceTemplate", () => {
+    const appConfig = {
+        ordNamespace: "customer.testNamespace",
+        appName: "testAppName",
+        packageName: "TestPackage",
+        lastUpdate: "2022-12-19T15:47:04+00:00",
+        policyLevels: ["none"],
+        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+    };
+
     it("produces a complete event resource object with defaults", () => {
         const result = createEventResourceTemplate(BASE_SERVICE, BASE_APP_CONFIG);
         expect(result).toEqual({
@@ -292,5 +301,368 @@ describe("createEventResourceTemplate", () => {
         const result = createEventResourceTemplate(service, BASE_APP_CONFIG);
         expect(result.title).toBe("My Events");
         expect(result.releaseStatus).toBe("beta");
+    });
+
+    it("should create event resource template correctly", () => {
+        const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+        const srvDefinition = model.definitions["MyService"];
+
+        expect(createEventResourceTemplate(srvDefinition, appConfig)).toMatchSnapshot();
+    });
+
+    it("should create event resource template correctly with packageIds including namespace", () => {
+        const model = cds.linked(`
+                service MyService {
+                   entity Books {
+                       key ID: UUID;
+                       title: String;
+                   }
+                };
+            `);
+        const srvDefinition = model.definitions["MyService"];
+
+        expect(createEventResourceTemplate(srvDefinition, appConfig)).toMatchSnapshot();
+    });
+
+    it("should return event resource with correct title from annotation '@EndUserText.label'", () => {
+        const serviceName = "MyService";
+        const linkedModel = cds.linked(`
+                @EndUserText.label: 'This is test MyService event title'
+                service MyService { }
+            `);
+        const eventResourceTemplate = createEventResourceTemplate(linkedModel.definitions[serviceName], appConfig);
+
+        expect(eventResourceTemplate.title).toEqual("This is test MyService event title");
+    });
+
+    it('should add events with ORD Extension "visibility=public"', () => {
+        const linkedModel = cds.linked(`
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService event title',
+                    shortDescription: 'short description for test MyService event',
+                    visibility : 'public',
+                    version : '2.0.0',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+        const srvDefinition = linkedModel.definitions["MyService"];
+        const eventResourceTemplate = createEventResourceTemplate(srvDefinition, appConfig);
+
+        expect(eventResourceTemplate).toMatchSnapshot();
+    });
+
+    it("should include internal events but ensure they appear in a separate package", () => {
+        const linkedModel = cds.linked(`
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                }
+                annotate MyService with @ORD.Extensions : {
+                    title           : 'This is test MyService event title',
+                    shortDescription: 'short description for test MyService event',
+                    visibility : 'internal',
+                    version : '2.0.0',
+                    extensible : {
+                        supported : 'yes'
+                    }
+                };
+            `);
+        const srvDefinition = linkedModel.definitions["MyService"];
+        const eventResourceTemplate = createEventResourceTemplate(srvDefinition, appConfig);
+
+        expect(eventResourceTemplate).toMatchSnapshot();
+
+        expect(eventResourceTemplate.visibility).toEqual("internal");
+    });
+
+    it("should assign the correct partOfPackage for public Event", () => {
+        const serviceDefinition = { "@ORD.Extensions.visibility": "public", "entities": [], "name": "PublicEvent" };
+
+        const eventResource = createEventResourceTemplate(serviceDefinition, appConfig);
+
+        expect(eventResource.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
+    });
+
+    it("should assign the correct partOfPackage for internal Event", () => {
+        const serviceDefinition = {
+            "@ORD.Extensions.visibility": "internal",
+            "entities": [],
+            "name": "InternalEvent",
+        };
+
+        const eventResource = createEventResourceTemplate(serviceDefinition, appConfig);
+
+        expect(eventResource.partOfPackage).toBe("customer.testNamespace:package:testAppName:v1");
+    });
+
+    it("should strip application namespace from local namespace", () => {
+        const appConfig = {
+            ordNamespace: "customer.testNamespace",
+            appName: "testAppName",
+            packageName: "TestPackage",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        };
+        const model = cds.linked(`
+                namespace customer.testNamespace.nested;
+
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'public'
+                };
+            `);
+
+        expect(
+            createEventResourceTemplate(model.definitions["customer.testNamespace.nested.MyService"], appConfig),
+        ).toMatchSnapshot();
+    });
+
+    it("should strip application namespace if its the same as local namespace", () => {
+        const appConfig = {
+            ordNamespace: "customer.testNamespace",
+            appName: "testAppName",
+            packageName: "TestPackage",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        };
+        const model = cds.linked(`
+                namespace customer.testNamespace;
+
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'public'
+                };
+            `);
+
+        expect(
+            createEventResourceTemplate(model.definitions["customer.testNamespace.MyService"], appConfig),
+        ).toMatchSnapshot();
+    });
+
+    it("should not strip a different local namespace", () => {
+        const appConfig = {
+            ordNamespace: "customer.testNamespace",
+            appName: "testAppName",
+            packageName: "TestPackage",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+        };
+        const model = cds.linked(`
+                namespace other.namespace;
+
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+                annotate MyService with @ORD.Extensions : {
+                    visibility : 'public'
+                };
+            `);
+
+        expect(
+            createEventResourceTemplate(model.definitions["other.namespace.MyService"], appConfig),
+        ).toMatchSnapshot();
+    });
+
+    it("should strip internalNamespace when it differs from ordNamespace", () => {
+        const appConfig = {
+            ordNamespace: "sap.sourcing",
+            internalNamespace: "com.sap.sourcing.api.v1",
+            appName: "testAppName",
+            packageName: "TestPackage",
+            lastUpdate: "2022-12-19T15:47:04+00:00",
+            authConfig: {
+                accessStrategies: [ORD_ACCESS_STRATEGY.Open],
+            },
+        };
+        const model = cds.linked(`
+            namespace com.sap.sourcing.api.v1;
+            service SourcingService {
+                entity Orders { key ID: UUID; }
+            };
+            annotate SourcingService with @ORD.Extensions : { visibility : 'public' };
+        `);
+
+        const eventResult = createEventResourceTemplate(
+            model.definitions["com.sap.sourcing.api.v1.SourcingService"],
+            appConfig,
+        );
+
+        expect(eventResult.ordId).toBe("sap.sourcing:eventResource:SourcingService:v1");
+    });
+});
+
+describe("createEventResources", () => {
+    const BASE_CONFIG = {
+        ordNamespace: "sap.test",
+        appName: "TestApp",
+        packageName: "TestPackage",
+        lastUpdate: "2024-01-01T00:00:00+00:00",
+        env: { defaultVisibility: RESOURCE_VISIBILITY.public },
+        accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
+    };
+
+    const makeService = (name, overrides = {}) => ({
+        kind: "service",
+        name,
+        entities: {},
+        ...overrides,
+    });
+
+    const makeEventDef = (service, eventName = "OrderPlaced") => ({
+        kind: "event",
+        name: `${service.name}.${eventName}`,
+        _service: service,
+    });
+
+    it("returns an empty array when there are no event definitions", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: { definitions: { Books: { kind: "entity", name: "Books" } } },
+        };
+
+        expect(createEventResources(appConfig)).toEqual([]);
+    });
+
+    it("returns one event resource per service that has events", () => {
+        const serviceA = makeService("ServiceA");
+        const serviceB = makeService("ServiceB");
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    "ServiceA.OrderPlaced": makeEventDef(serviceA),
+                    "ServiceB.ItemShipped": makeEventDef(serviceB, "ItemShipped"),
+                },
+            },
+        };
+
+        const result = createEventResources(appConfig);
+
+        expect(result).toHaveLength(2);
+        const ordIds = result.map((r) => r.ordId);
+        expect(ordIds).toContain("sap.test:eventResource:ServiceA:v1");
+        expect(ordIds).toContain("sap.test:eventResource:ServiceB:v1");
+    });
+
+    it("deduplicates: multiple events from the same service produce one event resource", () => {
+        const service = makeService("MyService");
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    "MyService.EventA": makeEventDef(service, "EventA"),
+                    "MyService.EventB": makeEventDef(service, "EventB"),
+                    "MyService.EventC": makeEventDef(service, "EventC"),
+                },
+            },
+        };
+
+        const result = createEventResources(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toBe("sap.test:eventResource:MyService:v1");
+    });
+
+    it("excludes event resources for private services", () => {
+        const publicService = makeService("PublicService");
+        const privateService = makeService("PrivateService", { "@ORD.Extensions.visibility": "private" });
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    "PublicService.EventA": makeEventDef(publicService),
+                    "PrivateService.EventB": makeEventDef(privateService, "EventB"),
+                },
+            },
+        };
+
+        const result = createEventResources(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toBe("sap.test:eventResource:PublicService:v1");
+    });
+
+    it("excludes events whose service has @protocol: 'none'", () => {
+        const visibleService = makeService("VisibleService");
+        const hiddenService = makeService("HiddenService", { "@protocol": "none", kind: "service" });
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    "VisibleService.OrderPlaced": makeEventDef(visibleService),
+                    "HiddenService.ItemCreated": makeEventDef(hiddenService, "ItemCreated"),
+                },
+            },
+        };
+
+        const result = createEventResources(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toBe("sap.test:eventResource:VisibleService:v1");
+    });
+
+    it("excludes non-event definitions (entities, services) from consideration", () => {
+        const service = makeService("MyService");
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    "MyService.OrderPlaced": makeEventDef(service),
+                    Books: { kind: "entity", name: "Books", _service: service },
+                    MyService: service,
+                },
+            },
+        };
+
+        const result = createEventResources(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toBe("sap.test:eventResource:MyService:v1");
+    });
+
+    it("uses cds.linked model to correctly resolve services with events", () => {
+        const model = cds.linked(`
+            namespace sap.test;
+            service OrderService {
+                event OrderPlaced { ID: UUID; }
+            }
+        `);
+        const appConfig = { ...BASE_CONFIG, csn: model };
+
+        const result = createEventResources(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toContain("eventResource");
+        expect(result[0].ordId).toContain("OrderService");
     });
 });

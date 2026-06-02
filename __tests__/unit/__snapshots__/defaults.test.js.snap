@@ -64,7 +64,7 @@ exports[`defaults baseTemplate should return correct value when no tenant is giv
           },
         ],
         "perspective": "system-version",
-        "url": "/ord/v1/documents/ord-document",
+        "url": "/ord/v1/documents/ord-document?part=0",
       },
     ],
   },
@@ -82,7 +82,7 @@ exports[`defaults baseTemplate should return correct value when no tenant is giv
           },
         ],
         "perspective": "system-version",
-        "url": "/ord/v1/documents/ord-document",
+        "url": "/ord/v1/documents/ord-document?part=0",
       },
     ],
   },
@@ -100,7 +100,7 @@ exports[`defaults baseTemplate should return correct value when tenant is given 
           },
         ],
         "perspective": "system-version",
-        "url": "/ord/v1/documents/ord-document",
+        "url": "/ord/v1/documents/ord-document?part=0",
       },
       {
         "accessStrategies": [
@@ -109,7 +109,7 @@ exports[`defaults baseTemplate should return correct value when tenant is given 
           },
         ],
         "perspective": "system-instance",
-        "url": "/ord/v1/documents/ord-document?perspective=system-instance",
+        "url": "/ord/v1/documents/ord-document?part=0&perspective=system-instance",
       },
     ],
   },
@@ -127,7 +127,7 @@ exports[`defaults baseTemplate should return correct value when tenant is given 
           },
         ],
         "perspective": "system-version",
-        "url": "/ord/v1/documents/ord-document",
+        "url": "/ord/v1/documents/ord-document?part=0",
       },
       {
         "accessStrategies": [
@@ -136,7 +136,7 @@ exports[`defaults baseTemplate should return correct value when tenant is given 
           },
         ],
         "perspective": "system-instance",
-        "url": "/ord/v1/documents/ord-document?perspective=system-instance",
+        "url": "/ord/v1/documents/ord-document?part=0&perspective=system-instance",
       },
     ],
   },
@@ -154,7 +154,7 @@ exports[`defaults baseTemplate should return correct value when tenant is given 
           },
         ],
         "perspective": "system-version",
-        "url": "/ord/v1/documents/ord-document",
+        "url": "/ord/v1/documents/ord-document?part=0",
       },
       {
         "accessStrategies": [
@@ -163,7 +163,7 @@ exports[`defaults baseTemplate should return correct value when tenant is given 
           },
         ],
         "perspective": "system-instance",
-        "url": "/ord/v1/documents/ord-document?perspective=system-instance",
+        "url": "/ord/v1/documents/ord-document?part=0&perspective=system-instance",
       },
     ],
   },
@@ -181,7 +181,7 @@ exports[`defaults baseTemplate should return correct value when tenant is not gi
           },
         ],
         "perspective": "system-version",
-        "url": "/ord/v1/documents/ord-document",
+        "url": "/ord/v1/documents/ord-document?part=0",
       },
     ],
   },
@@ -199,7 +199,7 @@ exports[`defaults baseTemplate should return correct value when tenant is not gi
           },
         ],
         "perspective": "system-version",
-        "url": "/ord/v1/documents/ord-document",
+        "url": "/ord/v1/documents/ord-document?part=0",
       },
     ],
   },
@@ -212,254 +212,8 @@ exports[`defaults groupTypeId should return default value 1`] = `"sap.cds:servic
 
 exports[`defaults openResourceDiscovery should return default value 1`] = `"1.14"`;
 
-exports[`defaults packages should not contain partOfProducts if no productsOrdId found 1`] = `
-[
-  {
-    "description": "This package contains public General for My Package.",
-    "ordId": "customer.sample:package:MyPackage:v1",
-    "shortDescription": "Package containing public General",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-]
-`;
-
-exports[`defaults packages should return custom value if user defined in .cdsrc.json 1`] = `
-[
-  {
-    "description": "This package contains public General for My Package.",
-    "ordId": "customer.sample:package:MyPackage:v1",
-    "partOfProducts": [
-      "customer:product:eb.bm.tests:",
-    ],
-    "shortDescription": "Package containing public General",
-    "tags": [
-      "custom",
-    ],
-    "title": "My Package",
-    "vendor": "sap:vendor:SAP:",
-    "version": "1.0.0",
-  },
-]
-`;
-
-exports[`defaults packages should return default value if policyLevels contains sap 1`] = `
-[
-  {
-    "description": "This package contains public APIs for My Package.",
-    "ordId": "customer.sample:package:MyPackage-api:v1",
-    "shortDescription": "Package containing public APIs",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains internal APIs for My Package.",
-    "ordId": "customer.sample:package:MyPackage-api-internal:v1",
-    "shortDescription": "Package containing internal APIs",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains private APIs for My Package.",
-    "ordId": "customer.sample:package:MyPackage-api-private:v1",
-    "shortDescription": "Package containing private APIs",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains public Events for My Package.",
-    "ordId": "customer.sample:package:MyPackage-event:v1",
-    "shortDescription": "Package containing public Events",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains internal Events for My Package.",
-    "ordId": "customer.sample:package:MyPackage-event-internal:v1",
-    "shortDescription": "Package containing internal Events",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains private Events for My Package.",
-    "ordId": "customer.sample:package:MyPackage-event-private:v1",
-    "shortDescription": "Package containing private Events",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains public Entity Types for My Package.",
-    "ordId": "customer.sample:package:MyPackage-entityType:v1",
-    "shortDescription": "Package containing public Entity Types",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains internal Entity Types for My Package.",
-    "ordId": "customer.sample:package:MyPackage-entityType-internal:v1",
-    "shortDescription": "Package containing internal Entity Types",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains private Entity Types for My Package.",
-    "ordId": "customer.sample:package:MyPackage-entityType-private:v1",
-    "shortDescription": "Package containing private Entity Types",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains public Data Products for My Package.",
-    "ordId": "customer.sample:package:MyPackage-dataProduct:v1",
-    "shortDescription": "Package containing public Data Products",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains internal Data Products for My Package.",
-    "ordId": "customer.sample:package:MyPackage-dataProduct-internal:v1",
-    "shortDescription": "Package containing internal Data Products",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains private Data Products for My Package.",
-    "ordId": "customer.sample:package:MyPackage-dataProduct-private:v1",
-    "shortDescription": "Package containing private Data Products",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains public Integration Dependencies for My Package.",
-    "ordId": "customer.sample:package:MyPackage-integrationDependency:v1",
-    "shortDescription": "Package containing public Integration Dependencies",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains internal Integration Dependencies for My Package.",
-    "ordId": "customer.sample:package:MyPackage-integrationDependency-internal:v1",
-    "shortDescription": "Package containing internal Integration Dependencies",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-  {
-    "description": "This package contains private Integration Dependencies for My Package.",
-    "ordId": "customer.sample:package:MyPackage-integrationDependency-private:v1",
-    "shortDescription": "Package containing private Integration Dependencies",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-]
-`;
-
-exports[`defaults packages should return default value if policyLevels does not contain sap 1`] = `
-[
-  {
-    "description": "This package contains public General for My Package.",
-    "ordId": "customer.sample:package:MyPackage:v1",
-    "shortDescription": "Package containing public General",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-]
-`;
-
-exports[`defaults packages should return only custom value if user definitions in .cdsrc.json are done correctly 1`] = `
-[
-  {
-    "description": "This package contains public General for My Package.",
-    "labels": [
-      "correct",
-    ],
-    "licenseType": "important license",
-    "ordId": "customer.sample:package:MyPackage:v1",
-    "partOfProducts": [
-      "customer:product:eb.bm.tests:",
-    ],
-    "shortDescription": "Package containing public General",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-]
-`;
-
-exports[`defaults packages should use custom vendor if it defined in .cdsrc.json 1`] = `
-[
-  {
-    "description": "This package contains public General for My Package.",
-    "ordId": "customer.sample:package:MyPackage:v1",
-    "shortDescription": "Package containing public General",
-    "title": "My Package",
-    "vendor": "sap:vendor:SAP:",
-    "version": "1.0.0",
-  },
-]
-`;
-
-exports[`defaults packages should use existingProductId if existingProductId and custom product both provided in .cdsrc.json 1`] = `
-[
-  {
-    "description": "This package contains public General for My Package.",
-    "ordId": "customer.sample:package:MyPackage:v1",
-    "partOfProducts": [
-      "sap:product:SAPServiceCloudV2:",
-    ],
-    "shortDescription": "Package containing public General",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-]
-`;
-
-exports[`defaults packages should use existingProductId if provided in .cdsrc.json 1`] = `
-[
-  {
-    "description": "This package contains public General for My Package.",
-    "ordId": "customer.sample:package:MyPackage:v1",
-    "partOfProducts": [
-      "sap:product:SAPServiceCloudV2:",
-    ],
-    "shortDescription": "Package containing public General",
-    "title": "My Package",
-    "vendor": "customer:vendor:Customer:",
-    "version": "1.0.0",
-  },
-]
-`;
-
 exports[`defaults policyLevels should return default value 1`] = `
 [
   "none",
-]
-`;
-
-exports[`defaults products should return default value 1`] = `
-[
-  {
-    "ordId": "customer:product:My.Product:",
-    "shortDescription": "Short description of My Product",
-    "title": "My Product",
-    "vendor": "customer:vendor:Customer:",
-  },
 ]
 `;

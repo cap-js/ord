@@ -1,0 +1,39 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`createEntityTypeTemplate should return entity type with default version, title and level:sub-entity 1`] = `
+{
+  "description": "Description for SomeAribaDummyEntity",
+  "extensible": {
+    "supported": "no",
+  },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "level": "sub-entity",
+  "localId": "SomeAribaDummyEntity",
+  "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v1",
+  "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+  "releaseStatus": "active",
+  "shortDescription": "Short description of SomeAribaDummyEntity",
+  "title": "SomeAribaDummyEntity",
+  "version": "1.0.0",
+  "visibility": "public",
+}
+`;
+
+exports[`createEntityTypeTemplate should return entity type with incorrect version, title and level:root-entity 1`] = `
+{
+  "description": "Description for SomeAribaDummyEntity",
+  "extensible": {
+    "supported": "no",
+  },
+  "lastUpdate": "2022-12-19T15:47:04+00:00",
+  "level": "root-entity",
+  "localId": "SomeAribaDummyEntity",
+  "ordId": "sap.sm:entityType:SomeAribaDummyEntity:v3b",
+  "partOfPackage": "customer.testNamespace:package:testAppName:v1",
+  "releaseStatus": "active",
+  "shortDescription": "Short description of SomeAribaDummyEntity",
+  "title": "Title of SomeAribaDummyEntity",
+  "version": "3b.0.0",
+  "visibility": "public",
+}
+`;
