@@ -1,9 +1,9 @@
 const path = require("path");
 
 const utils = require("../utils");
+const { CF_MTLS_HEADERS } = require("../../lib/constants");
 const createTestApp = require("../hooks/test-app");
 const createMockServer = require("../hooks/mock-server");
-const { CF_MTLS_HEADERS, ORD_ACCESS_STRATEGY } = require("../../lib/constants");
 
 const ORD_CONFIG_ENDPOINT = "/.well-known/open-resource-discovery";
 const ORD_DOCUMENT_ENDPOINT = "/ord/v1/documents/ord-document";
