@@ -29,7 +29,7 @@
         "test:all": "npm run test && npm run test:integration:basic && npm run test:integration:mtls && npm run test:integration:build"
     },
     "devDependencies": {
-        "@cap-js/cds-test": "0.4.1",
+        "@cap-js/cds-test": "1.0.1",
         "@cap-js/graphql": "^0.14.0",
         "@cap-js/sqlite": "^2",
         "@open-resource-discovery/specification": "1.14.5",
