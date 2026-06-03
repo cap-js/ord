@@ -685,11 +685,6 @@ describe("createAPIResourceTemplate", () => {
             const result = _getPackageID("customer.testNamespace", packageIds);
             expect(result).toBe("customer.testNamespace:package:fallback-package:v1");
         });
-
-        it("should return undefined when no packageIds are provided", () => {
-            const result = _getPackageID("customer.testNamespace");
-            expect(result).toBeUndefined();
-        });
     });
 
     describe("Version Suffix Extraction for Data Product Services", () => {

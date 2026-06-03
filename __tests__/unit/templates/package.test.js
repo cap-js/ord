@@ -165,7 +165,7 @@ describe("createPackage", () => {
             const result = createPackage(BASE_CONFIG, {
                 label: "General",
                 visibility: RESOURCE_VISIBILITY.public,
-                productOrdId: "sap:product:MyProduct:",
+                products: ["sap:product:MyProduct:"],
             });
             expect(result.partOfProducts).toEqual(["sap:product:MyProduct:"]);
         });
