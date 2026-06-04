@@ -10,7 +10,6 @@ const {
     DATA_PRODUCT_TYPE,
     ORD_ACCESS_STRATEGY,
     DATA_PRODUCT_ANNOTATION,
-    MCP_RESOURCE_DEFINITION_TYPE,
     DATA_PRODUCT_SIMPLE_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_ODM_ENTITY_NAME_ANNOTATION,
@@ -148,7 +147,7 @@ describe("createAPIResourceTemplate", () => {
         const mcpResource = apiResourceTemplate[0];
         expect(mcpResource.apiProtocol).toBe("mcp");
         expect(mcpResource.resourceDefinitions).toHaveLength(1);
-        expect(mcpResource.resourceDefinitions[0].type).toBe(MCP_RESOURCE_DEFINITION_TYPE);
+        expect(mcpResource.resourceDefinitions[0].type).toBe("sap:mcp-server-card:v0");
         expect(mcpResource.resourceDefinitions[0].mediaType).toBe("application/json");
         expect(mcpResource.resourceDefinitions[0].url).toContain(".mcp.json");
 

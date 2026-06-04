@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 
-const { ORD_EXTENSIONS_PREFIX, RESOURCE_VISIBILITY } = require("../../lib/constants");
+const { RESOURCE_VISIBILITY } = require("../../lib/constants");
 const Configuration = require("../../lib/configuration");
 
 describe("templates", () => {
@@ -41,7 +41,7 @@ describe("templates", () => {
             `);
             const model = new Configuration(linkedModel).csn;
             const eventDefinition = model.definitions["MyService.ServiceEvent"];
-            expect(eventDefinition[ORD_EXTENSIONS_PREFIX + "visibility"]).toEqual(RESOURCE_VISIBILITY.private);
+            expect(eventDefinition["@ORD.Extensions.visibility"]).toEqual(RESOURCE_VISIBILITY.private);
         });
 
         it("should propagate visibility internal", () => {
@@ -68,7 +68,7 @@ describe("templates", () => {
             `);
             const model = new Configuration(linkedModel).csn;
             const eventDefinition = model.definitions["MyService.ServiceEvent"];
-            expect(eventDefinition[ORD_EXTENSIONS_PREFIX + "visibility"]).toEqual(RESOURCE_VISIBILITY.internal);
+            expect(eventDefinition["@ORD.Extensions.visibility"]).toEqual(RESOURCE_VISIBILITY.internal);
         });
 
         it("should not propagate if there is no visibility annotation", () => {
@@ -92,7 +92,7 @@ describe("templates", () => {
             `);
             const model = new Configuration(linkedModel).csn;
             const eventDefinition = model.definitions["MyService.ServiceEvent"];
-            expect(eventDefinition[ORD_EXTENSIONS_PREFIX + "visibility"]).toBeUndefined();
+            expect(eventDefinition["@ORD.Extensions.visibility"]).toBeUndefined();
         });
     });
 });
