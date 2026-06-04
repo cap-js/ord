@@ -165,7 +165,7 @@ describe("createPackage", () => {
             const result = createPackage(BASE_CONFIG, {
                 label: "General",
                 visibility: RESOURCE_VISIBILITY.public,
-                productOrdId: "sap:product:MyProduct:",
+                products: ["sap:product:MyProduct:"],
             });
             expect(result.partOfProducts).toEqual(["sap:product:MyProduct:"]);
         });
@@ -175,11 +175,11 @@ describe("createPackage", () => {
             expect(result).not.toHaveProperty("partOfProducts");
         });
 
-        it("omits partOfProducts when productOrdId is an empty string", () => {
+        it("omits partOfProducts when products is an empty array", () => {
             const result = createPackage(BASE_CONFIG, {
                 label: "General",
                 visibility: RESOURCE_VISIBILITY.public,
-                productOrdId: "",
+                products: [],
             });
             expect(result).not.toHaveProperty("partOfProducts");
         });
