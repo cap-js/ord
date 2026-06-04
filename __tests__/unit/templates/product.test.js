@@ -118,12 +118,19 @@ describe("createProducts", () => {
         const appConfig = {
             ...BASE_CONFIG,
             env: {
-                products: [
-                    { ordId: "customer:product:A:" },
-                    { ordId: "customer:product:B:" },
-                ],
+                products: [{ ordId: "customer:product:A:" }, { ordId: "customer:product:B:" }],
             },
         };
         expect(createProducts(appConfig)).toHaveLength(1);
+    });
+
+    it("correctly replaces placeholders for namespace and type in product ordId", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            env: {
+                products: [{ ordId: "{namespace}:{type}:A:" }],
+            },
+        };
+        expect(createProducts(appConfig)).toMatchSnapshot();
     });
 });

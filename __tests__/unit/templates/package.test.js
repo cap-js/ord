@@ -209,5 +209,16 @@ describe("createPackage", () => {
             const result = createPackage(BASE_CONFIG, { label: "General", visibility: RESOURCE_VISIBILITY.public });
             expect(result.vendor).toBe("customer:vendor:Customer:");
         });
+
+        it("placeholders in overrides are replaced accordingly", () => {
+            const appConfig = {
+                ...BASE_CONFIG,
+                env: { packages: [{ ordId: "{namespace}:{type}:custom-override:v1" }] },
+            };
+            const result = createPackages(appConfig);
+
+            expect(result).toHaveLength(1);
+            expect(result[0].ordId).toBe("sap.test:package:custom-override:v1");
+        });
     });
 });

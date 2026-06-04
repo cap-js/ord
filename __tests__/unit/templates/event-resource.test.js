@@ -1,6 +1,10 @@
 const cds = require("@sap/cds");
 
-const { createEventResources, createEventResourceTemplate, RESOLVERS } = require("../../../lib/templates/event-resource");
+const {
+    createEventResources,
+    createEventResourceTemplate,
+    RESOLVERS,
+} = require("../../../lib/templates/event-resource");
 const {
     RESOURCE_VISIBILITY,
     ENTITY_RELATIONSHIP_ANNOTATION,
@@ -71,6 +75,11 @@ describe("RESOLVERS.ordId", () => {
 
     it("prefers @ORD.Extensions.ordId when set", () => {
         const service = { ...BASE_SERVICE, "@ORD.Extensions.ordId": "sap.test:eventResource:custom:v2" };
+        expect(RESOLVERS.ordId(service, BASE_APP_CONFIG)).toBe("sap.test:eventResource:custom:v2");
+    });
+
+    it("replaces placeholders when used in @ORD.Extensions.ordId", () => {
+        const service = { ...BASE_SERVICE, "@ORD.Extensions.ordId": "{namespace}:{type}:custom:v2" };
         expect(RESOLVERS.ordId(service, BASE_APP_CONFIG)).toBe("sap.test:eventResource:custom:v2");
     });
 });
@@ -216,6 +225,11 @@ describe("RESOLVERS.partOfPackage", () => {
 
     it("prefers @ORD.Extensions.partOfPackage when set", () => {
         const service = { ...BASE_SERVICE, "@ORD.Extensions.partOfPackage": "sap.test:package:custom:v1" };
+        expect(RESOLVERS.partOfPackage(service, BASE_APP_CONFIG)).toBe("sap.test:package:custom:v1");
+    });
+
+    it("replaces placeholders in @ORD.Extensions.partOfPackage when set", () => {
+        const service = { ...BASE_SERVICE, "@ORD.Extensions.partOfPackage": "{namespace}:{type}:custom:v1" };
         expect(RESOLVERS.partOfPackage(service, BASE_APP_CONFIG)).toBe("sap.test:package:custom:v1");
     });
 });
@@ -569,9 +583,8 @@ describe("createEventResources", () => {
         const result = createEventResources(appConfig);
 
         expect(result).toHaveLength(2);
-        const ordIds = result.map((r) => r.ordId);
-        expect(ordIds).toContain("sap.test:eventResource:ServiceA:v1");
-        expect(ordIds).toContain("sap.test:eventResource:ServiceB:v1");
+        expect(result.map((r) => r.ordId)).toContain("sap.test:eventResource:ServiceA:v1");
+        expect(result.map((r) => r.ordId)).toContain("sap.test:eventResource:ServiceB:v1");
     });
 
     it("deduplicates: multiple events from the same service produce one event resource", () => {
@@ -614,7 +627,7 @@ describe("createEventResources", () => {
 
     it("excludes events whose service has @protocol: 'none'", () => {
         const visibleService = makeService("VisibleService");
-        const hiddenService = makeService("HiddenService", { "@protocol": "none", kind: "service" });
+        const hiddenService = makeService("HiddenService", { "@protocol": "none", "kind": "service" });
         const appConfig = {
             ...BASE_CONFIG,
             csn: {
@@ -638,8 +651,8 @@ describe("createEventResources", () => {
             csn: {
                 definitions: {
                     "MyService.OrderPlaced": makeEventDef(service),
-                    Books: { kind: "entity", name: "Books", _service: service },
-                    MyService: service,
+                    "Books": { kind: "entity", name: "Books", _service: service },
+                    "MyService": service,
                 },
             },
         };
@@ -664,5 +677,45 @@ describe("createEventResources", () => {
         expect(result).toHaveLength(1);
         expect(result[0].ordId).toContain("eventResource");
         expect(result[0].ordId).toContain("OrderService");
+    });
+
+    it("correctly replaces placeholders in @ORD.Extensions.ordId", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    "PublicService.EventA": makeEventDef(
+                        makeService("PublicService", {
+                            "@ORD.Extensions.ordId": "{namespace}:{type}:PublicService:v1",
+                        }),
+                    ),
+                },
+            },
+        };
+
+        const result = createEventResources(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toBe("sap.test:eventResource:PublicService:v1");
+    });
+
+    it("correctly replaces placeholders in @ORD.Extensions.partOfPackage", () => {
+        const appConfig = {
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    "PublicService.EventA": makeEventDef(
+                        makeService("PublicService", {
+                            "@ORD.Extensions.partOfPackage": "{namespace}:{type}:PublicServices:v1",
+                        }),
+                    ),
+                },
+            },
+        };
+
+        const result = createEventResources(appConfig);
+
+        expect(result).toHaveLength(1);
+        expect(result[0].partOfPackage).toBe("sap.test:package:PublicServices:v1");
     });
 });
