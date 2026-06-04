@@ -137,7 +137,7 @@ describe("RESOLVERS.exposedEntityTypes", () => {
                 BPEntity: { [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:BusinessPartner:v1" },
             },
         };
-        expect(RESOLVERS.exposedEntityTypes(service)).toEqual([{ ordId: "sap.test:entityType:BusinessPartner:v1" }]);
+        expect(RESOLVERS.exposedEntityTypes(service, BASE_APP_CONFIG)).toEqual([{ ordId: "sap.test:entityType:BusinessPartner:v1" }]);
     });
 
     it("deduplicates ordIds across entities", () => {
@@ -146,7 +146,7 @@ describe("RESOLVERS.exposedEntityTypes", () => {
             ...BASE_SERVICE,
             entities: { E1: entity, E2: entity },
         };
-        expect(RESOLVERS.exposedEntityTypes(service)).toEqual([{ ordId: "sap.odm:entityType:BusinessPartner:v1" }]);
+        expect(RESOLVERS.exposedEntityTypes(service, BASE_APP_CONFIG)).toEqual([{ ordId: "sap.odm:entityType:BusinessPartner:v1" }]);
     });
 
     it("includes both ODM and entity relationship ordIds when both annotations are present", () => {
@@ -159,7 +159,7 @@ describe("RESOLVERS.exposedEntityTypes", () => {
                 },
             },
         };
-        const result = RESOLVERS.exposedEntityTypes(service);
+        const result = RESOLVERS.exposedEntityTypes(service, BASE_APP_CONFIG);
         expect(result).toEqual(
             expect.arrayContaining([
                 { ordId: "sap.odm:entityType:BusinessPartner:v1" },

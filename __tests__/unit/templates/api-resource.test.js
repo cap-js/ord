@@ -1073,6 +1073,49 @@ describe("createAPIResourceTemplate", () => {
 
             expect(result).toEqual([]);
         });
+
+        it("should properly replace placeholders in @ORD.Extensions.ordId", () => {
+            const result = createAPIResources({
+                ...appConfig,
+                csn: cds.linked(`
+                @ORD.Extensions.ordId: '{namespace}:{type}:MyService:v1'
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+            `),
+            });
+
+            expect(result).toHaveLength(1);
+            expect(result[0].resourceDefinitions).toHaveLength(2);
+            expect(result[0].ordId).toBe("customer.testNamespace:apiResource:MyService:v1");
+            expect(result[0].resourceDefinitions[0].url).toBe(
+                "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.oas3.json",
+            );
+            expect(result[0].resourceDefinitions[1].url).toBe(
+                "/ord/v1/customer.testNamespace:apiResource:MyService:v1/MyService.edmx",
+            );
+        });
+
+        it("should properly replace placeholders in @ORD.Extensions.partOfPackage", () => {
+            const result = createAPIResources({
+                ...appConfig,
+                csn: cds.linked(`
+                @ORD.Extensions.partOfPackage: '{namespace}:{type}:Services:v1'
+                service MyService {
+                    entity Books {
+                        key ID: UUID;
+                        title: String;
+                    }
+                };
+            `),
+            });
+
+            expect(result).toHaveLength(1);
+            expect(result[0].partOfPackage).toBe("customer.testNamespace:package:Services:v1");
+        });
     });
 
     describe("getExposedEntityTypes", () => {
