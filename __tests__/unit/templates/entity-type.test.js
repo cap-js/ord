@@ -21,7 +21,7 @@ const BASE_APP_CONFIG = {
 
 describe("RESOLVERS.ordId", () => {
     it("builds ordId from entity relationship annotation", () => {
-        expect(RESOLVERS.ordId(BASE_ENTITY)).toBe("sap.test:entityType:BusinessPartner:v1");
+        expect(RESOLVERS.ordId(BASE_ENTITY, BASE_APP_CONFIG)).toBe("sap.test:entityType:BusinessPartner:v1");
     });
 
     it("uses @ORD.Extensions.version major over annotation version", () => {
@@ -29,12 +29,26 @@ describe("RESOLVERS.ordId", () => {
             [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:BusinessPartner:v1",
             "@ORD.Extensions.version": "3.2.1",
         };
-        expect(RESOLVERS.ordId(entity)).toBe("sap.test:entityType:BusinessPartner:v3");
+        expect(RESOLVERS.ordId(entity, BASE_APP_CONFIG)).toBe("sap.test:entityType:BusinessPartner:v3");
     });
 
     it("falls back to '1' when annotation has no version segment", () => {
         const entity = { [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:BusinessPartner" };
-        expect(RESOLVERS.ordId(entity)).toBe("sap.test:entityType:BusinessPartner:v1");
+        expect(RESOLVERS.ordId(entity, BASE_APP_CONFIG)).toBe("sap.test:entityType:BusinessPartner:v1");
+    });
+
+    it("prefers @ORD.Extensions.ordId when set", () => {
+        const entity = {
+            ...BASE_ENTITY,
+            "@ORD.Extensions.ordId": "sap.test:entityType:custom:v1",
+            [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:BusinessPartner:v1",
+        };
+        expect(RESOLVERS.ordId(entity, BASE_APP_CONFIG)).toBe("sap.test:entityType:custom:v1");
+    });
+
+    it("correctly replaces placeholders in @ORD.Extensions.partOfPackage when set", () => {
+        const entity = { ...BASE_ENTITY, "@ORD.Extensions.ordId": "{namespace}:{type}:custom:v1" };
+        expect(RESOLVERS.ordId(entity, BASE_APP_CONFIG)).toBe("sap.test:entityType:custom:v1");
     });
 });
 
@@ -108,23 +122,23 @@ describe("RESOLVERS.version", () => {
     });
 
     it("derives version from ordId when no extension is set", () => {
-        expect(RESOLVERS.version(BASE_ENTITY)).toBe("1.0.0");
+        expect(RESOLVERS.version(BASE_ENTITY, BASE_APP_CONFIG)).toBe("1.0.0");
     });
 
     it("uses @ORD.Extensions.version when set", () => {
         const entity = { ...BASE_ENTITY, "@ORD.Extensions.version": "2.3.4" };
-        expect(RESOLVERS.version(entity)).toBe("2.3.4");
+        expect(RESOLVERS.version(entity, BASE_APP_CONFIG)).toBe("2.3.4");
     });
 
     it("warns and still returns the value when version is not a valid semver", () => {
         const entity = { ...BASE_ENTITY, "@ORD.Extensions.version": "not-a-version" };
-        expect(RESOLVERS.version(entity)).toBe("not-a-version");
+        expect(RESOLVERS.version(entity, BASE_APP_CONFIG)).toBe("not-a-version");
         expect(warnSpy).toHaveBeenCalled();
     });
 
     it("does not warn for valid semver strings", () => {
         const entity = { ...BASE_ENTITY, "@ORD.Extensions.version": "1.0.0" };
-        RESOLVERS.version(entity);
+        RESOLVERS.version(entity, BASE_APP_CONFIG);
         expect(warnSpy).not.toHaveBeenCalled();
     });
 });
@@ -166,6 +180,11 @@ describe("RESOLVERS.partOfPackage", () => {
 
     it("prefers @ORD.Extensions.partOfPackage when set", () => {
         const entity = { ...BASE_ENTITY, "@ORD.Extensions.partOfPackage": "sap.test:package:custom:v1" };
+        expect(RESOLVERS.partOfPackage(entity, BASE_APP_CONFIG)).toBe("sap.test:package:custom:v1");
+    });
+
+    it("correctly replaces placeholders in @ORD.Extensions.partOfPackage when set", () => {
+        const entity = { ...BASE_ENTITY, "@ORD.Extensions.partOfPackage": "{namespace}:{type}:custom:v1" };
         expect(RESOLVERS.partOfPackage(entity, BASE_APP_CONFIG)).toBe("sap.test:package:custom:v1");
     });
 });
@@ -338,12 +357,10 @@ describe("createEntityTypes", () => {
     });
 
     it("returns entity types for exposed entities", () => {
-        const appConfig = {
+        const result = createEntityTypes({
             ...BASE_CONFIG,
             csn: { definitions: { BusinessPartner: makeEntity() } },
-        };
-
-        const result = createEntityTypes(appConfig);
+        });
 
         expect(result).toHaveLength(1);
         expect(result[0].ordId).toBe("sap.test:entityType:BusinessPartner:v1");
@@ -390,7 +407,8 @@ describe("createEntityTypes", () => {
 
     it("deduplicates entities with the same ordId", () => {
         const entity = makeEntity();
-        const appConfig = {
+
+        const result = createEntityTypes({
             ...BASE_CONFIG,
             csn: {
                 definitions: {
@@ -398,16 +416,14 @@ describe("createEntityTypes", () => {
                     BPCopy2: { ...entity },
                 },
             },
-        };
-
-        const result = createEntityTypes(appConfig);
+        });
 
         expect(result).toHaveLength(1);
         expect(result[0].ordId).toBe("sap.test:entityType:BusinessPartner:v1");
     });
 
     it("returns multiple distinct entity types", () => {
-        const appConfig = {
+        const result = createEntityTypes({
             ...BASE_CONFIG,
             csn: {
                 definitions: {
@@ -418,14 +434,11 @@ describe("createEntityTypes", () => {
                     }),
                 },
             },
-        };
-
-        const result = createEntityTypes(appConfig);
+        });
 
         expect(result).toHaveLength(2);
-        const ordIds = result.map((r) => r.ordId);
-        expect(ordIds).toContain("sap.test:entityType:BusinessPartner:v1");
-        expect(ordIds).toContain("sap.test:entityType:SalesOrder:v1");
+        expect(result.map((r) => r.ordId)).toContain("sap.test:entityType:SalesOrder:v1");
+        expect(result.map((r) => r.ordId)).toContain("sap.test:entityType:BusinessPartner:v1");
     });
 
     it("excludes entities from services with @protocol: 'none'", () => {
@@ -433,11 +446,47 @@ describe("createEntityTypes", () => {
             ...BASE_CONFIG,
             csn: {
                 definitions: {
-                    HiddenEntity: makeEntity({ _service: { name: "HiddenService", "@protocol": "none" } }),
+                    HiddenEntity: makeEntity({ _service: { "name": "HiddenService", "@protocol": "none" } }),
                 },
             },
         };
 
         expect(createEntityTypes(appConfig)).toEqual([]);
+    });
+
+    it("correctly replaces placeholders in @ORD.Extensions.ordId", () => {
+        const result = createEntityTypes({
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    SalesOrder: makeEntity({
+                        "name": "SalesOrder",
+                        [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:SalesOrder:v1",
+                        "@ORD.Extensions.ordId": "{namespace}:{type}:custom:v1",
+                    }),
+                },
+            },
+        });
+
+        expect(result).toHaveLength(1);
+        expect(result[0].ordId).toBe("sap.test:entityType:custom:v1");
+    });
+
+    it("correctly replaces placeholders in @ORD.Extensions.partOfPackage", () => {
+        const result = createEntityTypes({
+            ...BASE_CONFIG,
+            csn: {
+                definitions: {
+                    SalesOrder: makeEntity({
+                        "name": "SalesOrder",
+                        [ENTITY_RELATIONSHIP_ANNOTATION]: "sap.test:SalesOrder:v1",
+                        "@ORD.Extensions.partOfPackage": "{namespace}:{type}:custom:v1",
+                    }),
+                },
+            },
+        });
+
+        expect(result).toHaveLength(1);
+        expect(result[0].partOfPackage).toBe("sap.test:package:custom:v1");
     });
 });

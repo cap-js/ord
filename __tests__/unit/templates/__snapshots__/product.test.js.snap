@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`createProducts correctly replaces placeholders for namespace and type in product ordId 1`] = `
+[
+  {
+    "ordId": "sap.test:product:A:",
+    "shortDescription": "Short description of MyPackage",
+    "title": "MyPackage",
+    "vendor": "customer:vendor:Customer:",
+  },
+]
+`;

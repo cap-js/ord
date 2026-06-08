@@ -24,6 +24,7 @@ service AdminService @(requires: 'authenticated-user') {
 }
 
 annotate AdminService with @ORD.Extensions: {
+    ordId             : '{namespace}:{type}:AdminService:v2',
     title             : 'This is test AdminService title',
     shortDescription  : 'short description for test AdminService',
     visibility        : 'public',
