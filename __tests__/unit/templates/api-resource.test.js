@@ -108,8 +108,7 @@ describe("createAPIResourceTemplate", () => {
                 };
             `);
 
-        const srvDefinition = model.definitions["customer.testNamespace.MyService"];
-        expect(createAPIResourceTemplate(srvDefinition, appConfig)).toEqual([]);
+        expect(createAPIResources({ ...appConfig, csn: model })).toEqual([]);
     });
 
     it("should create correct resource definition for MCP protocol", () => {
@@ -179,9 +178,7 @@ describe("createAPIResourceTemplate", () => {
                     }
                 };
             `);
-        const srvDefinition = linkedModel.definitions["MyService"];
-        appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
-        const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
+        const apiResourceTemplate = createAPIResources({ ...appConfig, csn: linkedModel });
 
         expect(apiResourceTemplate).toBeInstanceOf(Array);
         expect(apiResourceTemplate).toMatchSnapshot();
@@ -210,7 +207,6 @@ describe("createAPIResourceTemplate", () => {
                 };
             `);
         const srvDefinition = linkedModel.definitions["MyService"];
-        appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
         const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
 
         expect(apiResourceTemplate).toBeInstanceOf(Array);
@@ -240,9 +236,7 @@ describe("createAPIResourceTemplate", () => {
                     }
                 };
             `);
-        const srvDefinition = linkedModel.definitions["MyService"];
-        appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
-        const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
+        const apiResourceTemplate = createAPIResources({ ...appConfig, csn: linkedModel });
 
         expect(apiResourceTemplate).toBeInstanceOf(Array);
         expect(apiResourceTemplate).toMatchSnapshot();
@@ -282,7 +276,6 @@ describe("createAPIResourceTemplate", () => {
                 };
             `);
         const srvDefinition = linkedModel.definitions["MyService"];
-        appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
         const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
 
         expect(apiResourceTemplate).toMatchSnapshot();
@@ -321,7 +314,6 @@ describe("createAPIResourceTemplate", () => {
                 };
             `);
         const srvDefinition = linkedModel.definitions["MyService"];
-        appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
         const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
 
         expect(apiResourceTemplate).toMatchSnapshot();
@@ -360,7 +352,6 @@ describe("createAPIResourceTemplate", () => {
                 };
             `);
         const srvDefinition = linkedModel.definitions["MyService"];
-        appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
         const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
 
         expect(apiResourceTemplate).toMatchSnapshot();
@@ -407,7 +398,6 @@ describe("createAPIResourceTemplate", () => {
                 };
             `);
         const srvDefinition = linkedModel.definitions["MyService"];
-        appConfig["entityTypeTargets"] = [{ ordId: "sap.odm:entityType:test:v1" }];
         const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
 
         expect(apiResourceTemplate).toMatchSnapshot();
