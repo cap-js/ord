@@ -210,7 +210,7 @@ exports[`defaults description should return default value 1`] = `"this is an app
 
 exports[`defaults groupTypeId should return default value 1`] = `"sap.cds:service"`;
 
-exports[`defaults openResourceDiscovery should return default value 1`] = `"1.14"`;
+exports[`defaults openResourceDiscovery should return default value 1`] = `"1.15"`;
 
 exports[`defaults policyLevels should return default value 1`] = `
 [
