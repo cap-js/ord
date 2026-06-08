@@ -1,7 +1,11 @@
 const cds = require("@sap/cds");
 
 const { RESOURCE_VISIBILITY } = require("../../../lib/constants");
-const { createIntegrationDependencies, createIntegrationDependency, RESOLVERS } = require("../../../lib/templates/integration-dependency");
+const {
+    createIntegrationDependencies,
+    createIntegrationDependency,
+    RESOLVERS,
+} = require("../../../lib/templates/integration-dependency");
 
 describe("RESOLVERS.version", () => {
     it("defaults to 1.0.0 when env has no integrationDependency config", () => {
@@ -38,6 +42,15 @@ describe("RESOLVERS.ordId", () => {
         });
 
         expect(result).toBe("sap.test:integrationDependency:externalDependencies:v3");
+    });
+
+    it("replaces placeholders in env.integrationDependency.ordId", () => {
+        const result = RESOLVERS.ordId({
+            ordNamespace: "sap.test",
+            env: { integrationDependency: { ordId: "{namespace}:{type}:test:v1" } },
+        });
+
+        expect(result).toBe("sap.test:integrationDependency:test:v1");
     });
 });
 
@@ -116,6 +129,18 @@ describe("RESOLVERS.partOfPackage", () => {
             packageName: "TestPackage",
             hasSAPPolicyLevel: true,
             env: { integrationDependency: { partOfPackage: "sap.test:package:custom:v1" } },
+        });
+
+        expect(result).toBe("sap.test:package:custom:v1");
+    });
+
+    it("replaces placeholders in env.integrationDependency.partOfPackage when set", () => {
+        const result = RESOLVERS.partOfPackage({
+            appName: "TestApp",
+            ordNamespace: "sap.test",
+            packageName: "TestPackage",
+            hasSAPPolicyLevel: true,
+            env: { integrationDependency: { partOfPackage: "{namespace}:{type}:custom:v1" } },
         });
 
         expect(result).toBe("sap.test:package:custom:v1");
@@ -406,6 +431,27 @@ describe("createIntegrationDependency", () => {
         expect(result.visibility).toBe(RESOURCE_VISIBILITY.internal);
         expect(result.description).toBe("Custom integration dependency description");
         expect(result.shortDescription).toBe("Custom short description");
+    });
+
+    it("should replace placeholders when ordId is overridden via cdsrc", () => {
+        const result = createIntegrationDependency({
+            appName: "testapp",
+            packageName: "TestPackage",
+            ordNamespace: "customer.testapp",
+            env: {
+                integrationDependency: {
+                    ordId: "{namespace}:{type}:test:v1",
+                },
+            },
+            csn: cds.linked(`
+                @cds.external
+                @data.product
+                @cds.dp.ordId: 'sap.ext:apiResource:Supplier:v1'
+                service sap.sai.Supplier.v1 {};
+            `),
+        });
+
+        expect(result.ordId).toBe("customer.testapp:integrationDependency:test:v1");
     });
 });
 

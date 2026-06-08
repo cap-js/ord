@@ -165,7 +165,7 @@ describe("createPackage", () => {
             const result = createPackage(BASE_CONFIG, {
                 label: "General",
                 visibility: RESOURCE_VISIBILITY.public,
-                productOrdId: "sap:product:MyProduct:",
+                products: ["sap:product:MyProduct:"],
             });
             expect(result.partOfProducts).toEqual(["sap:product:MyProduct:"]);
         });
@@ -208,6 +208,17 @@ describe("createPackage", () => {
         it("does not apply overrides when env.packages is absent", () => {
             const result = createPackage(BASE_CONFIG, { label: "General", visibility: RESOURCE_VISIBILITY.public });
             expect(result.vendor).toBe("customer:vendor:Customer:");
+        });
+
+        it("placeholders in overrides are replaced accordingly", () => {
+            const appConfig = {
+                ...BASE_CONFIG,
+                env: { packages: [{ ordId: "{namespace}:{type}:custom-override:v1" }] },
+            };
+            const result = createPackages(appConfig);
+
+            expect(result).toHaveLength(1);
+            expect(result[0].ordId).toBe("sap.test:package:custom-override:v1");
         });
     });
 });
