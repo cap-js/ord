@@ -243,7 +243,6 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
     },
   ],
   "openResourceDiscovery": "1.16",
-
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
