@@ -1,4 +1,5 @@
 const {
+    prune,
     getRFC3339Date,
     resolveVisibility,
     resolveServiceName,
@@ -13,6 +14,74 @@ const Logger = require("../../../lib/logger");
 const cds = require("@sap/cds");
 
 const RFC3339_REGEX = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:\d{2})$/;
+
+describe("prune", () => {
+    it("keeps entries with string values", () => {
+        const result = prune({ a: "hello" });
+
+        expect(result).toEqual({ a: "hello" });
+    });
+
+    it("keeps entries with number values", () => {
+        const result = prune({ n: 0 });
+
+        expect(result).toEqual({ n: 0 });
+    });
+
+    it("keeps entries with boolean false", () => {
+        const result = prune({ flag: false });
+
+        expect(result).toEqual({ flag: false });
+    });
+
+    it("removes entries with null values", () => {
+        const result = prune({ a: "keep", b: null });
+
+        expect(result).toEqual({ a: "keep" });
+    });
+
+    it("removes entries with undefined values", () => {
+        const result = prune({ a: "keep", b: undefined });
+
+        expect(result).toEqual({ a: "keep" });
+    });
+
+    it("removes entries with empty arrays", () => {
+        const result = prune({ a: "keep", b: [] });
+
+        expect(result).toEqual({ a: "keep" });
+    });
+
+    it("removes entries with empty objects", () => {
+        const result = prune({ a: "keep", b: {} });
+
+        expect(result).toEqual({ a: "keep" });
+    });
+
+    it("keeps entries with non-empty arrays", () => {
+        const result = prune({ a: [1, 2, 3] });
+
+        expect(result).toEqual({ a: [1, 2, 3] });
+    });
+
+    it("keeps entries with non-empty objects", () => {
+        const result = prune({ a: { x: 1 } });
+
+        expect(result).toEqual({ a: { x: 1 } });
+    });
+
+    it("returns an empty object when all entries are prunable", () => {
+        const result = prune({ a: null, b: undefined, c: [], d: {} });
+
+        expect(result).toEqual({});
+    });
+
+    it("returns an empty object when given an empty object", () => {
+        const result = prune({});
+
+        expect(result).toEqual({});
+    });
+});
 
 describe("isPrimaryDataProductService", () => {
     it("returns true for @DataIntegration.dataProduct.type: 'primary'", () => {
