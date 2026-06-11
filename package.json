@@ -32,7 +32,7 @@
         "@cap-js/cds-test": "0.4.1",
         "@cap-js/graphql": "^0.14.0",
         "@cap-js/sqlite": "^2",
-        "@open-resource-discovery/specification": "1.15.0",
+        "@open-resource-discovery/specification": "1.16.1",
         "@sap/cds-dk": ">=8.9.5",
         "eslint": "^10.0.0",
         "express": "^5.0.0",

@@ -242,7 +242,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.16",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -477,7 +477,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.16",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -709,7 +709,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.16",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -944,7 +944,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Endpoint Test
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.16",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -1176,7 +1176,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.16",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -1411,7 +1411,7 @@ exports[`ORD Integration Tests - Basic Authentication ORD Document Structure Val
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.16",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",

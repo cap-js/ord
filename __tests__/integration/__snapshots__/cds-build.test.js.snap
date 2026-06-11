@@ -207,7 +207,7 @@ exports[`ORD Build Integration Tests IntegrationDependency with cdsrc customizat
       "visibility": "internal",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.16",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -443,7 +443,7 @@ exports[`ORD Build Integration Tests IntegrationDependency with custom.ord.json 
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.16",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
@@ -678,7 +678,7 @@ exports[`ORD Build Integration Tests Successful Build should generate ord-docume
       "visibility": "public",
     },
   ],
-  "openResourceDiscovery": "1.15",
+  "openResourceDiscovery": "1.16",
   "packages": [
     {
       "description": "This package contains public General for capire ord integration test.",
