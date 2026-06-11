@@ -1,5 +1,395 @@
-const { createPackages, createPackage } = require("../../../lib/templates/package");
+const { createPackages, createPackage, RESOLVERS } = require("../../../lib/templates/package");
 const { ORD_RESOURCE_TYPE, RESOURCE_VISIBILITY } = require("../../../lib/constants");
+
+describe("RESOLVERS", () => {
+    describe("title", () => {
+        it("returns default title derived from appName when no env override", () => {
+            const result = RESOLVERS.title({
+                appName: "MyApp",
+                ordNamespace: "sap.test",
+            });
+
+            expect(result).toBe("MyApp");
+        });
+
+        it("replaces non-alphanumeric characters in appName with spaces and trims", () => {
+            const result = RESOLVERS.title({
+                appName: "-my-app.name-",
+                ordNamespace: "sap.test",
+            });
+
+            expect(result).toBe("my app name");
+        });
+
+        it("uses env.packages[0].title when provided", () => {
+            const result = RESOLVERS.title({
+                appName: "MyApp",
+                ordNamespace: "sap.test",
+                env: { packages: [{ title: "Custom Title" }] },
+            });
+
+            expect(result).toBe("Custom Title");
+        });
+
+        it("falls back to default when env.packages[0].title is undefined", () => {
+            const result = RESOLVERS.title({
+                appName: "MyApp",
+                ordNamespace: "sap.test",
+                env: { packages: [{ title: undefined }] },
+            });
+
+            expect(result).toBe("MyApp");
+        });
+    });
+
+    describe("vendor", () => {
+        it("returns default vendor when no env override", () => {
+            const result = RESOLVERS.vendor({
+                appName: "MyApp",
+                ordNamespace: "sap.test",
+            });
+
+            expect(result).toBe("customer:vendor:Customer:");
+        });
+
+        it("uses env.packages[0].vendor when provided", () => {
+            const result = RESOLVERS.vendor({
+                appName: "MyApp",
+                ordNamespace: "sap.test",
+                env: { packages: [{ vendor: "sap:vendor:SAP:" }] },
+            });
+
+            expect(result).toBe("sap:vendor:SAP:");
+        });
+
+        it("falls back to default when env.packages[0].vendor is undefined", () => {
+            const result = RESOLVERS.vendor({
+                appName: "MyApp",
+                ordNamespace: "sap.test",
+                env: { packages: [{ vendor: undefined }] },
+            });
+
+            expect(result).toBe("customer:vendor:Customer:");
+        });
+    });
+
+    describe("version", () => {
+        it("returns default version when no env override", () => {
+            const result = RESOLVERS.version({
+                appName: "MyApp",
+                ordNamespace: "sap.test",
+            });
+
+            expect(result).toBe("1.0.0");
+        });
+
+        it("uses env.packages[0].version when provided", () => {
+            const result = RESOLVERS.version({
+                appName: "MyApp",
+                ordNamespace: "sap.test",
+                env: { packages: [{ version: "2.3.4" }] },
+            });
+
+            expect(result).toBe("2.3.4");
+        });
+
+        it("falls back to default when env.packages[0].version is undefined", () => {
+            const result = RESOLVERS.version({
+                appName: "MyApp",
+                ordNamespace: "sap.test",
+                env: { packages: [{ version: undefined }] },
+            });
+
+            expect(result).toBe("1.0.0");
+        });
+    });
+
+    describe("partOfProducts", () => {
+        it("returns the supplied products array when no env override", () => {
+            const result = RESOLVERS.partOfProducts(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                },
+                ["customer:product:MyApp:"],
+            );
+
+            expect(result).toEqual(["customer:product:MyApp:"]);
+        });
+
+        it("uses env.packages[0].partOfProducts when provided", () => {
+            const result = RESOLVERS.partOfProducts(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ partOfProducts: ["sap:product:SomeProduct:"] }] },
+                },
+                ["customer:product:MyApp:"],
+            );
+
+            expect(result).toEqual(["sap:product:SomeProduct:"]);
+        });
+
+        it("falls back to supplied products when env.packages[0].partOfProducts is undefined", () => {
+            const result = RESOLVERS.partOfProducts(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ partOfProducts: undefined }] },
+                },
+                ["customer:product:MyApp:"],
+            );
+
+            expect(result).toEqual(["customer:product:MyApp:"]);
+        });
+    });
+
+    describe("description", () => {
+        it("returns a default description containing visibility, label, and resolved title", () => {
+            const result = RESOLVERS.description(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+            );
+
+            expect(result).toBe("This package contains public General for MyApp.");
+        });
+
+        it("incorporates the resolved title into the default description", () => {
+            const result = RESOLVERS.description(
+                {
+                    appName: "my-app",
+                    ordNamespace: "sap.test",
+                },
+                "APIs",
+                RESOURCE_VISIBILITY.internal,
+            );
+
+            expect(result).toBe("This package contains internal APIs for my app.");
+        });
+
+        it("uses env.packages[0].description when provided", () => {
+            const result = RESOLVERS.description(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ description: "Custom description" }] },
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+            );
+
+            expect(result).toBe("Custom description");
+        });
+
+        it("falls back to default when env.packages[0].description is undefined", () => {
+            const result = RESOLVERS.description(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ description: undefined }] },
+                },
+                "APIs",
+                RESOURCE_VISIBILITY.private,
+            );
+
+            expect(result).toBe("This package contains private APIs for MyApp.");
+        });
+    });
+
+    describe("shortDescription", () => {
+        it("returns default short description containing visibility and label", () => {
+            const result = RESOLVERS.shortDescription(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+            );
+
+            expect(result).toBe("Package containing public General");
+        });
+
+        it("uses env.packages[0].shortDescription when provided", () => {
+            const result = RESOLVERS.shortDescription(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ shortDescription: "Custom short desc" }] },
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+            );
+
+            expect(result).toBe("Custom short desc");
+        });
+
+        it("falls back to default when env.packages[0].shortDescription is undefined", () => {
+            const result = RESOLVERS.shortDescription(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ shortDescription: undefined }] },
+                },
+                "APIs",
+                RESOURCE_VISIBILITY.internal,
+            );
+
+            expect(result).toBe("Package containing internal APIs");
+        });
+    });
+
+    describe("ordId", () => {
+        it("returns default ordId with no resourceType tag and no visibility suffix for public", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+                undefined,
+            );
+
+            expect(result).toBe("sap.test:package:MyApp:v1");
+        });
+
+        it("appends resourceType tag when resourceType is provided", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                },
+                "APIs",
+                RESOURCE_VISIBILITY.public,
+                "api",
+            );
+
+            expect(result).toBe("sap.test:package:MyApp-api:v1");
+        });
+
+        it("appends visibility suffix for non-public visibility", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                },
+                "APIs",
+                RESOURCE_VISIBILITY.internal,
+                undefined,
+            );
+
+            expect(result).toBe("sap.test:package:MyApp-internal:v1");
+        });
+
+        it("appends both resourceType tag and visibility suffix together", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                },
+                "APIs",
+                RESOURCE_VISIBILITY.private,
+                "api",
+            );
+
+            expect(result).toBe("sap.test:package:MyApp-api-private:v1");
+        });
+
+        it("strips non-alphanumeric characters from appName", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "my-app.name",
+                    ordNamespace: "sap.test",
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+                undefined,
+            );
+
+            expect(result).toBe("sap.test:package:myappname:v1");
+        });
+
+        it("uses env.packages[0].ordId verbatim when provided", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ ordId: "sap.test:package:Custom:v1" }] },
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+                undefined,
+            );
+
+            expect(result).toBe("sap.test:package:Custom:v1");
+        });
+
+        it("replaces {namespace} placeholder in env.packages[0].ordId", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ ordId: "{namespace}:package:MyApp:v1" }] },
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+                undefined,
+            );
+
+            expect(result).toBe("sap.test:package:MyApp:v1");
+        });
+
+        it("replaces {type} placeholder in env.packages[0].ordId", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ ordId: "sap.test:{type}:MyApp:v1" }] },
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+                undefined,
+            );
+
+            expect(result).toBe("sap.test:package:MyApp:v1");
+        });
+
+        it("replaces both {namespace} and {type} placeholders in env.packages[0].ordId", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ ordId: "{namespace}:{type}:MyApp:v1" }] },
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+                undefined,
+            );
+
+            expect(result).toBe("sap.test:package:MyApp:v1");
+        });
+
+        it("falls back to default when env.packages[0].ordId is undefined", () => {
+            const result = RESOLVERS.ordId(
+                {
+                    appName: "MyApp",
+                    ordNamespace: "sap.test",
+                    env: { packages: [{ ordId: undefined }] },
+                },
+                "General",
+                RESOURCE_VISIBILITY.public,
+                undefined,
+            );
+
+            expect(result).toBe("sap.test:package:MyApp:v1");
+        });
+    });
+});
 
 describe("packages", () => {
     it("should return default value if policyLevels contains sap", () => {
