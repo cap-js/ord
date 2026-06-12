@@ -1,5 +1,31 @@
 // Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
+exports[`interop-csn should correctly handle version override 1`] = `
+{
+  "csnInteropEffective": "1.0",
+  "definitions": {
+    "com.example.MyService": {
+      "@EndUserText.label": "{i18n>service.title}",
+      "@ORD.Extensions.version": "1.3.8",
+      "kind": "service",
+    },
+  },
+  "i18n": {
+    "en": {
+      "service.title": "My Service",
+    },
+  },
+  "meta": {
+    "__name": "MyService",
+    "__namespace": "com.example",
+    "document": {
+      "version": "1.3.8",
+    },
+    "flavor": "effective",
+  },
+}
+`;
+
 exports[`interop-csn should extract service metadata 1`] = `
 {
   "csnInteropEffective": "1.0",
