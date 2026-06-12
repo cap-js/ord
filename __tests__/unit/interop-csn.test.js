@@ -1,3 +1,5 @@
+const assert = require("node:assert");
+
 const { interopCSN } = require("../../lib/interop-csn.js");
 
 jest.mock("@sap/cds/lib/i18n/localize", () => ({
@@ -53,14 +55,14 @@ describe("interop-csn", () => {
                 "customer.namespace.MyService.v2": { kind: "service" },
             },
             meta: {
-              creator: "shouldVanish",
-              compilerCsnFlavor: "shouldVanish",
-              unknownProp: "shouldVanish",
-              __privateProperty: "shouldStay",
-              features: {
-                "complete": true
-              },
-            }
+                creator: "shouldVanish",
+                compilerCsnFlavor: "shouldVanish",
+                unknownProp: "shouldVanish",
+                __privateProperty: "shouldStay",
+                features: {
+                    complete: true,
+                },
+            },
         };
         expect(interopCSN(csn)).toMatchSnapshot();
     });
@@ -122,5 +124,45 @@ describe("interop-csn", () => {
         expect(interopCSN(123)).toBe(123);
         expect(interopCSN(null)).toBe(null);
         expect(interopCSN(undefined)).toBe(undefined);
+    });
+
+    it("should correctly handle version override", () => {
+        localize.bundles4.mockReturnValue([["en", { "service.title": "My Service", "unused.key": "Unused" }]]);
+
+        const result = interopCSN({
+            definitions: {
+                "com.example.MyService": {
+                    "kind": "service",
+                    "@title": "{i18n>service.title}",
+                    "@cds.autoexpose": true,
+                    "@ORD.Extensions.version": "1.3.8",
+                },
+            },
+        });
+
+        expect(result).toMatchSnapshot();
+        expect(result.meta.document.version).toBe("1.3.8");
+    });
+
+    it("should fail on major version mismatch when overriding version", () => {
+        localize.bundles4.mockReturnValue([["en", { "service.title": "My Service", "unused.key": "Unused" }]]);
+
+        expect(() =>
+            interopCSN({
+                definitions: {
+                    "com.example.MyService.v1": {
+                        "kind": "service",
+                        "@title": "{i18n>service.title}",
+                        "@cds.autoexpose": true,
+                        "@ORD.Extensions.version": "2.3.8",
+                    },
+                },
+            }),
+        ).toThrow(
+            new assert.AssertionError({
+                message:
+                    "Major version in service name (1) does not match major version in @ORD.Extensions.version (2.3.8)",
+            }),
+        );
     });
 });
