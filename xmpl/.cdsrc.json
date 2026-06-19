@@ -1,4 +1,9 @@
 {
+    "requires": {
+        "telemetry": {
+            "kind": "telemetry-to-console"
+        }
+    },
     "export": {
         "asyncapi": {
             "application_namespace": "sap",

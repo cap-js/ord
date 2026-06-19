@@ -12,6 +12,33 @@ For more information, have a look at the [Open Resource Discovery](https://open-
 
 > ⚠ By installing this plugin, the metadata describing your CAP application will be made openly accessible. If you want to secure your CAP application's metadata, configure `basic` authentication by setting the environment variables or updating the `.cdsrc.json` file. The plugin prioritizes environment variables, then checks `.cdsrc.json`. If neither is configured, metadata remains publicly accessible.
 
+## Telemetry (OpenTelemetry)
+
+The plugin emits OpenTelemetry traces and metrics for the host application,
+following the OTel "instrumented library" pattern: it depends only on
+`@opentelemetry/api`, never starts an SDK itself, and emits no-ops when no SDK
+is present in the host.
+
+**Recommended host setup:** install [`@cap-js/telemetry`](https://github.com/cap-js/telemetry)
+in your CAP application — it brings the SDK, exporters and W3C Trace Context
+propagators required by SAP product standards [CDE-48 / CDE-49 / CDE-50](https://pages.github.tools.sap/product-standards/portal/docs/requirements/CloudDeliveryExcellence/CDE-48R1R2R3/).
+
+What the plugin emits:
+
+| Signal | Name | Where |
+| --- | --- | --- |
+| Span | `ord.well_known.serve` | `GET /.well-known/open-resource-discovery` |
+| Span | `ord.document.serve` | `GET /ord/v1/documents/ord-document` |
+| Span | `ord.metadata.serve` | `GET /ord/v1/...` (CSN / OAS3 / AsyncAPI / MCP) |
+| Span | `ord.document.generate` | per ORD document generation (also runs at build time) |
+| Counter | `ord.documents.generated` | bumped per document generation |
+| Counter | `ord.metadata.requests` | bumped per HTTP metadata request, attribute `http.response.status_code` |
+| Histogram | `ord.document.generation.duration` (ms) | wall-clock of one ORD generation |
+
+Disable everything via `NO_TELEMETRY=true`.
+
+See [`DEMO.md`](./DEMO.md) for a full local + Cloud Foundry walkthrough.
+
 ## Requirements and Setup
 
 ### Installation
