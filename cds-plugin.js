@@ -9,9 +9,9 @@ Object.defineProperty(cds.compile.to, "ord", {
     get: () => (model) => require("./lib/index").ord(model, []),
 });
 
-// Attach the OTel telemetry middleware once express is up, without touching
-// any of the business handlers. See lib/telemetry.js for the rationale.
+// Attach the ORD http.route enricher once express is up, without touching any
+// of the business handlers. See lib/telemetry.js for the rationale.
 cds.on("bootstrap", (app) => {
-    const { ordTelemetryMiddleware } = require("./lib/telemetry");
-    app.use(ordTelemetryMiddleware);
+    const { ordHttpRouteAttribute } = require("./lib/telemetry");
+    app.use(ordHttpRouteAttribute);
 });
