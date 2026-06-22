@@ -55,7 +55,7 @@
         "node": ">=20 <25"
     },
     "overrides": {
-        "@sap/cds-compiler": "6.9.2"
+        "@sap/cds-compiler": "6.9.3"
     },
     "cds": {
         "requires": {
