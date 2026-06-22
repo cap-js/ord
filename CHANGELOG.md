@@ -4,6 +4,43 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.9.0 (2026-06-22)
+
+## What's Changed
+
+- chore: Simplify 'resolveApiResourceProtocol' by @mlakov in https://github.com/cap-js/ord/pull/455
+- Update dependency org.apache.maven.plugins:maven-enforcer-plugin to v3.6.3 by @rennovate in https://github.com/cap-js/ord/pull/462
+- feat: Add support for access strategy 'sap.businesshub:mtls:v1' by @mlakov in https://github.com/cap-js/ord/pull/458
+- chore: Extract & refactor 'createEntityTypeTemplate' by @mlakov in https://github.com/cap-js/ord/pull/457
+- chore: Remove the now obsolete memory bank by @mlakov in https://github.com/cap-js/ord/pull/464
+- chore: Extract 'createGroupsTemplateForService' by @mlakov in https://github.com/cap-js/ord/pull/467
+- chore: Extract 'createEventResourceTemplate' by @mlakov in https://github.com/cap-js/ord/pull/466
+- chore: Improve handling of custom ORD content by @mlakov in https://github.com/cap-js/ord/pull/443
+- chore: Extract 'createIntegrationDependency' by @mlakov in https://github.com/cap-js/ord/pull/469
+- chore(deps): update dependency org.apache.maven.plugins:maven-surefire-plugin to v3.5.6 by @rennovate in https://github.com/cap-js/ord/pull/472
+- feat: Split ORD documents bigger than 2mb by @mlakov in https://github.com/cap-js/ord/pull/468
+- chore: Refactor ORD document generation by @mlakov in https://github.com/cap-js/ord/pull/471
+- chore: Extract additional template functions & utilities by @mlakov in https://github.com/cap-js/ord/pull/474
+- chore: Rewrite integration tests with cds.test by @mlakov in https://github.com/cap-js/ord/pull/475
+- fix: Make resource definition URLs OS agnostic by @mlakov in https://github.com/cap-js/ord/pull/463
+- chore: Simplify 'lib/protocol-resolver.js' by @mlakov in https://github.com/cap-js/ord/pull/479
+- chore: Refactor access strategy handling by @mlakov in https://github.com/cap-js/ord/pull/478
+- chore(deps): update dependency org.jacoco:jacoco-maven-plugin to v0.8.15 by @rennovate in https://github.com/cap-js/ord/pull/485
+- chore: Extract resource definitions generation logic to a dispatch table by @mlakov in https://github.com/cap-js/ord/pull/484
+- feat: Allow for specifying the "package name" via .cdsrc.json by @mlakov in https://github.com/cap-js/ord/pull/482
+- feat: Allow for using '{namespace}' and '{type}' placeholders for 'ordId' and 'partOfPackage' by @mlakov in https://github.com/cap-js/ord/pull/480
+- chore(deps): update dependency @open-resource-discovery/specification to v1.15.0 by @rennovate in https://github.com/cap-js/ord/pull/470
+- chore: Refactor 'lib/templates/product.js' to use resolvers by @mlakov in https://github.com/cap-js/ord/pull/489
+- chore(deps): update dependency prettier to v3.8.4 by @rennovate in https://github.com/cap-js/ord/pull/487
+- chore: Refactor 'lib/templates/package.js' to use resolvers by @mlakov in https://github.com/cap-js/ord/pull/491
+- fix(deps): update spring boot to v3.5.15 by @rennovate in https://github.com/cap-js/ord/pull/492
+- chore: Update to ORD 1.16 by @mlakov in https://github.com/cap-js/ord/pull/481
+- fix: Allow overriding document version for interop CSN by @mlakov in https://github.com/cap-js/ord/pull/493
+- chore(deps): update actions/checkout action to v7 by @rennovate in https://github.com/cap-js/ord/pull/494
+- chore(deps): update dependency @sap/cds-compiler to v6.9.3 by @rennovate in https://github.com/cap-js/ord/pull/495
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.8.0...v1.9.0
+
 ## 1.8.0 (2026-05-15)
 
 ## What's Changed
