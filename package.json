@@ -47,6 +47,7 @@
         "@cap-js/asyncapi": "^1.0.3",
         "@cap-js/openapi": "^1.2.1",
         "@opentelemetry/api": "^1.9.0",
+        "@opentelemetry/semantic-conventions": "^1.30.0",
         "bcryptjs": "3.0.3",
         "cli-progress": "^3.12.0",
         "lodash": "^4.17.21",
