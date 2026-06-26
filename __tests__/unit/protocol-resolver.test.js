@@ -258,8 +258,10 @@ describe("protocol-resolver", () => {
                 `);
                 const srvDefinition = model.definitions["CustomService"];
 
-                expect(() => resolveApiResourceProtocol(srvDefinition)).not.toThrow();
-                const result = resolveApiResourceProtocol(srvDefinition);
+                let result;
+                expect(() => {
+                    result = resolveApiResourceProtocol(srvDefinition);
+                }).not.toThrow();
                 expect(result).toEqual([]);
                 expect(loggerWarnSpy).toHaveBeenCalledWith(
                     expect.stringContaining("Unknown protocol 'custom_protocol' is not supported"),
