@@ -236,5 +236,56 @@ describe("protocol-resolver", () => {
                 expect(inaProtocol.hasResourceDefinitions).toBe(false);
             });
         });
+
+        // Regression: a custom CAP protocol plugin (e.g. transport_inbound) registers itself
+        // on cds.service.protocols. endpoints4() returns an endpoint with that kind, but ORD
+        // has no mapping for it. The filter must drop it, not pass it through — otherwise
+        // api-resource.js crashes with "RESOURCE_DEFINITION_PROVIDERS[apiProtocol] is not a function".
+        describe("with custom CAP protocol plugin loaded", () => {
+            beforeEach(() => {
+                cds.service.protocols["transport_inbound"] = {
+                    path: "/transport-inbound",
+                    impl: "@example/transport-inbound",
+                };
+            });
+
+            afterEach(() => {
+                delete cds.service.protocols["transport_inbound"];
+            });
+
+            it("should not crash and should warn for unknown CAP-registered protocol", () => {
+                const model = cds.linked(`
+                    @protocol: 'transport_inbound'
+                    service TIService {
+                        entity Things { key ID: UUID; }
+                    }
+                `);
+                const srvDefinition = model.definitions["TIService"];
+
+                expect(() => resolveApiResourceProtocol(srvDefinition)).not.toThrow();
+                const result = resolveApiResourceProtocol(srvDefinition);
+                expect(result).toEqual([]);
+                expect(loggerWarnSpy).toHaveBeenCalledWith(
+                    expect.stringContaining("Unknown protocol 'transport_inbound' is not supported"),
+                );
+            });
+
+            it("should keep known protocols and drop unknown CAP-registered protocol", () => {
+                const model = cds.linked(`
+                    @protocol: ['rest', 'transport_inbound']
+                    service MixedService {
+                        entity Things { key ID: UUID; }
+                    }
+                `);
+                const srvDefinition = model.definitions["MixedService"];
+                const result = resolveApiResourceProtocol(srvDefinition);
+
+                expect(result).toHaveLength(1);
+                expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.REST);
+                expect(loggerWarnSpy).toHaveBeenCalledWith(
+                    expect.stringContaining("Unknown protocol 'transport_inbound' is not supported"),
+                );
+            });
+        });
     });
 });
