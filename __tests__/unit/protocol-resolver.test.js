@@ -237,42 +237,38 @@ describe("protocol-resolver", () => {
             });
         });
 
-        // Regression: a custom CAP protocol plugin (e.g. transport_inbound) registers itself
-        // on cds.service.protocols. endpoints4() returns an endpoint with that kind, but ORD
-        // has no mapping for it. The filter must drop it, not pass it through — otherwise
-        // api-resource.js crashes with "RESOURCE_DEFINITION_PROVIDERS[apiProtocol] is not a function".
         describe("with custom CAP protocol plugin loaded", () => {
             beforeEach(() => {
-                cds.service.protocols["transport_inbound"] = {
-                    path: "/transport-inbound",
-                    impl: "@example/transport-inbound",
+                cds.service.protocols["custom_protocol"] = {
+                    path: "/custom-protocol",
+                    impl: "@example/custom-protocol",
                 };
             });
 
             afterEach(() => {
-                delete cds.service.protocols["transport_inbound"];
+                delete cds.service.protocols["custom_protocol"];
             });
 
             it("should not crash and should warn for unknown CAP-registered protocol", () => {
                 const model = cds.linked(`
-                    @protocol: 'transport_inbound'
-                    service TIService {
+                    @protocol: 'custom_protocol'
+                    service CustomService {
                         entity Things { key ID: UUID; }
                     }
                 `);
-                const srvDefinition = model.definitions["TIService"];
+                const srvDefinition = model.definitions["CustomService"];
 
                 expect(() => resolveApiResourceProtocol(srvDefinition)).not.toThrow();
                 const result = resolveApiResourceProtocol(srvDefinition);
                 expect(result).toEqual([]);
                 expect(loggerWarnSpy).toHaveBeenCalledWith(
-                    expect.stringContaining("Unknown protocol 'transport_inbound' is not supported"),
+                    expect.stringContaining("Unknown protocol 'custom_protocol' is not supported"),
                 );
             });
 
             it("should keep known protocols and drop unknown CAP-registered protocol", () => {
                 const model = cds.linked(`
-                    @protocol: ['rest', 'transport_inbound']
+                    @protocol: ['rest', 'custom_protocol']
                     service MixedService {
                         entity Things { key ID: UUID; }
                     }
@@ -283,7 +279,7 @@ describe("protocol-resolver", () => {
                 expect(result).toHaveLength(1);
                 expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.REST);
                 expect(loggerWarnSpy).toHaveBeenCalledWith(
-                    expect.stringContaining("Unknown protocol 'transport_inbound' is not supported"),
+                    expect.stringContaining("Unknown protocol 'custom_protocol' is not supported"),
                 );
             });
         });
