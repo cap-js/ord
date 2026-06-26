@@ -6,7 +6,7 @@
         "@cap-js/graphql": "^0.14.0",
         "@cap-js/ord": "file:../../ord",
         "@cap-js/sqlite": ">=2",
-        "@sap/cds-mtxs": "^3",
+        "@sap/cds-mtxs": "^4.0.0",
         "sap-sai-supplier-v1": "file:./srv/imported/sap-sai-supplier-v1",
         "sap-s4com-supplier-v1": "file:./srv/imported/sap-s4com-supplier-v1"
     },
