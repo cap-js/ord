@@ -236,5 +236,54 @@ describe("protocol-resolver", () => {
                 expect(inaProtocol.hasResourceDefinitions).toBe(false);
             });
         });
+
+        describe("with custom CAP protocol plugin loaded", () => {
+            beforeEach(() => {
+                cds.service.protocols["custom_protocol"] = {
+                    path: "/custom-protocol",
+                    impl: "@example/custom-protocol",
+                };
+            });
+
+            afterEach(() => {
+                delete cds.service.protocols["custom_protocol"];
+            });
+
+            it("should not crash and should warn for unknown CAP-registered protocol", () => {
+                const model = cds.linked(`
+                    @protocol: 'custom_protocol'
+                    service CustomService {
+                        entity Things { key ID: UUID; }
+                    }
+                `);
+                const srvDefinition = model.definitions["CustomService"];
+
+                let result;
+                expect(() => {
+                    result = resolveApiResourceProtocol(srvDefinition);
+                }).not.toThrow();
+                expect(result).toEqual([]);
+                expect(loggerWarnSpy).toHaveBeenCalledWith(
+                    expect.stringContaining("Unknown protocol 'custom_protocol' is not supported"),
+                );
+            });
+
+            it("should keep known protocols and drop unknown CAP-registered protocol", () => {
+                const model = cds.linked(`
+                    @protocol: ['rest', 'custom_protocol']
+                    service MixedService {
+                        entity Things { key ID: UUID; }
+                    }
+                `);
+                const srvDefinition = model.definitions["MixedService"];
+                const result = resolveApiResourceProtocol(srvDefinition);
+
+                expect(result).toHaveLength(1);
+                expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.REST);
+                expect(loggerWarnSpy).toHaveBeenCalledWith(
+                    expect.stringContaining("Unknown protocol 'custom_protocol' is not supported"),
+                );
+            });
+        });
     });
 });
