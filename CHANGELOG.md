@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.9.1 (2026-06-26)
+
+## What's Changed
+
+- fix(protocol-resolver): drop unknown protocols instead of passing them through by @zongqichen in https://github.com/cap-js/ord/pull/505
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.9.0...v1.9.1
+
 ## 1.9.0 (2026-06-22)
 
 ## What's Changed
