@@ -1,7 +1,7 @@
 {
     "name": "ord-sample-mtx",
     "dependencies": {
-        "@cap-js/hana": "^2",
+        "@cap-js/hana": "^3.0.0",
         "@sap/cds": "^9",
         "@sap/cds-mtxs": "^3",
         "@sap/xssec": "^4",
