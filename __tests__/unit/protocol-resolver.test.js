@@ -280,6 +280,17 @@ describe("protocol-resolver", () => {
             });
         });
 
+        it("should silently skip MCP protocol when plugin is not loaded", () => {
+            const srvDefinition = {
+                "name": "McpService",
+                "@protocol": "mcp",
+            };
+            const result = resolveApiResourceProtocol(srvDefinition);
+
+            expect(result).toEqual([]);
+            expect(loggerWarnSpy).not.toHaveBeenCalled();
+        });
+
         describe("with custom CAP protocol plugin loaded", () => {
             beforeEach(() => {
                 cds.service.protocols["custom_protocol"] = {
