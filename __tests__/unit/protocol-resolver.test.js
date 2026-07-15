@@ -237,6 +237,49 @@ describe("protocol-resolver", () => {
             });
         });
 
+        describe("with @cap-js/mcp plugin loaded", () => {
+            beforeEach(() => {
+                cds.service.protocols["mcp"] = { path: "/mcp", impl: "@cap-js/mcp" };
+            });
+
+            afterEach(() => {
+                delete cds.service.protocols["mcp"];
+            });
+
+            it("should resolve MCP protocol", () => {
+                const model = cds.linked(`
+                    @protocol: 'mcp'
+                    service McpService {
+                        entity Books { key ID: UUID; }
+                    }
+                `);
+                const srvDefinition = model.definitions["McpService"];
+                const result = resolveApiResourceProtocol(srvDefinition);
+
+                expect(result).toHaveLength(1);
+                expect(result[0].apiProtocol).toBe(ORD_API_PROTOCOL.MCP);
+                expect(result[0].hasResourceDefinitions).toBe(true);
+                expect(result[0].entryPoints).not.toContain(null);
+                expect(loggerWarnSpy).not.toHaveBeenCalled();
+            });
+
+            it("should resolve MCP alongside OData without warning", () => {
+                const model = cds.linked(`
+                    @protocol: ['odata-v4', 'mcp']
+                    service MyService {
+                        entity Books { key ID: UUID; }
+                    }
+                `);
+                const srvDefinition = model.definitions["MyService"];
+                const result = resolveApiResourceProtocol(srvDefinition);
+
+                const protocols = result.map((r) => r.apiProtocol);
+                expect(protocols).toContain(ORD_API_PROTOCOL.ODATA_V4);
+                expect(protocols).toContain(ORD_API_PROTOCOL.MCP);
+                expect(loggerWarnSpy).not.toHaveBeenCalled();
+            });
+        });
+
         describe("with custom CAP protocol plugin loaded", () => {
             beforeEach(() => {
                 cds.service.protocols["custom_protocol"] = {

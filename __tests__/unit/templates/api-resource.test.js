@@ -111,27 +111,18 @@ describe("createAPIResourceTemplate", () => {
         expect(createAPIResources({ ...appConfig, csn: model })).toEqual([]);
     });
 
-    it("should create correct resource definition for MCP protocol", () => {
-        // CAP core doesn't recognize 'mcp' protocol (@protocol: 'mcp' returns empty endpoints)
-        // Only added when plugin is there
-        // So we need to mock the protocol resolver to test the MCP resource definition branch
-        jest.resetModules();
+    describe("with @cap-js/mcp plugin loaded", () => {
+        beforeEach(() => {
+            cds.service.protocols["mcp"] = { path: "/mcp", impl: "@cap-js/mcp" };
+        });
 
-        jest.doMock("../../../lib/protocol-resolver", () => ({
-            resolveApiResourceProtocol: jest.fn().mockReturnValue([
-                {
-                    apiProtocol: "mcp",
-                    entryPoints: ["/mcp/mcp-service"],
-                    hasResourceDefinitions: true,
-                },
-            ]),
-        }));
+        afterEach(() => {
+            delete cds.service.protocols["mcp"];
+        });
 
-        const {
-            createAPIResourceTemplate: createAPIResourceTemplateMocked,
-        } = require("../../../lib/templates/api-resource");
-
-        const model = cds.linked(`
+        it("should create correct resource definition for MCP protocol", () => {
+            const model = cds.linked(`
+                    @protocol: 'mcp'
                     service McpService {
                        entity Items {
                            key ID: UUID;
@@ -139,20 +130,18 @@ describe("createAPIResourceTemplate", () => {
                        }
                     };
                 `);
-        const srvDefinition = model.definitions["McpService"];
+            const srvDefinition = model.definitions["McpService"];
 
-        const apiResourceTemplate = createAPIResourceTemplateMocked(srvDefinition, appConfig);
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
 
-        expect(apiResourceTemplate).toHaveLength(1);
-        const mcpResource = apiResourceTemplate[0];
-        expect(mcpResource.apiProtocol).toBe("mcp");
-        expect(mcpResource.resourceDefinitions).toHaveLength(1);
-        expect(mcpResource.resourceDefinitions[0].type).toBe(MCP_RESOURCE_DEFINITION_TYPE);
-        expect(mcpResource.resourceDefinitions[0].mediaType).toBe("application/json");
-        expect(mcpResource.resourceDefinitions[0].url).toContain(".mcp.json");
-
-        jest.dontMock("../../../lib/protocol-resolver");
-        jest.resetModules();
+            expect(apiResourceTemplate).toHaveLength(1);
+            const mcpResource = apiResourceTemplate[0];
+            expect(mcpResource.apiProtocol).toBe("mcp");
+            expect(mcpResource.resourceDefinitions).toHaveLength(1);
+            expect(mcpResource.resourceDefinitions[0].type).toBe(MCP_RESOURCE_DEFINITION_TYPE);
+            expect(mcpResource.resourceDefinitions[0].mediaType).toBe("application/json");
+            expect(mcpResource.resourceDefinitions[0].url).toContain(".mcp.json");
+        });
     });
 
     it('should add apiResources with ORD Extension "visibility=public"', () => {
