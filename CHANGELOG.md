@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.9.2 (2026-07-16)
+
+## What's Changed
+
+- fix(protocol-resolver): map CAP 'mcp' protocol to ORD apiProtocol by @zongqichen in https://github.com/cap-js/ord/pull/519
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.9.1...v1.9.2
+
 ## 1.9.1 (2026-06-26)
 
 ## What's Changed
