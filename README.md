@@ -12,6 +12,15 @@ For more information, have a look at the [Open Resource Discovery](https://open-
 
 > ⚠ By installing this plugin, the metadata describing your CAP application will be made openly accessible. If you want to secure your CAP application's metadata, configure `basic` authentication by setting the environment variables or updating the `.cdsrc.json` file. The plugin prioritizes environment variables, then checks `.cdsrc.json`. If neither is configured, metadata remains publicly accessible.
 
+### AI Coding Agent Skills
+
+This project ships two [Claude Code skills](https://docs.anthropic.com/en/docs/claude-code/skills-tutorial) under `.skills/` that AI coding agents can use to assist with common tasks:
+
+| Skill | Description |
+| ----- | ----------- |
+| [`integrate-ord-plugin`](.skills/integrate-ord-plugin/SKILL.md) | Step-by-step guide for integrating `@cap-js/ord` into a CAP Node.js project — installation, `.cdsrc.json` configuration, authentication, and verification. |
+| [`custom-ord-annotations`](.skills/custom-ord-annotations/SKILL.md) | Reference for all `@ORD.Extensions.*` CDS annotations — title, description, version, visibility, consumption bundles, and more. |
+
 ## Requirements and Setup
 
 ### Installation
