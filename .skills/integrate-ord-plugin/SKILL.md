@@ -68,6 +68,8 @@ Prefix used to build **every** ORD ID in the document — packages, API/event re
 - **ID effect:** `namespace: "customer.myapp"` + service `MyService` → `"customer.myapp:apiResource:MyService:v1"`.
 - Cross-checked against `export.asyncapi.applicationNamespace` — mismatch logs a warning but does not block startup.
 
+> **⚠️ Changing the namespace is a backward-incompatible operation.** Every ORD ID in the document is derived from the namespace, so renaming it changes all resource identifiers at once. Any ORD aggregator, consumer, or integration that has stored or referenced those IDs — bookmarks, subscriptions, API clients, discovery caches — will break and require manual remediation. Treat the namespace as immutable once the application is in production.
+
 ```json
 { "ord": { "namespace": "customer.myapp" } }
 ```
@@ -171,6 +173,7 @@ Overrides fields on the single auto-generated product entry.
 
 - **Only `products[0]` is read.** Elements at index 1+ are ignored.
 - **Constraint:** if `products[0].ordId` starts with `"sap"` (case-insensitive), the plugin discards all overrides and logs an error — use `existingProductORDId` instead.
+- **Mutually exclusive with `existingProductORDId`:** when `existingProductORDId` is set, no product entry is auto-generated at all, so `products` overrides have nothing to apply to and are ignored entirely.
 - Default: `ordId` → `"customer:product:<dotted-packageName>:"`, `vendor` → `"customer:vendor:Customer:"`, `title` and `shortDescription` auto-derived.
 
 ```json
@@ -338,7 +341,13 @@ Strips a CDS model namespace prefix from service names when building ORD IDs. Us
 
 #### `compileOptions`
 
-Extra options forwarded to the resource definition compilers.
+Extra options forwarded to the resource definition compilers. Each key corresponds to a compiler; the value is passed through as-is. For the full list of supported options per compiler, refer to the respective package documentation:
+
+- **`openapi`** — [`@cap-js/openapi`](https://www.npmjs.com/package/@cap-js/openapi)
+- **`asyncapi`** — [`@cap-js/asyncapi`](https://www.npmjs.com/package/@cap-js/asyncapi)
+- **`edmx`** — [`@sap/cds`](https://www.npmjs.com/package/@sap/cds)
+- **`mcp`** — [`@cap-js/mcp`](https://www.npmjs.com/package/@cap-js/mcp)
+- **`graphql`** — [`@cap-js/graphql`](https://www.npmjs.com/package/@cap-js/graphql)
 
 ```json
 {
@@ -347,7 +356,8 @@ Extra options forwarded to the resource definition compilers.
             "openapi":   { "openapi:url": "https://{host}.example.com/${service-path}" },
             "asyncapi":  {},
             "edmx":      {},
-            "mcp":       {}
+            "mcp":       {},
+            "graphql":   {}
         }
     }
 }

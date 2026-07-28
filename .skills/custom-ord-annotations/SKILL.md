@@ -83,7 +83,7 @@ Resolution chain (first match wins):
 | 2 | `@title`                | Standard CAP label |
 | 3 | `@Common.Label`         | OData common label |
 | 4 | `@EndUserText.label`    | SAP end-user label |
-| 5 | *(fallback)*            | API: service name; Event: "ODM appName Events"; Entity: name segment of `@EntityRelationship.entityType` |
+| 5 | *(fallback)*            | Depends on resource type: **API** → the service name; **Event** → `"<appName> Events"`; **Entity** → the local name from `@EntityRelationship.entityType` |
 
 ```cds
 annotate CatalogService with @ORD.Extensions.title: 'Catalog Service';
@@ -137,7 +137,7 @@ annotate MyService with @protocol('rest').ORD.Extensions.ordId: 'sap.sample:apiR
 Sets `version` on an API resource, event resource, or entity type. Also drives the `v<N>` suffix in auto-generated `ordId` values.
 
 - **Applies to:** `service`, `entity`
-- **Default:** `"1.0.0"` for services; derived from the version segment of `@EntityRelationship.entityType` for entities.
+- **Default:** `"1.0.0"` for services; for entities, extracted from the version suffix of the `@EntityRelationship.entityType` value (e.g. `sap.odm:EntityType:BusinessPartner:v2` → `"2.0.0"`).
 - **Constraint:** when generating CSN resource definitions for a single-service data product, the fully-qualified service name must end in a `.v<N>` segment (e.g. `my.namespace.Service.v2`) and that major must match the major of this annotation. Mismatch throws during CSN compilation (not at general startup).
 
 ```cds
