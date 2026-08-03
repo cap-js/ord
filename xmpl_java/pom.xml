@@ -14,9 +14,10 @@
 
 		<!-- DEPENDENCIES VERSION -->
 		<jdk.version>21</jdk.version>
-		<cds.services.version>5.0.1</cds.services.version>
-		<spring.boot.version>4.1.0</spring.boot.version>
 		<xsuaa.version>4.3.1</xsuaa.version>
+		<spring.boot.version>4.1.0</spring.boot.version>
+		<cds.services.version>5.0.1</cds.services.version>
+		<cds.feature.ord.version>6.0.0</cds.feature.ord.version>
 
 		<cds.install-node.downloadUrl>https://nodejs.org/dist/</cds.install-node.downloadUrl>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -50,7 +51,7 @@
 			<dependency>
 				<groupId>com.sap.cds</groupId>
 				<artifactId>cds-feature-ord</artifactId>
-				<version>${cds.services.version}</version>
+				<version>${cds.feature.ord.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
