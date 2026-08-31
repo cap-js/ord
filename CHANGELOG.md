@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.9.3 (2026-08-31)
+
+## What's Changed
+
+- chore(deps): update dependency @sap/cds-compiler to v7.0.3 by @rennovate in https://github.com/cap-js/ord/pull/523
+- chore: Introduce AI agent friendly skills by @mlakov in https://github.com/cap-js/ord/pull/522
+- chore: Introduce localization for resource definitions by @mlakov in https://github.com/cap-js/ord/pull/532
+- chore: Allow specifying default toggles by @mlakov in https://github.com/cap-js/ord/pull/534
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.9.2...v1.9.3
+
 ## 1.9.2 (2026-07-16)
 
 ## What's Changed
