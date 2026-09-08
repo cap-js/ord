@@ -1,0 +1,6 @@
+{
+  "requires": {
+    "db": { "kind": "sqlite", "model": ["srv", "db"] },
+    "SAP ORD Service": { "model": "@cap-js/ord/lib/services/ord-service" }
+  }
+}
