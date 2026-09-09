@@ -7,7 +7,7 @@
     },
     "dependencies": {
         "@cap-js/ord": "*",
-        "@sap/cds-mtxs": "^3",
+        "@sap/cds-mtxs": "3.9.7",
         "test-sai-supplier-v1": "file:./srv/imported/test-sai-supplier-v1",
         "test-s4-supplier-v1": "file:./srv/imported/test-s4-supplier-v1"
     },
