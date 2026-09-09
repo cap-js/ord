@@ -3,10 +3,12 @@ const cds = require("@sap/cds");
 jest.mock("../../../lib/logger", () => ({ warn: jest.fn() }));
 jest.mock("@cap-js/graphql/lib/api");
 jest.mock("@cap-js/mcp/lib/api", () => ({ registerCompileTargets: jest.fn() }), { virtual: true });
+jest.mock("@cap-js/agents/lib/api", () => ({ registerCompileTargets: jest.fn() }), { virtual: true });
 
 const Logger = require("../../../lib/logger");
 const graphqlApi = require("@cap-js/graphql/lib/api");
 const mcpApi = require("@cap-js/mcp/lib/api");
+const agentsApi = require("@cap-js/agents/lib/api");
 const registerCompileTargets = require("../../../lib/common/register-compile-targets");
 
 describe("register-compile-targets", () => {
@@ -19,9 +21,11 @@ describe("register-compile-targets", () => {
         cds.env.plugins = {};
         delete cds.env.protocols.graphql;
         delete cds.env.protocols.mcp;
+        delete cds.env.protocols.a2a;
 
         graphqlApi.registerCompileTargets = jest.fn();
         mcpApi.registerCompileTargets = jest.fn();
+        agentsApi.registerCompileTargets = jest.fn();
         jest.clearAllMocks();
     });
 
@@ -79,6 +83,15 @@ describe("register-compile-targets", () => {
         registerCompileTargets();
 
         expect(cds.env.protocols.mcp).toEqual({ path: "/mcp", impl: "@cap-js/mcp" });
+    });
+
+    it("registers a2a protocol when @cap-js/agents is installed and protocol is absent", () => {
+        cds.env.plugins = { "@cap-js/agents": {} };
+
+        registerCompileTargets();
+
+        expect(agentsApi.registerCompileTargets).toHaveBeenCalledTimes(1);
+        expect(cds.env.protocols.a2a).toEqual({ path: "/a2a", impl: "@cap-js/agents" });
     });
 
     it("calls registerCompileTargets on the plugin api module", () => {
