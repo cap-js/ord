@@ -1,25 +1,16 @@
-const path = require("node:path");
 const cds = require("@sap/cds");
 const { before, after } = require("node:test");
 
-module.exports = function (appPath, environment) {
-    const originalEnv = process.env;
+module.exports = function (path, environment) {
+    const env = process.env;
 
     before(() => {
-        const testEnv = { ...environment };
-        // Resolve a relative CDS_CONFIG against the app directory rather than the
-        // current working directory. cds.env may be evaluated by a plugin (e.g.
-        // @sap/cds-mtxs) before cds.root is set, in which case a relative path
-        // would resolve against the repo root and throw ENOENT. See #546.
-        if (testEnv.CDS_CONFIG && !path.isAbsolute(testEnv.CDS_CONFIG)) {
-            testEnv.CDS_CONFIG = path.join(appPath, testEnv.CDS_CONFIG);
-        }
-        process.env = testEnv;
+        process.env = environment;
     });
 
     after(() => {
-        process.env = originalEnv;
+        process.env = env;
     });
 
-    return cds.test(appPath);
+    return cds.test(path);
 };
