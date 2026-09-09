@@ -1,0 +1,29 @@
+{
+    "namespace": "sap.capire.incidents",
+    "definitions": {
+        "sap.capire.incidents.LocalService": {
+            "kind": "service",
+            "@agent": true,
+            "@ORD.Extensions.title": "Local Agent Service",
+            "@description": "An AI agent for incident management"
+        },
+        "sap.capire.incidents.LocalService.Incidents": {
+            "kind": "entity",
+            "elements": {
+                "id": {
+                    "key": true,
+                    "type": "cds.UUID"
+                },
+                "title": {
+                    "type": "cds.String",
+                    "length": 100
+                }
+            }
+        }
+    },
+    "meta": {
+        "creator": "CDS Compiler v5.4.4",
+        "flavor": "inferred"
+    },
+    "$version": "2.0"
+}

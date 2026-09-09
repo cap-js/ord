@@ -8,6 +8,7 @@ const {
     resolveAccessStrategies,
     isPrimaryDataProductService,
     isBlockedServiceName,
+    isAgentService,
 } = require("../../../lib/common/utils");
 const { RESOURCE_VISIBILITY, ORD_ACCESS_STRATEGY } = require("../../../lib/constants");
 const Logger = require("../../../lib/logger");
@@ -409,5 +410,31 @@ describe("resolveAccessStrategies", () => {
         expect(() =>
             resolveAccessStrategies({ accessStrategies: [ORD_ACCESS_STRATEGY.Open, ORD_ACCESS_STRATEGY.Basic] }),
         ).toThrow();
+    });
+});
+
+describe("isAgentService", () => {
+    it("returns true for a service with @agent: true", () => {
+        // TODO: Review AI Test
+        const definition = { kind: "service", "@agent": true };
+        expect(isAgentService(definition)).toBe(true);
+    });
+
+    it("returns false for a service without @agent annotation", () => {
+        // TODO: Review AI Test
+        const definition = { kind: "service" };
+        expect(isAgentService(definition)).toBe(false);
+    });
+
+    it("returns false for a non-service definition with @agent", () => {
+        // TODO: Review AI Test
+        const definition = { kind: "entity", "@agent": true };
+        expect(isAgentService(definition)).toBe(false);
+    });
+
+    it("returns false for a service with @agent: false", () => {
+        // TODO: Review AI Test
+        const definition = { kind: "service", "@agent": false };
+        expect(isAgentService(definition)).toBe(false);
     });
 });
