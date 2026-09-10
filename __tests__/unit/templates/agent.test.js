@@ -26,7 +26,7 @@ describe("createAgentTemplate", () => {
 
         expect(agent.ordId).toEqual("customer.testNamespace:agent:MyAgentService:v1");
         expect(agent.version).toEqual("1.0.0");
-        expect(agent.releaseStatus).toEqual("beta");
+        expect(agent.releaseStatus).toEqual("active");
         expect(agent.visibility).toEqual("public");
         expect(agent.partOfPackage).toBeDefined();
     });
@@ -99,7 +99,7 @@ describe("createAgentTemplate", () => {
         expect(agent.description).toBeUndefined();
     });
 
-    it("should generate exposedApiResources cross-reference pointing to the matching apiResource ordId", () => {
+    it("should auto-generate exposedApiResources referencing the a2a API resource", () => {
         // TODO: Review AI Test
         const model = cds.linked(`
             @agent
@@ -109,8 +109,23 @@ describe("createAgentTemplate", () => {
 
         const agent = createAgentTemplate(service, baseAppConfig);
 
-        expect(agent.exposedApiResources).toHaveLength(1);
-        expect(agent.exposedApiResources[0].ordId).toEqual("customer.testNamespace:apiResource:MyAgentService:v1");
+        expect(agent.exposedApiResources).toEqual([
+            { ordId: "customer.testNamespace:apiResource:MyAgentService:v1" },
+        ]);
+    });
+
+    it("should use @ORD.Extensions.exposedApiResources when provided", () => {
+        // TODO: Review AI Test
+        const model = cds.linked(`
+            @agent
+            @ORD.Extensions.exposedApiResources: [{ ordId: 'customer.testNamespace:apiResource:MyAgentService:v1' }]
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(agent.exposedApiResources).toEqual([{ ordId: "customer.testNamespace:apiResource:MyAgentService:v1" }]);
     });
 
     it("should use @ORD.Extensions.ordId when provided", () => {

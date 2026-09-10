@@ -163,31 +163,21 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
 
             expect(document.agents).toHaveLength(1);
             expect(document.agents[0].ordId).toContain("LocalService");
-            expect(document.agents[0].releaseStatus).toEqual("beta");
+            expect(document.agents[0].releaseStatus).toEqual("active");
             expect(document.agents[0].partOfPackage).toBeDefined();
-            expect(document.agents[0].exposedApiResources).toHaveLength(1);
         });
 
-        test("Generates a2a API resource alongside agent entry", () => {
+        test("Creates a2a API resource entry for agent service", () => {
             // TODO: Review AI Test
             const csn = require("../__mocks__/agentCsn.json");
             const document = ord(csn);
 
             const a2aResources = document.apiResources.filter((r) => r.apiProtocol === "a2a");
             expect(a2aResources).toHaveLength(1);
+            expect(a2aResources[0].releaseStatus).toEqual("beta");
+            expect(a2aResources[0].resourceDefinitions).toHaveLength(1);
             expect(a2aResources[0].resourceDefinitions[0].type).toEqual("a2a-agent-card");
             expect(a2aResources[0].resourceDefinitions[0].url).toContain("/.well-known/agent-card.json");
-        });
-
-        test("Agent's exposedApiResources cross-references the a2a API resource ordId", () => {
-            // TODO: Review AI Test
-            const csn = require("../__mocks__/agentCsn.json");
-            const document = ord(csn);
-
-            const agentApiOrdId = document.agents[0].exposedApiResources[0].ordId;
-            const matchingApiResource = document.apiResources.find((r) => r.ordId === agentApiOrdId);
-            expect(matchingApiResource).toBeDefined();
-            expect(matchingApiResource.apiProtocol).toEqual("a2a");
         });
 
         test("Does not include agents array when no service is annotated with @agent", () => {
