@@ -6,7 +6,6 @@
             "@protocol": "agent",
             "@path": "local-service",
             "@agent": true,
-            "@agent.cardUrl": "/a2a/local-service/.well-known/agent-card.json",
             "@ORD.Extensions.title": "Local Agent Service",
             "@description": "An AI agent for incident management"
         },
