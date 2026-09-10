@@ -224,7 +224,7 @@ describe("Build", () => {
                 ordId: "sap.sm:apiResource:SupplierService:v1",
                 resourceDefinitions: [
                     {
-                        url: "https://example.com/resource1",
+                        url: "/ord/v1/sap.sm:apiResource:SupplierService:v1/SupplierService.oas3.json",
                     },
                 ],
             },
