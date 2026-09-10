@@ -154,7 +154,7 @@ describe("createAPIResourceTemplate", () => {
             delete cds.service.protocols["agent"];
         });
 
-        it("should build the agent card URL following the /ord/v1 resource pattern", () => {
+        it("should build the agent card URL from the a2a entry point (well-known convention)", () => {
             // TODO: Review AI Test
             const model = cds.linked(`
                     @protocol: 'agent'
@@ -175,7 +175,7 @@ describe("createAPIResourceTemplate", () => {
             expect(a2aResource.resourceDefinitions[0].type).toBe(AGENT_CARD_RESOURCE_DEFINITION_TYPE);
             expect(a2aResource.resourceDefinitions[0].mediaType).toBe("application/json");
             expect(a2aResource.resourceDefinitions[0].url).toBe(
-                `/ord/v1/${a2aResource.ordId}/MyAgentService.a2a.json`,
+                `${a2aResource.entryPoints[0]}/.well-known/agent-card.json`,
             );
         });
     });

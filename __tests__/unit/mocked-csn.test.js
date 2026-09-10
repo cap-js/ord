@@ -187,11 +187,11 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(a2aResources[0].resourceDefinitions).toHaveLength(1);
             expect(a2aResources[0].resourceDefinitions[0].type).toEqual("a2a-agent-card");
             expect(a2aResources[0].resourceDefinitions[0].url).toEqual(
-                `/ord/v1/${a2aResources[0].ordId}/sap.capire.incidents.LocalService.a2a.json`,
+                `${a2aResources[0].entryPoints[0]}/.well-known/agent-card.json`,
             );
         });
 
-        test("a2a resource definition uses the /ord/v1 pattern even without explicit @path", () => {
+        test("a2a resource definition points to the well-known agent card even without explicit @path", () => {
             // TODO: Review AI Test
             const csn = {
                 namespace: "",
@@ -209,7 +209,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(a2aResources[0].resourceDefinitions).toHaveLength(1);
             expect(a2aResources[0].resourceDefinitions[0].type).toEqual("a2a-agent-card");
             expect(a2aResources[0].resourceDefinitions[0].url).toEqual(
-                `/ord/v1/${a2aResources[0].ordId}/NoPathService.a2a.json`,
+                `${a2aResources[0].entryPoints[0]}/.well-known/agent-card.json`,
             );
         });
 
