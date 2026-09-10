@@ -154,29 +154,7 @@ describe("createAPIResourceTemplate", () => {
             delete cds.service.protocols["agent"];
         });
 
-        it("should derive agent card URL from relative @path", () => {
-            // TODO: Review AI Test
-            const model = cds.linked(`
-                    @protocol: 'agent'
-                    @path: 'my-agent'
-                    @agent
-                    service MyAgentService {
-                        entity Items { key ID: UUID; }
-                    };
-                `);
-            const srvDefinition = model.definitions["MyAgentService"];
-
-            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
-
-            expect(apiResourceTemplate).toHaveLength(1);
-            const a2aResource = apiResourceTemplate[0];
-            expect(a2aResource.apiProtocol).toBe("a2a");
-            expect(a2aResource.resourceDefinitions).toHaveLength(1);
-            expect(a2aResource.resourceDefinitions[0].type).toBe(AGENT_CARD_RESOURCE_DEFINITION_TYPE);
-            expect(a2aResource.resourceDefinitions[0].url).toBe("/a2a/my-agent/.well-known/agent-card.json");
-        });
-
-        it("should derive agent card URL from absolute @path", () => {
+        it("should build the agent card URL following the /ord/v1 resource pattern", () => {
             // TODO: Review AI Test
             const model = cds.linked(`
                     @protocol: 'agent'
@@ -194,7 +172,11 @@ describe("createAPIResourceTemplate", () => {
             const a2aResource = apiResourceTemplate[0];
             expect(a2aResource.apiProtocol).toBe("a2a");
             expect(a2aResource.resourceDefinitions).toHaveLength(1);
-            expect(a2aResource.resourceDefinitions[0].url).toBe("/a2a/my-agent/.well-known/agent-card.json");
+            expect(a2aResource.resourceDefinitions[0].type).toBe(AGENT_CARD_RESOURCE_DEFINITION_TYPE);
+            expect(a2aResource.resourceDefinitions[0].mediaType).toBe("application/json");
+            expect(a2aResource.resourceDefinitions[0].url).toBe(
+                `/ord/v1/${a2aResource.ordId}/MyAgentService.a2a.json`,
+            );
         });
     });
 

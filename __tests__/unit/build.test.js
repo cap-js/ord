@@ -271,4 +271,24 @@ describe("Build", () => {
             "customer.sample_eventResource_ProcessorService_v1/ProcessorService.asyncapi2.json",
         );
     });
+
+    it("should include a2a resource definitions as compile tasks", () => {
+        // TODO: Review AI Test
+        const buildClass = new OrdBuildPlugin();
+        const resources = [
+            {
+                ordId: "sap.sm:apiResource:AgentService:v1",
+                resourceDefinitions: [
+                    { url: "/ord/v1/sap.sm:apiResource:AgentService:v1/AgentService.a2a.json" },
+                ],
+            },
+        ];
+
+        expect(buildClass._extractCompileTasks(resources)).toEqual([
+            {
+                url: "/ord/v1/sap.sm:apiResource:AgentService:v1/AgentService.a2a.json",
+                ordId: "sap.sm:apiResource:AgentService:v1",
+            },
+        ]);
+    });
 });

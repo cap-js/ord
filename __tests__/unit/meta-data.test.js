@@ -154,6 +154,48 @@ describe("metaData", () => {
         await expect(getMetadata(url)).resolves.toEqual(expectedResponse);
     });
 
+    test("getMetadata should return a2a agent-card content for a given URL", async () => {
+        // TODO: Review AI Test
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AgentService:v1/AgentService.a2a.json";
+        const mockAgentCard = {
+            kind: "agent-card",
+            name: "AgentService",
+            description: "",
+            version: "0.1",
+            capabilities: { streaming: true },
+        };
+        const to = (cds.compile.to ??= {});
+        const original = Object.getOwnPropertyDescriptor(to, "a2a");
+        to.a2a = jest.fn().mockReturnValue(mockAgentCard);
+        try {
+            await expect(getMetadata(url)).resolves.toEqual({
+                contentType: "application/json",
+                response: mockAgentCard,
+            });
+            expect(to.a2a).toHaveBeenCalledTimes(1);
+            expect(to.a2a.mock.calls[0][1]).toEqual(expect.objectContaining({ as: "object" }));
+        } finally {
+            if (original) Object.defineProperty(to, "a2a", original);
+            else delete to.a2a;
+        }
+    });
+
+    test("getMetadata should raise error when get a2a failed", async () => {
+        // TODO: Review AI Test
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AgentService:v1/AgentService.a2a.json";
+        const to = (cds.compile.to ??= {});
+        const original = Object.getOwnPropertyDescriptor(to, "a2a");
+        to.a2a = jest.fn(() => {
+            throw new Error("A2A error");
+        });
+        try {
+            await expect(getMetadata(url)).rejects.toThrow("A2A error");
+        } finally {
+            if (original) Object.defineProperty(to, "a2a", original);
+            else delete to.a2a;
+        }
+    });
+
     test("getMetadata should return GraphQL SDL content with text/plain content type", async () => {
         const url =
             "/ord/v1/customer.sample:apiResource:sap.capire.incidents.GraphQLService:v1/sap.capire.incidents.GraphQLService.graphql";

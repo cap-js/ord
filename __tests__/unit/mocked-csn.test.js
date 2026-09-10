@@ -187,11 +187,11 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             expect(a2aResources[0].resourceDefinitions).toHaveLength(1);
             expect(a2aResources[0].resourceDefinitions[0].type).toEqual("a2a-agent-card");
             expect(a2aResources[0].resourceDefinitions[0].url).toEqual(
-                "/a2a/local-service/.well-known/agent-card.json",
+                `/ord/v1/${a2aResources[0].ordId}/sap.capire.incidents.LocalService.a2a.json`,
             );
         });
 
-        test("a2a resource definition is absent when service has no explicit @path", () => {
+        test("a2a resource definition uses the /ord/v1 pattern even without explicit @path", () => {
             // TODO: Review AI Test
             const csn = {
                 namespace: "",
@@ -206,46 +206,11 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const a2aResources = (document.apiResources || []).filter((r) => r.apiProtocol === "a2a");
             expect(a2aResources).toHaveLength(1);
             expect(a2aResources[0].entryPoints).toHaveLength(1);
-            expect(a2aResources[0].resourceDefinitions).toHaveLength(0);
-        });
-
-        test("agent card URL uses /a2a/ prefix for relative @path", () => {
-            // TODO: Review AI Test
-            const csn = {
-                namespace: "",
-                definitions: {
-                    MyAgent: { kind: "service", "@protocol": "agent", "@path": "my-agent", "@agent": true },
-                },
-                meta: { creator: "test" },
-                $version: "2.0",
-            };
-            const document = ord(csn);
-
-            const a2aResources = (document.apiResources || []).filter((r) => r.apiProtocol === "a2a");
-            expect(a2aResources).toHaveLength(1);
-            expect(a2aResources[0].resourceDefinitions[0].url).toEqual("/a2a/my-agent/.well-known/agent-card.json");
-        });
-
-        test("agent card URL uses absolute @path verbatim", () => {
-            // TODO: Review AI Test
-            const csn = {
-                namespace: "",
-                definitions: {
-                    MyAgent: {
-                        kind: "service",
-                        "@protocol": "agent",
-                        "@path": "/a2a/my-agent",
-                        "@agent": true,
-                    },
-                },
-                meta: { creator: "test" },
-                $version: "2.0",
-            };
-            const document = ord(csn);
-
-            const a2aResources = (document.apiResources || []).filter((r) => r.apiProtocol === "a2a");
-            expect(a2aResources).toHaveLength(1);
-            expect(a2aResources[0].resourceDefinitions[0].url).toEqual("/a2a/my-agent/.well-known/agent-card.json");
+            expect(a2aResources[0].resourceDefinitions).toHaveLength(1);
+            expect(a2aResources[0].resourceDefinitions[0].type).toEqual("a2a-agent-card");
+            expect(a2aResources[0].resourceDefinitions[0].url).toEqual(
+                `/ord/v1/${a2aResources[0].ordId}/NoPathService.a2a.json`,
+            );
         });
 
         test("Does not include agents array when no service is annotated with @agent", () => {
