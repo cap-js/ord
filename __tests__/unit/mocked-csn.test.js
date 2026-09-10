@@ -156,6 +156,14 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
     });
 
     describe("Tests for ORD document when service is annotated with @agent", () => {
+        beforeEach(() => {
+            cds.service.protocols["agent"] = { path: "/a2a", impl: "@cap-js/agents" };
+        });
+
+        afterEach(() => {
+            delete cds.service.protocols["agent"];
+        });
+
         test("Successfully creates ORD document with agents array", () => {
             // TODO: Review AI Test
             const csn = require("../__mocks__/agentCsn.json");
@@ -175,9 +183,30 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             const a2aResources = document.apiResources.filter((r) => r.apiProtocol === "a2a");
             expect(a2aResources).toHaveLength(1);
             expect(a2aResources[0].releaseStatus).toEqual("beta");
+            expect(a2aResources[0].entryPoints).toEqual(["/a2a/local-service"]);
             expect(a2aResources[0].resourceDefinitions).toHaveLength(1);
             expect(a2aResources[0].resourceDefinitions[0].type).toEqual("a2a-agent-card");
-            expect(a2aResources[0].resourceDefinitions[0].url).toContain("/.well-known/agent-card.json");
+            expect(a2aResources[0].resourceDefinitions[0].url).toEqual(
+                "/a2a/local-service/.well-known/agent-card.json",
+            );
+        });
+
+        test("a2a API resource has no resourceDefinitions when @agent.cardUrl is absent", () => {
+            // TODO: Review AI Test
+            const csn = {
+                namespace: "",
+                definitions: {
+                    NoCardService: { kind: "service", "@protocol": "agent", "@agent": true },
+                },
+                meta: { creator: "test" },
+                $version: "2.0",
+            };
+            const document = ord(csn);
+
+            const a2aResources = (document.apiResources || []).filter((r) => r.apiProtocol === "a2a");
+            expect(a2aResources).toHaveLength(1);
+            expect(a2aResources[0].resourceDefinitions).toHaveLength(0);
+            expect(a2aResources[0].entryPoints).toHaveLength(1);
         });
 
         test("Does not include agents array when no service is annotated with @agent", () => {
