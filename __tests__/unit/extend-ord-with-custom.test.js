@@ -1,5 +1,4 @@
 const cds = require("@sap/cds");
-const path = require("path");
 const {
     MERGE_STRATEGIES,
     getCustomORDContent,
@@ -36,32 +35,23 @@ describe("extendOrdWithCustom", () => {
 
     describe("extend-ord-with-custom", () => {
         it("should return empty object if there is no customOrdContentFile property in the .cdsrc.json", () => {
-            appConfig.env.customOrdContentFile = undefined;
-
-            const result = getCustomORDContent(appConfig);
-
-            expect(result).toEqual({});
+            expect(getCustomORDContent(undefined)).toEqual({});
         });
 
         it("should return empty object if customOrdContentFile property in the .cdsrc.json points to NON-EXISTING custom ord file", () => {
-            appConfig.env.customOrdContentFile = "./ord/NotExistingCustom.ord.json";
-
-            const result = getCustomORDContent(appConfig);
-
-            expect(result).toEqual({});
+            expect(getCustomORDContent("./ord/NotExistingCustom.ord.json")).toEqual({});
         });
 
         it("should add new ord resources that are not supported by cap framework", () => {
-            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithNewResources.json");
-
-            const result = compareAndHandleCustomORDContentWithExistingContent({}, getCustomORDContent(appConfig));
+            const result = compareAndHandleCustomORDContentWithExistingContent(
+                {},
+                getCustomORDContent("__tests__/unit/utils/testCustomORDContentFileWithNewResources.json"),
+            );
 
             expect(result).toMatchSnapshot();
         });
 
         it("should enhance the list of generated ord resources", () => {
-            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithEnhanced.json");
-
             const result = compareAndHandleCustomORDContentWithExistingContent(
                 {
                     packages: [
@@ -71,15 +61,13 @@ describe("extendOrdWithCustom", () => {
                         },
                     ],
                 },
-                getCustomORDContent(appConfig),
+                getCustomORDContent("__tests__/unit/utils/testCustomORDContentFileWithEnhanced.json"),
             );
 
             expect(result).toMatchSnapshot();
         });
 
         it("should should patch the existing generated ord resources", () => {
-            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithPatch.json");
-
             const result = compareAndHandleCustomORDContentWithExistingContent(
                 {
                     packages: [
@@ -114,15 +102,13 @@ describe("extendOrdWithCustom", () => {
                         },
                     ],
                 },
-                getCustomORDContent(appConfig),
+                getCustomORDContent("__tests__/unit/utils/testCustomORDContentFileWithPatch.json"),
             );
 
             expect(result).toMatchSnapshot();
         });
 
         it("should patch MCP API resources via custom.ord.json", () => {
-            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithMCPOverride.json");
-
             const result = compareAndHandleCustomORDContentWithExistingContent(
                 {
                     apiResources: [
@@ -138,7 +124,7 @@ describe("extendOrdWithCustom", () => {
                         },
                     ],
                 },
-                getCustomORDContent(appConfig),
+                getCustomORDContent("__tests__/unit/utils/testCustomORDContentFileWithMCPOverride.json"),
             );
 
             expect(result.apiResources).toEqual([
@@ -156,8 +142,6 @@ describe("extendOrdWithCustom", () => {
         });
 
         it("should patch IntegrationDependency via custom.ord.json", () => {
-            prepareTestEnvironment({}, appConfig, "testCustomORDContentFileWithIntegrationDependency.json");
-
             const result = compareAndHandleCustomORDContentWithExistingContent(
                 {
                     integrationDependencies: [
@@ -179,7 +163,7 @@ describe("extendOrdWithCustom", () => {
                         },
                     ],
                 },
-                getCustomORDContent(appConfig),
+                getCustomORDContent("__tests__/unit/utils/testCustomORDContentFileWithIntegrationDependency.json"),
             );
 
             expect(result.integrationDependencies).toEqual([
@@ -204,9 +188,3 @@ describe("extendOrdWithCustom", () => {
         });
     });
 });
-
-function prepareTestEnvironment(ordEnvVariables, appConfig, testFileName) {
-    cds.env["ord"] = ordEnvVariables;
-    appConfig.env.customOrdContentFile = testFileName;
-    jest.spyOn(path, "join").mockReturnValueOnce(`${__dirname}/utils/${testFileName}`);
-}

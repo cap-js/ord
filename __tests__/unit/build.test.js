@@ -158,15 +158,20 @@ describe("Build", () => {
         const buildClass = new OrdBuildPlugin();
 
         jest.spyOn(console, "log").mockImplementation(() => {});
-        jest.spyOn(OrdBuildPlugin.prototype, "_generateResourcesFiles").mockImplementation(async (_, resources) => {
+        jest.spyOn(OrdBuildPlugin.prototype, "_generateResourcesFiles").mockImplementation(async (model) => {
+            const document = index.ord(model);
+
             await Promise.all(
-                resources.flatMap(({ ordId, resourceDefinitions }) =>
-                    resourceDefinitions
-                        .map(({ url }) => [
-                            url.split("/").pop(),
-                            cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, ordId),
-                        ])
-                        .map(async ([file, path]) => Promise.resolve(invocations.push(`Writing ${file} to ${path}`))),
+                [...(document.apiResources ?? []), ...(document.eventResources ?? [])].flatMap(
+                    ({ ordId, resourceDefinitions }) =>
+                        resourceDefinitions
+                            .map(({ url }) => [
+                                url.split("/").pop(),
+                                cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, ordId),
+                            ])
+                            .map(async ([file, path]) =>
+                                Promise.resolve(invocations.push(`Writing ${file} to ${path}`)),
+                            ),
                 ),
             );
         });
@@ -178,33 +183,32 @@ describe("Build", () => {
 
     it("should not write resources files when eventResources is empty", async () => {
         jest.spyOn(console, "log").mockImplementation(() => {});
-        jest.spyOn(OrdBuildPlugin.prototype, "_generateResourcesFiles").mockImplementation(async (_, resources) => {
-            await Promise.all(
-                resources.flatMap(({ ordId, resourceDefinitions }) =>
-                    resourceDefinitions.map(({ url }) =>
-                        Promise.resolve(
-                            `Writing ${url.split("/").pop()} to ${cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, ordId)}`,
-                        ),
-                    ),
-                ),
-            );
-        });
-
-        const mockModel = {};
-        const mockOrdDocument = {
+        jest.spyOn(index, "ord").mockReturnValue({
             apiResources: [
                 {
                     ordId: "sap.sm:apiResource:SupplierService:v1",
                     resourceDefinitions: [{ url: "https://example.com/resource1" }],
                 },
             ],
-        };
-        jest.spyOn(index, "ord").mockReturnValue(mockOrdDocument);
+        });
+        jest.spyOn(OrdBuildPlugin.prototype, "_generateResourcesFiles").mockImplementation(async (model) => {
+            const document = index.ord(model);
 
-        const plugin = new OrdBuildPlugin();
-        plugin.model = jest.fn().mockResolvedValue(mockModel);
+            await Promise.all(
+                [...(document.apiResources ?? []), ...(document.eventResources ?? [])].flatMap(
+                    ({ ordId, resourceDefinitions }) =>
+                        resourceDefinitions.map(({ url }) =>
+                            Promise.resolve(
+                                `Writing ${url.split("/").pop()} to ${cds.utils.path.join(cds.root, BUILD_DEFAULT_PATH, ordId)}`,
+                            ),
+                        ),
+                ),
+            );
+        });
+
         const buildClass = new OrdBuildPlugin();
         await buildClass.build();
+
         expect(buildClass._generateResourcesFiles).toHaveBeenCalledTimes(1);
     });
 
