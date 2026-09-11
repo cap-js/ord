@@ -224,7 +224,7 @@ describe("Build", () => {
                 ordId: "sap.sm:apiResource:SupplierService:v1",
                 resourceDefinitions: [
                     {
-                        url: "https://example.com/resource1",
+                        url: "/ord/v1/sap.sm:apiResource:SupplierService:v1/SupplierService.oas3.json",
                     },
                 ],
             },
@@ -270,5 +270,25 @@ describe("Build", () => {
         expect(updatedOrdDocument.eventResources[0].resourceDefinitions[0].url).toBe(
             "customer.sample_eventResource_ProcessorService_v1/ProcessorService.asyncapi2.json",
         );
+    });
+
+    it("should include a2a resource definitions as compile tasks", () => {
+        // TODO: Review AI Test
+        const buildClass = new OrdBuildPlugin();
+        const resources = [
+            {
+                ordId: "sap.sm:apiResource:AgentService:v1",
+                resourceDefinitions: [
+                    { url: "/ord/v1/sap.sm:apiResource:AgentService:v1/AgentService.a2a.json" },
+                ],
+            },
+        ];
+
+        expect(buildClass._extractCompileTasks(resources)).toEqual([
+            {
+                url: "/ord/v1/sap.sm:apiResource:AgentService:v1/AgentService.a2a.json",
+                ordId: "sap.sm:apiResource:AgentService:v1",
+            },
+        ]);
     });
 });
