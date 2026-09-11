@@ -1,6 +1,7 @@
 const cds = require("@sap/cds");
 const path = require("path");
 const { CDS_ELEMENT_KIND } = require("../../lib/constants");
+const { getCustomORDContent } = require("../../lib/extend-ord-with-custom");
 
 // Global setup for all tests - runs once before all test suites
 beforeAll(() => {
@@ -38,7 +39,7 @@ describe("End-to-end test for ORD document", () => {
         });
 
         test("Successfully create ORD Documents with defaults", () => {
-            const document = ord(csn);
+            const document = ord(csn, [getCustomORDContent(cds?.env?.["ord"]?.customOrdContentFile)]);
             expect(document).toMatchSnapshot();
         });
 
@@ -48,7 +49,7 @@ describe("End-to-end test for ORD document", () => {
                     applicationNamespace: "non-ord-namespace",
                 },
             };
-            const document = ord(csn);
+            const document = ord(csn, [getCustomORDContent(cds?.env?.["ord"]?.customOrdContentFile)]);
             expect(document).toMatchSnapshot();
         });
 
@@ -124,7 +125,7 @@ describe("End-to-end test for ORD document", () => {
         });
 
         test("Successfully create ORD Documents with defaults", () => {
-            const document = ord(csn);
+            const document = ord(csn, [getCustomORDContent(cds?.env?.["ord"]?.customOrdContentFile)]);
             expect(document).toMatchSnapshot();
         });
 
@@ -301,7 +302,9 @@ describe("Tests for Data Product definition", () => {
         let document;
         await jest.isolateModules(() => {
             const cds = require("@sap/cds");
-            jest.spyOn(require("../../lib/common/utils"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../../lib/common/utils"), "getRFC3339Date").mockReturnValue(
+                "2024-11-04T14:33:25+01:00",
+            );
             const ordLocal = require("../../lib/ord");
 
             const linkedModel = cds.linked(`
@@ -330,7 +333,9 @@ describe("Tests for Data Product definition", () => {
         let document;
         await jest.isolateModules(() => {
             const cds = require("@sap/cds");
-            jest.spyOn(require("../../lib/common/utils"), "getRFC3339Date").mockReturnValue("2024-11-04T14:33:25+01:00");
+            jest.spyOn(require("../../lib/common/utils"), "getRFC3339Date").mockReturnValue(
+                "2024-11-04T14:33:25+01:00",
+            );
             const ordLocal = require("../../lib/ord");
 
             const linkedModel = cds.linked(`
