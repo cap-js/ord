@@ -1,0 +1,13 @@
+{
+    "eventResources": [
+        {
+            "ordId": "custom:eventResource:CustomEventsApi:v1",
+            "resourceDefinitions": [
+                {
+                    "type": "custom:type:v1",
+                    "url": "https://example.com/custom-resource"
+                }
+            ]
+        }
+    ]
+}

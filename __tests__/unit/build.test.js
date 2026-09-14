@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const index = require("../../lib/index");
 const { BUILD_DEFAULT_PATH, DOCUMENT_PERSPECTIVES } = require("../../lib/constants");
 
@@ -89,8 +91,10 @@ describe("Build", () => {
     afterEach(() => {
         jest.clearAllMocks();
         jest.restoreAllMocks();
-        delete cds.env.plugins?.["@cap-js/graphql"];
+
         delete cds.env.protocols?.graphql;
+        delete cds.env.ord.customOrdContentFile;
+        delete cds.env.plugins?.["@cap-js/graphql"];
     });
 
     describe("GraphQL protocol restoration during cds build", () => {
@@ -179,6 +183,44 @@ describe("Build", () => {
         expect((await buildClass.build()).length).toEqual(2);
         expect(buildClass._generateResourcesFiles).toHaveBeenCalledTimes(1);
         expect(invocations.length).toEqual(4);
+    });
+
+    it("should not generate resource files for API resources from a custom ORD extension", async () => {
+        cds.env.ord.customOrdContentFile = "__tests__/unit/utils/custom-api-resource.ord.json";
+        index.ord.mockImplementation((model, extensions = []) => {
+            if (!extensions.length) return { apiResources: [] };
+
+            return { apiResources: extensions.flatMap(({ apiResources }) => apiResources ?? []) };
+        });
+
+        const buildClass = new OrdBuildPlugin();
+        const createWorkerPool = jest.spyOn(buildClass, "_createWorkerPool");
+
+        await expect(buildClass.build()).resolves.toHaveLength(2);
+        expect(index.ord).toHaveBeenNthCalledWith(1, {});
+        expect(index.ord).toHaveBeenNthCalledWith(2, {}, [
+            expect.objectContaining(JSON.parse(fs.readFileSync(cds.env.ord.customOrdContentFile, "utf-8"))),
+        ]);
+        expect(createWorkerPool).not.toHaveBeenCalled();
+    });
+
+    it("should not generate resource files for event resources from a custom ORD extension", async () => {
+        cds.env.ord.customOrdContentFile = "__tests__/unit/utils/custom-event-resource.ord.json";
+        index.ord.mockImplementation((model, extensions = []) => {
+            if (!extensions.length) return { eventResources: [] };
+
+            return { eventResources: extensions.flatMap(({ eventResources }) => eventResources ?? []) };
+        });
+
+        const buildClass = new OrdBuildPlugin();
+        const createWorkerPool = jest.spyOn(buildClass, "_createWorkerPool");
+
+        await expect(buildClass.build()).resolves.toHaveLength(2);
+        expect(index.ord).toHaveBeenNthCalledWith(1, {});
+        expect(index.ord).toHaveBeenNthCalledWith(2, {}, [
+            expect.objectContaining(JSON.parse(fs.readFileSync(cds.env.ord.customOrdContentFile, "utf-8"))),
+        ]);
+        expect(createWorkerPool).not.toHaveBeenCalled();
     });
 
     it("should not write resources files when eventResources is empty", async () => {
