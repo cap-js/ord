@@ -20,10 +20,11 @@ describe("authentication", () => {
     // The bcrypt hash decrypted is: secret
     const mockValidUser = { admin: "$2a$05$cx46X.uaat9Az0XLfc8.BuijktdnHrIvtRMXnLdhozqo.1Eeo7.ZW" };
     const defaultAuthConfig = {
-        accessStrategies: [ ORD_ACCESS_STRATEGY.Open ],
+        accessStrategies: [ORD_ACCESS_STRATEGY.Open],
     };
 
     beforeEach(() => {
+        delete cds?.env?.ord;
         jest.clearAllMocks();
     });
 
@@ -69,18 +70,22 @@ describe("authentication", () => {
         });
 
         it("should return default configuration with error when credentials are not valid BCrypt hashes", () => {
-            cds.env.ord.authentication.basic = {
-                credentials: { admin: "InvalidBCrypHash" },
+            cds.env.ord = {
+                authentication: {
+                    basic: {
+                        credentials: { admin: "InvalidBCrypHash" },
+                    },
+                },
             };
             const authConfig = createAuthConfig();
             expect(authConfig.error).toEqual("All passwords must be bcrypt hashes");
         });
 
         it("should automatically ignore Open when combined with Basic authentication", () => {
-            cds.env.ord.authentication.basic = { credentials: mockValidUser };
+            cds.env.ord = { authentication: { basic: { credentials: mockValidUser } } };
             const authConfig = createAuthConfig();
             // Open should be filtered out automatically when Basic is present
-            expect(authConfig.accessStrategies).toEqual([ ORD_ACCESS_STRATEGY.Basic ]);
+            expect(authConfig.accessStrategies).toEqual([ORD_ACCESS_STRATEGY.Basic]);
             expect(authConfig.credentials).toEqual(mockValidUser);
         });
 
@@ -94,16 +99,16 @@ describe("authentication", () => {
             process.env.BASIC_AUTH = JSON.stringify(mockValidUser);
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
-                accessStrategies: [ ORD_ACCESS_STRATEGY.Basic ],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Basic],
                 credentials: mockValidUser,
             });
         });
 
         it("should return auth configuration containing credentials by using data from .cdsrc.json", () => {
-            cds.env.ord.authentication.basic = { credentials: mockValidUser };
+            cds.env.ord = { authentication: { basic: { credentials: mockValidUser } } };
             const authConfig = createAuthConfig();
             expect(authConfig).toEqual({
-                accessStrategies: [ ORD_ACCESS_STRATEGY.Basic ],
+                accessStrategies: [ORD_ACCESS_STRATEGY.Basic],
                 credentials: mockValidUser,
             });
         });
@@ -141,7 +146,7 @@ describe("authentication", () => {
             expect(authConfig.error).toBe("All passwords must be bcrypt hashes");
             expect(Logger.error).toHaveBeenCalledWith(
                 "createAuthConfig:",
-                'Password for user "admin" must be a bcrypt hash'
+                'Password for user "admin" must be a bcrypt hash',
             );
         });
     });
@@ -276,12 +281,10 @@ describe("authentication", () => {
             });
 
             const authConfig = createAuthConfig();
-            expect(authConfig.accessStrategies).toEqual([
-                ORD_ACCESS_STRATEGY.CmpMtls,
-            ]);
+            expect(authConfig.accessStrategies).toEqual([ORD_ACCESS_STRATEGY.CmpMtls]);
             // Validator should be null (lazy loading)
-            expect(authConfig.cfMtlsValidator).toBeNull();
-            expect(authConfig._cfMtlsInitPromise).toBeNull();
+            expect(authConfig.mtlsValidator).toBeNull();
+            expect(authConfig._mtlsInitPromise).toBeNull();
         });
 
         it("should mark CF mTLS for lazy initialization using cds.env", () => {
@@ -297,13 +300,15 @@ describe("authentication", () => {
             const authConfig = createAuthConfig();
             expect(authConfig.accessStrategies).toEqual([ORD_ACCESS_STRATEGY.CmpMtls]);
             // Validator should be null (lazy loading)
-            expect(authConfig.cfMtlsValidator).toBeNull();
+            expect(authConfig.mtlsValidator).toBeNull();
         });
 
         it("should authenticate with valid certificate pair and root CA", async () => {
+            cds.env = { ord: { authentication: { cfMtls: true } } };
+
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.CmpMtls],
-                cfMtlsValidator: () => ({
+                mtlsValidator: () => ({
                     ok: true,
                     issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                     subject: "CN=aggregator, O=SAP SE, C=DE",
@@ -332,15 +337,17 @@ describe("authentication", () => {
                 .expect(200)
                 .expect("OK");
 
-            expect(capturedReq.cfMtlsIssuer).toBe(issuerDn);
-            expect(capturedReq.cfMtlsSubject).toBe(subjectDn);
-            expect(capturedReq.cfMtlsRootCaDn).toBe(rootCaDn);
+            expect(capturedReq.mtlsIssuer).toBe(issuerDn);
+            expect(capturedReq.mtlsSubject).toBe(subjectDn);
+            expect(capturedReq.mtlsRootCaDn).toBe(rootCaDn);
         });
 
         it("should not authenticate with missing XFCC verification headers", async () => {
+            cds.env.ord = { authentication: { cfMtls: true } };
+
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.CmpMtls],
-                cfMtlsValidator: () => ({
+                mtlsValidator: () => ({
                     ok: false,
                     reason: "XFCC_VERIFICATION_FAILED",
                 }),
@@ -348,15 +355,20 @@ describe("authentication", () => {
 
             await request(createTestApp(authConfig))
                 .get(TEST_ENDPOINT)
-                .set(CF_MTLS_HEADERS.ISSUER, Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString("base64"))
+                .set(
+                    CF_MTLS_HEADERS.ISSUER,
+                    Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString("base64"),
+                )
                 .expect(401)
                 .expect("Missing proxy verification of mTLS client certificate");
         });
 
         it("should not authenticate with missing certificate headers", async () => {
+            cds.env.ord = { authentication: { cfMtls: true } };
+
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.CmpMtls],
-                cfMtlsValidator: () => ({
+                mtlsValidator: () => ({
                     ok: false,
                     reason: "HEADER_MISSING",
                     missing: CF_MTLS_HEADERS.ISSUER,
@@ -373,9 +385,11 @@ describe("authentication", () => {
         });
 
         it("should not authenticate with invalid base64 encoding", async () => {
+            cds.env.ord = { authentication: { cfMtls: true } };
+
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.CmpMtls],
-                cfMtlsValidator: () => ({ ok: false, reason: "INVALID_ENCODING" }),
+                mtlsValidator: () => ({ ok: false, reason: "INVALID_ENCODING" }),
             };
 
             await request(createTestApp(authConfig))
@@ -389,9 +403,11 @@ describe("authentication", () => {
         });
 
         it("should return 403 forbidden for certificate pair mismatch", async () => {
+            cds.env.ord = { authentication: { cfMtls: true } };
+
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.CmpMtls],
-                cfMtlsValidator: () => ({
+                mtlsValidator: () => ({
                     ok: false,
                     reason: "CERT_PAIR_MISMATCH",
                     issuer: "CN=Evil CA, O=Evil Corp, C=XX",
@@ -412,9 +428,11 @@ describe("authentication", () => {
         });
 
         it("should return 403 forbidden for root CA mismatch", async () => {
+            cds.env.ord = { authentication: { cfMtls: true } };
+
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.CmpMtls],
-                cfMtlsValidator: () => ({
+                mtlsValidator: () => ({
                     ok: false,
                     reason: "ROOT_CA_MISMATCH",
                     rootCaDn: "CN=Evil Root CA, O=Evil Corp, C=XX",
@@ -426,7 +444,10 @@ describe("authentication", () => {
                 .set(CF_MTLS_HEADERS.XFCC, "dummy-xfcc-value")
                 .set(CF_MTLS_HEADERS.CLIENT, "1")
                 .set(CF_MTLS_HEADERS.CLIENT_VERIFY, "0")
-                .set(CF_MTLS_HEADERS.ISSUER, Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString("base64"))
+                .set(
+                    CF_MTLS_HEADERS.ISSUER,
+                    Buffer.from("CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE").toString("base64"),
+                )
                 .set(CF_MTLS_HEADERS.SUBJECT, Buffer.from("CN=aggregator, O=SAP SE, C=DE").toString("base64"))
                 .set(CF_MTLS_HEADERS.ROOT_CA, Buffer.from("CN=Evil Root CA, O=Evil Corp, C=XX").toString("base64"))
                 .expect(403)
@@ -445,14 +466,14 @@ describe("authentication", () => {
             expect(authConfig.accessStrategies).toContain(ORD_ACCESS_STRATEGY.CmpMtls);
             expect(authConfig.credentials).toBeDefined();
             // CF mTLS validator should be null (lazy loading)
-            expect(authConfig.cfMtlsValidator).toBeNull();
+            expect(authConfig.mtlsValidator).toBeNull();
         });
 
         it("should handle Basic auth when both Basic and CF mTLS are configured", async () => {
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Basic, ORD_ACCESS_STRATEGY.CmpMtls],
                 credentials: mockValidUser,
-                cfMtlsValidator: () => ({
+                mtlsValidator: () => ({
                     ok: true,
                     issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                     subject: "CN=aggregator, O=SAP SE, C=DE",
@@ -468,10 +489,12 @@ describe("authentication", () => {
         });
 
         it("should handle CF mTLS when both Basic and CF mTLS are configured but no Basic header", async () => {
+            cds.env.ord = { authentication: { cfMtls: true } };
+
             const authConfig = {
                 accessStrategies: [ORD_ACCESS_STRATEGY.Basic, ORD_ACCESS_STRATEGY.CmpMtls],
                 credentials: mockValidUser,
-                cfMtlsValidator: () => ({
+                mtlsValidator: () => ({
                     ok: true,
                     issuer: "CN=SAP Cloud Platform Client CA, O=SAP SE, C=DE",
                     subject: "CN=aggregator, O=SAP SE, C=DE",
@@ -518,10 +541,7 @@ describe("authentication", () => {
             };
             const authConfig = createAuthConfig();
 
-            expect(authConfig.accessStrategies).toEqual([
-                ORD_ACCESS_STRATEGY.Basic,
-                ORD_ACCESS_STRATEGY.CmpMtls,
-            ]);
+            expect(authConfig.accessStrategies).toEqual([ORD_ACCESS_STRATEGY.Basic, ORD_ACCESS_STRATEGY.CmpMtls]);
         });
 
         it("should automatically filter out Open when combined with CF mTLS", () => {
@@ -535,9 +555,7 @@ describe("authentication", () => {
             };
             const authConfig = createAuthConfig();
 
-            expect(authConfig.accessStrategies).toEqual([
-                ORD_ACCESS_STRATEGY.CmpMtls,
-            ]);
+            expect(authConfig.accessStrategies).toEqual([ORD_ACCESS_STRATEGY.CmpMtls]);
         });
 
         it("should automatically filter out Open when all three auth types are combined", () => {
@@ -551,10 +569,7 @@ describe("authentication", () => {
             const authConfig = createAuthConfig();
 
             // Open should be filtered out, Basic and CfMtls remain
-            expect(authConfig.accessStrategies).toEqual([
-                ORD_ACCESS_STRATEGY.Basic,
-                ORD_ACCESS_STRATEGY.CmpMtls,
-            ]);
+            expect(authConfig.accessStrategies).toEqual([ORD_ACCESS_STRATEGY.Basic, ORD_ACCESS_STRATEGY.CmpMtls]);
         });
     });
 });
