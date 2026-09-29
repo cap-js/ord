@@ -4,7 +4,7 @@ const {
     createCfMtlsValidator,
     createCfMtlsConfig,
 } = require("../../lib/auth/cf-mtls");
-const { CF_MTLS_HEADERS } = require("../../lib/constants");
+const { CF_MTLS_HEADERS, MTLS_ERROR_REASON } = require("../../lib/constants");
 
 describe("CF mTLS Validation", () => {
     const mockHeaderNames = {
@@ -172,8 +172,19 @@ describe("CF mTLS Validation", () => {
             expect(result.issuer).toBe(issuerDn);
         });
 
-        // Note: We no longer validate base64 encoding with regex.
-        // CF always sends base64-encoded strings, and Buffer.from() will handle any decoding errors.
+        it("should reject malformed base64-encoded headers", () => {
+            const req = {
+                headers: {
+                    [CF_MTLS_HEADERS.ISSUER]: "not-valid-base64!!!",
+                    [CF_MTLS_HEADERS.SUBJECT]: Buffer.from("CN=subject").toString("base64"),
+                    [CF_MTLS_HEADERS.ROOT_CA]: Buffer.from("CN=root").toString("base64"),
+                },
+            };
+
+            expect(extractCertHeaders(req, mockHeaderNames)).toEqual({
+                error: MTLS_ERROR_REASON.INVALID_ENCODING,
+            });
+        });
 
         it("should handle case-insensitive header names", () => {
             const issuerDn = "CN=test, O=SAP SE";

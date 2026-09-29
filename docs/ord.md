@@ -13,6 +13,7 @@
     - [Defining Custom Products](#2-defining-a-non-sap-product)
 5. [Authentication](#authentication)
     - [CF mTLS Authentication](#cf-mtls-authentication)
+    - [DwC mTLS Authentication](#dwc-mtls-authentication)
 6. [Parameters](#parameters)
     - [defaultVisibility](#defaultvisibility)
     - [internalNamespace](#internalnamespace)
@@ -352,6 +353,39 @@ When CF mTLS is configured, the plugin automatically adds `"sap:cmp-mtls:v1"` to
 
 ---
 
+### DwC mTLS Authentication
+
+DwC mTLS validates a client certificate chain forwarded by the gateway in the
+`DwC-Forwarded-Client-Cert` header. The gateway must terminate TLS and verify the
+certificate chain before forwarding this header.
+
+Configure DwC mTLS using the same `certs`, `rootCaDn`, `configEndpoints`, and
+optional `accessStrategies` fields as CF mTLS, but under `dwcMtls` and with the
+`DWC_MTLS_TRUSTED_CERTS` environment variable:
+
+```json
+{
+    "ord": {
+        "authentication": {
+            "dwcMtls": true
+        }
+    }
+}
+```
+
+```bash
+export DWC_MTLS_TRUSTED_CERTS='{
+  "certs": [{"issuer": "CN=My CA,O=MyOrg", "subject": "CN=my-service,O=MyOrg"}],
+  "rootCaDn": ["CN=My Root CA,O=MyOrg"]
+}'
+```
+
+For local development, put the same configuration object directly in
+`ord.authentication.dwcMtls`. Do not use this mode to store production
+certificate configuration in source control.
+
+---
+
 ## Parameters
 
 ### `defaultVisibility`
@@ -483,5 +517,6 @@ annotate sap.sai.Supplier with @ORD.Extensions: {
 | Defining Custom Products         | Add `products` section manually                                                                  |
 | Basic Authentication             | Configure `ord.authentication.basic`                                                             |
 | CF mTLS Authentication           | Set `ord.authentication.cfMtls: true` + `CF_MTLS_TRUSTED_CERTS` env var                          |
+| DwC mTLS Authentication          | Set `ord.authentication.dwcMtls: true` + `DWC_MTLS_TRUSTED_CERTS` env var                        |
 | CDS/ORD Namespace Mismatch       | Set `internalNamespace` to strip the CDS namespace prefix from ORD IDs                           |
 | External Data Products           | Services with `@cds.external`, `@data.product`, `@cds.dp.ordId` generate IntegrationDependencies |

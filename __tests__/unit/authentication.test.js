@@ -263,6 +263,7 @@ describe("authentication", () => {
             delete process.env.CF_MTLS_TRUSTED_CERTS;
             delete process.env.CF_MTLS_TRUSTED_CERT_PAIRS;
             delete process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS;
+            delete process.env.DWC_MTLS_TRUSTED_CERTS;
             cds.env.ord = { authentication: {} };
         });
 
@@ -271,6 +272,7 @@ describe("authentication", () => {
             delete process.env.CF_MTLS_TRUSTED_CERTS;
             delete process.env.CF_MTLS_TRUSTED_CERT_PAIRS;
             delete process.env.CF_MTLS_TRUSTED_ROOT_CA_DNS;
+            delete process.env.DWC_MTLS_TRUSTED_CERTS;
             cds.env.ord = { authentication: {} };
         });
 

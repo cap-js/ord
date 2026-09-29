@@ -1,6 +1,17 @@
-const { tokenizeDn, dnTokensMatch } = require("../../lib/auth/ssl-utils");
+const { decodeBase64, tokenizeDn, dnTokensMatch } = require("../../lib/auth/ssl-utils");
 
 describe("SSL Utils", () => {
+    describe("decodeBase64", () => {
+        it("decodes padded and unpadded base64 values", () => {
+            expect(decodeBase64("Y2VydGlmaWNhdGU=")).toBe("certificate");
+            expect(decodeBase64("Y2VydGlmaWNhdGU")).toBe("certificate");
+        });
+
+        it.each(["not-valid-base64!!!", "abc=def", "====", "", null])("rejects malformed base64: %p", (value) => {
+            expect(() => decodeBase64(value)).toThrow("Invalid base64 value");
+        });
+    });
+
     describe("tokenizeDn", () => {
         it("should split DN by comma and trim whitespace", () => {
             const dn = "CN=test, O=SAP SE, C=DE";
@@ -82,6 +93,20 @@ describe("SSL Utils", () => {
             const tokens1 = ["CN=test", "O=SAP SE", "C=DE"];
             const tokens2 = ["C=DE", "O=SAP SE", "CN=test"];
             expect(dnTokensMatch(tokens1, tokens2)).toBe(true);
+        });
+
+        it("should return true for repeated DN attributes in different order", () => {
+            const tokens1 = ["CN=test", "OU=Engineering", "OU=Engineering", "C=DE"];
+            const tokens2 = ["OU=Engineering", "C=DE", "CN=test", "OU=Engineering"];
+
+            expect(dnTokensMatch(tokens1, tokens2)).toBe(true);
+        });
+
+        it("should return false when repeated DN attribute counts differ", () => {
+            const tokens1 = ["CN=test", "OU=Engineering", "OU=Engineering"];
+            const tokens2 = ["CN=test", "OU=Engineering", "OU=Security"];
+
+            expect(dnTokensMatch(tokens1, tokens2)).toBe(false);
         });
 
         it("should return false for different token values", () => {

@@ -38,7 +38,7 @@
         "express": "^5.0.0",
         "jest": "^30.0.0",
         "prettier": "3.9.9",
-        "supertest": "^7.0.0"
+        "supertest": "7.1.4"
     },
     "peerDependencies": {
         "@sap/cds": ">=8.9.4"
