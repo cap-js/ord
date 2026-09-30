@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.10.0 (2026-09-30)
+
+## What's Changed
+
+- chore: handle promise rejections by @InaGlushkova in https://github.com/cap-js/ord/pull/557
+- chore: Workaround for OpenAPI plugin bug by @mlakov in https://github.com/cap-js/ord/pull/545
+- feat: Introduce DwC mTLS auth support by @mlakov and @InaGlushkova in https://github.com/cap-js/ord/pull/553
+- fix: Buildtime - apply custom ORD extensions only after generating resource definitions by @mlakov in https://github.com/cap-js/ord/pull/551
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.9.3...v1.10.0
+
 ## 1.9.3 (2026-08-31)
 
 ## What's Changed
