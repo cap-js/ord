@@ -40,6 +40,7 @@ The ORD Plugin supports multiple authentication strategies that can be configure
 - **Open**: No authentication (default when no other auth is configured)
 - **Basic**: HTTP Basic Authentication with bcrypt-hashed passwords
 - **CF mTLS**: Cloud Foundry mutual TLS authentication
+- **DwC mTLS**: Data Warehouse Cloud mutual TLS authentication
 
 **Multiple Authentication Strategies**: You can configure multiple authentication methods simultaneously (e.g., both `basic` and `cf-mtls`). The plugin implements an Express-like middleware pattern that tries each configured strategy in order until one succeeds.
 
@@ -185,6 +186,14 @@ For local development, configure the full mTLS settings directly in `.cdsrc.json
 ```
 
 > **Note:** For detailed CF mTLS configuration options, see the [documentation](./docs/ord.md#cf-mtls-authentication).
+
+#### DwC mTLS Authentication
+
+Configure DwC mTLS when a gateway forwards the verified client certificate in the
+`DwC-Forwarded-Client-Cert` header. Its configuration has the same `certs`,
+`rootCaDn`, `configEndpoints`, and optional `accessStrategies` fields as CF mTLS;
+use `dwcMtls` and `DWC_MTLS_TRUSTED_CERTS` instead. See the
+[DwC mTLS documentation](./docs/ord.md#dwc-mtls-authentication) for an example.
 
 #### Multiple Authentication Strategies
 
