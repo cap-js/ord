@@ -33,6 +33,11 @@ describe("ORD Integration Tests - Basic Authentication", () => {
                             accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
                             perspective: "system-version",
                         },
+                        {
+                            url: "/ord/v1/documents/ord-document?part=0&perspective=system-instance",
+                            accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Basic }],
+                            perspective: "system-instance",
+                        },
                     ],
                 },
             });
