@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.10.1 (2026-10-13)
+
+## What's Changed
+
+- fix: Expose 'system-instance' perspective when 'Local-Tenant-Id' header is missing by @mlakov in https://github.com/cap-js/ord/pull/568
+
 ## 1.10.0 (2026-09-30)
 
 ## What's Changed
