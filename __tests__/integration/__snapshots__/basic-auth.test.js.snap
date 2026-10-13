@@ -13,6 +13,15 @@ exports[`ORD Integration Tests - Basic Authentication ORD Config Endpoint Tests 
         "perspective": "system-version",
         "url": "/ord/v1/documents/ord-document?part=0",
       },
+      {
+        "accessStrategies": [
+          {
+            "type": "basic-auth",
+          },
+        ],
+        "perspective": "system-instance",
+        "url": "/ord/v1/documents/ord-document?part=0&perspective=system-instance",
+      },
     ],
   },
 }
@@ -30,6 +39,15 @@ exports[`ORD Integration Tests - Basic Authentication ORD Config Endpoint Tests 
         ],
         "perspective": "system-version",
         "url": "/ord/v1/documents/ord-document?part=0",
+      },
+      {
+        "accessStrategies": [
+          {
+            "type": "basic-auth",
+          },
+        ],
+        "perspective": "system-instance",
+        "url": "/ord/v1/documents/ord-document?part=0&perspective=system-instance",
       },
     ],
   },

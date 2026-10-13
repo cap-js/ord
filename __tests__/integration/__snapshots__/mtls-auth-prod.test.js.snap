@@ -1058,6 +1058,18 @@ exports[`ORD Integration Tests - mTLS Production Mode (cfMtls: true) mTLS Authen
         "perspective": "system-version",
         "url": "/ord/v1/documents/ord-document?part=0",
       },
+      {
+        "accessStrategies": [
+          {
+            "type": "sap:cmp-mtls:v1",
+          },
+          {
+            "type": "sap.businesshub:mtls:v1",
+          },
+        ],
+        "perspective": "system-instance",
+        "url": "/ord/v1/documents/ord-document?part=0&perspective=system-instance",
+      },
     ],
   },
 }
