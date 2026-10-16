@@ -1,0 +1,14 @@
+{
+    "apiResources": [
+        {
+            "ordId": "custom:apiResource:CustomApi:v1",
+            "apiProtocol": "custom:protocol:v1",
+            "resourceDefinitions": [
+                {
+                    "type": "custom:type:v1",
+                    "url": "https://example.com/custom-resource"
+                }
+            ]
+        }
+    ]
+}
