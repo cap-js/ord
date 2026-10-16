@@ -11,6 +11,7 @@ const {
     ORD_ACCESS_STRATEGY,
     DATA_PRODUCT_ANNOTATION,
     MCP_RESOURCE_DEFINITION_TYPE,
+    AGENT_CARD_RESOURCE_DEFINITION_TYPE,
     DATA_PRODUCT_SIMPLE_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_ODM_ENTITY_NAME_ANNOTATION,
@@ -141,6 +142,41 @@ describe("createAPIResourceTemplate", () => {
             expect(mcpResource.resourceDefinitions[0].type).toBe(MCP_RESOURCE_DEFINITION_TYPE);
             expect(mcpResource.resourceDefinitions[0].mediaType).toBe("application/json");
             expect(mcpResource.resourceDefinitions[0].url).toContain(".mcp.json");
+        });
+    });
+
+    describe("with @cap-js/agents plugin loaded", () => {
+        beforeEach(() => {
+            cds.service.protocols["agent"] = { path: "/a2a", impl: "@cap-js/agents" };
+        });
+
+        afterEach(() => {
+            delete cds.service.protocols["agent"];
+        });
+
+        it("should build the agent card URL from the a2a entry point (well-known convention)", () => {
+            // TODO: Review AI Test
+            const model = cds.linked(`
+                    @protocol: 'agent'
+                    @path: '/a2a/my-agent'
+                    @agent
+                    service MyAgentService {
+                        entity Items { key ID: UUID; }
+                    };
+                `);
+            const srvDefinition = model.definitions["MyAgentService"];
+
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
+
+            expect(apiResourceTemplate).toHaveLength(1);
+            const a2aResource = apiResourceTemplate[0];
+            expect(a2aResource.apiProtocol).toBe("a2a");
+            expect(a2aResource.resourceDefinitions).toHaveLength(1);
+            expect(a2aResource.resourceDefinitions[0].type).toBe(AGENT_CARD_RESOURCE_DEFINITION_TYPE);
+            expect(a2aResource.resourceDefinitions[0].mediaType).toBe("application/json");
+            expect(a2aResource.resourceDefinitions[0].url).toBe(
+                `${a2aResource.entryPoints[0]}/.well-known/agent-card.json`,
+            );
         });
     });
 
