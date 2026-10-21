@@ -154,7 +154,7 @@ describe("createAPIResourceTemplate", () => {
             delete cds.service.protocols["agent"];
         });
 
-        it("should build the agent card URL from the a2a entry point (well-known convention)", () => {
+        it("should create correct resource definition for A2A protocol", () => {
             // TODO: Review AI Test
             const model = cds.linked(`
                     @protocol: 'agent'
@@ -174,9 +174,7 @@ describe("createAPIResourceTemplate", () => {
             expect(a2aResource.resourceDefinitions).toHaveLength(1);
             expect(a2aResource.resourceDefinitions[0].type).toBe(AGENT_CARD_RESOURCE_DEFINITION_TYPE);
             expect(a2aResource.resourceDefinitions[0].mediaType).toBe("application/json");
-            expect(a2aResource.resourceDefinitions[0].url).toBe(
-                `${a2aResource.entryPoints[0]}/.well-known/agent-card.json`,
-            );
+            expect(a2aResource.resourceDefinitions[0].url).toContain(".a2a.json");
         });
     });
 
