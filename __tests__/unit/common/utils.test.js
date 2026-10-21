@@ -9,7 +9,7 @@ const {
     isPrimaryDataProductService,
     isBlockedServiceName,
 } = require("../../../lib/common/utils");
-const { RESOURCE_VISIBILITY, ORD_ACCESS_STRATEGY } = require("../../../lib/constants");
+const { RESOURCE_VISIBILITY, ORD_ACCESS_STRATEGY, DATA_PRODUCT_TYPE } = require("../../../lib/constants");
 const Logger = require("../../../lib/logger");
 const cds = require("@sap/cds");
 
@@ -122,17 +122,17 @@ describe("isPrimaryDataProductService", () => {
         expect(isPrimaryDataProductService(serviceDefinition)).toBe(true);
     });
 
-    it("returns true when both annotations are present with @data.product truthy", () => {
+    it("returns false when derived DP with @data.product truthy", () => {
         const serviceDefinition = {
-            "@DataIntegration.dataProduct.type": "secondary",
+            "@DataIntegration.dataProduct.type": DATA_PRODUCT_TYPE.derived,
             "@data.product": true,
         };
-        expect(isPrimaryDataProductService(serviceDefinition)).toBe(true);
+        expect(isPrimaryDataProductService(serviceDefinition)).toBe(false);
     });
 
     it("returns false when both annotations are present with falsy values", () => {
         const serviceDefinition = {
-            "@DataIntegration.dataProduct.type": "secondary",
+            "@DataIntegration.dataProduct.type": DATA_PRODUCT_TYPE.derived,
             "@data.product": false,
         };
         expect(isPrimaryDataProductService(serviceDefinition)).toBe(false);

@@ -9,7 +9,7 @@ const {
 const {
     DATA_PRODUCT_TYPE,
     ORD_ACCESS_STRATEGY,
-    DATA_PRODUCT_ANNOTATION,
+    DATA_PRODUCT_TYPE_ANNOTATION,
     MCP_RESOURCE_DEFINITION_TYPE,
     DATA_PRODUCT_SIMPLE_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
@@ -682,7 +682,7 @@ describe("createAPIResourceTemplate", () => {
             test("should handle .v0 suffix correctly", () => {
                 const serviceDefinition = {
                     name: "DataService.v0",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -696,7 +696,7 @@ describe("createAPIResourceTemplate", () => {
             test("should handle .v1 suffix correctly", () => {
                 const serviceDefinition = {
                     name: "DataService.v1",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -710,7 +710,7 @@ describe("createAPIResourceTemplate", () => {
             test("should handle .v2 suffix correctly", () => {
                 const serviceDefinition = {
                     name: "DataService.v2",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -724,7 +724,7 @@ describe("createAPIResourceTemplate", () => {
             test("should handle .v10 suffix correctly", () => {
                 const serviceDefinition = {
                     name: "DataService.v10",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -738,7 +738,7 @@ describe("createAPIResourceTemplate", () => {
             test("should handle complex service names with .v1 suffix", () => {
                 const serviceDefinition = {
                     name: "complex.DataProductService.v1",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -754,7 +754,7 @@ describe("createAPIResourceTemplate", () => {
             test("should use current behavior for .v1.1 suffix (invalid pattern)", () => {
                 const serviceDefinition = {
                     name: "DataService.v1.1",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -768,7 +768,7 @@ describe("createAPIResourceTemplate", () => {
             test("should use current behavior for .v1.0 suffix (invalid pattern)", () => {
                 const serviceDefinition = {
                     name: "DataService.v1.0",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -782,7 +782,7 @@ describe("createAPIResourceTemplate", () => {
             test("should use current behavior for .version1 suffix (invalid pattern)", () => {
                 const serviceDefinition = {
                     name: "DataService.version1",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -796,7 +796,7 @@ describe("createAPIResourceTemplate", () => {
             test("should use current behavior for .beta suffix (invalid pattern)", () => {
                 const serviceDefinition = {
                     name: "DataService.beta",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -810,7 +810,7 @@ describe("createAPIResourceTemplate", () => {
             test("should use current behavior for .v suffix (invalid pattern)", () => {
                 const serviceDefinition = {
                     name: "DataService.v",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -826,7 +826,7 @@ describe("createAPIResourceTemplate", () => {
             test("should use current behavior for data product service without version suffix", () => {
                 const serviceDefinition = {
                     name: "DataService",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -841,7 +841,7 @@ describe("createAPIResourceTemplate", () => {
                 const serviceDefinition = {
                     name: "RegularService.v2",
                     kind: "service",
-                    // No DATA_PRODUCT_ANNOTATION - this is a regular service
+                    // No DATA_PRODUCT_TYPE_ANNOTATION - this is a regular service
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -856,7 +856,7 @@ describe("createAPIResourceTemplate", () => {
                 const serviceDefinition = {
                     name: "DataService.v2",
                     kind: "service",
-                    [DATA_PRODUCT_ANNOTATION]: "secondary", // Not primary
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: "secondary", // Not primary
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -872,7 +872,7 @@ describe("createAPIResourceTemplate", () => {
             test("should maintain data product specific properties with version extraction", () => {
                 const serviceDefinition = {
                     name: "DataService.v2",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                 };
 
                 const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
@@ -937,7 +937,7 @@ describe("createAPIResourceTemplate", () => {
             test("should prioritize @DataIntegration.dataProduct.type over @data.product for version extraction", () => {
                 const serviceDefinition = {
                     name: "DataService.v3",
-                    [DATA_PRODUCT_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.primary,
                     [DATA_PRODUCT_SIMPLE_ANNOTATION]: false,
                 };
 
@@ -949,19 +949,14 @@ describe("createAPIResourceTemplate", () => {
                 expect(result[0].partOfGroups[0]).toBe("sap.cds:service:sap.test:DataService");
             });
 
-            test("should apply @data.product when @DataIntegration.dataProduct.type is not primary", () => {
+            test("should not apply @data.product when @DataIntegration.dataProduct.type is derived", () => {
                 const serviceDefinition = {
                     name: "DataService.v2",
-                    [DATA_PRODUCT_ANNOTATION]: "secondary",
+                    [DATA_PRODUCT_TYPE_ANNOTATION]: DATA_PRODUCT_TYPE.derived,
                     [DATA_PRODUCT_SIMPLE_ANNOTATION]: true,
                 };
 
-                const result = createAPIResourceTemplate(serviceDefinition, mockAppConfig);
-
-                expect(result).toHaveLength(1);
-                expect(result[0].ordId).toBe("sap.test:apiResource:DataService:v2");
-                expect(result[0].version).toBe("2.0.0");
-                expect(result[0].partOfGroups[0]).toBe("sap.cds:service:sap.test:DataService");
+                expect(createAPIResourceTemplate(serviceDefinition, mockAppConfig)).toHaveLength(0);
             });
         });
     });
