@@ -168,6 +168,88 @@ describe("createAgentTemplate", () => {
 
         expect(agent.lastUpdate).toEqual(baseAppConfig.lastUpdate);
     });
+
+    it("should use @ORD.Extensions.releaseStatus when provided", () => {
+        // TODO: Review AI Test
+        const model = cds.linked(`
+            @agent
+            @ORD.Extensions.releaseStatus: 'beta'
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(agent.releaseStatus).toEqual("beta");
+    });
+
+    it("should use @ORD.Extensions.shortDescription when provided", () => {
+        // TODO: Review AI Test
+        const model = cds.linked(`
+            @agent
+            @ORD.Extensions.shortDescription: 'Custom short desc'
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(agent.shortDescription).toEqual("Custom short desc");
+    });
+
+    it("should fall back to @shortDescription when @ORD.Extensions.shortDescription is absent", () => {
+        // TODO: Review AI Test
+        const model = cds.linked(`
+            @agent
+            @shortDescription: 'Fallback short desc'
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(agent.shortDescription).toEqual("Fallback short desc");
+    });
+
+    it("should default shortDescription to service name prefix when not annotated", () => {
+        // TODO: Review AI Test
+        const model = cds.linked(`
+            @agent
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(agent.shortDescription).toEqual("Short description of MyAgentService");
+    });
+
+    it("should set aiHint from @ORD.Extensions.aiHint", () => {
+        // TODO: Review AI Test
+        const model = cds.linked(`
+            @agent
+            @ORD.Extensions.aiHint: 'Use this agent for resolving support incidents'
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(agent.aiHint).toEqual("Use this agent for resolving support incidents");
+    });
+
+    it("should omit aiHint when not annotated", () => {
+        // TODO: Review AI Test
+        const model = cds.linked(`
+            @agent
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(agent.aiHint).toBeUndefined();
+    });
 });
 
 describe("createAgents", () => {
