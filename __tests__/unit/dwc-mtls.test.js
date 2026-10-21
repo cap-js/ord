@@ -1,28 +1,13 @@
-const { pki } = require("node-forge");
+const path = require("path");
+const fs = require("fs");
 
 const { DWC_MTLS_HEADERS, MTLS_ERROR_REASON } = require("../../lib/constants");
 const { extractCertHeaders, createDwcMtlsValidator, createDwcMtlsConfig } = require("../../lib/auth/dwc-mtls");
 
-function createCertificate(subjectAttributes, issuerAttributes, issuerKey) {
-    const keys = pki.rsa.generateKeyPair({ bits: 512 });
-    const certificate = pki.createCertificate();
-    certificate.publicKey = keys.publicKey;
-    certificate.serialNumber = String(Math.floor(Math.random() * 1_000_000));
-    certificate.validity.notBefore = new Date();
-    certificate.validity.notAfter = new Date(Date.now() + 60_000);
-    certificate.setSubject(subjectAttributes);
-    certificate.setIssuer(issuerAttributes);
-    certificate.sign(issuerKey ?? keys.privateKey);
-
-    return { certificate, privateKey: keys.privateKey };
-}
-
 describe("DwC mTLS validation", () => {
-    const rootAttributes = [{ name: "commonName", value: "Trusted Root" }];
-    const leafAttributes = [{ name: "commonName", value: "DwC Client" }];
-    const root = createCertificate(rootAttributes, rootAttributes);
-    const leaf = createCertificate(leafAttributes, rootAttributes, root.privateKey);
-    const chain = `${pki.certificateToPem(leaf.certificate)}${pki.certificateToPem(root.certificate)}`;
+    const leafPem = fs.readFileSync(path.join(__dirname, "fixtures/dwc-leaf.pem"), "utf8");
+    const caPem = fs.readFileSync(path.join(__dirname, "fixtures/dwc-ca.pem"), "utf8");
+    const chain = `${leafPem}${caPem}`;
     const request = {
         headers: {
             [DWC_MTLS_HEADERS.DFCC.toLowerCase()]: `Cert="${encodeURIComponent(chain)}"`,
