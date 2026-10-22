@@ -8,3 +8,4 @@ auth-env.txt
 test-config.json
 xmpl_java/srv/src/main/resources/ord/
 .npmrc
+__tests__/integration/integration-test-app/db.sqlite
