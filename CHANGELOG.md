@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.10.2 (2026-10-21)
+
+## What's Changed
+
+- fix: Correctly handle derived data products by @mlakov in https://github.com/cap-js/ord/pull/576
+- refactor: replace node-forge with Node.js built-in crypto by @maginseb and @mlakov in https://github.com/cap-js/ord/pull/578
+
 ## 1.10.1 (2026-10-13)
 
 ## What's Changed

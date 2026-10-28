@@ -1,6 +1,6 @@
 {
     "name": "@cap-js/ord",
-    "version": "1.10.1",
+    "version": "1.10.2",
     "description": "CAP Plugin for generating ORD document.",
     "repository": "cap-js/ord",
     "author": "SAP SE (https://www.sap.com)",
@@ -49,14 +49,13 @@
         "bcryptjs": "3.0.3",
         "cli-progress": "^3.12.0",
         "lodash": "^4.17.21",
-        "node-forge": "^1.4.0",
         "piscina": "^5.1.4"
     },
     "engines": {
         "node": ">=20 <25"
     },
     "overrides": {
-        "@sap/cds-compiler": "7.1.2"
+        "@sap/cds-compiler": "7.2.1"
     },
     "cds": {
         "requires": {
