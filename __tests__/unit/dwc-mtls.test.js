@@ -1,31 +1,46 @@
-const { pki } = require("node-forge");
-
 const { DWC_MTLS_HEADERS, MTLS_ERROR_REASON } = require("../../lib/constants");
 const { extractCertHeaders, createDwcMtlsValidator, createDwcMtlsConfig } = require("../../lib/auth/dwc-mtls");
 
-function createCertificate(subjectAttributes, issuerAttributes, issuerKey) {
-    const keys = pki.rsa.generateKeyPair({ bits: 512 });
-    const certificate = pki.createCertificate();
-    certificate.publicKey = keys.publicKey;
-    certificate.serialNumber = String(Math.floor(Math.random() * 1_000_000));
-    certificate.validity.notBefore = new Date();
-    certificate.validity.notAfter = new Date(Date.now() + 60_000);
-    certificate.setSubject(subjectAttributes);
-    certificate.setIssuer(issuerAttributes);
-    certificate.sign(issuerKey ?? keys.privateKey);
-
-    return { certificate, privateKey: keys.privateKey };
-}
+const CERT_CHAIN = `-----BEGIN CERTIFICATE-----
+MIICqDCCAZACCQDLACU6DqEbSTANBgkqhkiG9w0BAQsFADAXMRUwEwYDVQQDDAxU
+cnVzdGVkIFJvb3QwHhcNMjYxMDIxMDYzMjQyWhcNMzYxMDE4MDYzMjQyWjAVMRMw
+EQYDVQQDDApEd0MgQ2xpZW50MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAnT1iU4VqNHYcjq2kb5qvJ6ezv2uIL6yBoJ4K+6C7iMRhy8tsGePuFKOnWPht
+83cIMwJRpgJbZGI2W6Lv3MM3OPOY/WgzFNZNEUtW5lsd6QQ4B+/5vDiUxjcX+lw+
+3BvJ0N93o1HYiESvwE00j7W1/T8vf6FIUQ+Qvee/fyL+ZuZ4xDyUXm50oNYWTbGb
+M9WFtPoryoiTu7jsas5wJsRCHKHbRekWK8miEqgu2V3uEzPOVCS1fBSDA7Hn4sUh
+/KnsMv7rAJ/YheW/u5VqS48SR5HSDOjv77hwEI11weGlcZPvaCz/aUQjhgkKhmL/
+Z2UkmdQj61xyoAyP+x2l1UTv5wIDAQABMA0GCSqGSIb3DQEBCwUAA4IBAQCrZ7uG
+yW8p7Io/8hifiEhfEi2+bDDVhbF2ge6vlqDdLy/eq2cO+9m8JOut1OkmWIjIyd6R
+S7VBY1olljXe/hjeei1DMK5qRVR2X+8HQ6QQLseDvNc7A1nx0HctX2almjNhkesR
+fOC226HpMVj39YVA0SjKzndApmp8Tp6NCulSlgsqHbUDxj+tet6zISAXE4TNPIMD
+x53BjL6n3+zCqNVulBAR+pNPRO1b9kgl5J6otpQ63VCbx9tQoDz81PVsEZCoa9Up
+A2VMU2kUrqY+B5k0h3XOODrUA2G3ClLEHmOOqvHInJf4KeXOGaHcxS38m13SoU8z
+Knj/d6stCcN5qh9X
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+MIICqjCCAZICCQC78DNIk6Y8hzANBgkqhkiG9w0BAQsFADAXMRUwEwYDVQQDDAxU
+cnVzdGVkIFJvb3QwHhcNMjYxMDIxMDYzMjQyWhcNMzYxMDE4MDYzMjQyWjAXMRUw
+EwYDVQQDDAxUcnVzdGVkIFJvb3QwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEK
+AoIBAQDHgUQPeuM7mcmui1vNvZ+6odabc2zJwz/DA9dkEHeUZlRiQiC1TyR9AXT3
+GnjFHsCuGMYcV3o8ghAy/k7q6OdQJ3r+WCWYEXvDKfHpJMfNDoVTUUoHaQHAwEzF
+VKegU8gmWqPAtSQIS2RuPM0cL3EjJNQ1F3fniMO/gFADX3mZKFVg3QnsHtL42M9w
+JYRe/35xx2WNlszacStxlYf0qfAPTYUXsrGejbutcGlc2hvSMC0xVUwaFGBRCfTb
+ULgLlT2rtaICw0jHemXE6Hmfl347V3INEMelPt3C1/6MiQDcijh1uRV055fKBPxo
+Pc6lBCqEw0dfy/6ooOOQf59R5bC5AgMBAAEwDQYJKoZIhvcNAQELBQADggEBAHIu
+bm2ynNieaCo+tbS29/u5JKkutDMPUM/AtnpWJ8I5oG6wSmkpdtvbULfAocsZELIl
+CZKm5V3lDAZY6hcwHimp6yIJdo+ehzWFM913OAHVow8jKGPsKim7oJDy4b1U4wHc
+q6diYB5osiahM9uzL2hXFgIfAz1HIdLb8ncwZWeUqkdlHXSJgp8s0UPUYRFTD6V9
+2IXCX5o6UFgMxuuEpARXQC6UgQZpZBDMcWA/atlsyRQZ1PVuQd56xPTwCypofkcx
+ajndFnBR9dJs79tJYtYqajVBbKNzp6mwKb/iiWHJ7YDnA7BQ0GlBnM+4Qk1MTm3D
+gvylCzaagEMkzxpDtLA=
+-----END CERTIFICATE-----
+`;
 
 describe("DwC mTLS validation", () => {
-    const rootAttributes = [{ name: "commonName", value: "Trusted Root" }];
-    const leafAttributes = [{ name: "commonName", value: "DwC Client" }];
-    const root = createCertificate(rootAttributes, rootAttributes);
-    const leaf = createCertificate(leafAttributes, rootAttributes, root.privateKey);
-    const chain = `${pki.certificateToPem(leaf.certificate)}${pki.certificateToPem(root.certificate)}`;
     const request = {
         headers: {
-            [DWC_MTLS_HEADERS.DFCC.toLowerCase()]: `Cert="${encodeURIComponent(chain)}"`,
+            [DWC_MTLS_HEADERS.DFCC.toLowerCase()]: `Cert="${encodeURIComponent(CERT_CHAIN)}"`,
         },
     };
 
@@ -40,7 +55,7 @@ describe("DwC mTLS validation", () => {
     it("extracts a base64-encoded PEM certificate chain", () => {
         const base64Request = {
             headers: {
-                [DWC_MTLS_HEADERS.DFCC.toLowerCase()]: [Buffer.from(chain).toString("base64")],
+                [DWC_MTLS_HEADERS.DFCC.toLowerCase()]: [Buffer.from(CERT_CHAIN).toString("base64")],
             },
         };
 
