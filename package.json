@@ -52,7 +52,7 @@
         "piscina": "^5.1.4"
     },
     "engines": {
-        "node": ">=20 <25"
+        "node": ">=20 <27"
     },
     "overrides": {
         "@sap/cds-compiler": "7.2.1"
