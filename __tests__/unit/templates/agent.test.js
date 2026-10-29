@@ -1,6 +1,6 @@
 const cds = require("@sap/cds");
 
-const { createAgents, createAgentTemplate, RESOLVERS } = require("../../../lib/templates/agent");
+const { createAgents, createAgentTemplate } = require("../../../lib/templates/agent");
 const { ORD_ACCESS_STRATEGY } = require("../../../lib/constants");
 
 const baseAppConfig = {
