@@ -26,7 +26,7 @@ cds.build.Plugin = class {
 };
 
 // Now require the build plugin after the mock is set up
-const OrdBuildPlugin = require("../../lib/build");
+const OrdBuildPlugin = require("../../lib/build/ord-builder");
 
 jest.mock("../../lib/index", () => {
     return {
