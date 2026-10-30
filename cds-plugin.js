@@ -2,7 +2,7 @@ const cds = require("@sap/cds");
 const { getCustomORDContent } = require("./lib/extend-ord-with-custom");
 
 if (cds.cli.command === "build") {
-    cds.build?.register?.("ord", require("./lib/build"));
+    cds.build?.register?.("ord", require("./lib/build/ord-builder"));
 }
 
 Object.defineProperty(cds.compile.to, "ord", {
