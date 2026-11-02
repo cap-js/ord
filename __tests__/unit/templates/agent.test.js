@@ -15,7 +15,6 @@ const baseAppConfig = {
 
 describe("createAgentTemplate", () => {
     it("should set required fields with defaults", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             service MyAgentService {}
@@ -24,18 +23,23 @@ describe("createAgentTemplate", () => {
 
         const agent = createAgentTemplate(service, baseAppConfig);
 
-        expect(agent.ordId).toEqual("customer.testNamespace:agent:MyAgentService:v1");
-        expect(agent.version).toEqual("1.0.0");
-        expect(agent.releaseStatus).toEqual("active");
-        expect(agent.visibility).toEqual("public");
-        expect(agent.partOfPackage).toBeDefined();
+        expect(agent).toMatchObject({
+            ordId: "customer.testNamespace:agent:MyAgentService:v1",
+            title: "MyAgentService",
+            shortDescription: "Short description of MyAgentService",
+            version: "1.0.0",
+            releaseStatus: "active",
+            visibility: "public",
+            partOfPackage: "customer.testNamespace:package:testAppName:v1",
+            lastUpdate: baseAppConfig.lastUpdate,
+        });
     });
 
     it("should use @ORD.Extensions.title when present", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @ORD.Extensions.title: 'My Custom Agent Title'
+            @title: 'Lower-priority title'
             service MyAgentService {}
         `);
         const service = model.definitions["MyAgentService"];
@@ -46,7 +50,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should fall back to @title when @ORD.Extensions.title is absent", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @title: 'Fallback Title'
@@ -60,7 +63,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should fall back to service local name when no title annotation is present", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             service MyAgentService {}
@@ -73,7 +75,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should populate description from @description annotation", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @description: 'An AI agent for incident management'
@@ -87,7 +88,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should omit description when not annotated", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             service MyAgentService {}
@@ -100,7 +100,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should auto-generate exposedApiResources referencing the a2a API resource", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             service MyAgentService {}
@@ -110,12 +109,11 @@ describe("createAgentTemplate", () => {
         const agent = createAgentTemplate(service, baseAppConfig);
 
         expect(agent.exposedApiResources).toEqual([
-            { ordId: "customer.testNamespace:apiResource:MyAgentService:v1" },
+            { ordId: "customer.testNamespace:apiResource:MyAgentService-a2a:v1" },
         ]);
     });
 
     it("should use @ORD.Extensions.exposedApiResources when provided", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @ORD.Extensions.exposedApiResources: [{ ordId: 'customer.testNamespace:apiResource:MyAgentService:v1' }]
@@ -129,7 +127,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should use @ORD.Extensions.ordId when provided", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @ORD.Extensions.ordId: 'customer.testNamespace:agent:CustomAgentId:v1'
@@ -142,8 +139,7 @@ describe("createAgentTemplate", () => {
         expect(agent.ordId).toEqual("customer.testNamespace:agent:CustomAgentId:v1");
     });
 
-    it("should not include private agents", () => {
-        // TODO: Review AI Test
+    it("should preserve private visibility for filtering by createAgents", () => {
         const model = cds.linked(`
             @agent
             @ORD.Extensions.visibility: 'private'
@@ -157,7 +153,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should include lastUpdate from appConfig", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             service MyAgentService {}
@@ -170,7 +165,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should use @ORD.Extensions.releaseStatus when provided", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @ORD.Extensions.releaseStatus: 'beta'
@@ -184,7 +178,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should use @ORD.Extensions.shortDescription when provided", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @ORD.Extensions.shortDescription: 'Custom short desc'
@@ -198,7 +191,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should fall back to @shortDescription when @ORD.Extensions.shortDescription is absent", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @shortDescription: 'Fallback short desc'
@@ -212,7 +204,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should default shortDescription to service name prefix when not annotated", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             service MyAgentService {}
@@ -225,7 +216,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should set aiHint from @ORD.Extensions.aiHint", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @ORD.Extensions.aiHint: 'Use this agent for resolving support incidents'
@@ -239,7 +229,6 @@ describe("createAgentTemplate", () => {
     });
 
     it("should omit aiHint when not annotated", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             service MyAgentService {}
@@ -254,7 +243,6 @@ describe("createAgentTemplate", () => {
 
 describe("createAgents", () => {
     it("should return one agent per @agent-annotated service", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             service AgentOne {}
@@ -270,10 +258,13 @@ describe("createAgents", () => {
         const agents = createAgents(appConfig);
 
         expect(agents).toHaveLength(2);
+        expect(agents.map(({ ordId }) => ordId)).toEqual([
+            "customer.testNamespace:agent:AgentOne:v1",
+            "customer.testNamespace:agent:AgentTwo:v1",
+        ]);
     });
 
     it("should return empty array when no services are annotated with @agent", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             service NonAgentService {}
         `);
@@ -288,7 +279,6 @@ describe("createAgents", () => {
     });
 
     it("should not include private agents in the result", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             @ORD.Extensions.visibility: 'private'
@@ -304,16 +294,16 @@ describe("createAgents", () => {
 
         const agents = createAgents(appConfig);
 
-        expect(agents).toHaveLength(1);
-        expect(agents[0].ordId).toContain("PublicAgent");
+        expect(agents).toHaveLength(1)
+        expect(agents.map(({ ordId }) => ordId)).toEqual(["customer.testNamespace:agent:PublicAgent:v1"]);
     });
 
     it("should not include non-service definitions", () => {
-        // TODO: Review AI Test
         const model = cds.linked(`
             @agent
             service AgentService {}
 
+            @agent
             entity SomeEntity {
                 key ID: UUID;
             }
@@ -325,6 +315,6 @@ describe("createAgents", () => {
 
         const agents = createAgents(appConfig);
 
-        expect(agents).toHaveLength(1);
+        expect(agents.map(({ ordId }) => ordId)).toEqual(["customer.testNamespace:agent:AgentService:v1"]);
     });
 });
