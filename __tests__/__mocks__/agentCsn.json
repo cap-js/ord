@@ -3,7 +3,6 @@
     "definitions": {
         "sap.capire.incidents.LocalService": {
             "kind": "service",
-            "@protocol": "agent",
             "@path": "local-service",
             "@agent": true,
             "@ORD.Extensions.title": "Local Agent Service",

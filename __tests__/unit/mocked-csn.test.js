@@ -165,56 +165,71 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         });
 
         test("Successfully creates ORD document with agents array", () => {
-            // TODO: Review AI Test
             const csn = require("../__mocks__/agentCsn.json");
             const document = ord(csn);
 
-            expect(document.agents).toHaveLength(1);
-            expect(document.agents[0].ordId).toContain("LocalService");
-            expect(document.agents[0].releaseStatus).toEqual("active");
-            expect(document.agents[0].partOfPackage).toBeDefined();
+            expect(document.agents).toEqual([
+                expect.objectContaining({
+                    ordId: "sap.test.cdsrc.sample:agent:sap.capire.incidents.LocalService:v1",
+                    title: "Local Agent Service",
+                    description: "An AI agent for incident management",
+                    releaseStatus: "active",
+                    partOfPackage: "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+                    exposedApiResources: [
+                        {
+                            ordId: "sap.test.cdsrc.sample:apiResource:sap.capire.incidents.LocalService-a2a:v1",
+                        },
+                    ],
+                }),
+            ]);
         });
 
         test("Creates a2a API resource entry for agent service", () => {
-            // TODO: Review AI Test
             const csn = require("../__mocks__/agentCsn.json");
             const document = ord(csn);
 
             const a2aResources = document.apiResources.filter((r) => r.apiProtocol === "a2a");
             expect(a2aResources).toHaveLength(1);
-            expect(a2aResources[0].releaseStatus).toEqual("active");
-            expect(a2aResources[0].entryPoints).toEqual(["/a2a/local-service"]);
-            expect(a2aResources[0].resourceDefinitions).toHaveLength(1);
-            expect(a2aResources[0].resourceDefinitions[0].type).toEqual("a2a-agent-card");
-            expect(a2aResources[0].resourceDefinitions[0].url).toEqual(
-                `/ord/v1/${a2aResources[0].ordId}/sap.capire.incidents.LocalService.a2a.json`,
-            );
+            expect(a2aResources[0]).toMatchObject({
+                ordId: "sap.test.cdsrc.sample:apiResource:sap.capire.incidents.LocalService:v1",
+                releaseStatus: "active",
+                entryPoints: ["/a2a/local-service"],
+                resourceDefinitions: [
+                    {
+                        type: "a2a-agent-card",
+                        mediaType: "application/json",
+                        url: "/ord/v1/sap.test.cdsrc.sample:apiResource:sap.capire.incidents.LocalService:v1/sap.capire.incidents.LocalService.a2a.json",
+                    },
+                ],
+            });
         });
 
         test("a2a resource definition is served by ORD even without explicit @path", () => {
-            // TODO: Review AI Test
             const csn = {
                 namespace: "",
                 definitions: {
-                    NoPathService: { kind: "service", "@protocol": "agent", "@agent": true },
+                    NoPathService: { kind: "service", "@agent": true },
                 },
                 meta: { creator: "test" },
                 $version: "2.0",
             };
             const document = ord(csn);
 
-            const a2aResources = (document.apiResources || []).filter((r) => r.apiProtocol === "a2a");
+            const a2aResources = document.apiResources.filter((r) => r.apiProtocol === "a2a");
             expect(a2aResources).toHaveLength(1);
-            expect(a2aResources[0].entryPoints).toHaveLength(1);
-            expect(a2aResources[0].resourceDefinitions).toHaveLength(1);
-            expect(a2aResources[0].resourceDefinitions[0].type).toEqual("a2a-agent-card");
-            expect(a2aResources[0].resourceDefinitions[0].url).toEqual(
-                `/ord/v1/${a2aResources[0].ordId}/NoPathService.a2a.json`,
-            );
+            expect(a2aResources[0]).toMatchObject({
+                entryPoints: ["/a2a/no-path"],
+                resourceDefinitions: [
+                    {
+                        type: "a2a-agent-card",
+                        mediaType: "application/json",
+                        url: `/ord/v1/${a2aResources[0].ordId}/NoPathService.a2a.json`,
+                    },
+                ],
+            });
         });
 
         test("Does not include agents array when no service is annotated with @agent", () => {
-            // TODO: Review AI Test
             const csn = require("../__mocks__/publicResourcesCsn.json");
             const document = ord(csn);
 

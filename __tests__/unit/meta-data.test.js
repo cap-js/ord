@@ -18,6 +18,7 @@ describe("metaData", () => {
     });
 
     afterEach(() => {
+        jest.restoreAllMocks();
         jest.clearAllMocks();
     });
 
@@ -155,7 +156,6 @@ describe("metaData", () => {
     });
 
     test("getMetadata should return a2a content for a given URL", async () => {
-        // TODO: Review AI Test
         const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AgentService:v1/AgentService.a2a.json";
         const mockAgentCard = {
             name: "AgentService",
@@ -167,13 +167,18 @@ describe("metaData", () => {
             contentType: "application/json",
             response: JSON.stringify(mockAgentCard),
         };
-        jest.spyOn(cds, "compile").mockImplementation(() => ({
-            to: {
-                a2a: () => JSON.stringify(mockAgentCard),
-            },
-        }));
+        const compileA2a = jest.fn(() => JSON.stringify(mockAgentCard));
+        const compile = jest.spyOn(cds, "compile").mockReturnValue({
+            to: { a2a: compileA2a },
+        });
 
         await expect(getMetadata(url)).resolves.toEqual(expectedResponse);
+        expect(compile).toHaveBeenCalledWith(undefined);
+        expect(compileA2a).toHaveBeenCalledWith({
+            service: "AgentService",
+            as: "str",
+            messages: [],
+        });
     });
 
     test("getMetadata should return GraphQL SDL content with text/plain content type", async () => {
@@ -213,17 +218,16 @@ describe("metaData", () => {
     });
 
     test("getMetadata should raise error when get a2a failed", async () => {
-        // TODO: Review AI Test
         const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AgentService:v1/AgentService.a2a.json";
-        jest.spyOn(cds, "compile").mockImplementation(() => ({
-            to: {
-                a2a: () => {
-                    throw new Error("A2A error");
-                },
-            },
-        }));
+        const compileA2a = jest.fn(() => {
+            throw new Error("A2A error");
+        });
+        jest.spyOn(cds, "compile").mockReturnValue({
+            to: { a2a: compileA2a },
+        });
 
         await expect(getMetadata(url)).rejects.toThrow("A2A error");
+        expect(compileA2a).toHaveBeenCalledTimes(1);
     });
 
     test("getMetadata should handle missing service name in URL", async () => {

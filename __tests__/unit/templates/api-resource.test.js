@@ -155,11 +155,9 @@ describe("createAPIResourceTemplate", () => {
         });
 
         it("should create correct resource definition for A2A protocol", () => {
-            // TODO: Review AI Test
             const model = cds.linked(`
-                    @protocol: 'agent'
-                    @path: '/a2a/my-agent'
                     @agent
+                    @path: '/a2a/my-agent'
                     service MyAgentService {
                         entity Items { key ID: UUID; }
                     };
@@ -170,11 +168,19 @@ describe("createAPIResourceTemplate", () => {
 
             expect(apiResourceTemplate).toHaveLength(1);
             const a2aResource = apiResourceTemplate[0];
-            expect(a2aResource.apiProtocol).toBe("a2a");
-            expect(a2aResource.resourceDefinitions).toHaveLength(1);
-            expect(a2aResource.resourceDefinitions[0].type).toBe(AGENT_CARD_RESOURCE_DEFINITION_TYPE);
-            expect(a2aResource.resourceDefinitions[0].mediaType).toBe("application/json");
-            expect(a2aResource.resourceDefinitions[0].url).toContain(".a2a.json");
+            expect(a2aResource).toMatchObject({
+                ordId: "customer.testNamespace:apiResource:MyAgentService:v1",
+                apiProtocol: "a2a",
+                entryPoints: ["/a2a/my-agent"],
+                resourceDefinitions: [
+                    {
+                        type: AGENT_CARD_RESOURCE_DEFINITION_TYPE,
+                        mediaType: "application/json",
+                        accessStrategies: appConfig.accessStrategies,
+                        url: "/ord/v1/customer.testNamespace:apiResource:MyAgentService:v1/MyAgentService.a2a.json",
+                    },
+                ],
+            });
         });
     });
 
