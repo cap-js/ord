@@ -4,8 +4,8 @@ const {
     createAPIResources,
     createAPIResourceTemplate,
     _getPackageID,
-    _getExposedEntityTypes,
 } = require("../../../lib/templates/api-resource");
+const { resolveExposedEntityTypes } = require("../../../lib/common/entity-types");
 const {
     DATA_PRODUCT_TYPE,
     ORD_ACCESS_STRATEGY,
@@ -1100,7 +1100,7 @@ describe("createAPIResourceTemplate", () => {
             serviceDefinition.entities[0][ORD_ODM_ENTITY_NAME_ANNOTATION] = "Something";
             serviceDefinition.entities[1][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.sm:Else:v2";
             serviceDefinition.entities[2][ENTITY_RELATIONSHIP_ANNOTATION] = "sap.odm:Something";
-            const exposedEntityTypes = _getExposedEntityTypes(serviceDefinition);
+            const exposedEntityTypes = resolveExposedEntityTypes(serviceDefinition);
             expect(exposedEntityTypes).toMatchSnapshot();
             expect(exposedEntityTypes.length).toEqual(2);
         });

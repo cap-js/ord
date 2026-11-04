@@ -1,0 +1,19 @@
+{
+    "name": "@capire/ord-entity-types-sample",
+    "version": "1.0.0",
+    "private": true,
+    "dependencies": {
+        "@cap-js/ord": "file:../.."
+    },
+    "cds": {
+        "ord": {
+            "namespace": "customer.entitytypes",
+            "policyLevels": ["none"],
+            "customOrdContentFile": "./ord/custom.ord.json",
+            "entityTypes": {
+                "generateAggregates": true,
+                "includeRootEntities": true
+            }
+        }
+    }
+}

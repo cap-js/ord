@@ -20,6 +20,7 @@
 7. [ORD Root Properties](#ord-root-property)
 8. [External Data Products](#external-data-products)
 9. [Consumption Bundles](#consumption-bundles)
+10. [Entity Types](#entity-types)
 ---
 
 ## Introduction
@@ -505,6 +506,37 @@ annotate sap.sai.Supplier with @ORD.Extensions: {
 
 ---
 
+## Entity Types
+
+Annotate domain entities with `@EntityRelationship.entityType` to expose their ORD entity type metadata. Mark a composition root with `@ObjectModel.compositionRoot: true` or `@ODM.root: true`. By default, the plugin generates root and sub-entity resources with the existing IDs and levels.
+
+To generate an aggregate for each annotated root, enable:
+
+```json
+{
+    "ord": {
+        "entityTypes": {
+            "generateAggregates": true,
+            "includeRootEntities": false
+        }
+    }
+}
+```
+
+In this mode, the root's business entity ID identifies the aggregate. Composed sub-entities receive `relatedEntityTypes` with `relationType: "part-of"`, pointing to that aggregate. Ordinary associations can contribute API/event exposure references but do not establish aggregate membership. Explicit `@ORD.Extensions.level` annotations take precedence.
+
+Set `includeRootEntities` to `true` to also generate a separate root: `customer.demo:entityType:Order:v1` produces `customer.demo:entityType:OrderRoot:v1`. This requires a root marker, and only applies when aggregate generation is enabled. Collisions with explicitly declared entity type IDs and conflicting levels for one ID cause generation to fail.
+
+Enabling aggregate generation changes a previously generated root resource's level to `aggregate`, unless its level is explicitly overridden. Review existing consumers before enabling it. ORD ID overrides and version overrides apply consistently to entity definitions and API/event references. Entity relationship annotations accept either `namespace:Name:v1` or a complete `namespace:entityType:Name:v1` ORD ID.
+
+With aggregate generation enabled, `@ODM.entityName` also adds a `can-share-identity` relationship to the corresponding external entity type. Simple or dotted names use `sap.odm:entityType:<name>:v1`; qualified names such as `sap.odm:Order:v2` and complete entity type ORD IDs retain their namespace/version. Explicit relationships are retained, and inferred relationships are added without duplicating an existing target.
+
+SAP policy levels continue to suppress generated entity type definitions in favor of the central registry. Aggregate generation does not bypass this rule: referenced application types must be published by their agreed owner. BDC data products remain published through FOS; supplied static data product metadata can express `entityTypes` and `outputPorts` through `customOrdContentFile`.
+
+See the [entity type sample](../xmpl/entity-types/README.md) for static build and tenant-free system-version discovery examples.
+
+---
+
 ## Summary
 
 | Scenario                         | Approach                                                                                         |
@@ -520,3 +552,4 @@ annotate sap.sai.Supplier with @ORD.Extensions: {
 | DwC mTLS Authentication          | Set `ord.authentication.dwcMtls: true` + `DWC_MTLS_TRUSTED_CERTS` env var                        |
 | CDS/ORD Namespace Mismatch       | Set `internalNamespace` to strip the CDS namespace prefix from ORD IDs                           |
 | External Data Products           | Services with `@cds.external`, `@data.product`, `@cds.dp.ordId` generate IntegrationDependencies |
+| Entity Types                     | Annotate with `@EntityRelationship.entityType`; enable `entityTypes.generateAggregates` for aggregate/membership generation |
