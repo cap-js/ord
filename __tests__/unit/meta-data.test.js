@@ -52,14 +52,13 @@ describe("metaData", () => {
                 to: {
                     edmx: () => {
                         throw new Error("EDMX error");
-                    }
-                }
-            }
+                    },
+                },
+            };
         });
 
         await expect(getMetadata(url)).rejects.toThrow("EDMX error");
     });
-
 
     test("getMetadata should return asyncapi content for a given URL", async () => {
         const url = "/ord/v1/sap.test.cdsrc.sample:eventResource:AdminService:v1/AdminService.asyncapi2.json";
@@ -93,7 +92,7 @@ describe("metaData", () => {
             return expectedResponse.response;
         });
 
-        await expect(getMetadata(url, "Csn content")).resolves.toEqual(expectedResponse);
+        await expect(getMetadata(url, {})).resolves.toEqual(expectedResponse);
     });
 
     test("getMetadata should raise error when get csn failed", async () => {
@@ -282,7 +281,7 @@ describe("metaData", () => {
         test("should pass servers from annotation to openapi compiler", async () => {
             const servers = [{ url: "https://api.example.com", description: "Production" }];
             const mockCsn = {
-                definitions: { TestService: { "@OpenAPI.servers": servers } },
+                definitions: { TestService: { kind: "service", "@OpenAPI.servers": servers } },
             };
 
             await getMetadata(url, mockCsn);
