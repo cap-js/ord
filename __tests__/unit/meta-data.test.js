@@ -92,7 +92,7 @@ describe("metaData", () => {
             return expectedResponse.response;
         });
 
-        await expect(getMetadata(url, {})).resolves.toEqual(expectedResponse);
+        await expect(getMetadata(url, {definitions: []})).resolves.toEqual(expectedResponse);
     });
 
     test("getMetadata should raise error when get csn failed", async () => {
