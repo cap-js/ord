@@ -18,6 +18,7 @@ describe("metaData", () => {
     });
 
     afterEach(() => {
+        jest.restoreAllMocks();
         jest.clearAllMocks();
     });
 
@@ -153,6 +154,32 @@ describe("metaData", () => {
         await expect(getMetadata(url)).resolves.toEqual(expectedResponse);
     });
 
+    test("getMetadata should return a2a content for a given URL", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AgentService:v1/AgentService.a2a.json";
+        const mockAgentCard = {
+            name: "AgentService",
+            description: "Agent service",
+            protocolVersion: "0.3.0",
+            skills: [],
+        };
+        const expectedResponse = {
+            contentType: "application/json",
+            response: JSON.stringify(mockAgentCard),
+        };
+        const compileA2a = jest.fn(() => JSON.stringify(mockAgentCard));
+        const compile = jest.spyOn(cds, "compile").mockReturnValue({
+            to: { a2a: compileA2a },
+        });
+
+        await expect(getMetadata(url)).resolves.toEqual(expectedResponse);
+        expect(compile).toHaveBeenCalledWith(undefined);
+        expect(compileA2a).toHaveBeenCalledWith({
+            service: "AgentService",
+            as: "str",
+            messages: [],
+        });
+    });
+
     test("getMetadata should return GraphQL SDL content with text/plain content type", async () => {
         const url =
             "/ord/v1/customer.sample:apiResource:sap.capire.incidents.GraphQLService:v1/sap.capire.incidents.GraphQLService.graphql";
@@ -187,6 +214,19 @@ describe("metaData", () => {
         }));
 
         await expect(getMetadata(url)).rejects.toThrow("MCP error");
+    });
+
+    test("getMetadata should raise error when get a2a failed", async () => {
+        const url = "/ord/v1/sap.test.cdsrc.sample:apiResource:AgentService:v1/AgentService.a2a.json";
+        const compileA2a = jest.fn(() => {
+            throw new Error("A2A error");
+        });
+        jest.spyOn(cds, "compile").mockReturnValue({
+            to: { a2a: compileA2a },
+        });
+
+        await expect(getMetadata(url)).rejects.toThrow("A2A error");
+        expect(compileA2a).toHaveBeenCalledTimes(1);
     });
 
     test("getMetadata should handle missing service name in URL", async () => {
