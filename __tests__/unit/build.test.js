@@ -26,7 +26,8 @@ cds.build.Plugin = class {
 };
 
 // Now require the build plugin after the mock is set up
-const OrdBuildPlugin = require("../../lib/build");
+const OrdBuildPlugin = require("../../lib/build/ord-builder");
+const StandardBuilder = require("../../lib/build/standard-builder");
 
 jest.mock("../../lib/index", () => {
     return {
@@ -276,11 +277,11 @@ describe("Build", () => {
             },
         ];
 
-        await expect(buildClass._generateResourcesFiles({}, resources)).rejects.toThrow();
+        await expect(buildClass._generateResourcesFiles({}, { apiResources: resources }, ".")).rejects.toThrow();
     });
 
-    it("should update resource URLs with relative paths and without colunms", () => {
-        const buildClass = new OrdBuildPlugin();
+    it("should update resource URLs with relative paths and without colons", () => {
+        const buildClass = new StandardBuilder(new OrdBuildPlugin());
         const ordDocument = {
             apiResources: [
                 {
