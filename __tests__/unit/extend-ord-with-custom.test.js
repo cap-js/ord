@@ -14,18 +14,9 @@ describe("MERGE_STRATEGIES", () => {
 });
 
 describe("extendOrdWithCustom", () => {
-    let appConfig = {};
-
+    
     beforeAll(() => {
         cds.env = {};
-    });
-
-    beforeEach(() => {
-        appConfig = {
-            env: {
-                customOrdContentFile: "customOrdContentFile.json",
-            },
-        };
     });
 
     afterAll(() => {
@@ -34,7 +25,6 @@ describe("extendOrdWithCustom", () => {
     });
 
     describe("extend-ord-with-custom", () => {
-        expect(appConfig).toBeDefined()
 
         it("should return empty object if there is no customOrdContentFile property in the .cdsrc.json", () => {
             expect(getCustomORDContent(undefined)).toEqual({});
