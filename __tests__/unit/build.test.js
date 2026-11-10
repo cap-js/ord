@@ -320,9 +320,8 @@ describe("Build", () => {
     });
 
     it("should include a2a resource definitions as compile tasks", () => {
-        // TODO: Review AI Test
         const buildClass = new OrdBuildPlugin();
-        const resources = [
+        const apiResources = [
             {
                 ordId: "sap.sm:apiResource:AgentService:v1",
                 resourceDefinitions: [
@@ -331,7 +330,7 @@ describe("Build", () => {
             },
         ];
 
-        expect(buildClass._extractCompileTasks(resources)).toEqual([
+        expect(buildClass._extractCompileTasks({ apiResources })).toEqual([
             {
                 url: "/ord/v1/sap.sm:apiResource:AgentService:v1/AgentService.a2a.json",
                 ordId: "sap.sm:apiResource:AgentService:v1",
