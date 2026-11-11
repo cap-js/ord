@@ -915,6 +915,100 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
 }
 `;
 
+exports[`Entity type generation from xmpl schema generates aggregate and part-of relationships with generateAggregates enabled 1`] = `
+[
+  {
+    "description": "Description for Movie",
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2024-11-04T14:33:25+01:00",
+    "level": "aggregate",
+    "localId": "Movie",
+    "ordId": "customer.sample:entityType:Movie:v1",
+    "partOfPackage": "customer.sample:package:capireordsample:v1",
+    "releaseStatus": "active",
+    "shortDescription": "Short description of Movie",
+    "title": "Movie Details",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+  {
+    "description": "Description for Show",
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2024-11-04T14:33:25+01:00",
+    "level": "sub-entity",
+    "localId": "Show",
+    "ordId": "customer.sample:entityType:Show:v1",
+    "partOfPackage": "customer.sample:package:capireordsample:v1",
+    "relatedEntityTypes": [
+      {
+        "ordId": "customer.sample:entityType:Movie:v1",
+        "relationType": "part-of",
+      },
+    ],
+    "releaseStatus": "active",
+    "shortDescription": "Short description of Show",
+    "title": "Show Details",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
+exports[`Entity type generation from xmpl schema generates aggregate and part-of relationships with generateAggregates enabled 2`] = `
+[
+  {
+    "ordId": "sap.odm:entityType:Cinema:v1",
+  },
+  {
+    "ordId": "customer.sample:entityType:Movie:v1",
+  },
+  {
+    "ordId": "customer.sample:entityType:Show:v1",
+  },
+]
+`;
+
+exports[`Entity type generation from xmpl schema produces root-entity level when generateAggregates is disabled 1`] = `
+[
+  {
+    "description": "Description for Movie",
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2024-11-04T14:33:25+01:00",
+    "level": "root-entity",
+    "localId": "Movie",
+    "ordId": "customer.sample:entityType:Movie:v1",
+    "partOfPackage": "customer.sample:package:capireordsample:v1",
+    "releaseStatus": "active",
+    "shortDescription": "Short description of Movie",
+    "title": "Movie Details",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+  {
+    "description": "Description for Show",
+    "extensible": {
+      "supported": "no",
+    },
+    "lastUpdate": "2024-11-04T14:33:25+01:00",
+    "level": "sub-entity",
+    "localId": "Show",
+    "ordId": "customer.sample:entityType:Show:v1",
+    "partOfPackage": "customer.sample:package:capireordsample:v1",
+    "releaseStatus": "active",
+    "shortDescription": "Short description of Show",
+    "title": "Show Details",
+    "version": "1.0.0",
+    "visibility": "public",
+  },
+]
+`;
+
 exports[`Tests for Data Product definition Check interop CSN annotation mapping through ORD 1`] = `
 {
   "$schema": "https://open-resource-discovery.github.io/specification/spec-v1/interfaces/Document.schema.json",

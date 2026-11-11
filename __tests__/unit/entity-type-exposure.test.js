@@ -24,7 +24,7 @@ const source = `
     }
     @EntityRelationship.entityType: 'customer.demo:OrderItemDetail:v2'
     entity Details { key ID: UUID; parent: Association to Items; }
-    @EntityRelationship.entityType: 'customer.demo:Currency:v1'
+    @EntityRelationship.entityType: 'customer.demo:Currency'
     entity Currency { key ID: UUID; }
     service OrderService {
         entity Orders as projection on demo.Orders;
@@ -148,9 +148,10 @@ describe("entity type exposure", () => {
         cds.env.ord.entityTypes.includeRootEntities = true;
         const document = ord(model);
         expect(document.entityTypes).toBeUndefined();
-        expect(document.apiResources[0].exposedEntityTypes).toContainEqual({
-            ordId: "sap.odm:entityType:Order:v1",
-        });
+        expect(document.apiResources[0].exposedEntityTypes).toContainEqual({ ordId: "sap.odm:entityType:Order:v1" });
+        expect(document.apiResources[0].exposedEntityTypes).toContainEqual({ ordId: "customer.demo:entityType:CustomOrder:v2" });
+        expect(document.eventResources[0].exposedEntityTypes).toContainEqual({ ordId: "sap.odm:entityType:Order:v1" });
+        expect(document.eventResources[0].exposedEntityTypes).toContainEqual({ ordId: "customer.demo:entityType:CustomOrder:v2" });
     });
 
     it("preserves entity relationships in static system-version output", () => {

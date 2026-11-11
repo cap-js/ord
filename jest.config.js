@@ -4,7 +4,6 @@ const config = {
     testMatch: ["**/*.test.js"],
     testPathIgnorePatterns: [
         "/node_modules/",
-        "<rootDir>/ord/", // Ignore nested copy of the repo
         "/__tests__/integration/", // Ignore new integration folder
         "/__tests__/integration-test-app/", // Ignore embedded test app code
     ],

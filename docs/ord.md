@@ -527,13 +527,13 @@ In this mode, the root's business entity ID identifies the aggregate. Composed s
 
 Set `includeRootEntities` to `true` to also generate a separate root: `customer.demo:entityType:Order:v1` produces `customer.demo:entityType:OrderRoot:v1`. This requires a root marker, and only applies when aggregate generation is enabled. Collisions with explicitly declared entity type IDs and conflicting levels for one ID cause generation to fail.
 
-Enabling aggregate generation changes a previously generated root resource's level to `aggregate`, unless its level is explicitly overridden. Review existing consumers before enabling it. ORD ID overrides and version overrides apply consistently to entity definitions and API/event references. Entity relationship annotations accept either `namespace:Name:v1` or a complete `namespace:entityType:Name:v1` ORD ID.
+Enabling aggregate generation changes a previously generated root resource's level to `aggregate`, unless its level is explicitly overridden. Review existing consumers before enabling it. ORD ID overrides and version overrides apply consistently to entity definitions and API/event references. Entity relationship annotations accept `namespace:Name` or `namespace:Name:v2` (version defaults to `v1` when omitted).
 
 With aggregate generation enabled, `@ODM.entityName` also adds a `can-share-identity` relationship to the corresponding external entity type. Simple or dotted names use `sap.odm:entityType:<name>:v1`; qualified names such as `sap.odm:Order:v2` and complete entity type ORD IDs retain their namespace/version. Explicit relationships are retained, and inferred relationships are added without duplicating an existing target.
 
-SAP policy levels continue to suppress generated entity type definitions in favor of the central registry. Aggregate generation does not bypass this rule: referenced application types must be published by their agreed owner. BDC data products remain published through FOS; supplied static data product metadata can express `entityTypes` and `outputPorts` through `customOrdContentFile`.
+Under SAP policy levels, entity type *definitions* are suppressed in favor of the central registry, but `exposedEntityTypes` references on API and event resources are still emitted. Aggregate generation does not bypass the publication rule: entity type definitions owned by SAP must be published through their agreed owner. BDC data products remain published through FOS; supplied static data product metadata can express `entityTypes` and `outputPorts` through `customOrdContentFile`.
 
-See the [entity type sample](../xmpl/entity-types/README.md) for static build and tenant-free system-version discovery examples.
+See the [entity type sample](../xmpl) for an example model with aggregate generation.
 
 ---
 

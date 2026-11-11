@@ -561,3 +561,48 @@ describe("Tests for eventResource and apiResource", () => {
         expect(document).toMatchSnapshot();
     });
 });
+
+describe("Entity type generation from xmpl schema", () => {
+    let csn, ord, originalEnv;
+
+    beforeAll(async () => {
+        cds.root = path.join(__dirname, "../../xmpl");
+        csn = await cds.load(path.join(cds.root, "srv"));
+        ord = require("../../lib/ord");
+    });
+
+    beforeEach(() => {
+        originalEnv = cds.env.ord;
+        cds.env.ord = {
+            namespace: "customer.sample",
+            policyLevels: ["none"],
+        };
+    });
+
+    afterEach(() => {
+        cds.env.ord = originalEnv;
+    });
+
+    test("generates aggregate and part-of relationships with generateAggregates enabled", () => {
+        cds.env.ord.entityTypes = { generateAggregates: true };
+        const document = ord(csn);
+        const movie = document.entityTypes?.find((e) => e.ordId.includes(":Movie:"));
+        expect(movie).toBeDefined();
+        expect(movie.level).toBe("aggregate");
+        const show = document.entityTypes?.find((e) => e.ordId.includes(":Show:"));
+        expect(show).toBeDefined();
+        expect(show.relatedEntityTypes).toContainEqual(
+            expect.objectContaining({ ordId: movie.ordId, relationType: "part-of" }),
+        );
+        expect(document.entityTypes).toMatchSnapshot();
+        const localService = document.apiResources?.find((r) => r.ordId.includes("LocalService"));
+        expect(localService?.exposedEntityTypes).toMatchSnapshot();
+    });
+
+    test("produces root-entity level when generateAggregates is disabled", () => {
+        const document = ord(csn);
+        const movie = document.entityTypes?.find((e) => e.ordId.includes(":Movie:"));
+        expect(movie?.level).toBe("root-entity");
+        expect(document.entityTypes).toMatchSnapshot();
+    });
+});
