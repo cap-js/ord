@@ -599,7 +599,8 @@ describe("Entity type generation from xmpl schema", () => {
         expect(localService?.exposedEntityTypes).toMatchSnapshot();
     });
 
-    test("produces root-entity level when generateAggregates is disabled", () => {
+    test("produces root-entity level when generateAggregates is explicitly disabled", () => {
+        cds.env.ord.entityTypes = { generateAggregates: false };
         const document = ord(csn);
         const movie = document.entityTypes?.find((e) => e.ordId.includes(":Movie:"));
         expect(movie?.level).toBe("root-entity");

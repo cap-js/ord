@@ -158,6 +158,46 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
   ],
   "description": "this is my custom description",
+  "entityTypes": [
+    {
+      "description": "Description for Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Authors",
+      "ordId": "customer.foo:entityType:Authors:v2",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "relatedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+          "relationType": "can-share-identity",
+        },
+      ],
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Authors",
+      "title": "Authors",
+      "version": "2.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "Description for Genres",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Genres",
+      "ordId": "customer.foo:entityType:Genres:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType-internal:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Genres",
+      "title": "Genres",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -286,6 +326,28 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
         "customer:product:capire.bookshop.ord.sample:",
       ],
       "shortDescription": "Package containing internal Events",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "This package contains public Entity Types for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing public Entity Types",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "This package contains internal Entity Types for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType-internal:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing internal Entity Types",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
@@ -463,6 +525,46 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
   ],
   "description": "this is my custom description",
+  "entityTypes": [
+    {
+      "description": "Description for Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Authors",
+      "ordId": "customer.foo:entityType:Authors:v2",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "relatedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+          "relationType": "can-share-identity",
+        },
+      ],
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Authors",
+      "title": "Authors",
+      "version": "2.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "Description for Genres",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Genres",
+      "ordId": "customer.foo:entityType:Genres:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType-internal:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Genres",
+      "title": "Genres",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -591,6 +693,28 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
         "customer:product:capire.bookshop.ord.sample:",
       ],
       "shortDescription": "Package containing internal Events",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "This package contains public Entity Types for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing public Entity Types",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "This package contains internal Entity Types for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType-internal:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing internal Entity Types",
       "title": "capire bookshop ord sample",
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
@@ -768,6 +892,46 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
     },
   ],
   "description": "this is my custom description",
+  "entityTypes": [
+    {
+      "description": "Description for Authors",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Authors",
+      "ordId": "customer.foo:entityType:Authors:v2",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "relatedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+          "relationType": "can-share-identity",
+        },
+      ],
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Authors",
+      "title": "Authors",
+      "version": "2.0.0",
+      "visibility": "public",
+    },
+    {
+      "description": "Description for Genres",
+      "extensible": {
+        "supported": "no",
+      },
+      "lastUpdate": "2024-11-04T14:33:25+01:00",
+      "level": "sub-entity",
+      "localId": "Genres",
+      "ordId": "customer.foo:entityType:Genres:v1",
+      "partOfPackage": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType-internal:v1",
+      "releaseStatus": "active",
+      "shortDescription": "Short description of Genres",
+      "title": "Genres",
+      "version": "1.0.0",
+      "visibility": "internal",
+    },
+  ],
   "eventResources": [
     {
       "description": "CAP Event resource describing events / messages.",
@@ -900,6 +1064,28 @@ exports[`End-to-end test for ORD document Tests for default ORD document when .c
       "vendor": "customer:vendor:Customer:",
       "version": "1.0.0",
     },
+    {
+      "description": "This package contains public Entity Types for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing public Entity Types",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
+    {
+      "description": "This package contains internal Entity Types for capire bookshop ord sample.",
+      "ordId": "sap.test.cdsrc.sample:package:capirebookshopordsample-entityType-internal:v1",
+      "partOfProducts": [
+        "customer:product:capire.bookshop.ord.sample:",
+      ],
+      "shortDescription": "Package containing internal Entity Types",
+      "title": "capire bookshop ord sample",
+      "vendor": "customer:vendor:Customer:",
+      "version": "1.0.0",
+    },
   ],
   "policyLevels": [
     "sap:core:v1",
@@ -931,7 +1117,7 @@ exports[`Entity type generation from xmpl schema generates aggregate and part-of
     "shortDescription": "Short description of Movie",
     "title": "Movie Details",
     "version": "1.0.0",
-    "visibility": "public",
+    "visibility": "internal",
   },
   {
     "description": "Description for Show",
@@ -953,7 +1139,7 @@ exports[`Entity type generation from xmpl schema generates aggregate and part-of
     "shortDescription": "Short description of Show",
     "title": "Show Details",
     "version": "1.0.0",
-    "visibility": "public",
+    "visibility": "internal",
   },
 ]
 `;
@@ -972,7 +1158,7 @@ exports[`Entity type generation from xmpl schema generates aggregate and part-of
 ]
 `;
 
-exports[`Entity type generation from xmpl schema produces root-entity level when generateAggregates is disabled 1`] = `
+exports[`Entity type generation from xmpl schema produces root-entity level when generateAggregates is explicitly disabled 1`] = `
 [
   {
     "description": "Description for Movie",
@@ -988,7 +1174,7 @@ exports[`Entity type generation from xmpl schema produces root-entity level when
     "shortDescription": "Short description of Movie",
     "title": "Movie Details",
     "version": "1.0.0",
-    "visibility": "public",
+    "visibility": "internal",
   },
   {
     "description": "Description for Show",
@@ -1004,7 +1190,7 @@ exports[`Entity type generation from xmpl schema produces root-entity level when
     "shortDescription": "Short description of Show",
     "title": "Show Details",
     "version": "1.0.0",
-    "visibility": "public",
+    "visibility": "internal",
   },
 ]
 `;
@@ -2914,6 +3100,12 @@ exports[`Tests for products and packages should not contain products property if
       "localId": "Authors",
       "ordId": "customer.foo:entityType:Authors:v2",
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "relatedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+          "relationType": "can-share-identity",
+        },
+      ],
       "releaseStatus": "active",
       "shortDescription": "Short description of Authors",
       "title": "Authors",
@@ -2934,7 +3126,7 @@ exports[`Tests for products and packages should not contain products property if
       "shortDescription": "Short description of Genres",
       "title": "Genres",
       "version": "1.0.0",
-      "visibility": "public",
+      "visibility": "internal",
     },
   ],
   "eventResources": [
@@ -3190,6 +3382,12 @@ exports[`Tests for products and packages should raise error log when custom prod
       "localId": "Authors",
       "ordId": "customer.foo:entityType:Authors:v2",
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "relatedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+          "relationType": "can-share-identity",
+        },
+      ],
       "releaseStatus": "active",
       "shortDescription": "Short description of Authors",
       "title": "Authors",
@@ -3210,7 +3408,7 @@ exports[`Tests for products and packages should raise error log when custom prod
       "shortDescription": "Short description of Genres",
       "title": "Genres",
       "version": "1.0.0",
-      "visibility": "public",
+      "visibility": "internal",
     },
   ],
   "eventResources": [
@@ -3474,6 +3672,12 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "localId": "Authors",
       "ordId": "customer.foo:entityType:Authors:v2",
       "partOfPackage": "customer.capirebookshopordsample:package:capirebookshopordsample:v1",
+      "relatedEntityTypes": [
+        {
+          "ordId": "sap.odm:entityType:odm.bookshop.Authors:v1",
+          "relationType": "can-share-identity",
+        },
+      ],
       "releaseStatus": "active",
       "shortDescription": "Short description of Authors",
       "title": "Authors",
@@ -3494,7 +3698,7 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "shortDescription": "Short description of Genres",
       "title": "Genres",
       "version": "1.0.0",
-      "visibility": "public",
+      "visibility": "internal",
     },
   ],
   "eventResources": [

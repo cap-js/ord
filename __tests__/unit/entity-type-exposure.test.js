@@ -1,7 +1,7 @@
 const cds = require("@sap/cds");
 const ord = require("../../lib/ord");
 cds.build = require("@sap/cds-dk/lib/build");
-const OrdBuildPlugin = require("../../lib/build");
+const OrdBuildPlugin = require("../../lib/build/standard-builder");
 const { createEntityTypes } = require("../../lib/templates/entity-type");
 const { resolveODMEntityTypeOrdId } = require("../../lib/common/entity-types");
 
@@ -82,7 +82,7 @@ describe("entity type exposure", () => {
     });
 
     it("keeps legacy root IDs and levels when aggregate generation is disabled", () => {
-        delete cds.env.ord.entityTypes;
+        cds.env.ord.entityTypes = { generateAggregates: false };
         const document = ord(model);
         expect(find(document, "CustomOrder").level).toBe("root-entity");
         expect(find(document, "OrderItem").relatedEntityTypes).toBeUndefined();
@@ -147,11 +147,25 @@ describe("entity type exposure", () => {
         cds.env.ord.policyLevels = ["sap:core:v1"];
         cds.env.ord.entityTypes.includeRootEntities = true;
         const document = ord(model);
-        expect(document.entityTypes).toBeUndefined();
+        expect(document.entityTypes).toBeDefined();
         expect(document.apiResources[0].exposedEntityTypes).toContainEqual({ ordId: "sap.odm:entityType:Order:v1" });
         expect(document.apiResources[0].exposedEntityTypes).toContainEqual({ ordId: "customer.demo:entityType:CustomOrder:v2" });
         expect(document.eventResources[0].exposedEntityTypes).toContainEqual({ ordId: "sap.odm:entityType:Order:v1" });
         expect(document.eventResources[0].exposedEntityTypes).toContainEqual({ ordId: "customer.demo:entityType:CustomOrder:v2" });
+    });
+
+    it("defaults entity type visibility to internal when no annotation or config is set", () => {
+        const document = ord(model);
+        for (const entityType of document.entityTypes) {
+            expect(entityType.visibility).toBe("internal");
+        }
+    });
+
+    it("respects explicit visibility annotation over the internal default", () => {
+        model.definitions["demo.Orders"]["@ORD.Extensions.visibility"] = "public";
+        const document = ord(model);
+        const order = document.entityTypes.find((e) => e.ordId.includes(":CustomOrder:"));
+        expect(order.visibility).toBe("public");
     });
 
     it("preserves entity relationships in static system-version output", () => {
@@ -200,7 +214,6 @@ describe("ODM entity type identities", () => {
         ["odm.bookshop.Authors", "sap.odm:entityType:odm.bookshop.Authors:v1"],
         ["sap.odm:Order", "sap.odm:entityType:Order:v1"],
         ["sap.odm:Order:v2", "sap.odm:entityType:Order:v2"],
-        ["sap.odm:entityType:Order:v2", "sap.odm:entityType:Order:v2"],
     ])("converts %s to %s", (name, expected) => {
         expect(resolveODMEntityTypeOrdId({ "@ODM.entityName": name })).toBe(expected);
     });

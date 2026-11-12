@@ -96,14 +96,19 @@ describe("RESOLVERS.level", () => {
         expect(RESOLVERS.level(BASE_ENTITY)).toBe(LEVEL.subEntity);
     });
 
-    it("returns root-entity when @ObjectModel.compositionRoot is true", () => {
+    it("returns aggregate when @ObjectModel.compositionRoot is true (default)", () => {
         const entity = { ...BASE_ENTITY, "@ObjectModel.compositionRoot": true };
-        expect(RESOLVERS.level(entity)).toBe(LEVEL.rootEntity);
+        expect(RESOLVERS.level(entity)).toBe(LEVEL.aggregate);
     });
 
-    it("returns root-entity when @ODM.root is true", () => {
+    it("returns aggregate when @ODM.root is true (default)", () => {
         const entity = { ...BASE_ENTITY, "@ODM.root": true };
-        expect(RESOLVERS.level(entity)).toBe(LEVEL.rootEntity);
+        expect(RESOLVERS.level(entity)).toBe(LEVEL.aggregate);
+    });
+
+    it("returns root-entity when @ObjectModel.compositionRoot is true and generateAggregates is false", () => {
+        const entity = { ...BASE_ENTITY, "@ObjectModel.compositionRoot": true };
+        expect(RESOLVERS.level(entity, { env: { entityTypes: { generateAggregates: false } } })).toBe(LEVEL.rootEntity);
     });
 
     it("prefers @ORD.Extensions.level over annotation-derived level", () => {
@@ -144,12 +149,12 @@ describe("RESOLVERS.version", () => {
 });
 
 describe("RESOLVERS.visibility", () => {
-    it("defaults to public from appConfig env", () => {
+    it("defaults to public from appConfig env when defaultVisibility is set to public", () => {
         expect(RESOLVERS.visibility(BASE_ENTITY, BASE_APP_CONFIG)).toBe(RESOURCE_VISIBILITY.public);
     });
 
-    it("defaults to public when appConfig.env is absent", () => {
-        expect(RESOLVERS.visibility(BASE_ENTITY, {})).toBe(RESOURCE_VISIBILITY.public);
+    it("defaults to internal when appConfig.env is absent", () => {
+        expect(RESOLVERS.visibility(BASE_ENTITY, {})).toBe(RESOURCE_VISIBILITY.internal);
     });
 
     it("uses appConfig.env.defaultVisibility when no entity override", () => {
@@ -248,7 +253,7 @@ describe("createEntityTypeTemplate", () => {
         expect(entityType.title).toEqual("Title of SomeAribaDummyEntity");
     });
 
-    it("should return entity type with incorrect version, title and level:root-entity", () => {
+    it("should return entity type with incorrect version, title and level:aggregate", () => {
         const entityWithVersion = {
             "@EntityRelationship.entityType": "sap.sm:SomeAribaDummyEntity:v3b",
             "@title": "Title of SomeAribaDummyEntity",
@@ -260,7 +265,7 @@ describe("createEntityTypeTemplate", () => {
         expect(entityType).toMatchSnapshot();
         expect(warnSpy).toHaveBeenCalledTimes(1);
         expect(entityType.version).toEqual("3b.0.0");
-        expect(entityType.level).toEqual("root-entity");
+        expect(entityType.level).toEqual("aggregate");
         expect(entityType.partOfPackage).toEqual("customer.testNamespace:package:testAppName:v1");
     });
 
@@ -295,7 +300,7 @@ describe("createEntityTypeTemplate", () => {
         const entityType = createEntityTypeTemplate(updatedAppConfig, entity);
 
         expect(entityType).not.toBeNull();
-        expect(entityType.visibility).toBe("public");
+        expect(entityType.visibility).toBe("internal");
     });
 
     it("should assign the correct partOfPackage based on visibility", () => {
@@ -346,14 +351,17 @@ describe("createEntityTypes", () => {
         ...overrides,
     });
 
-    it("returns an empty array when hasSAPPolicyLevel is true", () => {
+    it("returns entity types with internal visibility when hasSAPPolicyLevel is true", () => {
         const appConfig = {
             ...BASE_CONFIG,
+            env: {},
             hasSAPPolicyLevel: true,
             csn: { definitions: { BusinessPartner: makeEntity() } },
         };
 
-        expect(createEntityTypes(appConfig)).toEqual([]);
+        const result = createEntityTypes(appConfig);
+        expect(result).toHaveLength(1);
+        expect(result[0].visibility).toBe("internal");
     });
 
     it("returns entity types for exposed entities", () => {
@@ -488,5 +496,124 @@ describe("createEntityTypes", () => {
 
         expect(result).toHaveLength(1);
         expect(result[0].partOfPackage).toBe("sap.test:package:custom:v1");
+    });
+
+    describe("visibility configuration", () => {
+        it("uses internal visibility by default when no annotation or config is set", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: {},
+                csn: { definitions: { BP: makeEntity() } },
+            });
+            expect(result[0].visibility).toBe("internal");
+        });
+
+        it("uses defaultVisibility from config when set", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: { defaultVisibility: "public" },
+                csn: { definitions: { BP: makeEntity() } },
+            });
+            expect(result[0].visibility).toBe("public");
+        });
+
+        it("uses internal visibility under SAP policy when no annotation is set", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: {},
+                hasSAPPolicyLevel: true,
+                csn: { definitions: { BP: makeEntity() } },
+            });
+            expect(result[0].visibility).toBe("internal");
+        });
+
+        it("respects explicit annotation over SAP policy default", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: {},
+                hasSAPPolicyLevel: true,
+                csn: { definitions: { BP: makeEntity({ "@ORD.Extensions.visibility": "public" }) } },
+            });
+            expect(result[0].visibility).toBe("public");
+        });
+
+        it("respects explicit annotation over defaultVisibility config", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: { defaultVisibility: "internal" },
+                csn: { definitions: { BP: makeEntity({ "@ORD.Extensions.visibility": "public" }) } },
+            });
+            expect(result[0].visibility).toBe("public");
+        });
+    });
+
+    describe("generateAggregates configuration", () => {
+        const makeRoot = (overrides = {}) => ({
+            ...makeEntity({ "@ObjectModel.compositionRoot": true, ...overrides }),
+        });
+
+        it("generates aggregate level by default when generateAggregates is not configured", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: {},
+                csn: { definitions: { BP: makeRoot() } },
+            });
+            expect(result[0].level).toBe("aggregate");
+        });
+
+        it("generates root-entity level when generateAggregates is explicitly false", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: { entityTypes: { generateAggregates: false } },
+                csn: { definitions: { BP: makeRoot() } },
+            });
+            expect(result[0].level).toBe("root-entity");
+        });
+
+        it("generates aggregate level when generateAggregates is true", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: { entityTypes: { generateAggregates: true } },
+                csn: { definitions: { BP: makeRoot() } },
+            });
+            expect(result[0].level).toBe("aggregate");
+        });
+
+        it("does not generate a root entity when includeRootEntities is false", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: { entityTypes: { generateAggregates: true, includeRootEntities: false } },
+                csn: { definitions: { BP: makeRoot() } },
+            });
+            expect(result).toHaveLength(1);
+            expect(result[0].level).toBe("aggregate");
+        });
+
+        it("generates an additional root-entity entry when includeRootEntities is true", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: { entityTypes: { generateAggregates: true, includeRootEntities: true } },
+                csn: { definitions: { BP: makeRoot() } },
+            });
+            expect(result).toHaveLength(2);
+            const aggregate = result.find((r) => r.level === "aggregate");
+            const root = result.find((r) => r.level === "root-entity");
+            expect(aggregate).toBeDefined();
+            expect(root).toBeDefined();
+            expect(root.ordId).toBe("sap.test:entityType:BusinessPartnerRoot:v1");
+            expect(root.relatedEntityTypes).toContainEqual({
+                ordId: "sap.test:entityType:BusinessPartner:v1",
+                relationType: "part-of",
+            });
+        });
+
+        it("respects explicit level override over generateAggregates", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: { entityTypes: { generateAggregates: true } },
+                csn: { definitions: { BP: makeRoot({ "@ORD.Extensions.level": "root-entity" }) } },
+            });
+            expect(result[0].level).toBe("root-entity");
+        });
     });
 });
