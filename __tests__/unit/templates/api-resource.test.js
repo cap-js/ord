@@ -11,6 +11,7 @@ const {
     ORD_ACCESS_STRATEGY,
     DATA_PRODUCT_TYPE_ANNOTATION,
     MCP_RESOURCE_DEFINITION_TYPE,
+    AGENT_CARD_RESOURCE_DEFINITION_TYPE,
     DATA_PRODUCT_SIMPLE_ANNOTATION,
     ENTITY_RELATIONSHIP_ANNOTATION,
     ORD_ODM_ENTITY_NAME_ANNOTATION,
@@ -141,6 +142,45 @@ describe("createAPIResourceTemplate", () => {
             expect(mcpResource.resourceDefinitions[0].type).toBe(MCP_RESOURCE_DEFINITION_TYPE);
             expect(mcpResource.resourceDefinitions[0].mediaType).toBe("application/json");
             expect(mcpResource.resourceDefinitions[0].url).toContain(".mcp.json");
+        });
+    });
+
+    describe("with @cap-js/agents plugin loaded", () => {
+        beforeEach(() => {
+            cds.service.protocols["agent"] = { path: "/a2a", impl: "@cap-js/agents" };
+        });
+
+        afterEach(() => {
+            delete cds.service.protocols["agent"];
+        });
+
+        it("should create correct resource definition for A2A protocol", () => {
+            const model = cds.linked(`
+                    @agent
+                    @path: '/a2a/my-agent'
+                    service MyAgentService {
+                        entity Items { key ID: UUID; }
+                    };
+                `);
+            const srvDefinition = model.definitions["MyAgentService"];
+
+            const apiResourceTemplate = createAPIResourceTemplate(srvDefinition, appConfig);
+
+            expect(apiResourceTemplate).toHaveLength(1);
+            const a2aResource = apiResourceTemplate[0];
+            expect(a2aResource).toMatchObject({
+                ordId: "customer.testNamespace:apiResource:MyAgentService:v1",
+                apiProtocol: "a2a",
+                entryPoints: ["/a2a/my-agent"],
+                resourceDefinitions: [
+                    {
+                        type: AGENT_CARD_RESOURCE_DEFINITION_TYPE,
+                        mediaType: "application/json",
+                        accessStrategies: appConfig.accessStrategies,
+                        url: "/ord/v1/customer.testNamespace:apiResource:MyAgentService:v1/MyAgentService.a2a.json",
+                    },
+                ],
+            });
         });
     });
 

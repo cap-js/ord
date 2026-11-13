@@ -155,6 +155,88 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
         });
     });
 
+    describe("Tests for ORD document when service is annotated with @agent", () => {
+        beforeEach(() => {
+            cds.service.protocols["agent"] = { path: "/a2a", impl: "@cap-js/agents" };
+        });
+
+        afterEach(() => {
+            delete cds.service.protocols["agent"];
+        });
+
+        test("Successfully creates ORD document with agents array", () => {
+            const csn = require("../__mocks__/agentCsn.json");
+            const document = ord(csn);
+
+            expect(document.agents).toEqual([
+                expect.objectContaining({
+                    ordId: "sap.test.cdsrc.sample:agent:sap.capire.incidents.LocalService:v1",
+                    title: "Local Agent Service",
+                    description: "An AI agent for incident management",
+                    releaseStatus: "active",
+                    partOfPackage: "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
+                    exposedApiResources: [
+                        {
+                            ordId: "sap.test.cdsrc.sample:apiResource:sap.capire.incidents.LocalService-a2a:v1",
+                        },
+                    ],
+                }),
+            ]);
+        });
+
+        test("Creates a2a API resource entry for agent service", () => {
+            const csn = require("../__mocks__/agentCsn.json");
+            const document = ord(csn);
+
+            const a2aResources = document.apiResources.filter((r) => r.apiProtocol === "a2a");
+            expect(a2aResources).toHaveLength(1);
+            expect(a2aResources[0]).toMatchObject({
+                ordId: "sap.test.cdsrc.sample:apiResource:sap.capire.incidents.LocalService:v1",
+                releaseStatus: "active",
+                entryPoints: ["/a2a/local-service"],
+                resourceDefinitions: [
+                    {
+                        type: "a2a-agent-card",
+                        mediaType: "application/json",
+                        url: "/ord/v1/sap.test.cdsrc.sample:apiResource:sap.capire.incidents.LocalService:v1/sap.capire.incidents.LocalService.a2a.json",
+                    },
+                ],
+            });
+        });
+
+        test("a2a resource definition is served by ORD even without explicit @path", () => {
+            const csn = {
+                namespace: "",
+                definitions: {
+                    NoPathService: { kind: "service", "@agent": true },
+                },
+                meta: { creator: "test" },
+                $version: "2.0",
+            };
+            const document = ord(csn);
+
+            const a2aResources = document.apiResources.filter((r) => r.apiProtocol === "a2a");
+            expect(a2aResources).toHaveLength(1);
+            expect(a2aResources[0]).toMatchObject({
+                entryPoints: ["/a2a/no-path"],
+                resourceDefinitions: [
+                    {
+                        type: "a2a-agent-card",
+                        mediaType: "application/json",
+                        url: `/ord/v1/${a2aResources[0].ordId}/NoPathService.a2a.json`,
+                    },
+                ],
+            });
+        });
+
+        test("Does not include agents array when no service is annotated with @agent", () => {
+            const csn = require("../__mocks__/publicResourcesCsn.json");
+            const document = ord(csn);
+
+            expect(document.agents).toBeUndefined();
+        });
+    });
+
     describe("Tests for ORD document when service is annotated with @data.product", () => {
         test("Successfully create ORD Documents with @data.product annotation", () => {
             const csn = require("../__mocks__/dataProductSimpleAnnotationCsn.json");
