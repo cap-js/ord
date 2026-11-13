@@ -1117,7 +1117,7 @@ exports[`Entity type generation from xmpl schema generates aggregate and part-of
     "shortDescription": "Short description of Movie",
     "title": "Movie Details",
     "version": "1.0.0",
-    "visibility": "internal",
+    "visibility": "public",
   },
   {
     "description": "Description for Show",
@@ -1139,7 +1139,7 @@ exports[`Entity type generation from xmpl schema generates aggregate and part-of
     "shortDescription": "Short description of Show",
     "title": "Show Details",
     "version": "1.0.0",
-    "visibility": "internal",
+    "visibility": "public",
   },
 ]
 `;
@@ -1174,7 +1174,7 @@ exports[`Entity type generation from xmpl schema produces root-entity level when
     "shortDescription": "Short description of Movie",
     "title": "Movie Details",
     "version": "1.0.0",
-    "visibility": "internal",
+    "visibility": "public",
   },
   {
     "description": "Description for Show",
@@ -1190,7 +1190,7 @@ exports[`Entity type generation from xmpl schema produces root-entity level when
     "shortDescription": "Short description of Show",
     "title": "Show Details",
     "version": "1.0.0",
-    "visibility": "internal",
+    "visibility": "public",
   },
 ]
 `;
@@ -3126,7 +3126,7 @@ exports[`Tests for products and packages should not contain products property if
       "shortDescription": "Short description of Genres",
       "title": "Genres",
       "version": "1.0.0",
-      "visibility": "internal",
+      "visibility": "public",
     },
   ],
   "eventResources": [
@@ -3408,7 +3408,7 @@ exports[`Tests for products and packages should raise error log when custom prod
       "shortDescription": "Short description of Genres",
       "title": "Genres",
       "version": "1.0.0",
-      "visibility": "internal",
+      "visibility": "public",
     },
   ],
   "eventResources": [
@@ -3698,7 +3698,7 @@ exports[`Tests for products and packages should use valid custom products ordId 
       "shortDescription": "Short description of Genres",
       "title": "Genres",
       "version": "1.0.0",
-      "visibility": "internal",
+      "visibility": "public",
     },
   ],
   "eventResources": [

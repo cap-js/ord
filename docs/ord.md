@@ -512,7 +512,7 @@ Annotate CDS entities with `@EntityRelationship.entityType` to expose their ORD 
 
 ### Behavior without configuration (default)
 
-Each annotated entity generates one entity type entry. Aggregate generation is enabled by default, so composition roots get `level: "aggregate"` and every entity reachable through a CDS `Composition` from that root automatically receives a `relatedEntityTypes` entry pointing to the aggregate with `relationType: "part-of"`. Ordinary associations are not traversed — only compositions establish aggregate membership.
+Each entity annotated with [`@EntityRelationship.entityType`](https://sap.github.io/csn-interop-specification/spec-v1/extensions/entity-relationship) generates one entity type ORD resource. Aggregate generation is enabled by default, so composition roots get `level: "aggregate"` and every entity reachable through a CDS `Composition` from that root automatically receives a `relatedEntityTypes` entry pointing to the aggregate with `relationType: "part-of"`. Ordinary associations are not traversed — only compositions establish aggregate membership.
 
 If `@ODM.entityName` is present on the root, a `can-share-identity` relationship is added pointing to the corresponding SAP ODM canonical type. Explicit `@ORD.Extensions.level` annotations always take precedence over the generated level.
 
@@ -540,15 +540,11 @@ Enable via `.cdsrc.json`:
 
 ### Visibility
 
-Entity type visibility is resolved in this priority order: `@ORD.Extensions.visibility` annotation → `ord.defaultVisibility` from config → `"internal"`.
+Entity type visibility is resolved in this priority order: `@ORD.Extensions.visibility` annotation → `ord.defaultVisibility` from config → `"internal"` under SAP policy levels → `"public"`. Under SAP policy levels, `"internal"` is the default so that the central SAP registry remains the authoritative public source while the structural information stays available for catalog tooling and local consumers.
 
 ### Exposed entity types on API and event resources
 
 Every API resource and event resource that serves annotated entities automatically receives an `exposedEntityTypes` array. This field describes what domain types an API works with — it is part of the API contract, not a type publication. It is always emitted regardless of policy level. Override per-service with `@ORD.Extensions.exposedEntityTypes`.
-
-### SAP policy level
-
-Under SAP policy levels, entity type definitions are always emitted but default to `visibility: "internal"`. This keeps the structural information available for catalog tooling and local consumers while the central SAP registry remains the authoritative public source. `exposedEntityTypes` references on API and event resources are always emitted. Aggregate generation does not bypass publication ownership rules: entity type definitions owned by SAP must be published through their agreed owner.
 
 ### Examples
 

@@ -153,8 +153,8 @@ describe("RESOLVERS.visibility", () => {
         expect(RESOLVERS.visibility(BASE_ENTITY, BASE_APP_CONFIG)).toBe(RESOURCE_VISIBILITY.public);
     });
 
-    it("defaults to internal when appConfig.env is absent", () => {
-        expect(RESOLVERS.visibility(BASE_ENTITY, {})).toBe(RESOURCE_VISIBILITY.internal);
+    it("defaults to public when appConfig.env is absent", () => {
+        expect(RESOLVERS.visibility(BASE_ENTITY, {})).toBe(RESOURCE_VISIBILITY.public);
     });
 
     it("uses appConfig.env.defaultVisibility when no entity override", () => {
@@ -300,7 +300,7 @@ describe("createEntityTypeTemplate", () => {
         const entityType = createEntityTypeTemplate(updatedAppConfig, entity);
 
         expect(entityType).not.toBeNull();
-        expect(entityType.visibility).toBe("internal");
+        expect(entityType.visibility).toBe("public");
     });
 
     it("should assign the correct partOfPackage based on visibility", () => {
@@ -358,7 +358,6 @@ describe("createEntityTypes", () => {
             hasSAPPolicyLevel: true,
             csn: { definitions: { BusinessPartner: makeEntity() } },
         };
-
         const result = createEntityTypes(appConfig);
         expect(result).toHaveLength(1);
         expect(result[0].visibility).toBe("internal");
@@ -499,22 +498,32 @@ describe("createEntityTypes", () => {
     });
 
     describe("visibility configuration", () => {
-        it("uses internal visibility by default when no annotation or config is set", () => {
+        it("uses internal visibility by default when SAP policy is active and no annotation or config is set", () => {
             const result = createEntityTypes({
                 ...BASE_CONFIG,
                 env: {},
+                hasSAPPolicyLevel: true,
                 csn: { definitions: { BP: makeEntity() } },
             });
             expect(result[0].visibility).toBe("internal");
         });
 
-        it("uses defaultVisibility from config when set", () => {
+        it("uses public visibility by default when no SAP policy and no annotation or config is set", () => {
             const result = createEntityTypes({
                 ...BASE_CONFIG,
-                env: { defaultVisibility: "public" },
+                env: {},
                 csn: { definitions: { BP: makeEntity() } },
             });
             expect(result[0].visibility).toBe("public");
+        });
+
+        it("uses defaultVisibility from config when set", () => {
+            const result = createEntityTypes({
+                ...BASE_CONFIG,
+                env: { defaultVisibility: "internal" },
+                csn: { definitions: { BP: makeEntity() } },
+            });
+            expect(result[0].visibility).toBe("internal");
         });
 
         it("uses internal visibility under SAP policy when no annotation is set", () => {

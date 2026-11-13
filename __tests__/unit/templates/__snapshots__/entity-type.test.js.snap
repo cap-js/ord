@@ -15,7 +15,7 @@ exports[`createEntityTypeTemplate should return entity type with default version
   "shortDescription": "Short description of SomeAribaDummyEntity",
   "title": "SomeAribaDummyEntity",
   "version": "1.0.0",
-  "visibility": "internal",
+  "visibility": "public",
 }
 `;
 
@@ -34,6 +34,6 @@ exports[`createEntityTypeTemplate should return entity type with incorrect versi
   "shortDescription": "Short description of SomeAribaDummyEntity",
   "title": "Title of SomeAribaDummyEntity",
   "version": "3b.0.0",
-  "visibility": "internal",
+  "visibility": "public",
 }
 `;

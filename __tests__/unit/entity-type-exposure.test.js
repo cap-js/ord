@@ -154,7 +154,8 @@ describe("entity type exposure", () => {
         expect(document.eventResources[0].exposedEntityTypes).toContainEqual({ ordId: "customer.demo:entityType:CustomOrder:v2" });
     });
 
-    it("defaults entity type visibility to internal when no annotation or config is set", () => {
+    it("defaults entity type visibility to internal when SAP policy is active and no annotation or config is set", () => {
+        cds.env.ord.policyLevels = ["sap:core:v1"];
         const document = ord(model);
         for (const entityType of document.entityTypes) {
             expect(entityType.visibility).toBe("internal");
