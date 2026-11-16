@@ -20,6 +20,7 @@
 7. [ORD Root Properties](#ord-root-property)
 8. [External Data Products](#external-data-products)
 9. [Consumption Bundles](#consumption-bundles)
+10. [Entity Types](#entity-types)
 ---
 
 ## Introduction
@@ -505,6 +506,111 @@ annotate sap.sai.Supplier with @ORD.Extensions: {
 
 ---
 
+## Entity Types
+
+Annotate CDS entities with `@EntityRelationship.entityType` to expose their ORD entity type metadata. The annotation value is `namespace:Name` or `namespace:Name:v2` — the version defaults to `v1` when omitted. Mark a composition root with `@ObjectModel.compositionRoot: true` or `@ODM.root: true`.
+
+### Behavior without configuration (default)
+
+Each entity annotated with [`@EntityRelationship.entityType`](https://sap.github.io/csn-interop-specification/spec-v1/extensions/entity-relationship) generates one entity type ORD resource. Aggregate generation is enabled by default, so composition roots get `level: "aggregate"` and every entity reachable through a CDS `Composition` from that root automatically receives a `relatedEntityTypes` entry pointing to the aggregate with `relationType: "part-of"`. Ordinary associations are not traversed — only compositions establish aggregate membership.
+
+If `@ODM.entityName` is present on the root, a `can-share-identity` relationship is added pointing to the corresponding SAP ODM canonical type. Explicit `@ORD.Extensions.level` annotations always take precedence over the generated level.
+
+### Disabling aggregate generation (`generateAggregates: false`)
+
+Set `generateAggregates: false` to opt out. Composition roots get `level: "root-entity"`, all other annotated entities get `level: "sub-entity"`. No relationship metadata is generated between them.
+
+```json
+{ "ord": { "entityTypes": { "generateAggregates": false } } }
+```
+
+### Root entity generation (`includeRootEntities: true`)
+
+Requires `generateAggregates: true`. For each aggregate root, an additional `root-entity` entry is generated alongside it. The root ID is derived by appending `Root` to the aggregate's entity name. Both IDs appear in `exposedEntityTypes` on all API and event resources that serve the aggregate.
+
+Use this when consumers specifically require a `root-entity` level entry in addition to the aggregate.
+
+Collisions between a generated root ID and an explicitly declared entity type ID, or conflicting levels for the same ORD ID, cause an error at generation time.
+
+Enable via `.cdsrc.json`:
+
+```json
+{ "ord": { "entityTypes": { "generateAggregates": true, "includeRootEntities": true } } }
+```
+
+### Visibility
+
+Entity type visibility is resolved in this priority order: `@ORD.Extensions.visibility` annotation → `ord.defaultVisibility` from config → `"internal"` under SAP policy levels → `"public"`. Under SAP policy levels, `"internal"` is the default so that the central SAP registry remains the authoritative public source while the structural information stays available for catalog tooling and local consumers.
+
+### Exposed entity types on API and event resources
+
+Every API resource and event resource that serves annotated entities automatically receives an `exposedEntityTypes` array. This field describes what domain types an API works with — it is part of the API contract, not a type publication. It is always emitted regardless of policy level. Override per-service with `@ORD.Extensions.exposedEntityTypes`.
+
+### Examples
+
+The following examples are based on this model:
+
+```cds
+@ObjectModel.compositionRoot: true
+@EntityRelationship.entityType: 'customer.sample:Order'
+@ODM.entityName: 'Order'
+entity Orders {
+    key ID: UUID;
+    items: Composition of many OrderItems on items.order = $self;
+}
+
+@EntityRelationship.entityType: 'customer.sample:OrderItem'
+entity OrderItems {
+    key ID: UUID;
+    order: Association to Orders;
+}
+```
+
+**Mode 1 — default (`generateAggregates` on)**
+
+```
+customer.sample:entityType:Order:v1
+  level: "aggregate"
+  relatedEntityTypes: [{ ordId: "sap.odm:entityType:Order:v1", relationType: "can-share-identity" }]
+
+customer.sample:entityType:OrderItem:v1
+  level: "sub-entity"
+  relatedEntityTypes: [{ ordId: "customer.sample:entityType:Order:v1", relationType: "part-of" }]
+```
+
+**Mode 2 — `generateAggregates: false`**
+
+```
+customer.sample:entityType:Order:v1
+  level: "root-entity"
+
+customer.sample:entityType:OrderItem:v1
+  level: "sub-entity"
+```
+
+**Mode 3 — `generateAggregates: true` + `includeRootEntities: true`**
+
+```
+customer.sample:entityType:Order:v1
+  level: "aggregate"
+  relatedEntityTypes: [{ ordId: "sap.odm:entityType:Order:v1", relationType: "can-share-identity" }]
+
+customer.sample:entityType:OrderRoot:v1
+  level: "root-entity"
+  relatedEntityTypes: [
+    { ordId: "customer.sample:entityType:Order:v1", relationType: "part-of" },
+    { ordId: "sap.odm:entityType:Order:v1",         relationType: "can-share-identity" }
+  ]
+
+customer.sample:entityType:OrderItem:v1
+  level: "sub-entity"
+  relatedEntityTypes: [{ ordId: "customer.sample:entityType:Order:v1", relationType: "part-of" }]
+```
+
+See the [entity type sample](../xmpl) for a runnable example.
+
+---
+
 ## Summary
 
 | Scenario                         | Approach                                                                                         |
@@ -520,3 +626,4 @@ annotate sap.sai.Supplier with @ORD.Extensions: {
 | DwC mTLS Authentication          | Set `ord.authentication.dwcMtls: true` + `DWC_MTLS_TRUSTED_CERTS` env var                        |
 | CDS/ORD Namespace Mismatch       | Set `internalNamespace` to strip the CDS namespace prefix from ORD IDs                           |
 | External Data Products           | Services with `@cds.external`, `@data.product`, `@cds.dp.ordId` generate IntegrationDependencies |
+| Entity Types                     | Annotate with `@EntityRelationship.entityType`; enable `entityTypes.generateAggregates` for aggregate/membership generation |

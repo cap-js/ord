@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.11.0 (2026-11-13)
+
+## What's Changed
+
+- chore: Improve performance of ORD build by @mlakov in https://github.com/cap-js/ord/pull/558
+- chore: Add ability for static content generation by @mlakov in https://github.com/cap-js/ord/pull/587
+- feat: exposure of entity types by @InaGlushkova in https://github.com/cap-js/ord/pull/588
+- fix: Stabilize ORD builds that use cds.minify(...) by @mlakov in https://github.com/cap-js/ord/pull/589
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.10.2...v1.11.0
+
 ## 1.10.2 (2026-10-21)
 
 ## What's Changed
@@ -11,11 +22,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 - fix: Correctly handle derived data products by @mlakov in https://github.com/cap-js/ord/pull/576
 - refactor: replace node-forge with Node.js built-in crypto by @maginseb and @mlakov in https://github.com/cap-js/ord/pull/578
 
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.10.1...v1.10.2
+
 ## 1.10.1 (2026-10-13)
 
 ## What's Changed
 
 - fix: Expose 'system-instance' perspective when 'Local-Tenant-Id' header is missing by @mlakov in https://github.com/cap-js/ord/pull/568
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.10.0...v1.10.1
 
 ## 1.10.0 (2026-09-30)
 
