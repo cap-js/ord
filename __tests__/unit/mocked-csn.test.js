@@ -218,7 +218,7 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
             });
         });
 
-        test("a2a resource definition is served by ORD even without explicit @path", () => {
+        test("Creates an A2A resource definition with the default path when @path is absent", () => {
             const csn = {
                 namespace: "",
                 definitions: {
