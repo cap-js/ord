@@ -1,7 +1,9 @@
 const cds = require("@sap/cds");
 
 const { createAgents, createAgentTemplate } = require("../../../lib/templates/agent");
-const { ORD_ACCESS_STRATEGY } = require("../../../lib/constants");
+const { createAPIResourceTemplate } = require("../../../lib/templates/api-resource");
+const { createPackages } = require("../../../lib/templates/package");
+const { ORD_ACCESS_STRATEGY, ORD_API_PROTOCOL } = require("../../../lib/constants");
 
 const baseAppConfig = {
     ordNamespace: "customer.testNamespace",
@@ -12,6 +14,18 @@ const baseAppConfig = {
     accessStrategies: [{ type: ORD_ACCESS_STRATEGY.Open }],
     env: {},
 };
+
+let previousAgentProtocol;
+
+beforeEach(() => {
+    previousAgentProtocol = cds.service.protocols.agent;
+    cds.service.protocols.agent = { path: "/a2a", impl: "@cap-js/agents" };
+});
+
+afterEach(() => {
+    if (previousAgentProtocol === undefined) delete cds.service.protocols.agent;
+    else cds.service.protocols.agent = previousAgentProtocol;
+});
 
 describe("createAgentTemplate", () => {
     it("should set required fields with defaults", () => {
@@ -33,6 +47,28 @@ describe("createAgentTemplate", () => {
             partOfPackage: "customer.testNamespace:package:testAppName:v1",
             lastUpdate: baseAppConfig.lastUpdate,
         });
+    });
+
+    it("should reference the generated package when its ORD ID is customized", () => {
+        const model = cds.linked(`
+            @agent
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+        const appConfig = {
+            ...baseAppConfig,
+            env: {
+                packages: [{ ordId: "{namespace}:{type}:CustomPackage:v1" }],
+            },
+        };
+
+        const agent = createAgentTemplate(service, appConfig);
+        const packages = createPackages(appConfig);
+
+        expect(agent.partOfPackage).toEqual("customer.testNamespace:package:CustomPackage:v1");
+        expect(packages).toEqual(
+            expect.arrayContaining([expect.objectContaining({ ordId: agent.partOfPackage })]),
+        );
     });
 
     it("should use @ORD.Extensions.title when present", () => {
@@ -109,8 +145,139 @@ describe("createAgentTemplate", () => {
         const agent = createAgentTemplate(service, baseAppConfig);
 
         expect(agent.exposedApiResources).toEqual([
+            { ordId: "customer.testNamespace:apiResource:MyAgentService:v1" },
+        ]);
+        expect(createAPIResourceTemplate(service, baseAppConfig)).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    ordId: agent.exposedApiResources[0].ordId,
+                    apiProtocol: ORD_API_PROTOCOL.A2A,
+                }),
+            ]),
+        );
+    });
+
+    it("should reference the unsuffixed A2A resource when agent precedes OData", () => {
+        const model = cds.linked(`
+            @agent
+            @protocol: ['agent', 'odata']
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+        const resources = createAPIResourceTemplate(service, baseAppConfig);
+
+        expect(resources.map(({ apiProtocol }) => apiProtocol)).toEqual([
+            ORD_API_PROTOCOL.A2A,
+            ORD_API_PROTOCOL.ODATA_V4,
+        ]);
+        expect(agent.exposedApiResources).toEqual([
+            { ordId: "customer.testNamespace:apiResource:MyAgentService:v1" },
+        ]);
+        expect(resources).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    ordId: agent.exposedApiResources[0].ordId,
+                    apiProtocol: ORD_API_PROTOCOL.A2A,
+                }),
+            ]),
+        );
+    });
+
+    it("should reference the suffixed A2A resource when OData precedes agent", () => {
+        const model = cds.linked(`
+            @agent
+            @protocol: ['odata', 'agent']
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+        const resources = createAPIResourceTemplate(service, baseAppConfig);
+
+        expect(resources.map(({ apiProtocol }) => apiProtocol)).toEqual([
+            ORD_API_PROTOCOL.ODATA_V4,
+            ORD_API_PROTOCOL.A2A,
+        ]);
+        expect(agent.exposedApiResources).toEqual([
             { ordId: "customer.testNamespace:apiResource:MyAgentService-a2a:v1" },
         ]);
+        expect(resources).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    ordId: agent.exposedApiResources[0].ordId,
+                    apiProtocol: ORD_API_PROTOCOL.A2A,
+                }),
+            ]),
+        );
+    });
+
+    it("should reference the service-level ORD ID with resolved placeholders", () => {
+        const model = cds.linked(`
+            @agent
+            @ORD.Extensions.ordId: '{namespace}:{type}:CustomAgent:v1'
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(agent.ordId).toEqual("customer.testNamespace:agent:CustomAgent:v1");
+        expect(agent.exposedApiResources).toEqual([
+            { ordId: "customer.testNamespace:apiResource:CustomAgent:v1" },
+        ]);
+        expect(createAPIResourceTemplate(service, baseAppConfig)).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    ordId: agent.exposedApiResources[0].ordId,
+                    apiProtocol: ORD_API_PROTOCOL.A2A,
+                }),
+            ]),
+        );
+    });
+
+    it("should prefer the A2A-specific ORD ID with resolved placeholders", () => {
+        const model = cds.linked(`
+            @agent
+            @protocol: ['odata', 'agent']
+            @ORD.Extensions.ordId: '{namespace}:{type}:CustomAgent:v1'
+            @![protocol('a2a')].ORD.Extensions.ordId: '{namespace}:{type}:CustomA2A:v1'
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(agent.ordId).toEqual("customer.testNamespace:agent:CustomAgent:v1");
+        expect(agent.exposedApiResources).toEqual([
+            { ordId: "customer.testNamespace:apiResource:CustomA2A:v1" },
+        ]);
+        expect(createAPIResourceTemplate(service, baseAppConfig)).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    ordId: agent.exposedApiResources[0].ordId,
+                    apiProtocol: ORD_API_PROTOCOL.A2A,
+                }),
+            ]),
+        );
+    });
+
+    it("should omit the default reference when the agent protocol is not registered", () => {
+        delete cds.service.protocols.agent;
+        const model = cds.linked(`
+            @agent
+            service MyAgentService {}
+        `);
+        const service = model.definitions["MyAgentService"];
+
+        const resources = createAPIResourceTemplate(service, baseAppConfig);
+        const agent = createAgentTemplate(service, baseAppConfig);
+
+        expect(resources).not.toEqual(
+            expect.arrayContaining([expect.objectContaining({ apiProtocol: ORD_API_PROTOCOL.A2A })]),
+        );
+        expect(agent).not.toHaveProperty("exposedApiResources");
     });
 
     it("should use @ORD.Extensions.exposedApiResources when provided", () => {
