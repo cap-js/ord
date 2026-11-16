@@ -177,11 +177,25 @@ describe("Tests for ORD document generated out of mocked csn files", () => {
                     partOfPackage: "sap.test.cdsrc.sample:package:capirebookshopordsample-api:v1",
                     exposedApiResources: [
                         {
-                            ordId: "sap.test.cdsrc.sample:apiResource:sap.capire.incidents.LocalService-a2a:v1",
+                            ordId: "sap.test.cdsrc.sample:apiResource:sap.capire.incidents.LocalService:v1",
                         },
                     ],
                 }),
             ]);
+        });
+
+        test("Agent references the generated A2A API resource", () => {
+            const csn = require("../__mocks__/agentCsn.json");
+            const document = ord(csn);
+
+            expect(document.apiResources).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        ordId: document.agents[0].exposedApiResources[0].ordId,
+                        apiProtocol: "a2a",
+                    }),
+                ]),
+            );
         });
 
         test("Creates a2a API resource entry for agent service", () => {
