@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## 1.12.0 (2026-11-17)
+
+## What's Changed
+
+- feat: agents & api resource agent-card by @PDT42 in https://github.com/cap-js/ord/pull/550
+
+**Full Changelog**: https://github.com/cap-js/ord/compare/v1.11.0...v1.12.0
+
 ## 1.11.0 (2026-11-13)
 
 ## What's Changed
